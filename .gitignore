@@ -6,7 +6,7 @@
 /node_modules
 
 #config
-/src/config/
+/src/config
 
 # testing
 /coverage
