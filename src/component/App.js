@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {
   BrowserRouter as Router,
   Route,
+  Switch,
   Redirect,
 } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -20,13 +21,14 @@ require('react-onsenui');
 
 const PrivateRoute = ({ authenticated, component: Component, ...routeProps }) => (
   <Route {...routeProps} render={(props) => {
+
     console.log("Trying to acces private route with : " + (authenticated ? 'true' : 'false'));
     return (
       authenticated
         ? <Component {...props} />
         : <Redirect to={{
           pathname: '/login',
-          state: { from: props.location.pathname }
+          state: { from: props.location }
         }} />
     )
   }} />
@@ -34,36 +36,39 @@ const PrivateRoute = ({ authenticated, component: Component, ...routeProps }) =>
 
 class App extends Component {
 
-  render() {
+  getRoutes = () => {
 
-    const { isAuthenticated } = this.props;
-
-    return (
-      <Router>
+    const { isAuthenticated, authenticating } = this.props;
+    return authenticating ? <Welcome /> :
         <div>
           <Navigation/>
 
           <hr/>
 
-          <Route
-            exact path={routes.WELCOME}
-            component={() => <Welcome/>}
-          />
+          <Switch>
+            <Route
+              exact path={routes.SIGN_UP}
+              component={() => <SignUp/>}
+            />
 
-          <Route
-            exact path={routes.SIGN_UP}
-            component={() => <SignUp/>}
-          />
+            <Route
+              exact path={routes.LOGIN}
+              component={(props) => <Login {...props} />}
+            />
 
-          <Route
-            exact path={routes.LOGIN}
-            component={(props) => <Login {...props} />}
-          />
+            <PrivateRoute exact path={routes.DASHBOARD}
+                          authenticated={isAuthenticated}
+                          component={() => <Dashboard/> }/>
 
-          <PrivateRoute exact path={routes.DASHBOARD}
-                        authenticated={isAuthenticated}
-                        component={() => <Dashboard/> }/>
+            <Redirect to='/dashboard' />
+          </Switch>
         </div>
+  };
+
+  render() {
+    return (
+      <Router>
+          { this.getRoutes() }
       </Router>
     );
   }
@@ -73,6 +78,7 @@ export default compose(
   withAuthentication,
   connect(state => ({
     isAuthenticated: state.authentication.authenticated,
+    authenticating: state.authentication.authenticating,
     currentUser: state.authentication.currentUser
   }), {})
 )(App);

@@ -4,4 +4,5 @@ export const ROUTER = {
   FORGOT_PASSWORD: '/forgot-pw',
   DASHBOARD      : '/dashboard',
   WELCOME        : '/welcome',
+  HOME           : '/'
 };

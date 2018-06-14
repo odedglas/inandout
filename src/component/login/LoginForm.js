@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+  Redirect,
   withRouter,
 } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -43,8 +44,7 @@ class LoginForm extends Component {
         email,
         password,
         () => {
-          this.setState(() => ({...INITIAL_STATE}));
-          history.push(routes.DASHBOARD);
+          history.push(from ? from : routes.DASHBOARD);
           console.log("Loggin succes from: " + from)
         },
         (error) => this.handleStateChange('error', error)
@@ -76,11 +76,11 @@ class LoginForm extends Component {
       password,
       error,
     } = this.state;
-
+    const { isAuthenticated } = this.props;
     const isValid = this.validate();
 
     return (
-      <form onSubmit={this.onSubmit}>
+      !isAuthenticated ? <form onSubmit={this.onSubmit}>
         <input
           value={email}
           onChange={event => this.handleStateChange('email', event.target.value)}
@@ -98,17 +98,19 @@ class LoginForm extends Component {
         </button>
 
         { error && <p>{error.message}</p> }
-      </form>
+      </form> : <Redirect to={{pathname:'dashboard'}}/>
     );
   }
 }
 
 LoginForm.propTypes = {
-  from: PropTypes.string,
+  from: PropTypes.object,
   loginWithPassword: PropTypes.func.isRequired
 };
 
 export default compose(
   withRouter,
-  connect(null, { loginWithPassword })
+  connect(state => ({
+    isAuthenticated: state.authentication.authenticated,
+  }), { loginWithPassword })
 )(LoginForm);

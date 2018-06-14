@@ -1,8 +1,9 @@
 import React from 'react';
 
 const WelcomePage = () =>
-  <div>
-    <h1>Welcome Page</h1>
+  <div className={'welcome-container'}>
+    <div className={'loader'}>
+    </div>
   </div>;
 
 export default WelcomePage;
