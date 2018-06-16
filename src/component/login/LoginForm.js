@@ -5,6 +5,11 @@ import {
 } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import {
+  Button,
+  Input
+} from 'react-onsenui'
+
 import PropTypes from 'prop-types';
 import {ROUTER as routes} from '../../constants';
 import { loginWithPassword } from '../../actions/authentication'
@@ -81,22 +86,26 @@ class LoginForm extends Component {
 
     return (
       !isAuthenticated ? <form onSubmit={this.onSubmit}>
-        <input
+        <Input
           value={email}
+          float
           onChange={event => this.handleStateChange('email', event.target.value)}
           type="text"
           placeholder="Email Address"
         />
-        <input
+        <Input
           value={password}
+          float
           onChange={event => this.handleStateChange('password', event.target.value)}
           type="password"
           placeholder="Password"
         />
-        <button disabled={!isValid} type="submit">
+        <Button disabled={!isValid}
+                modifier='large'
+                onClick={this.onSubmit}>
           Sign In
-        </button>
-
+        </Button>
+        <button type="submit"> </button>
         { error && <p>{error.message}</p> }
       </form> : <Redirect to={{pathname:'dashboard'}}/>
     );

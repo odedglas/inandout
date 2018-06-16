@@ -1,7 +1,7 @@
 @import '../variables';
 
 $yin-yang1: $theme-primary;
-$yin-yang2: $theme-secondary;
+$yin-yang2: $theme-light-grey;
 
 .loader {
   position: relative;
@@ -44,8 +44,8 @@ $yin-yang2: $theme-secondary;
 .spinner {
   margin-left: 48%;
   fill: transparent;
-  stroke: #009688;
-  stroke-width: 5;
+  stroke: $theme-primary;
+  stroke-width: 4;
   animation: dash 2s ease infinite,rotate 2s linear infinite;
 }
 

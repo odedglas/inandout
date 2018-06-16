@@ -21,7 +21,7 @@ require('react-onsenui');
 
 const PrivateRoute = ({ authenticated, component: Component, ...routeProps }) => (
   <Route {...routeProps} render={(props) => {
-
+    debugger;
     console.log("Trying to acces private route with : " + (authenticated ? 'true' : 'false'));
     return (
       authenticated

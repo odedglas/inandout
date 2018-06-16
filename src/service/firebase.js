@@ -11,5 +11,11 @@ if (!firebase.apps.length) {
 const auth = firebase.auth(), database = firebase.database();
 export default {
   auth,
-  database
+  database,
+  createUser: (id, displayName, email) => {
+    return database.ref(`users/${id}`).set({
+      displayName,
+      email
+    });
+  }
 }

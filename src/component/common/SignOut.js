@@ -15,7 +15,7 @@ const doLogout = (history) => {
 };
 
 const SignOutButton = ({ history }) =>
-  <Button modifier={'material'}
+  <Button
     type="button"
     onClick={() => doLogout(history)}
   >

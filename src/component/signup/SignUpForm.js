@@ -1,8 +1,17 @@
 import React, {Component} from 'react';
 import {
   withRouter,
+  Redirect
 } from 'react-router-dom';
-import auth from '@service/auth'
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
+import PropTypes from 'prop-types';
+import {
+  Button,
+  Input
+} from 'react-onsenui'
+
+import {signUp} from '../../actions/authentication';
 import {ROUTER as routes} from '../../constants';
 
 const INITIAL_STATE = {
@@ -30,6 +39,7 @@ class SignUpForm extends Component {
 
     const {
       history,
+      signUp,
     } = this.props;
 
     this.setState({ error: undefined });
@@ -37,19 +47,16 @@ class SignUpForm extends Component {
 
     if (this.validate()) {
 
-      auth.signUp(email, passwordOne)
-        .then(authUser => {
-          debugger;
-          if (displayName) {
-
-          }
+      signUp(
+        email,
+        passwordOne,
+        displayName,
+        () => {
           this.setState(() => ({...INITIAL_STATE}));
           history.push(routes.HOME);
-        })
-        .catch(error => {
-          console.log(this.state.error);
-          this.handleStateChange('error', error);
-        });
+        },
+        (e) => this.handleStateChange('error', e)
+      );
     }
   };
 
@@ -83,43 +90,57 @@ class SignUpForm extends Component {
       passwordTwo,
       error,
     } = this.state;
-
+    const { isAuthenticated } = this.props;
     const isValid = this.validate();
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
+      !isAuthenticated ? <form onSubmit={this.onSubmit} className={'login-container'}>
+        <Input
           value={displayName}
           onChange={event => this.handleStateChange('displayName', event.target.value)}
           type="text"
           placeholder="Display Name"
         />
-        <input
+        <Input
           value={email}
           onChange={event => this.handleStateChange('email', event.target.value)}
           type="text"
           placeholder="Email Address"
         />
-        <input
+        <Input
           value={passwordOne}
           onChange={event => this.handleStateChange('passwordOne', event.target.value)}
           type="password"
           placeholder="Password"
         />
-        <input
+        <Input
           value={passwordTwo}
           onChange={event => this.handleStateChange('passwordTwo', event.target.value)}
           type="password"
           placeholder="Confirm Password"
         />
-        <button type="submit" disabled={!isValid}>
+
+        <Button disabled={!isValid}
+                modifier='large'
+                onClick={this.onSubmit}>
           Sign Up
-        </button>
+        </Button>
+
+        <button className={'hidden-submit-handler'} type="submit"> </button>
 
         {error && <p>{error.message}</p>}
-      </form>
+      </form> : <Redirect to={{pathname:'dashboard'}}/>
     );
   }
 }
 
-export default withRouter(SignUpForm);
+SignUpForm.propTypes = {
+  signUp: PropTypes.func.isRequired
+};
+
+export default compose(
+  withRouter,
+  connect(state => ({
+    isAuthenticated: state.authentication.authenticated,
+  }), { signUp })
+)(SignUpForm);
