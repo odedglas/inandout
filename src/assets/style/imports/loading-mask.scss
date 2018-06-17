@@ -1,0 +1,19 @@
+@import '../variables';
+
+.loading-mask-container {
+  position:relative;
+}
+
+.loading-mask {
+  overflow: hidden;
+  position:absolute;
+  display: none;
+  justify-content: center; /*centers items on the line (the x-axis by default)*/
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  //background-color: rgba(255, 255, 255, 0.5);
+}

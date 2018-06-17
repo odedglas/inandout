@@ -5,11 +5,13 @@ const loginWithProvider = provider => auth.signInWithPopup(provider);
 export default {
   loginWithPassword: (email, password) => auth.signInWithEmailAndPassword(email, password),
   signUp: (email, password, displayName) => auth.createUserWithEmailAndPassword(email, password).then(authUser => {
-    firebaseService.createUser(
-      authUser.user.id,
+
+    //Returns the user creation
+    return firebaseService.createUser(
+      authUser.user.uid,
       displayName,
       email
-    )
+    ).then(() => authUser);
   }),
   loginWithGoogle  : () => loginWithProvider(new auth.GoogleAuthProvider()),
   loginWithFacebook: () => loginWithProvider(new auth.FacebookAuthProvider()),

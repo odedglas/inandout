@@ -1,8 +1,32 @@
 @import '../variables';
 
 .login-container {
+  width: 460px;
+  padding: 70px;
+  display: block;
+  margin: 0 auto;
+  overflow: hidden;
+  background-color: white;
+  flex-direction: column;
+  text-align: center;
+  border-radius: 3px;
+  box-shadow: 0 2px 40px -10px rgba(0, 0, 0, 0.5);
 
-  .hidden-submit-handler {
-    visibility: hidden;
+  .login-form {
+
+    .form-control {
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+
+      ons-input {
+        flex: 1
+      }
+    }
+
+    .hidden-submit-handler {
+      visibility: hidden;
+    }
   }
 }
+

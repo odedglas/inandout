@@ -16,6 +16,6 @@ export default {
     return database.ref(`users/${id}`).set({
       displayName,
       email
-    });
+    })
   }
 }

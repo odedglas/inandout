@@ -14,6 +14,7 @@ import Welcome from './Welcome';
 import SignUp from './signup';
 import Login from './login';
 import Dashboard from './dashboard/Dashboard';
+import LoadingMask from './common/LoadingMask';
 
 import withAuthentication from './hoc/withAuthentication';
 
@@ -21,7 +22,6 @@ require('react-onsenui');
 
 const PrivateRoute = ({ authenticated, component: Component, ...routeProps }) => (
   <Route {...routeProps} render={(props) => {
-    debugger;
     console.log("Trying to acces private route with : " + (authenticated ? 'true' : 'false'));
     return (
       authenticated
@@ -38,8 +38,10 @@ class App extends Component {
 
   getRoutes = () => {
 
-    const { isAuthenticated, authenticating } = this.props;
+    const { isAuthenticated, authenticating, loading } = this.props;
+
     return authenticating ? <Welcome /> :
+      <LoadingMask loading={loading}>
         <div>
           <Navigation/>
 
@@ -63,6 +65,7 @@ class App extends Component {
             <Redirect to='/dashboard' />
           </Switch>
         </div>
+      </LoadingMask>
   };
 
   render() {
@@ -79,6 +82,7 @@ export default compose(
   connect(state => ({
     isAuthenticated: state.authentication.authenticated,
     authenticating: state.authentication.authenticating,
-    currentUser: state.authentication.currentUser
+    currentUser: state.authentication.currentUser,
+    loading: state.loading.isLoading,
   }), {})
 )(App);

@@ -1,7 +1,8 @@
 const initialState = {
   authenticated: false,
   authenticating: true,
-  currentUser  : {},
+  loggingIn: false,
+  authUser  : {},
 };
 
 export default function (state = initialState, action) {
@@ -14,32 +15,29 @@ export default function (state = initialState, action) {
         authenticating: true,
       };
     case 'AUTHENTICATION_SUCCESS':
-      console.log("Authentication success for : ");
       return {
         ...state,
         authenticated: true,
         authenticating: false,
-        currentUser  : action.authUser,
+        authUser  : action.authUser,
       };
     case 'AUTHENTICATION_FAIL':
       return {
         ...state,
         authenticated: false,
         authenticating: false,
-        currentUser  : {},
+        authUser  : {},
       };
-    case 'SIGN_UP_SUCCESS' :
+    case 'LOGIN_STATE_CHANGE':
       return {
         ...state,
-        authenticated: true,
-        authenticating: false,
-        currentUser  : action.authUser,
+        loggingIn: action.loggingIn
       };
     case 'LOGOUT':
       return {
         ...state,
         authenticated: false,
-        currentUser  : {},
+        authUser  : {},
       };
     default:
       return state;

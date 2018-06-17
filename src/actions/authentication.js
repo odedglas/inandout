@@ -5,15 +5,13 @@ export function createAuthenticationListener() {
 
   return dispatch => {
 
-    dispatch({type: 'APP_LOADING', loading: true});
     dispatch({type: 'AUTHENTICATION_START'});
 
     firebaseService.auth.onAuthStateChanged(authUser => {
+
       authUser
         ? dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser})
         : dispatch({type: 'AUTHENTICATION_FAIL'});
-
-      dispatch({type: 'APP_LOADING', loading: false});
 
     });
   }
@@ -21,7 +19,9 @@ export function createAuthenticationListener() {
 
 export function loginWithPassword(email, password, onSuccess, onError) {
   return dispatch => {
+
     dispatch({type: 'APP_LOADING', loading: true});
+    dispatch({type: 'LOGIN_STATE_CHANGE', loggingIn: true});
 
     authService.loginWithPassword(email, password).then(authUser => {
 
@@ -34,34 +34,30 @@ export function loginWithPassword(email, password, onSuccess, onError) {
       console.log('Failed to login : ' + e);
       onError(e);
     })
-      .finally(() => dispatch({type: 'APP_LOADING', loading: false}));
+      .finally(() => {
+        dispatch({type: 'LOGIN_STATE_CHANGE', loggingIn: false});
+        //dispatch({type: 'APP_LOADING', loading: false})
+      });
   }
 }
 
 export function signUp(email, password, displayName, onSuccess, onError) {
   return dispatch => {
+
     dispatch({type: 'APP_LOADING', loading: true});
+    dispatch({type: 'LOGIN_STATE_CHANGE', loggingIn: true});
 
     authService.signUp(email, password, displayName).then(authUser => {
 
-      //Creating user
-      firebaseService.createUser(
-        authUser.user.id,
-        displayName,
-        email
-      ).then((d) => {
-        debugger;
-        //Auth success
-        dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser});
-
-        onSuccess();
-
-      })
-        .catch(onError)
-        .finally(() => dispatch({type: 'APP_LOADING', loading: false}));
+      dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser});
+      debugger;
+      onSuccess();
 
     }).catch(onError)
-      .finally(() => dispatch({type: 'APP_LOADING', loading: false}));
+      .finally(() => {
+      dispatch({type: 'LOGIN_STATE_CHANGE', loggingIn: false});
+      dispatch({type: 'APP_LOADING', loading: false})
+    });
   }
 }
 

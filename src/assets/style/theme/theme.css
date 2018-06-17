@@ -1,5 +1,7 @@
 /* Custom Theme for Onsen UI 2.9.2 */
 
+/* Custom Theme for Onsen UI 2.9.2 */
+
 
 :root {
   /* variables for iOS components */
@@ -109,7 +111,7 @@
   --material-radio-button-inactive-color: #717171;
   --material-radio-button-disabled-color: #afafaf;
   --material-text-input-text-color: #212121;
-  --material-text-input-active-color: #376A7F;
+  --material-text-input-active-color: #37474F;
   --material-text-input-inactive-color: #afafaf;
   --material-search-background-color: #fafafa;
   --material-dialog-background-color: #ffffff;

@@ -51,10 +51,7 @@ class SignUpForm extends Component {
         email,
         passwordOne,
         displayName,
-        () => {
-          this.setState(() => ({...INITIAL_STATE}));
-          history.push(routes.HOME);
-        },
+        () => history.push(routes.DASHBOARD),
         (e) => this.handleStateChange('error', e)
       );
     }
@@ -90,11 +87,13 @@ class SignUpForm extends Component {
       passwordTwo,
       error,
     } = this.state;
-    const { isAuthenticated } = this.props;
     const isValid = this.validate();
+    const { isAuthenticated, loggingIn} = this.props;
+
+    const shouldSignUp = !isAuthenticated || loggingIn;
 
     return (
-      !isAuthenticated ? <form onSubmit={this.onSubmit} className={'login-container'}>
+      shouldSignUp ? <form onSubmit={this.onSubmit} className={'login-container'}>
         <Input
           value={displayName}
           onChange={event => this.handleStateChange('displayName', event.target.value)}
@@ -135,12 +134,15 @@ class SignUpForm extends Component {
 }
 
 SignUpForm.propTypes = {
-  signUp: PropTypes.func.isRequired
+  signUp: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
+  loggingIn: PropTypes.bool.isRequired
 };
 
 export default compose(
   withRouter,
   connect(state => ({
     isAuthenticated: state.authentication.authenticated,
+    loggingIn: state.authentication.loggingIn,
   }), { signUp })
 )(SignUpForm);

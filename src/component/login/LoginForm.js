@@ -48,11 +48,10 @@ class LoginForm extends Component {
       loginWithPassword(
         email,
         password,
-        () => {
-          history.push(from ? from : routes.DASHBOARD);
-          console.log("Loggin succes from: " + from)
-        },
-        (error) => this.handleStateChange('error', error)
+        () =>  history.push(from ? from : routes.DASHBOARD),
+        (error) => {
+          this.handleStateChange('error', error);
+        }
       )
     }
   };
@@ -81,45 +80,58 @@ class LoginForm extends Component {
       password,
       error,
     } = this.state;
-    const { isAuthenticated } = this.props;
     const isValid = this.validate();
+    const { isAuthenticated, loggingIn} = this.props;
+
+    const shouldLogin = !isAuthenticated || loggingIn;
 
     return (
-      !isAuthenticated ? <form onSubmit={this.onSubmit}>
-        <Input
-          value={email}
-          float
-          onChange={event => this.handleStateChange('email', event.target.value)}
-          type="text"
-          placeholder="Email Address"
-        />
-        <Input
-          value={password}
-          float
-          onChange={event => this.handleStateChange('password', event.target.value)}
-          type="password"
-          placeholder="Password"
-        />
-        <Button disabled={!isValid}
-                modifier='large'
-                onClick={this.onSubmit}>
-          Sign In
-        </Button>
-        <button type="submit"> </button>
-        { error && <p>{error.message}</p> }
-      </form> : <Redirect to={{pathname:'dashboard'}}/>
+      shouldLogin ? <div className={'login-container'}>
+        <form className={'login-form'} onSubmit={this.onSubmit}>
+          <div className={'form-control'}>
+            <Input
+              value={email}
+              float
+              onChange={event => this.handleStateChange('email', event.target.value)}
+              type="text"
+              placeholder="Email Address"
+            />
+          </div>
+          <div className={'form-control'}>
+            <Input
+              value={password}
+              float
+              onChange={event => this.handleStateChange('password', event.target.value)}
+              type="password"
+              placeholder="Password"
+            />
+          </div>
+          <div className={'form-control'}>
+            <Button disabled={!isValid}
+                    modifier='large'
+                    onClick={this.onSubmit}>
+              Sign In
+            </Button>
+            <button className={'hidden-submit-handler'} type="submit"> </button>
+          </div>
+          { error && <p>{error.message}</p> }
+      </form>
+      </div> : <Redirect to={{pathname:'dashboard'}}/>
     );
   }
 }
 
 LoginForm.propTypes = {
   from: PropTypes.object,
-  loginWithPassword: PropTypes.func.isRequired
+  loginWithPassword: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
+  loggingIn: PropTypes.bool.isRequired
 };
 
 export default compose(
   withRouter,
   connect(state => ({
     isAuthenticated: state.authentication.authenticated,
+    loggingIn: state.authentication.loggingIn,
   }), { loginWithPassword })
 )(LoginForm);
