@@ -8,17 +8,30 @@ import {
 } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import {ROUTER as routes} from '../constants';
+import { asyncComponent } from 'react-async-component';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+
+import {ROUTER as routes} from '../constants'
 import Navigation from './common/Navigation';
-import Welcome from './Welcome';
-import SignUp from './signup';
-import Login from './login';
-import Dashboard from './dashboard/Dashboard';
 import LoadingMask from './common/LoadingMask';
 
 import withAuthentication from './hoc/withAuthentication';
 
 require('react-onsenui');
+
+
+const SignUp = asyncComponent({
+  resolve: () => import('./signup')
+});
+const Login = asyncComponent({
+  resolve: () => import('./login')
+});
+const Dashboard = asyncComponent({
+  resolve: () => import('./dashboard/Dashboard')
+});
+const Welcome = asyncComponent({
+  resolve: () => import('./Welcome')
+});
 
 const PrivateRoute = ({ authenticated, component: Component, ...routeProps }) => (
   <Route {...routeProps} render={(props) => {
@@ -27,7 +40,7 @@ const PrivateRoute = ({ authenticated, component: Component, ...routeProps }) =>
       authenticated
         ? <Component {...props} />
         : <Redirect to={{
-          pathname: '/login',
+          pathname: routes.LOGIN,
           state: { from: props.location }
         }} />
     )
@@ -38,40 +51,43 @@ class App extends Component {
 
   getRoutes = () => {
 
-    const { isAuthenticated, authenticating, loading } = this.props;
+    const { isAuthenticated} = this.props;
+    console.log("App rendering routes")
+    return (
+        <Switch >
+          <Route
+            exact path={routes.SIGN_UP}
+            component={SignUp}
+          />
 
-    return authenticating ? <Welcome /> :
-      <LoadingMask loading={loading}>
-        <div>
-          <Navigation/>
+          <Route
+            exact path={routes.LOGIN}
+            component={Login}
+          />
 
-          <hr/>
+          <PrivateRoute exact path={routes.DASHBOARD}
+                        authenticated={isAuthenticated}
+                        component={Dashboard}/>
 
-          <Switch>
-            <Route
-              exact path={routes.SIGN_UP}
-              component={() => <SignUp/>}
-            />
-
-            <Route
-              exact path={routes.LOGIN}
-              component={(props) => <Login {...props} />}
-            />
-
-            <PrivateRoute exact path={routes.DASHBOARD}
-                          authenticated={isAuthenticated}
-                          component={() => <Dashboard/> }/>
-
-            <Redirect to='/dashboard' />
-          </Switch>
-        </div>
-      </LoadingMask>
+          <Redirect to={isAuthenticated ? routes.DASHBOARD : routes.LOGIN} />
+        </Switch>
+    )
   };
 
   render() {
+
+    const { authenticating, loading} = this.props;
     return (
       <Router>
-          { this.getRoutes() }
+        {  authenticating ? <Welcome /> :
+          <LoadingMask loading={loading}>
+            <div className={'col-flex h-100'}>
+              <Navigation/>
+              {this.getRoutes() }
+              <hr/>
+            </div>
+          </LoadingMask>
+        }
       </Router>
     );
   }

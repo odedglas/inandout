@@ -36,6 +36,7 @@
     "prop-types": "^15.6.1",
     "raf": "3.4.0",
     "react": "^16.4.0",
+    "react-async-component": "^2.0.0",
     "react-dev-utils": "^5.0.1",
     "react-dom": "^16.4.0",
     "react-onsenui": "^1.11.1",

@@ -6,20 +6,20 @@ export class LoadingMask extends Component {
 
   render() {
     const { loading } = this.props;
-
+    const loadClassList = `loading-mask ${loading ? 'active' : ''}`;
     return (
-      <div className={'loading-mask-container'}>
-        <div className={'loading-mask'}>
-          <CSSTransition
-            in={loading}
-            timeout={300}
-            classNames="fade"
-            unmountOnExit
-          >
+      <div className={'loading-mask-container h-100 w-100'}>
+        <CSSTransition
+          in={loading}
+          timeout={300}
+          classNames="fade"
+          unmountOnExit
+        >
+          <div className={loadClassList}>
             <div className={'loader'}>
             </div>
-          </CSSTransition>
-        </div>
+          </div>
+        </CSSTransition>
         {this.props.children}
       </div>
     )

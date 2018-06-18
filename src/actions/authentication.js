@@ -9,6 +9,7 @@ export function createAuthenticationListener() {
 
     firebaseService.auth.onAuthStateChanged(authUser => {
 
+      console.log("Auth state change listener : " +( authUser !== null ? 'true' : 'false'));
       authUser
         ? dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser})
         : dispatch({type: 'AUTHENTICATION_FAIL'});
@@ -28,7 +29,7 @@ export function loginWithPassword(email, password, onSuccess, onError) {
       //Auth success
       dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser});
 
-      onSuccess();
+      //onSuccess();
 
     }).catch(e => {
       console.log('Failed to login : ' + e);
@@ -36,7 +37,7 @@ export function loginWithPassword(email, password, onSuccess, onError) {
     })
       .finally(() => {
         dispatch({type: 'LOGIN_STATE_CHANGE', loggingIn: false});
-        //dispatch({type: 'APP_LOADING', loading: false})
+        dispatch({type: 'APP_LOADING', loading: false})
       });
   }
 }
@@ -50,8 +51,8 @@ export function signUp(email, password, displayName, onSuccess, onError) {
     authService.signUp(email, password, displayName).then(authUser => {
 
       dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser});
-      debugger;
-      onSuccess();
+
+      //onSuccess();
 
     }).catch(onError)
       .finally(() => {

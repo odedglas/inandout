@@ -10,7 +10,6 @@ import App from './component/App';
 import store from './store';
 import registerServiceWorker from './registerServiceWorker';
 require('./service/firebase');
-
 const ons = require('onsenui');
 const isMobile = window.matchMedia( "(min-width: 768px)" ).matches;
 

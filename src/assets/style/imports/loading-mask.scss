@@ -7,7 +7,8 @@
 .loading-mask {
   overflow: hidden;
   position:absolute;
-  display: none;
+  background-color: rgba(0, 0, 0, .25);
+  display:flex;
   justify-content: center; /*centers items on the line (the x-axis by default)*/
   align-items: center;
   top: 0;
@@ -15,5 +16,27 @@
   right: 0;
   bottom: 0;
   z-index: 100;
-  //background-color: rgba(255, 255, 255, 0.5);
+
+  &.active {
+
+  }
+
+  &.white {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.fade-enter {
+  opacity: 0.01;
+}
+.fade-enter-active {
+  opacity: 1;
+  transition: all 300ms ease-out;
+}
+.fade-exit {
+  opacity: 1;
+}
+.fade-exit-active {
+  opacity: 0.01;
+  transition: all 300ms ease-out;
 }
