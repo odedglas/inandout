@@ -4,7 +4,8 @@ import {
   Switch,
   Redirect,
 } from 'react-router-dom';
-import { asyncComponent } from 'react-async-component';
+import {asyncComponent} from 'react-async-component';
+//import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import {ROUTER as routes} from '../constants'
 
 const SignUp = asyncComponent({
@@ -19,7 +20,7 @@ const Dashboard = asyncComponent({
 
 const AuthenticatedRoute = ({authenticated, component: Component, ...routeProps}) => (
   <Route {...routeProps} render={(props) => {
-    console.log("Trying to acces private route with : " + (authenticated ? 'true' : 'false'));
+    console.log("Trying to acces private route with : " + (authenticated ? 'true' : 'false') + ", path is : ");
     return (
       authenticated
         ? <Component {...props} />
@@ -44,25 +45,27 @@ const UnAuthenticatedRoute = ({authenticated, component: Component, ...routeProp
   }}/>
 );
 
-const getRoutes = (isAuthenticated, location) => (
+const getRoutes = (isAuthenticated, location) => {
+  console.log(`App rendering, Authenticated: ${isAuthenticated}, location: ${location.pathname}`);
+  return (
+    <Switch>
+      <UnAuthenticatedRoute exact path={routes.SIGN_UP}
+                            authenticated={isAuthenticated}
+                            component={SignUp}/>
 
-  <Switch location={location}>
-    <UnAuthenticatedRoute exact path={routes.SIGN_UP}
+      <UnAuthenticatedRoute exact path={routes.LOGIN}
+                            authenticated={isAuthenticated}
+                            component={Login}/>
+
+      <AuthenticatedRoute exact path={routes.DASHBOARD}
                           authenticated={isAuthenticated}
-                          component={SignUp}/>
+                          location={location}
+                          component={Dashboard}/>
 
-    <UnAuthenticatedRoute exact path={routes.LOGIN}
-                          authenticated={isAuthenticated}
-                          component={Login}/>
-
-    <AuthenticatedRoute exact path={routes.DASHBOARD}
-                        authenticated={isAuthenticated}
-                        component={Dashboard}/>
-
-    <Redirect to={isAuthenticated ? routes.DASHBOARD : routes.LOGIN}/>
-  </Switch>
-
-);
+      <Redirect to={isAuthenticated ? routes.DASHBOARD : routes.LOGIN}/>
+    </Switch>
+  );
+};
 
 export {
   AuthenticatedRoute,

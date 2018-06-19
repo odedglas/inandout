@@ -7,7 +7,6 @@ import {
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { asyncComponent } from 'react-async-component';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import Navigation from './common/Navigation';
 import LoadingMask from './common/LoadingMask';

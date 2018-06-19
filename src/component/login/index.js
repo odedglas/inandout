@@ -90,6 +90,7 @@ class LoginForm extends Component {
             <Input
               value={email}
               float
+              autocomplete='email'
               onChange={event => this.handleStateChange('email', event.target.value)}
               type="text"
               placeholder="Email Address"
@@ -99,6 +100,7 @@ class LoginForm extends Component {
             <Input
               value={password}
               float
+              autocomplete='current-password'
               onChange={event => this.handleStateChange('password', event.target.value)}
               type="password"
               placeholder="Password"

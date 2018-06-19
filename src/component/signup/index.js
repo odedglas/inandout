@@ -99,6 +99,7 @@ class SignUpForm extends Component {
               value={displayName}
               onChange={event => this.handleStateChange('displayName', event.target.value)}
               type="text"
+              autocomplete='username'
               float
               placeholder="Display Name"
             />
@@ -107,6 +108,7 @@ class SignUpForm extends Component {
           <div className={'form-control'}>
             <Input
               value={email}
+              autocomplete='email'
               onChange={event => this.handleStateChange('email', event.target.value)}
               type="text"
               float
@@ -117,6 +119,7 @@ class SignUpForm extends Component {
           <div className={'form-control'}>
             <Input
               value={passwordOne}
+              autocomplete='off'
               onChange={event => this.handleStateChange('passwordOne', event.target.value)}
               type="password"
               float
@@ -129,6 +132,7 @@ class SignUpForm extends Component {
               value={passwordTwo}
               onChange={event => this.handleStateChange('passwordTwo', event.target.value)}
               type="password"
+              autocomplete='off'
               float
               placeholder="Confirm Password"
             />
