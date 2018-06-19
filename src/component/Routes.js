@@ -49,9 +49,8 @@ const getRoutes = (isAuthenticated, location) => {
   console.log(`App rendering, Authenticated: ${isAuthenticated}, location: ${location.pathname}`);
   return (
     <Switch>
-      <UnAuthenticatedRoute exact path={routes.SIGN_UP}
-                            authenticated={isAuthenticated}
-                            component={SignUp}/>
+      <Route exact path={routes.SIGN_UP}
+             component={SignUp}/>
 
       <UnAuthenticatedRoute exact path={routes.LOGIN}
                             authenticated={isAuthenticated}

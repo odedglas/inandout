@@ -15,8 +15,8 @@ import {ROUTER as routes} from '../../constants';
 import { loginWithPassword } from '../../actions/authentication'
 
 const INITIAL_STATE = {
-  email   : 'odedglas@gmail.com',
-  password: 'wtfitsomg',
+  email   : '',
+  password: '',
   error   : null,
 };
 
@@ -84,41 +84,49 @@ class LoginForm extends Component {
 
     console.log(`In login render`);
     return (
-      <div className={'login-container'}>
-        <form className={'login-form'} onSubmit={this.onSubmit}>
-          <div className={'form-control'}>
-            <Input
-              value={email}
-              float
-              autocomplete='email'
-              onChange={event => this.handleStateChange('email', event.target.value)}
-              type="text"
-              placeholder="Email Address"
-            />
+      <div className={'col-flex just-c h-100'}>
+        <div className={'login-layout'}>
+          <img src={require('@img/login-bg.svg')} alt='bg' />
+        </div>
+        <div className={'login-container'}>
+          <div className={'logo'}>
+            <img src={require('@img/logo.png')} alt='logo' />
           </div>
-          <div className={'form-control'}>
-            <Input
-              value={password}
-              float
-              autocomplete='current-password'
-              onChange={event => this.handleStateChange('password', event.target.value)}
-              type="password"
-              placeholder="Password"
-            />
-          </div>
-          <div className={'form-control'}>
-            <Button disabled={!isValid}
-                    modifier='large'
-                    onClick={this.onSubmit}>
-              Sign In
-            </Button>
-            <button className={'hidden-submit-handler'} type="submit"> </button>
-          </div>
-          <div>
-            <SignUpLink/>
-          </div>
-          { error && <p>{error.message}</p> }
-        </form>
+          <form className={'login-form'} onSubmit={this.onSubmit}>
+            <div className={'form-control'}>
+              <Input
+                value={email}
+                float
+                autocomplete='email'
+                onChange={event => this.handleStateChange('email', event.target.value)}
+                type="text"
+                placeholder="Email Address"
+              />
+            </div>
+            <div className={'form-control'}>
+              <Input
+                value={password}
+                float
+                autocomplete='current-password'
+                onChange={event => this.handleStateChange('password', event.target.value)}
+                type="password"
+                placeholder="Password"
+              />
+            </div>
+            <div className={'form-control'}>
+              <Button disabled={!isValid}
+                      modifier='large'
+                      onClick={this.onSubmit}>
+                Sign In
+              </Button>
+              <button className={'hidden-submit-handler'} type="submit"> </button>
+            </div>
+            <div>
+              <SignUpLink/>
+            </div>
+            { error && <p>{error.message}</p> }
+          </form>
+        </div>
       </div>
     );
   }

@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { asyncComponent } from 'react-async-component';
 
-import Navigation from './common/Navigation';
 import LoadingMask from './common/LoadingMask';
 import { getRoutes } from './Routes'
 import withAuthentication from './hoc/withAuthentication';
@@ -31,7 +30,6 @@ class App extends Component {
             authenticating ? <Welcome /> :
               <LoadingMask loading={loading}>
                 <div className={'col-flex h-100'}>
-                  <Navigation/>
                   { getRoutes(isAuthenticated, location) }
                   <hr/>
                 </div>

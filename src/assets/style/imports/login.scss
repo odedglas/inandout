@@ -2,7 +2,8 @@
 
 .login-container {
   width: 460px;
-  padding: 70px;
+  padding: 1.5rem 3rem;
+  z-index: 2;
   display: block;
   margin: 0 auto;
   overflow: hidden;
@@ -13,11 +14,12 @@
   box-shadow: 0 2px 40px -10px rgba(0, 0, 0, 0.5);
 
   .login-form {
+      padding: 1.5rem 0;
 
     .form-control {
       margin-bottom: 2rem;
       display: flex;
-      align-items: center;
+      flex-direction: column;
 
       ons-input {
         flex: 1
@@ -28,5 +30,16 @@
       visibility: hidden;
     }
   }
+
+  .logo {
+    margin: 1.5rem 0;
+  }
 }
+
+.login-layout {
+  position:absolute;
+  z-index:1;
+  height:100%;
+}
+
 

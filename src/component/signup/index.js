@@ -16,10 +16,10 @@ import {LoginLink} from '../login';
 import {ROUTER as routes} from '../../constants';
 
 const INITIAL_STATE = {
-  displayName: 'oded',
-  email   : 'odedglas@gmail.com',
-  passwordOne: 'wtfitsomg',
-  passwordTwo: 'wtfitsomg',
+  displayName: '',
+  email   : '',
+  passwordOne: '',
+  passwordTwo: '',
   error      : null,
 };
 
@@ -92,67 +92,75 @@ class SignUpForm extends Component {
 
     console.log(`In signup render`);
     return (
-      <div className={'login-container'}>
-        <form className={'login-form'} onSubmit={this.onSubmit}>
-          <div className={'form-control'}>
-            <Input
-              value={displayName}
-              onChange={event => this.handleStateChange('displayName', event.target.value)}
-              type="text"
-              autocomplete='username'
-              float
-              placeholder="Display Name"
-            />
+      <div className={'col-flex just-c h-100'}>
+        <div className={'login-layout'}>
+          <img src={require('@img/signup-bg.svg')} alt='bg' />
+        </div>
+        <div className={'login-container'}>
+          <div className={'logo'}>
+            <img src={require('@img/logo.png')} alt='logo' />
           </div>
+          <form className={'login-form'} onSubmit={this.onSubmit}>
+            <div className={'form-control'}>
+              <Input
+                value={displayName}
+                onChange={event => this.handleStateChange('displayName', event.target.value)}
+                type="text"
+                autocomplete='username'
+                float
+                placeholder="Display Name"
+              />
+            </div>
 
-          <div className={'form-control'}>
-            <Input
-              value={email}
-              autocomplete='email'
-              onChange={event => this.handleStateChange('email', event.target.value)}
-              type="text"
-              float
-              placeholder="Email Address"
-            />
-          </div>
+            <div className={'form-control'}>
+              <Input
+                value={email}
+                autocomplete='email'
+                onChange={event => this.handleStateChange('email', event.target.value)}
+                type="text"
+                float
+                placeholder="Email Address"
+              />
+            </div>
 
-          <div className={'form-control'}>
-            <Input
-              value={passwordOne}
-              autocomplete='off'
-              onChange={event => this.handleStateChange('passwordOne', event.target.value)}
-              type="password"
-              float
-              placeholder="Password"
-            />
-          </div>
+            <div className={'form-control'}>
+              <Input
+                value={passwordOne}
+                autocomplete='off'
+                onChange={event => this.handleStateChange('passwordOne', event.target.value)}
+                type="password"
+                float
+                placeholder="Password"
+              />
+            </div>
 
-          <div className={'form-control'}>
-            <Input
-              value={passwordTwo}
-              onChange={event => this.handleStateChange('passwordTwo', event.target.value)}
-              type="password"
-              autocomplete='off'
-              float
-              placeholder="Confirm Password"
-            />
-          </div>
+            <div className={'form-control'}>
+              <Input
+                value={passwordTwo}
+                onChange={event => this.handleStateChange('passwordTwo', event.target.value)}
+                type="password"
+                autocomplete='off'
+                float
+                placeholder="Confirm Password"
+              />
+            </div>
 
-          <div className={'form-control'}>
-            <Button disabled={!isValid}
-                    modifier='large'
-                    onClick={this.onSubmit}>
-              Sign Up
-            </Button>
+            <div className={'form-control'}>
+              <Button disabled={!isValid}
+                      modifier='large'
+                      onClick={this.onSubmit}>
+                Sign Up
+              </Button>
 
-            <button className={'hidden-submit-handler'} type="submit"> </button>
-          </div>
-          {error && <p>{error.message}</p>}
+              <button className={'hidden-submit-handler'} type="submit"> </button>
+            </div>
+            {error && <p>{error.message}</p>}
 
-          <div>
-            <LoginLink/>
-          </div>
-      </form>
+            <div>
+              <LoginLink/>
+            </div>
+          </form>
+        </div>
       </div>
     );
   }
