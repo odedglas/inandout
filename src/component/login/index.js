@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {
-  Redirect,
   Link,
   withRouter,
 } from 'react-router-dom';
@@ -82,12 +81,10 @@ class LoginForm extends Component {
       error,
     } = this.state;
     const isValid = this.validate();
-    const { isAuthenticated, loggingIn} = this.props;
 
-    const shouldLogin = !isAuthenticated || loggingIn;
-
+    console.log(`In login render`);
     return (
-      shouldLogin ? <div className={'login-container'}>
+      <div className={'login-container'}>
         <form className={'login-form'} onSubmit={this.onSubmit}>
           <div className={'form-control'}>
             <Input
@@ -120,16 +117,14 @@ class LoginForm extends Component {
           </div>
           { error && <p>{error.message}</p> }
         </form>
-      </div> : <Redirect to={{pathname:'dashboard'}}/>
+      </div>
     );
   }
 }
 
 LoginForm.propTypes = {
   from: PropTypes.object,
-  loginWithPassword: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
-  loggingIn: PropTypes.bool.isRequired
+  loginWithPassword: PropTypes.func.isRequired
 };
 
 const LoginLink = () =>
@@ -141,10 +136,7 @@ const LoginLink = () =>
 
 export default compose(
   withRouter,
-  connect(state => ({
-    isAuthenticated: state.authentication.authenticated,
-    loggingIn: state.authentication.loggingIn,
-  }), { loginWithPassword })
+  connect(null, { loginWithPassword })
 )(LoginForm);
 
 export {

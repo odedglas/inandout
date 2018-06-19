@@ -1,7 +1,6 @@
 const initialState = {
   authenticated: false,
   authenticating: true,
-  loggingIn: false,
   authUser  : {},
 };
 
@@ -27,11 +26,6 @@ export default function (state = initialState, action) {
         authenticated: false,
         authenticating: false,
         authUser  : {},
-      };
-    case 'LOGIN_STATE_CHANGE':
-      return {
-        ...state,
-        loggingIn: action.loggingIn
       };
     case 'LOGOUT':
       return {

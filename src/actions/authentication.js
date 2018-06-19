@@ -29,7 +29,7 @@ export function loginWithPassword(email, password, onSuccess, onError) {
       //Auth success
       dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser});
 
-      //onSuccess();
+      onSuccess();
 
     }).catch(e => {
       console.log('Failed to login : ' + e);
@@ -52,7 +52,7 @@ export function signUp(email, password, displayName, onSuccess, onError) {
 
       dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser});
 
-      //onSuccess();
+      onSuccess();
 
     }).catch(onError)
       .finally(() => {

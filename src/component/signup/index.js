@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {
   withRouter,
   Link,
-  Redirect
 } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
@@ -90,12 +89,10 @@ class SignUpForm extends Component {
       error,
     } = this.state;
     const isValid = this.validate();
-    const { isAuthenticated, loggingIn} = this.props;
 
-    const shouldSignUp = !isAuthenticated || loggingIn;
-
+    console.log(`In signup render`);
     return (
-      shouldSignUp ? <div className={'login-container'}>
+      <div className={'login-container'}>
         <form className={'login-form'} onSubmit={this.onSubmit}>
           <div className={'form-control'}>
             <Input
@@ -152,15 +149,13 @@ class SignUpForm extends Component {
             <LoginLink/>
           </div>
       </form>
-      </div>: <Redirect to={{pathname:'dashboard'}}/>
+      </div>
     );
   }
 }
 
 SignUpForm.propTypes = {
   signUp: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
-  loggingIn: PropTypes.bool.isRequired
 };
 
 
@@ -173,10 +168,7 @@ const SignUpLink = () =>
 
 export default compose(
   withRouter,
-  connect(state => ({
-    isAuthenticated: state.authentication.authenticated,
-    loggingIn: state.authentication.loggingIn,
-  }), { signUp })
+  connect(null, { signUp })
 )(SignUpForm);
 
 export {

@@ -11,7 +11,7 @@ $yin-yang2: $theme-light-grey;
   border: 1px solid $yin-yang1;
   border-width: 2px 2px 52px 2px;
   border-radius:50%;
-  animation: rotate 1.5s ease infinite;
+  animation: rotate 1.2s ease infinite;
 
   &:before, &:after {
     content:'';
@@ -37,8 +37,8 @@ $yin-yang2: $theme-light-grey;
 }
 
 @keyframes rotate {
-  0% {transform: rotate(0deg)}
-  100% {transform: rotate(360deg)}
+  0% {transform: rotate(-90deg)}
+  100% {transform: rotate(270deg)}
 }
 
 .spinner {
