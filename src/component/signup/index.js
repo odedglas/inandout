@@ -28,6 +28,7 @@ class SignUpForm extends Component {
   constructor(props) {
     super(props);
     this.state = {...INITIAL_STATE};
+    this.signupBtn = React.createRef();
   }
 
   onSubmit = (event) => {
@@ -57,6 +58,8 @@ class SignUpForm extends Component {
       );
     }
   };
+
+  doSignup = () =>  this.signupBtn.current.click();
 
   handleStateChange = (prop, value) => {
 
@@ -117,7 +120,8 @@ class SignUpForm extends Component {
                 value={email}
                 autocomplete='email'
                 onChange={event => this.handleStateChange('email', event.target.value)}
-                type="text"
+                type="email"
+                required
                 float
                 placeholder="Email Address"
               />
@@ -129,6 +133,7 @@ class SignUpForm extends Component {
                 autocomplete='off'
                 onChange={event => this.handleStateChange('passwordOne', event.target.value)}
                 type="password"
+                required
                 float
                 placeholder="Password"
               />
@@ -140,6 +145,7 @@ class SignUpForm extends Component {
                 onChange={event => this.handleStateChange('passwordTwo', event.target.value)}
                 type="password"
                 autocomplete='off'
+                required
                 float
                 placeholder="Confirm Password"
               />
@@ -152,7 +158,7 @@ class SignUpForm extends Component {
                 Sign Up
               </Button>
 
-              <button className={'hidden-submit-handler'} type="submit"> </button>
+              <button ref={this.signupBtn} className={'hidden-submit-handler'} type="submit"> </button>
             </div>
             {error && <p>{error.message}</p>}
 

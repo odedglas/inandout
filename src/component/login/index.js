@@ -25,6 +25,7 @@ class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {...INITIAL_STATE};
+    this.submitBtn = React.createRef();
   }
 
   onSubmit = (event) => {
@@ -55,6 +56,8 @@ class LoginForm extends Component {
       )
     }
   };
+
+  doSubmit = () =>  this.submitBtn.current.click();
 
   handleStateChange = (prop, value) => {
 
@@ -99,7 +102,8 @@ class LoginForm extends Component {
                 float
                 autocomplete='email'
                 onChange={event => this.handleStateChange('email', event.target.value)}
-                type="text"
+                type="email"
+                required
                 placeholder="Email Address"
               />
             </div>
@@ -110,16 +114,17 @@ class LoginForm extends Component {
                 autocomplete='current-password'
                 onChange={event => this.handleStateChange('password', event.target.value)}
                 type="password"
+                required
                 placeholder="Password"
               />
             </div>
             <div className={'form-control'}>
               <Button disabled={!isValid}
                       modifier='large'
-                      onClick={this.onSubmit}>
+                      onClick={this.doSubmit}>
                 Sign In
               </Button>
-              <button className={'hidden-submit-handler'} type="submit"> </button>
+              <button ref={this.submitBtn} className={'hidden-submit-handler'} type="submit"> </button>
             </div>
             <div>
               <SignUpLink/>
