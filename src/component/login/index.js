@@ -140,7 +140,7 @@ class LoginForm extends Component {
                                 horizontal: 'right',
                               }}
                               open={error !== undefined}
-                              duration={2500}
+                              duration={22500}
                               variant="error"
                               message="Wrong username or password">
         </SnackbarNotification>
