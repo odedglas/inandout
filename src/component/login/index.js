@@ -9,13 +9,14 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {SignUpLink} from '../signup'
+import SnackbarNotification from '../framework/SnackbarNotification';
 import {ROUTER as routes} from '../../constants';
 import { loginWithPassword } from '../../actions/authentication'
 
 const INITIAL_STATE = {
   email   : '',
   password: '',
-  error   : null,
+  error   : undefined
 };
 
 class LoginForm extends Component {
@@ -131,9 +132,18 @@ class LoginForm extends Component {
             <div>
               <SignUpLink/>
             </div>
-            { error && <p>{error.message}</p> }
           </form>
         </div>
+        <SnackbarNotification onClose={() => this.handleStateChange('error', undefined)}
+                              anchor={{
+                                vertical: 'bottom',
+                                horizontal: 'right',
+                              }}
+                              open={error !== undefined}
+                              duration={2500}
+                              variant="error"
+                              message="Wrong username or password">
+        </SnackbarNotification>
       </div>
     );
   }

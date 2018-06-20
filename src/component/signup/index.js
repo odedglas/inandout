@@ -23,6 +23,10 @@ const INITIAL_STATE = {
 
 class SignUpForm extends Component {
 
+  static propTypes = {
+    signUp: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {...INITIAL_STATE};
@@ -169,11 +173,6 @@ class SignUpForm extends Component {
     );
   }
 }
-
-SignUpForm.propTypes = {
-  signUp: PropTypes.func.isRequired,
-};
-
 
 const SignUpLink = () =>
   <p className={'link'}>
