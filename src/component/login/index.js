@@ -6,10 +6,8 @@ import {
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  Input
-} from 'react-onsenui'
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import {SignUpLink} from '../signup'
 import {ROUTER as routes} from '../../constants';
 import { loginWithPassword } from '../../actions/authentication'
@@ -21,6 +19,11 @@ const INITIAL_STATE = {
 };
 
 class LoginForm extends Component {
+
+  static propTypes = {
+    from: PropTypes.object,
+    loginWithPassword: PropTypes.func.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -37,7 +40,7 @@ class LoginForm extends Component {
 
     const {
       history,
-      from,
+      authenticationRedirect,
       loginWithPassword
     } = this.props;
 
@@ -45,11 +48,10 @@ class LoginForm extends Component {
     event.preventDefault();
 
     if (this.validate()) {
-
       loginWithPassword(
         email,
         password,
-        () =>  history.push(from ? from : routes.DASHBOARD),
+        () => history.push(authenticationRedirect ? authenticationRedirect : routes.DASHBOARD),
         (error) => {
           this.handleStateChange('error', error);
         }
@@ -85,7 +87,6 @@ class LoginForm extends Component {
     } = this.state;
     const isValid = this.validate();
 
-    console.log(`In login render`);
     return (
       <div className={'col-flex just-c h-100'}>
         <div className={'login-layout'}>
@@ -97,30 +98,31 @@ class LoginForm extends Component {
           </div>
           <form className={'login-form'} onSubmit={this.onSubmit}>
             <div className={'form-control'}>
-              <Input
+              <TextField
+                id="email"
+                label="Email Address"
                 value={email}
-                float
-                autocomplete='email'
-                onChange={event => this.handleStateChange('email', event.target.value)}
                 type="email"
+                autoComplete="email"
                 required
-                placeholder="Email Address"
+                onChange={event => this.handleStateChange('email', event.target.value)}
               />
             </div>
             <div className={'form-control'}>
-              <Input
+              <TextField
+                id="password-input"
+                label="Password"
                 value={password}
-                float
-                autocomplete='current-password'
                 onChange={event => this.handleStateChange('password', event.target.value)}
                 type="password"
+                autoComplete="current-password"
                 required
-                placeholder="Password"
               />
             </div>
             <div className={'form-control'}>
               <Button disabled={!isValid}
-                      modifier='large'
+                      variant="contained"
+                      color="primary"
                       onClick={this.doSubmit}>
                 Sign In
               </Button>
@@ -137,11 +139,6 @@ class LoginForm extends Component {
   }
 }
 
-LoginForm.propTypes = {
-  from: PropTypes.object,
-  loginWithPassword: PropTypes.func.isRequired
-};
-
 const LoginLink = () =>
   <p className={'link'}>
     Have an account already?
@@ -151,7 +148,9 @@ const LoginLink = () =>
 
 export default compose(
   withRouter,
-  connect(null, { loginWithPassword })
+  connect(state => ({
+    authenticationRedirect: state.authentication.authenticationRedirect,
+  }), { loginWithPassword })
 )(LoginForm);
 
 export {

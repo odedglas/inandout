@@ -1,7 +1,7 @@
 import firebaseService from '@service/firebase';
 import authService from '@service/auth';
 
-export function createAuthenticationListener() {
+export function createAuthenticationListener(location) {
 
   return dispatch => {
 
@@ -12,11 +12,12 @@ export function createAuthenticationListener() {
       console.log("Auth state change listener : " +( authUser !== null ? 'true' : 'false'));
       authUser
         ? dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser})
-        : dispatch({type: 'AUTHENTICATION_FAIL'});
+        : dispatch({type: 'AUTHENTICATION_FAIL', from: location});
 
     });
   }
 }
+
 
 export function loginWithPassword(email, password, onSuccess, onError) {
   return dispatch => {

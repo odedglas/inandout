@@ -1,6 +1,7 @@
 const initialState = {
   authenticated: false,
   authenticating: true,
+  authenticationRedirect: {},
   authUser  : {},
 };
 
@@ -25,6 +26,7 @@ export default function (state = initialState, action) {
         ...state,
         authenticated: false,
         authenticating: false,
+        authenticationRedirect: action.from,
         authUser  : {},
       };
     case 'LOGOUT':

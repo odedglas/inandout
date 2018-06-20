@@ -6,10 +6,8 @@ import {
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  Input
-} from 'react-onsenui'
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 import {signUp} from '../../actions/authentication';
 import {LoginLink} from '../login';
@@ -105,60 +103,60 @@ class SignUpForm extends Component {
           </div>
           <form className={'login-form'} onSubmit={this.onSubmit}>
             <div className={'form-control'}>
-              <Input
+              <TextField
+                id="display-name-input"
+                label="Display Name"
                 value={displayName}
                 onChange={event => this.handleStateChange('displayName', event.target.value)}
-                type="text"
-                autocomplete='username'
-                float
-                placeholder="Display Name"
               />
             </div>
 
             <div className={'form-control'}>
-              <Input
+              <TextField
+                id="email"
+                label="Email Address"
                 value={email}
-                autocomplete='email'
-                onChange={event => this.handleStateChange('email', event.target.value)}
                 type="email"
+                autoComplete="email"
                 required
-                float
-                placeholder="Email Address"
+                onChange={event => this.handleStateChange('email', event.target.value)}
               />
             </div>
-
             <div className={'form-control'}>
-              <Input
+              <TextField
+                id="password-one-input"
+                label="Password"
                 value={passwordOne}
-                autocomplete='off'
                 onChange={event => this.handleStateChange('passwordOne', event.target.value)}
                 type="password"
+                autoComplete="off"
                 required
-                float
-                placeholder="Password"
               />
             </div>
 
             <div className={'form-control'}>
-              <Input
+              <TextField
+                id="password-two-input"
+                label="Confirm Password"
                 value={passwordTwo}
                 onChange={event => this.handleStateChange('passwordTwo', event.target.value)}
                 type="password"
-                autocomplete='off'
+                autoComplete="off"
                 required
-                float
-                placeholder="Confirm Password"
               />
             </div>
 
             <div className={'form-control'}>
               <Button disabled={!isValid}
-                      modifier='large'
-                      onClick={this.onSubmit}>
+                      variant="contained"
+                      color="primary"
+                      onClick={this.doSignup}>
                 Sign Up
               </Button>
 
-              <button ref={this.signupBtn} className={'hidden-submit-handler'} type="submit"> </button>
+              <button ref={this.signupBtn}
+                      className={'hidden-submit-handler'}
+                      type="submit"> </button>
             </div>
             {error && <p>{error.message}</p>}
 

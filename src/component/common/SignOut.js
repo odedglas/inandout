@@ -2,9 +2,7 @@ import React from 'react';
 import {
   withRouter,
 } from 'react-router-dom';
-import {
-  Button
-} from 'react-onsenui';
+import Button from '@material-ui/core/Button';
 import auth from '@service/auth';
 import {ROUTER as routes} from '../../constants';
 
@@ -14,11 +12,10 @@ const doLogout = (history) => {
   );
 };
 
-const SignOutButton = ({ history }) =>
-  <Button
-    type="button"
-    onClick={() => doLogout(history)}
-  >
+const SignOutButton = ({history}) =>
+  <Button variant="contained"
+          onClick={() => doLogout(history)}
+          color="primary">
     Sign Out
   </Button>;
 

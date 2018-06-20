@@ -12,8 +12,6 @@ import LoadingMask from './common/LoadingMask';
 import { getRoutes } from './Routes'
 import withAuthentication from './hoc/withAuthentication';
 
-require('react-onsenui');
-
 const Welcome = asyncComponent({
   resolve: () => import('./Welcome')
 });
@@ -22,7 +20,12 @@ class App extends Component {
 
   render() {
 
-    const { authenticating, loading, isAuthenticated} = this.props;
+    const {
+      authenticating,
+      loading,
+      isAuthenticated,
+    } = this.props;
+
     return (
       <Router>
         <Route

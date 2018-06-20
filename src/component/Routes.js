@@ -8,6 +8,7 @@ import {asyncComponent} from 'react-async-component';
 //import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import {ROUTER as routes} from '../constants'
 
+
 const SignUp = asyncComponent({
   resolve: () => import('./signup')
 });
@@ -18,19 +19,21 @@ const Dashboard = asyncComponent({
   resolve: () => import('./dashboard/Dashboard')
 });
 
-const AuthenticatedRoute = ({authenticated, component: Component, ...routeProps}) => (
-  <Route {...routeProps} render={(props) => {
-    console.log("Trying to acces private route with : " + (authenticated ? 'true' : 'false') + ", path is : ");
-    return (
-      authenticated
-        ? <Component {...props} />
-        : <Redirect to={{
-          pathname: routes.LOGIN,
-          state   : {from: props.location}
-        }}/>
-    )
-  }}/>
-);
+const AuthenticatedRoute = ({authenticated, component: Component, ...routeProps}) => {
+  return (
+    <Route {...routeProps} render={(props) => {
+      console.log("Trying to acces private route with : " + (authenticated ? 'true' : 'false') + ", path is : ");
+      return (
+        authenticated
+          ? <Component {...props} />
+          : <Redirect to={{
+            pathname: routes.LOGIN,
+            state   : {from: props.location}
+          }}/>
+      )
+    }}/>
+  );
+};
 
 const UnAuthenticatedRoute = ({authenticated, component: Component, ...routeProps}) => (
   <Route {...routeProps} render={(props) => {
@@ -46,7 +49,7 @@ const UnAuthenticatedRoute = ({authenticated, component: Component, ...routeProp
 );
 
 const getRoutes = (isAuthenticated, location) => {
-  console.log(`App rendering, Authenticated: ${isAuthenticated}, location: ${location.pathname}`);
+  console.log(`App rendering, Authenticated: ${isAuthenticated}`);
   return (
     <Switch>
       <Route exact path={routes.SIGN_UP}
