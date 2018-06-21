@@ -136,11 +136,11 @@ class LoginForm extends Component {
         </div>
         <SnackbarNotification onClose={() => this.handleStateChange('error', undefined)}
                               anchor={{
-                                vertical: 'bottom',
+                                vertical: 'top',
                                 horizontal: 'right',
                               }}
                               open={error !== undefined}
-                              duration={22500}
+                              duration={2500}
                               variant="error"
                               message="Wrong username or password">
         </SnackbarNotification>

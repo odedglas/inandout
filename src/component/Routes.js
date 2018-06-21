@@ -16,7 +16,7 @@ const Login = asyncComponent({
   resolve: () => import('./login')
 });
 const Dashboard = asyncComponent({
-  resolve: () => import('./dashboard/Dashboard')
+  resolve: () => import('./dashboard')
 });
 
 const AuthenticatedRoute = ({authenticated, component: Component, ...routeProps}) => {

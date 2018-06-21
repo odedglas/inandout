@@ -12,10 +12,15 @@ const auth = firebase.auth(), database = firebase.database();
 export default {
   auth,
   database,
-  createUser: (id, displayName, email) => {
+  createUser: (id, user) => {
     return database.ref(`users/${id}`).set({
-      displayName,
-      email
+      user
     })
+  },
+  fetch: (path) => {
+
+    return database.ref(path).once('value').then((snapshot) => {
+      return snapshot.val();
+    });
   }
 }

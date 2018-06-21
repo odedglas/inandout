@@ -1,0 +1,25 @@
+.header {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  height: 55px;
+  margin:0;
+  padding:0;
+
+  .avatar {
+    padding-top:1px;
+    font-size:1rem;
+  }
+
+  .logo {
+    height:45px;
+
+    & > img {
+      height:100%;
+    }
+  }
+
+  &.transparent {
+    background-color: transparent;
+  }
+}

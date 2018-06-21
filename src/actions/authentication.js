@@ -1,5 +1,6 @@
 import firebaseService from '@service/firebase';
 import authService from '@service/auth';
+import userService from '@service/user';
 
 export function createAuthenticationListener(location) {
 
@@ -10,10 +11,19 @@ export function createAuthenticationListener(location) {
     firebaseService.auth.onAuthStateChanged(authUser => {
 
       console.log("Auth state change listener : " +( authUser !== null ? 'true' : 'false'));
-      authUser
-        ? dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser})
-        : dispatch({type: 'AUTHENTICATION_FAIL', from: location});
+      if(authUser !== null) {
 
+        //Auth went well, Fetching up user
+        userService.fetchUser(authUser.uid).then( user => {
+
+          dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser});
+          dispatch({type: 'SET_USER', user: user});
+        });
+      }
+      else {
+
+        dispatch({type: 'AUTHENTICATION_FAIL', from: location});
+      }
     });
   }
 }
@@ -27,11 +37,14 @@ export function loginWithPassword(email, password, onSuccess, onError) {
 
     authService.loginWithPassword(email, password).then(authUser => {
 
-      //Auth success
-      dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser});
+      userService.fetchUser(authUser.user.uid).then( user => {
 
-      onSuccess();
+        //Auth success
+        dispatch({type: 'SET_USER', user: user});
+        dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser});
 
+        onSuccess();
+      });
     }).catch(e => {
       console.log('Failed to login : ' + e);
       onError(e);
@@ -49,9 +62,11 @@ export function signUp(email, password, displayName, onSuccess, onError) {
     dispatch({type: 'APP_LOADING', loading: true});
     dispatch({type: 'LOGIN_STATE_CHANGE', loggingIn: true});
 
-    authService.signUp(email, password, displayName).then(authUser => {
+    authService.signUp(email, password, displayName).then(res => {
 
-      dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser});
+      //Auth success
+      dispatch({type: 'SET_USER', user: res.user});
+      dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: res.authUser});
 
       onSuccess();
 

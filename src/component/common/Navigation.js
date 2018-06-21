@@ -10,7 +10,6 @@ const Navigation = () =>
       <li><Link to={{pathname: routes.DASHBOARD}}>Dashboard</Link></li>
       <li><Link to={{pathname: routes.SIGN_UP}}>Sign Up</Link></li>
     </ul>
-    <li><SignOutButton /></li>
   </div>;
 
 export default Navigation;
