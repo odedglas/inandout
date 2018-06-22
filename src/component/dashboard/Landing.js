@@ -1,12 +1,36 @@
 import React from 'react';
 
+import CreateProjectModal from '../modals/CreateProject'
+import ProjectCard from './ProjectCard';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
 
 class Landing extends React.Component {
 
+  state = {
+    projects: [
+      {name: 'Project 1', id:'123asda12'},
+      {name: 'Project 2', id:'123a2132'},
+      {name: 'Project 3', id:'123123da12'},
+    ],
+    showCreateProjectModal: false,
+  };
+
+  showCreateProjectModal = () => {
+    console.log("Creating project");
+    this.setState({showCreateProjectModal: true})
+  };
+
+  closeCreateProjectModal = () => {
+    this.setState({showCreateProjectModal: false})
+  };
+
   render () {
 
+    const { projects, showCreateProjectModal } = this.state;
+
     const landingHeaderBackground = {
-      'background-image': `url('${require('@img/dashboard-header.jpg')}')`,
+      'backgroundImage': `url('${require('@img/dashboard-header.jpg')}')`,
     };
 
     return (
@@ -22,9 +46,21 @@ class Landing extends React.Component {
           </div>
         </div>
         <div className={'projects-container'}>
-          <div> Projects goes here </div>
-          <div className={'projects-inner'}></div>
+          {projects.length > 0 ? <div className={'title'}> Projects goes here </div> : null}
+          <div className={'projects-inner'}>
+            {
+              projects.map( project => <ProjectCard key={project.id} project={project}/>)
+            }
+          </div>
+          <Button variant="fab"
+                  color="primary"
+                  aria-label="add"
+                  onClick={this.showCreateProjectModal}
+                  className={'add-project'}>
+            <AddIcon />
+          </Button>
         </div>
+        <CreateProjectModal open={showCreateProjectModal} onClose={this.closeCreateProjectModal}/>
       </div>
     );
   }

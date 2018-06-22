@@ -6,6 +6,8 @@ $theme-light-grey: #ECEFF1;
 $form-control-text-color: #37474F;
 $logo-color: #4682b4;
 
+$light-header: #fafafa;
+$light-text: rgba(0,0,0,0.54);
 $menu-text-color: #424242;
 $menu-icon-color: #757575;
 
@@ -21,3 +23,26 @@ $size-sm:576px;
 $size-md:768px;
 $size-lg:992px;
 $size-xl:1200px;
+
+$breakpoints: (
+        "phone":        400px,
+        "phone-wide":   480px,
+        "phablet":      560px,
+        "tablet-small": 640px,
+        "tablet":       768px,
+        "tablet-wide":  1024px,
+        "desktop":      1248px,
+        "desktop-wide": 1440px
+);
+
+@mixin mq($width, $type: min) {
+  @if map_has_key($breakpoints, $width) {
+    $width: map_get($breakpoints, $width);
+    @if $type == max {
+      $width: $width - 1px;
+    }
+    @media only screen and (#{$type}-width: $width) {
+      @content;
+    }
+  }
+}

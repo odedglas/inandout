@@ -1,0 +1,21 @@
+@import '../variables';
+
+.modal {
+
+  .modal-title {
+    background-color: $light-header;
+  }
+
+  .modal-content {
+    padding: 2rem 2rem 0;
+  }
+
+  .modal-actions {
+    padding: 1rem;
+  }
+
+  .form-control {
+    margin-bottom: 1rem;
+    display: flex;
+  }
+}

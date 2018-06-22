@@ -16,7 +16,7 @@
       background-color:white;
 
       .landing-text span{
-        color: rgba(0,0,0,0.54);
+        color: $light-text;
         font-size: 16px;
         line-height: 24px;
 
@@ -29,10 +29,18 @@
         width: 0;
         height: 0;
         border-top: 330px solid #4682b4;
-        border-left: 660px solid transparent;
+        border-left: 960px solid transparent;
         position:absolute;
         right:0;
         top:0;
+
+        @include mq('desktop-wide', 'max') {
+          border-left: 660px solid transparent;
+        }
+
+        @include mq('tablet-wide', 'max') {
+          border-left: 460px solid transparent;
+        }
       }
     }
 
@@ -40,9 +48,27 @@
       padding: 0 6rem;
       position: relative;
       top: -120px;
+      height: calc(100% - 370px);
+
+      .title {
+        color: $light-text;
+        margin-bottom: 2rem;
+      }
 
       .projects-inner {
+        display: flex;
+        flex-direction: row;
 
+        .project-card {
+          width:370px;
+          margin:0 1.5rem;
+        }
+      }
+
+      .add-project {
+        position:absolute;
+        bottom:20px;
+        right:20px;
       }
     }
   }
