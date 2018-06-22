@@ -10,13 +10,13 @@ import {ROUTER as routes} from '../constants'
 
 
 const SignUp = asyncComponent({
-  resolve: () => import('./signup')
+  resolve: () => import('./signup/SignUp')
 });
 const Login = asyncComponent({
-  resolve: () => import('./login')
+  resolve: () => import('./login/Login')
 });
 const Dashboard = asyncComponent({
-  resolve: () => import('./dashboard')
+  resolve: () => import('./dashboard/Dashboard')
 });
 
 const AuthenticatedRoute = ({authenticated, component: Component, ...routeProps}) => {

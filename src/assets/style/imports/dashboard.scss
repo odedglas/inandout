@@ -1,4 +1,49 @@
+@import '../variables';
+
 .dashboard-container {
   height: 100%;
-  position: relative;
+
+  .lading-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    .landing-header {
+      position:relative;
+      height: 250px;
+      padding: 6rem;
+      background-color:white;
+
+      .landing-text span{
+        color: rgba(0,0,0,0.54);
+        font-size: 16px;
+        line-height: 24px;
+
+        h2 {
+          margin-bottom: 0.5rem;
+        }
+      }
+
+      .triangle {
+        width: 0;
+        height: 0;
+        border-top: 330px solid #4682b4;
+        border-left: 660px solid transparent;
+        position:absolute;
+        right:0;
+        top:0;
+      }
+    }
+
+    .projects-container {
+      padding: 0 6rem;
+      position: relative;
+      top: -120px;
+
+      .projects-inner {
+
+      }
+    }
+  }
 }

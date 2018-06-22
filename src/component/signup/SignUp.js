@@ -10,7 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import {signUp} from '../../actions/authentication';
-import {LoginLink} from '../login';
+import {LoginLink} from '../login/Login';
 import {ROUTER as routes} from '../../constants';
 
 const INITIAL_STATE = {

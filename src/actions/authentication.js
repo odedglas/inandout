@@ -78,7 +78,7 @@ export function signUp(email, password, displayName, onSuccess, onError) {
   }
 }
 
-export function logout() {
+export function signOut() {
   return dispatch => {
     authService.signOut().then(() => dispatch({type: 'LOGOUT'}));
   }
