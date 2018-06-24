@@ -25,7 +25,7 @@ class Header extends React.Component {
         <div className={'flex'}> </div>
         <div>
           <Tooltip title={'Notifications'} className={'tooltip'}>
-            <IconButton className={'notifications-button mx-3'}>
+            <IconButton className={'notifications-button'}>
               <NotificationsIcon/>
             </IconButton>
           </Tooltip>

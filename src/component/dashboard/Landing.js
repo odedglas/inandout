@@ -48,7 +48,11 @@ class Landing extends React.Component {
           </div>
         </div>
         <div className={'projects-container'}>
-          {projects.length > 0 ? <div className={'title'}> Your Projects </div> : null}
+          {projects.length > 0 ? <div className={'title'}> Your Projects </div> : <Button color="primary"
+                                                                                          onClick={this.showCreateProjectModal}>
+            &#43; Add Project
+          </Button>
+          }
           <div className={'projects-inner'}>
             {
               projects.map(project => <ProjectCard key={project.id} project={project}/>)
