@@ -30,12 +30,10 @@ class Landing extends React.Component {
   render() {
 
     const {projects, showCreateProjectModal} = this.state;
-    const landingHeaderBackground = {
-      'backgroundImage': `url('${require('@img/dashboard-test.svg')}')`,
-    };
+
     return (
       <div className={'lading-page'}>
-        <div className={'landing-header'} style={landingHeaderBackground}>
+        <div className={'landing-header'}>
           <div className={'centered'}>
             <div className={'landing-text'}>
               <h1> Welcome to In&Out !</h1>

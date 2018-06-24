@@ -51,13 +51,19 @@ class Dashboard extends Component {
     const { location } = this.props;
     const { headerShade, showNotificationsBar } = this.state;
 
+    const landingHeaderBackground = {
+      'backgroundImage'    : `url('${require('@img/dashboard-header.jpg')}')`
+    };
+
+    const isLanding = location.pathname === routes.DASHBOARD;
+
     return (
 
       <div className={'dashboard-container'}>
         <Header transparentMode={false}
                 withShade={headerShade}
                 toggleNotificationsDrawer={this.toggleNotificationsDrawer}/>
-        <div className={'dashboard-body'}>
+        <div className={'dashboard-body'} style={isLanding ? landingHeaderBackground : {}}>
           <Switch>
             <Route exact path={routes.DASHBOARD}
                    component={Landing}/>

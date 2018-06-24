@@ -17,5 +17,10 @@ export const PROJECT_TYPES = {
     key: 'smallBusiness',
     label: 'Small business',
     description: 'Same as above + Customers and Calendar',
+  },
+  MEDIUM_BUSINESS: {
+    key: 'mediumBusiness',
+    label: 'Medium business',
+    description: 'Same as above + Shift Manager and Project Management',
   }
 };

@@ -16,6 +16,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import PersonIcon from '@material-ui/icons/Person';
+import GroupIcon from '@material-ui/icons/Group';
+import HomeIcon from '@material-ui/icons/Home';
 import withValidation from '../hoc/withValidation';
 
 import { PROJECT_TYPES } from '@const/';
@@ -126,7 +128,7 @@ class CreateProjectModal extends React.Component {
 
                 <MenuItem value={PROJECT_TYPES.HOUSE_HOLD.key}>
                   <ListItemIcon className={'menu-icon'}>
-                    <PersonIcon />
+                    <HomeIcon />
                   </ListItemIcon>
                   <ListItemText className={'menu-text'}
                                 secondary={PROJECT_TYPES.HOUSE_HOLD.description}
@@ -140,6 +142,15 @@ class CreateProjectModal extends React.Component {
                   <ListItemText className={'menu-text'}
                                 secondary={PROJECT_TYPES.SMALL_BUSINESS.description}
                                 primary={<span> {PROJECT_TYPES.SMALL_BUSINESS.label} </span>} />
+                </MenuItem>
+
+                <MenuItem value={PROJECT_TYPES.MEDIUM_BUSINESS.key}  disabled={true}>
+                  <ListItemIcon className={'menu-icon'}>
+                    <GroupIcon />
+                  </ListItemIcon>
+                  <ListItemText className={'menu-text'}
+                                secondary={PROJECT_TYPES.MEDIUM_BUSINESS.description}
+                                primary={<span> {PROJECT_TYPES.MEDIUM_BUSINESS.label} </span>} />
                 </MenuItem>
               </Select>
             </FormControl>

@@ -6,6 +6,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Zoom from '@material-ui/core/Zoom';
 
 const styles = {
   bullet: {
@@ -28,33 +29,44 @@ class ProjectCard extends Component {
     project: PropTypes.object.isRequired,
   };
 
+  state = {
+    show: false,
+  };
+
+  componentDidMount() {
+    this.setState({show:true})
+  }
+
   render () {
 
     const { classes, project } = this.props;
+    const { show } = this.state;
     const bull = <span className={classes.bullet}>•</span>;
 
     return (
       <div>
-        <Card className={'project-card'}>
-          <CardContent>
-            <Typography className={classes.title} color="textSecondary">
-              {project.name}
-            </Typography>
-            <Typography variant="headline" component="h2">
-              be{bull}nev{bull}o{bull}lent
-            </Typography>
-            <Typography className={classes.pos} color="textSecondary">
-              adjective
-            </Typography>
-            <Typography component="p">
-              well meaning and kindly.<br />
-              {'"a benevolent smile"'}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">VIEW PROJECT</Button>
-          </CardActions>
-        </Card>
+        <Zoom in={show} timeout={400} >
+          <Card className={'project-card'}>
+            <CardContent>
+              <Typography className={classes.title} color="textSecondary">
+                {project.name}
+              </Typography>
+              <Typography variant="headline" component="h2">
+                be{bull}nev{bull}o{bull}lent
+              </Typography>
+              <Typography className={classes.pos} color="textSecondary">
+                adjective
+              </Typography>
+              <Typography component="p">
+                well meaning and kindly.<br />
+                {'"a benevolent smile"'}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size="small">VIEW PROJECT</Button>
+            </CardActions>
+          </Card>
+        </Zoom>
       </div>
     );
   }
