@@ -67,7 +67,7 @@ class UserProfileMenu extends React.Component {
       'backgroundColor' : user.avatarColor
     };
 
-    //TODO - Migrate to react-pooper v.1, With Reference instead of Target
+    //TODO - Migrate to react-pooper v.1, With Ref
     return (
         <Manager>
           <Target>
@@ -112,7 +112,7 @@ class UserProfileMenu extends React.Component {
                       <ListItemIcon className={'menu-icon'}>
                         <FeedbackIcon />
                       </ListItemIcon>
-                      <ListItemText className={'menu-text'} primary="Feedback" />
+                      <ListItemText className={'menu-text'} primary="Feedback"/>
                     </MenuItem>
                     <MenuItem className={'menu-item'} onClick={this.handleClose}>
                       <ListItemIcon className={'menu-icon'}>

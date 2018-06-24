@@ -3,7 +3,11 @@
 .modal {
 
   .modal-title {
-    background-color: $light-header;
+    background-color: $theme-primary;
+
+    h2 {
+      color: whitesmoke;
+    }
   }
 
   .modal-content {

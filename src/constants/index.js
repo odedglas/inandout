@@ -6,3 +6,16 @@ export const ROUTER = {
   WELCOME        : '/welcome',
   HOME           : '/'
 };
+
+export const PROJECT_TYPES = {
+  HOUSE_HOLD: {
+    key: 'houseHolding',
+    label: 'House Holding',
+    description: 'Outcome categories, Todo\'s and budgets'
+  },
+  SMALL_BUSINESS: {
+    key: 'smallBusiness',
+    label: 'Small business',
+    description: 'Same as above + Customers and Calendar',
+  }
+};

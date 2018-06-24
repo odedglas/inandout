@@ -3,15 +3,16 @@ import {
   Link,
   withRouter,
 } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import {connect} from 'react-redux';
+import {compose} from 'recompose';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {SignUpLink} from '../signup/SignUp'
 import SnackbarNotification from '../framework/SnackbarNotification';
 import {ROUTER as routes} from '../../constants';
-import { loginWithPassword } from '../../actions/authentication'
+import {loginWithPassword} from '../../actions/authentication'
+import validationService from '@service/validation';
 
 const INITIAL_STATE = {
   email   : '',
@@ -22,7 +23,7 @@ const INITIAL_STATE = {
 class LoginForm extends Component {
 
   static propTypes = {
-    from: PropTypes.object,
+    from             : PropTypes.object,
     loginWithPassword: PropTypes.func.isRequired
   };
 
@@ -30,6 +31,23 @@ class LoginForm extends Component {
     super(props);
     this.state = {...INITIAL_STATE};
     this.submitBtn = React.createRef();
+    this.validator = validationService.create([
+      {
+        field    : 'email',
+        method   : (v, f, state, validator, args) => !validator.isEmpty(v),
+        message  : 'Please provide an email address.'
+      },
+      {
+        field    : 'email',
+        method   : (v, f, state, validator, args) => validator.isEmail(v),
+        message  : 'Email address is not valid.'
+      },
+      {
+        field    : 'password',
+        method   : (v, f,state, validator, args) => !validator.isEmpty(v),
+        message  : 'Please provide a password/'
+      },
+    ]);
   }
 
   onSubmit = (event) => {
@@ -48,7 +66,9 @@ class LoginForm extends Component {
     this.setState({error: undefined});
     event.preventDefault();
 
-    if (this.validate()) {
+    const validationResult = validationService.validate(this.validator, this.state);
+
+    if(validationResult.isValid) {
       loginWithPassword(
         email,
         password,
@@ -60,7 +80,7 @@ class LoginForm extends Component {
     }
   };
 
-  doSubmit = () =>  this.submitBtn.current.click();
+  doSubmit = () => this.submitBtn.current.click();
 
   handleStateChange = (prop, value) => {
 
@@ -69,33 +89,23 @@ class LoginForm extends Component {
     this.setState(update)
   };
 
-  validate = () => {
-
-    const {
-      email,
-      password
-    } = this.state;
-
-    return !(password === '' ||
-             email === '');
-  };
-
   render() {
     const {
       email,
       password,
       error,
     } = this.state;
-    const isValid = this.validate();
+
+    const isValid = validationService.validate(this.validator, this.state).isValid;
 
     return (
       <div className={'col-flex just-c h-100'}>
         <div className={'login-layout'}>
-          <img src={require('@img/login-bg.svg')} alt='bg' />
+          <img src={require('@img/login-bg.svg')} alt='bg'/>
         </div>
         <div className={'login-container'}>
           <div className={'logo'}>
-            <img src={require('@img/logo.png')} alt='logo' />
+            <img src={require('@img/logo.png')} alt='logo'/>
           </div>
           <form className={'login-form'} onSubmit={this.onSubmit}>
             <div className={'form-control'}>
@@ -127,7 +137,7 @@ class LoginForm extends Component {
                       onClick={this.doSubmit}>
                 Sign In
               </Button>
-              <button ref={this.submitBtn} className={'hidden-submit-handler'} type="submit"> </button>
+              <button ref={this.submitBtn} className={'hidden-submit-handler'} type="submit"></button>
             </div>
             <div>
               <SignUpLink/>
@@ -136,7 +146,7 @@ class LoginForm extends Component {
         </div>
         <SnackbarNotification onClose={() => this.handleStateChange('error', undefined)}
                               anchor={{
-                                vertical: 'top',
+                                vertical  : 'top',
                                 horizontal: 'right',
                               }}
                               open={error !== undefined}
@@ -160,7 +170,7 @@ export default compose(
   withRouter,
   connect(state => ({
     authenticationRedirect: state.authentication.authenticationRedirect,
-  }), { loginWithPassword })
+  }), {loginWithPassword})
 )(LoginForm);
 
 export {
