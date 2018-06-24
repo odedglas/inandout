@@ -20,6 +20,7 @@ import HelpIcon from '@material-ui/icons/Help';
 import SettingsIcon from '@material-ui/icons/Settings';
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import Divider from '@material-ui/core/Divider';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { signOut } from '../../actions/authentication';
 import {ROUTER as routes} from '../../constants';
@@ -76,13 +77,15 @@ class UserProfileMenu extends React.Component {
                 this.userMenuTarget = node;
               }}
             >
-              <Avatar className={'avatar'}
-                      aria-owns={open ? 'menu-list-grow' : null}
-                      aria-haspopup="true"
-                      onClick={this.handleToggle}
-                      style={avatarBackground}>
-                {user.initials}
-              </Avatar>
+              <Tooltip title={open ? '' : 'User Profile'} className={'tooltip'}>
+                <Avatar className={'avatar'}
+                        aria-owns={open ? 'menu-list-grow' : null}
+                        aria-haspopup="true"
+                        onClick={this.handleToggle}
+                        style={avatarBackground}>
+                  {user.initials}
+                </Avatar>
+              </Tooltip>
             </div>
           </Target>
           <Popper

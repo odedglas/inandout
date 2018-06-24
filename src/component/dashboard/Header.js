@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
+import IconButton from '@material-ui/core/IconButton';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import Tooltip from '@material-ui/core/Tooltip';
 import UserProfileMenu from './UserProfileMenu'
 
 class Header extends React.Component {
@@ -21,6 +23,13 @@ class Header extends React.Component {
           <img src={require('@img/logo.png')} alt='logo' />
         </div>
         <div className={'flex'}> </div>
+        <div>
+          <Tooltip title={'Notifications'} className={'tooltip'}>
+            <IconButton className={'notifications-button mx-3'}>
+              <NotificationsIcon/>
+            </IconButton>
+          </Tooltip>
+        </div>
         <UserProfileMenu user={user}/>
       </div>
     );

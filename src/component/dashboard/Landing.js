@@ -4,6 +4,7 @@ import CreateProjectModal from '../modals/CreateProject'
 import ProjectCard from './ProjectCard';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import Tooltip from '@material-ui/core/Tooltip';
 
 class Landing extends React.Component {
 
@@ -53,13 +54,15 @@ class Landing extends React.Component {
               projects.map(project => <ProjectCard key={project.id} project={project}/>)
             }
           </div>
-          <Button variant="fab"
-                  color="primary"
-                  aria-label="add"
-                  onClick={this.showCreateProjectModal}
-                  className={'add-project'}>
-            <AddIcon/>
-          </Button>
+          <Tooltip title={'Add Project'} placement={'top'}>
+            <Button variant="fab"
+                    color="primary"
+                    aria-label="add"
+                    onClick={this.showCreateProjectModal}
+                    className={'add-project'}>
+              <AddIcon/>
+            </Button>
+          </Tooltip>
         </div>
         <CreateProjectModal open={showCreateProjectModal}
                             onClose={this.closeCreateProjectModal}/>

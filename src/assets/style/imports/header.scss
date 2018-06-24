@@ -25,6 +25,12 @@
     box-shadow: 0 1px 0 rgba(0,0,0,.15);
   }
 
+  .notifications-button {
+    color: rgba(255, 255, 255, 0.8);
+
+    &:hover { color: white}
+  }
+
   .user-menu-holder {
     transform-origin: right top !important;
     margin-top:.5rem;

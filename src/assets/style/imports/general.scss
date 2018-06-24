@@ -67,3 +67,8 @@ input:active, input:focus, textarea:active, textarea:focus, select:active, selec
     color: darken($link-color, 15%);
   }
 }
+
+div[role="tooltip"] {
+  font-size: .85rem;
+  padding: 0.5rem;
+}
