@@ -4,15 +4,16 @@ import CreateProjectModal from '../modals/CreateProject'
 import ProjectCard from './ProjectCard';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+
 class Landing extends React.Component {
 
   state = {
-    projects: [
-      {name: 'Project 1', id:'123asda12'},
-      {name: 'Project 2', id:'123a2132'},
-      {name: 'Project 3', id:'123123da12'},
-      {name: 'Project 4', id:'12312ssss12'},
-      {name: 'Project 5', id:'12312ssss12ss'},
+    projects              : [
+      {name: 'Project 1', id: '123asda12'},
+      {name: 'Project 2', id: '123a2132'},
+      {name: 'Project 3', id: '123123da12'},
+      {name: 'Project 4', id: '12312ssss12'},
+      {name: 'Project 5', id: '12312ssss12ss'},
     ],
     showCreateProjectModal: false,
   };
@@ -25,16 +26,16 @@ class Landing extends React.Component {
     this.setState({showCreateProjectModal: false})
   };
 
-  render () {
+  render() {
 
-    const { projects, showCreateProjectModal } = this.state;
+    const {projects, showCreateProjectModal} = this.state;
 
     const landingHeaderBackground = {
       'backgroundImage': `url('${require('@img/dashboard-header.jpg')}')`,
     };
 
     return (
-      <div className={'lading-page h-100'}  style={landingHeaderBackground}>
+      <div className={'lading-page h-100'} style={landingHeaderBackground}>
         <div className={'landing-header'}>
           <div className={'landing-text'}>
             <h2> Welcome to In&Out !</h2>
@@ -49,7 +50,7 @@ class Landing extends React.Component {
           {projects.length > 0 ? <div className={'title'}> Your Projects </div> : null}
           <div className={'projects-inner'}>
             {
-              projects.map( project => <ProjectCard key={project.id} project={project}/>)
+              projects.map(project => <ProjectCard key={project.id} project={project}/>)
             }
           </div>
           <Button variant="fab"
@@ -57,10 +58,11 @@ class Landing extends React.Component {
                   aria-label="add"
                   onClick={this.showCreateProjectModal}
                   className={'add-project'}>
-            <AddIcon />
+            <AddIcon/>
           </Button>
         </div>
-        <CreateProjectModal open={showCreateProjectModal} onClose={this.closeCreateProjectModal}/>
+        <CreateProjectModal open={showCreateProjectModal}
+                            onClose={this.closeCreateProjectModal}/>
       </div>
     );
   }

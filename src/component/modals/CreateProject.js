@@ -16,15 +16,14 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import PersonIcon from '@material-ui/icons/Person';
+import withValidation from '../hoc/withValidation';
 
 import { PROJECT_TYPES } from '@const/';
 import util from '@util/';
-import validationService from '@service/validation';
 
 const INITIAL_STATE = {
   projectType: '',
   projectName: '',
-  validation: undefined,
 };
 
 class CreateProjectModal extends React.Component {
@@ -32,47 +31,21 @@ class CreateProjectModal extends React.Component {
   static propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
+    isValid: PropTypes.func.isRequired,
+    validate: PropTypes.func.isRequired,
+    clearValidation: PropTypes.func.isRequired,
+    onValidationChange: PropTypes.func.isRequired,
+    validation: PropTypes.object.isRequired,
   };
 
   state = {...INITIAL_STATE};
-
-  constructor(props) {
-    super(props);
-    this.validator = validationService.create([
-      {
-        field    : 'projectName',
-        method   : (v, f, state, validator, args) => !validator.isEmpty(v),
-        message  : 'Please provide a project name address.'
-      },
-      {
-        field    : 'projectName',
-        method   : (v, f, state, validator, args) => validator.isLength(v, {min:4}),
-        message  : 'Project name must be at least 4 letters.'
-      },
-      {
-        field    : 'projectType',
-        method   : (v, f, state, validator, args) => !validator.isEmpty(v),
-        message  : 'Please choose project type.'
-      },
-    ]);
-  }
 
   handleChange = (value, name) => {
     let update = {};
     update[name] = value;
 
     //Validating against new input
-    const currentValidation = this.state.validation;
-    if(currentValidation) {
-      //Setting new value
-      let newState = {...this.state};
-      newState[name] = value;
-
-      //Extracting the specific field results, and overrides our component validation state
-      currentValidation[name] = validationService.validate(this.validator, newState, name)[name];
-      update.validation = currentValidation;
-    }
-
+    this.props.onValidationChange(this.state, update, name);
     this.setState(update);
   };
 
@@ -80,32 +53,25 @@ class CreateProjectModal extends React.Component {
 
   createProject = () => {
 
-    this.setState({ validation : undefined });
-    const validationResult = validationService.validate(this.validator, this.state);
+    const validationResult = this.props.validate(this.state);
 
     if(validationResult.isValid) {
       console.log("valid. Creating project wiht : " + this.state.projectName);
-
       this.handleClose();
     }
-    else {
 
-      this.setState({ validation: validationResult })
-    }
   };
 
   handleClose = () => {
-    this.setState(...INITIAL_STATE);
+    this.props.clearValidation();
+    this.setState({...INITIAL_STATE});
     this.props.onClose();
   };
 
   render() {
 
-    const { open } = this.props;
-    const { projectType, projectName, validation } = this.state;
-
-    const isValid = !validation || validation.isValid;
-    console.log("Is valid is : " + isValid);
+    const { open, validation} = this.props;
+    const { projectType, projectName } = this.state;
 
     return (
       <div>
@@ -126,12 +92,12 @@ class CreateProjectModal extends React.Component {
               <TextField
                 autoFocus
                 value={projectName}
-                error={validation && validation.projectName.isInvalid}
+                error={validation.projectName.isInvalid}
                 onChange={(event) => this.handleChange(event.target.value, 'projectName')}
                 margin="dense"
                 id="project-name"
                 label="Project Name"
-                type="email"
+                title={validation.projectName.message}
                 fullWidth
               />
             </div>
@@ -186,4 +152,20 @@ class CreateProjectModal extends React.Component {
   }
 }
 
-export default CreateProjectModal;
+export default withValidation([
+  {
+    field    : 'projectName',
+    method   : (v, f, state, validator, args) => !validator.isEmpty(v),
+    message  : 'Please provide a project name address.'
+  },
+  {
+    field    : 'projectName',
+    method   : (v, f, state, validator, args) => validator.isLength(v, {min:4}),
+    message  : 'Project name must be at least 4 letters.'
+  },
+  {
+    field    : 'projectType',
+    method   : (v, f, state, validator, args) => !validator.isEmpty(v),
+    message  : 'Please choose project type.'
+  },
+])(CreateProjectModal);
