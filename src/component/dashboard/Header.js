@@ -10,17 +10,18 @@ class Header extends React.Component {
 
   static propTypes = {
     transparentMode: PropTypes.bool,
+    withShade: PropTypes.bool
   };
 
   render () {
 
-    const { transparentMode, user } = this.props;
-    const containerCls = `header px-3 py-2 ${transparentMode ? 'transparent' : ''}`;
+    const { transparentMode, withShade, user } = this.props;
+    const containerCls = `header px-3 py-2 ${transparentMode ? 'transparent' : ''} ${withShade ? 'with-sade' : ''}`;
 
     return (
       <div className={containerCls}>
         <div className={'logo'}>
-          <img src={require('@img/logo.png')} alt='logo' />
+          <img src={require('@img/logo-white.png')} alt='logo' />
         </div>
         <div className={'flex'}> </div>
         <div>

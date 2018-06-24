@@ -5,10 +5,16 @@
   flex-direction: row;
   align-items: center;
   height: $header-inner-height;
+  background-color: $theme-primary;
   margin:0;
   padding:0;
   position: relative;
   z-index: 1;
+  transition: box-shadow 0.15s ease;
+
+  &.with-sade {
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .37);
+  }
 
   .logo {
     height:45px;
@@ -34,6 +40,7 @@
   .user-menu-holder {
     transform-origin: right top !important;
     margin-top:.5rem;
+    margin-right:.5rem;
     width:250px;
 
     ul {

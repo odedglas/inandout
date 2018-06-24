@@ -24,6 +24,7 @@ import util from '@util/';
 const INITIAL_STATE = {
   projectType: '',
   projectName: '',
+  projectDescription: '',
 };
 
 class CreateProjectModal extends React.Component {
@@ -71,7 +72,7 @@ class CreateProjectModal extends React.Component {
   render() {
 
     const { open, validation} = this.props;
-    const { projectType, projectName } = this.state;
+    const { projectType, projectName, projectDescription } = this.state;
 
     return (
       <div>
@@ -134,6 +135,17 @@ class CreateProjectModal extends React.Component {
                 </MenuItem>
               </Select>
             </FormControl>
+
+            <div className={'form-control'}>
+              <TextField
+                value={projectDescription}
+                onChange={(event) => this.handleChange(event.target.value, 'projectDescription')}
+                margin="dense"
+                label="Project Description"
+                id="project-description"
+                fullWidth
+              />
+            </div>
 
           </DialogContent>
           <DialogActions className={'modal-actions'}>
