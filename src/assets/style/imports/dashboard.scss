@@ -18,18 +18,18 @@
 
     &::-webkit-scrollbar-thumb {
       border-radius: 4px;
-      background-color: rgba(0,0,0,.5);
-      -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+      background-color: rgba(0, 0, 0, .5);
+      -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
     }
   }
 
   .lading-page {
-    flex:1;
+    flex: 1;
 
     .landing-header {
       height: 250px;
       padding: 3rem 0;
-      background-color:white;
+      background-color: white;
       background-repeat: no-repeat;
       background-position: right 45px bottom;
       background-size: contain;
@@ -38,7 +38,7 @@
         background-position: right bottom;
       }
 
-      .landing-text span{
+      .landing-text span {
         color: $light-text;
         font-size: 16px;
         line-height: 24px;
@@ -53,9 +53,9 @@
         height: 0;
         border-top: 330px solid #4682b4;
         border-left: 960px solid transparent;
-        position:absolute;
-        right:0;
-        top:0;
+        position: absolute;
+        right: 0;
+        top: 0;
 
         @include mq('desktop-wide', 'max') {
           border-left: 660px solid transparent;
@@ -94,9 +94,9 @@
         margin-bottom: 1rem;
 
         .project-card {
-          width:320px;
-          cursor:pointer;
-          margin:.5rem 1.5rem .5rem 0;
+          width: 320px;
+          cursor: pointer;
+          margin: .5rem 1.5rem .5rem 0;
           transition: box-shadow .25s, background-color .15s ease;
 
           @include mq('tablet-wide', 'max') {
@@ -104,8 +104,8 @@
           }
 
           @include mq('tablet', 'max') {
-            width:100%;
-            flex:1
+            width: 100%;
+            flex: 1
           }
 
           &:hover {
@@ -120,9 +120,9 @@
     }
 
     .add-project {
-      position:absolute;
-      bottom:20px;
-      right:40px;
+      position: absolute;
+      bottom: 20px;
+      right: 40px;
     }
 
     .centered {
