@@ -1,0 +1,29 @@
+@import '../variables';
+
+.notifications-drawer {
+  width: 380px;
+
+  .header {
+    background-color: $theme-primary;
+    color: white;
+    padding: 1rem;
+    font-size: 1.25rem;
+    display:flex;
+    align-items: center;
+    box-shadow: $header-shadow;
+
+    .text {
+      flex:1
+    }
+    .close {
+      @include offwhiteIcon()
+    }
+  }
+
+  .content {
+
+    &.empty {
+
+    }
+  }
+}

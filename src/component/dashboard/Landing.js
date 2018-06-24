@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import CreateProjectModal from '../modals/CreateProject'
 import ProjectCard from './ProjectCard';
@@ -20,14 +19,8 @@ class Landing extends React.Component {
     showCreateProjectModal: false,
   };
 
-  constructor(props) {
-    super(props);
-    this.addProjectButton = React.createRef();
-  }
-
   showCreateProjectModal = () => {
     this.setState({showCreateProjectModal: true});
-    ReactDOM.findDOMNode(this.addProjectButton.current).blur();
   };
 
   closeCreateProjectModal = () => {
@@ -45,7 +38,7 @@ class Landing extends React.Component {
         <div className={'landing-header'} style={landingHeaderBackground}>
           <div className={'centered'}>
             <div className={'landing-text'}>
-              <h2> Welcome to In&Out !</h2>
+              <h1> Welcome to In&Out !</h1>
               <span>Create a project and start managing your income / outcome.</span>
               <br/>
               <span>Stay in control.</span>
@@ -70,7 +63,6 @@ class Landing extends React.Component {
                             onClose={this.closeCreateProjectModal}/>
         <Tooltip title={'Add Project'} placement={'top'}>
           <Button variant="fab"
-                  ref={this.addProjectButton}
                   color="primary"
                   aria-label="add"
                   onClick={this.showCreateProjectModal}

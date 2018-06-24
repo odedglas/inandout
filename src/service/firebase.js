@@ -22,5 +22,17 @@ export default {
     return database.ref(path).once('value').then((snapshot) => {
       return snapshot.val();
     });
+  },
+  createProject:(project) => {
+
+    const ref = database.ref('projects').push(project)
+      .then(res => {
+        return {
+          ...project,
+          id: res.key
+        }
+      });
+
+    return ref;
   }
 }

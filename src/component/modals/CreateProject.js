@@ -20,6 +20,7 @@ import withValidation from '../hoc/withValidation';
 
 import { PROJECT_TYPES } from '@const/';
 import util from '@util/';
+import firebaseService from '@service/firebase';
 
 const INITIAL_STATE = {
   projectType: '',
@@ -58,6 +59,12 @@ class CreateProjectModal extends React.Component {
 
     if(validationResult.isValid) {
       console.log("valid. Creating project wiht : " + this.state.projectName);
+      debugger;
+      firebaseService.createProject({
+        ...this.state
+      }).then((d) => {
+        debugger;
+      })
       this.handleClose();
     }
 
@@ -79,6 +86,7 @@ class CreateProjectModal extends React.Component {
         <Dialog
           open={open}
           onClose={this.handleClose}
+          disableRestoreFocus={true}
           TransitionComponent={Grow}
           transitionDuration={300}
           className={'modal'}

@@ -13,7 +13,8 @@ export default {
       email,
       initials: initials.toUpperCase(),
       avatarImage:'',
-      avatarColor: themeService.getAvatarRandomColor()
+      avatarColor: themeService.getAvatarRandomColor(),
+      projects: []
     };
 
     return firebaseService.createUser(id, user).then(() => {

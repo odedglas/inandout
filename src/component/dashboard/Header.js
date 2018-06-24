@@ -10,13 +10,18 @@ class Header extends React.Component {
 
   static propTypes = {
     transparentMode: PropTypes.bool,
-    withShade: PropTypes.bool
+    withShade: PropTypes.bool,
+    toggleNotificationsDrawer: PropTypes.func.isRequired
+  };
+
+  toggleNotificationsDrawer = () => {
+    this.props.toggleNotificationsDrawer();
   };
 
   render () {
 
     const { transparentMode, withShade, user } = this.props;
-    const containerCls = `header px-3 py-2 ${transparentMode ? 'transparent' : ''} ${withShade ? 'with-sade' : ''}`;
+    const containerCls = `app-header px-3 py-2 ${transparentMode ? 'transparent' : ''} ${withShade ? 'with-sade' : ''}`;
 
     return (
       <div className={containerCls}>
@@ -26,7 +31,7 @@ class Header extends React.Component {
         <div className={'flex'}> </div>
         <div>
           <Tooltip title={'Notifications'} className={'tooltip'}>
-            <IconButton className={'notifications-button'}>
+            <IconButton className={'notifications-button'} onClick={this.toggleNotificationsDrawer}>
               <NotificationsIcon/>
             </IconButton>
           </Tooltip>

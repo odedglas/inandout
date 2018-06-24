@@ -5,6 +5,9 @@ import {
   withRouter
 } from 'react-router-dom';
 import ReactDOM from 'react-dom';
+
+import NotificationsDrawer from './drawer/NotificationsDrawer';
+
 import {ROUTER as routes} from '../../constants';
 import Header from './Header';
 import Landing from './Landing';
@@ -14,6 +17,7 @@ class Dashboard extends Component {
   state = {
     dashboardBodyRef: undefined,
     headerShade: false,
+    showNotificationsBar: false,
   };
 
   componentDidMount() {
@@ -35,21 +39,32 @@ class Dashboard extends Component {
     this.setState({ headerShade: bodyScrollTop > 0})
   };
 
+  toggleNotificationsDrawer = () => {
+    this.setState({
+      showNotificationsBar: !this.state.showNotificationsBar,
+    });
+  };
+
+
   render() {
 
     const { location } = this.props;
-    const { headerShade } = this.state;
-    const shouldRenderTransparentHeader = location.pathname === routes.DASHBOARD;
+    const { headerShade, showNotificationsBar } = this.state;
 
     return (
 
       <div className={'dashboard-container'}>
-        <Header transparentMode={false} withShade={headerShade}/>
+        <Header transparentMode={false}
+                withShade={headerShade}
+                toggleNotificationsDrawer={this.toggleNotificationsDrawer}/>
         <div className={'dashboard-body'}>
           <Switch>
             <Route exact path={routes.DASHBOARD}
                    component={Landing}/>
           </Switch>
+          <NotificationsDrawer open={showNotificationsBar} toggleNotificationsDrawer={this.toggleNotificationsDrawer}>
+
+          </NotificationsDrawer>
         </div>
       </div>
     );

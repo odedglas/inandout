@@ -77,7 +77,7 @@ class UserProfileMenu extends React.Component {
                 this.userMenuTarget = node;
               }}
             >
-              <Tooltip title={open ? '' : 'User Profile'} className={'tooltip'}>
+              <Tooltip title={'User Profile'} className={'tooltip'}>
                 <Avatar className={'avatar mx-3'}
                         aria-owns={open ? 'menu-list-grow' : null}
                         aria-haspopup="true"

@@ -10,9 +10,13 @@ $light-header: #fafafa;
 $light-text: rgba(0,0,0,0.54);
 $menu-text-color: #424242;
 $menu-icon-color: #757575;
+$icon-offwhite: rgba(255, 255, 255, 0.8);
 
 $background-color: #ECEFF1;
 $link-color: #6d8db1;
+
+// -- Shadows -- //
+$header-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
 
 // -- Sizes -- //
 $header-inner-height:55px;
@@ -44,5 +48,13 @@ $breakpoints: (
     @media only screen and (#{$type}-width: $width) {
       @content;
     }
+  }
+}
+
+@mixin offwhiteIcon() {
+  color: $icon-offwhite;
+
+  &:hover {
+    color:white;
   }
 }
