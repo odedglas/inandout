@@ -1,6 +1,7 @@
 @import '../variables';
 
 .modal {
+  @include withZIndex('modal');
 
   .modal-title {
     background-color: $theme-primary;

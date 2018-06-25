@@ -8,10 +8,7 @@ import CloseIcon from '@material-ui/icons/Close';
 class NotificationsDrawer extends Component {
 
   state = {
-    notifications: [{
-      project: 'Project 1',
-      From: 'Someone else'
-    }]
+    notifications: []
   };
 
   static propTypes = {
@@ -49,7 +46,19 @@ class NotificationsDrawer extends Component {
             </div>
           </div>
           <div className={'content'}>
-            {isEmpty ? 'I am emptyyyy' : 'I have content'}
+            {
+              !isEmpty ? 'I have content'
+                : <div className={'empty-notifications'}>
+                  <div className={'icon'}>
+                    <img src={require('@img/hot-air-balloon.svg')} alt="no-alerts" />
+                  </div>
+                  <div className={'context'}>
+                    You don't have any notifications
+
+                    <span> Notifications from projects you work on will appear here. </span>
+                  </div>
+                </div>
+            }
           </div>
         </div>
       </Drawer>

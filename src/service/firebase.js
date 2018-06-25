@@ -9,21 +9,30 @@ if (!firebase.apps.length) {
 }
 
 const auth = firebase.auth(), database = firebase.database();
+
 export default {
   auth,
   database,
-  createUser: (id, user) => {
+  initUser(user) {
+    this.user = user;
+  },
+  createUser(id, user) {
     return database.ref(`users/${id}`).set({
       user
     })
   },
-  fetch: (path) => {
+  fetch(path) {
 
     return database.ref(path).once('value').then((snapshot) => {
-      return snapshot.val();
+      return {
+        id: snapshot.key,
+        ...snapshot.val()
+      };
     });
   },
-  createProject:(project) => {
+  createProject(project) {
+
+    project.owner = this.user.id;
 
     const ref = database.ref('projects').push(project)
       .then(res => {

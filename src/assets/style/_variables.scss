@@ -16,7 +16,9 @@ $background-color: #ECEFF1;
 $link-color: #6d8db1;
 
 // -- Shadows -- //
-$header-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
+$header-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 
 // -- Sizes -- //
 $header-inner-height:55px;
@@ -57,4 +59,26 @@ $breakpoints: (
   &:hover {
     color:white;
   }
+}
+
+// -- Z-index's system --//
+@mixin withZIndex($type: content) {
+  $matchZIndex: 0;
+  @if $type == content {
+    $matchZIndex: 1
+  }
+  @if $type == layout {
+    $matchZIndex: 2
+  }
+  @if $type == laytouFloat {
+    $matchZIndex: 3
+  }
+  @if $type == modal {
+    $matchZIndex: 99
+  }
+  @if $type == loadingMask {
+    $matchZIndex: 101
+  }
+
+  z-index: $matchZIndex !important;
 }

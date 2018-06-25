@@ -3,7 +3,7 @@
 .login-container {
   width: 460px;
   padding: 1.5rem 3rem;
-  z-index: 2;
+  @include withZIndex('laytouFloat');
   display: block;
   margin: 0 auto;
   overflow: hidden;
@@ -34,7 +34,7 @@
 
 .login-layout {
   position:absolute;
-  z-index:1;
+  @include withZIndex();
   height:100%;
 }
 

@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {compose} from 'recompose';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -17,12 +19,13 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import PersonIcon from '@material-ui/icons/Person';
 import GroupIcon from '@material-ui/icons/Group';
-import HomeIcon from '@material-ui/icons/Home';
-import withValidation from '../hoc/withValidation';
+import HomeIcon from '@material-ui/icons/Home'
 
+import withValidation from '../hoc/withValidation';
+import { setLoading } from "@action/loading";
 import { PROJECT_TYPES } from '@const/';
 import util from '@util/';
-import firebaseService from '@service/firebase';
+import projectService from '@service/project';
 
 const INITIAL_STATE = {
   projectType: '',
@@ -40,6 +43,7 @@ class CreateProjectModal extends React.Component {
     clearValidation: PropTypes.func.isRequired,
     onValidationChange: PropTypes.func.isRequired,
     validation: PropTypes.object.isRequired,
+    setLoading: PropTypes.func.isRequired,
   };
 
   state = {...INITIAL_STATE};
@@ -57,17 +61,25 @@ class CreateProjectModal extends React.Component {
 
   createProject = () => {
 
-    const validationResult = this.props.validate(this.state);
+    const { validate, setLoading } = this.props;
+
+    const validationResult = validate(this.state);
 
     if(validationResult.isValid) {
-      console.log("valid. Creating project wiht : " + this.state.projectName);
-      debugger;
-      firebaseService.createProject({
-        ...this.state
-      }).then((d) => {
-        debugger;
-      })
-      this.handleClose();
+      const {  projectType, projectName, projectDescription } = this.state;
+      setLoading(true);
+
+      projectService.createProject(
+        projectName,
+        projectType,
+        projectDescription
+      ).then(() => {
+
+        this.handleClose();
+        setLoading(false);
+
+      });
+
     }
 
   };
@@ -183,20 +195,23 @@ class CreateProjectModal extends React.Component {
   }
 }
 
-export default withValidation([
-  {
-    field    : 'projectName',
-    method   : (v, f, state, validator, args) => !validator.isEmpty(v),
-    message  : 'Please provide a project name address.'
-  },
-  {
-    field    : 'projectName',
-    method   : (v, f, state, validator, args) => validator.isLength(v, {min:4}),
-    message  : 'Project name must be at least 4 letters.'
-  },
-  {
-    field    : 'projectType',
-    method   : (v, f, state, validator, args) => !validator.isEmpty(v),
-    message  : 'Please choose project type.'
-  },
-])(CreateProjectModal);
+export default compose(
+  withValidation([
+    {
+      field    : 'projectName',
+      method   : (v, f, state, validator, args) => !validator.isEmpty(v),
+      message  : 'Please provide a project name address.'
+    },
+    {
+      field    : 'projectName',
+      method   : (v, f, state, validator, args) => validator.isLength(v, {min:4}),
+      message  : 'Project name must be at least 4 letters.'
+    },
+    {
+      field    : 'projectType',
+      method   : (v, f, state, validator, args) => !validator.isEmpty(v),
+      message  : 'Please choose project type.'
+    },
+  ]),
+  connect( null, {setLoading})
+)(CreateProjectModal);

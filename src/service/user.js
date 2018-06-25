@@ -3,7 +3,9 @@ import themeService from './theme';
 
 export default {
 
-  fetchUser: id => firebaseService.fetch(`/users/${id}`).then(res => res.user),
+  fetchUser: id => firebaseService.fetch(`/users/${id}`).then(res =>  {
+    return {id: res.id, ...res.user}
+  }),
   createUser: (id, displayName, email) => {
 
     const initials = displayName ? getInitials(displayName) : email.substring(0,1);

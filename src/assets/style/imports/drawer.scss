@@ -6,11 +6,12 @@
   .header {
     background-color: $theme-primary;
     color: white;
-    padding: 1rem;
+    padding: .5rem 1rem;
     font-size: 1.25rem;
     display:flex;
     align-items: center;
     box-shadow: $header-shadow;
+    height: 55px;
 
     .text {
       flex:1
@@ -21,9 +22,32 @@
   }
 
   .content {
+    padding: 3rem 0;
 
-    &.empty {
+    .empty-notifications {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
 
+      .icon {
+        margin: 2rem;
+        height:184px;
+
+        img {
+          height: 100%;
+        }
+      }
+
+      .context {
+        text-align: center;
+        padding: 0 2rem;
+        color: $light-text;
+
+        span {
+          display:block;
+          margin-top:2rem;
+        }
+      }
     }
   }
 }

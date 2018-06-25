@@ -44,15 +44,16 @@ export function loginWithPassword(email, password, onSuccess, onError) {
         dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser});
 
         onSuccess();
-      });
+      }).finally(() => {
+          dispatch({type: 'LOGIN_STATE_CHANGE', loggingIn: false});
+          dispatch({type: 'APP_LOADING', loading: false})
+        });
     }).catch(e => {
       console.log('Failed to login : ' + e);
       onError(e);
+      dispatch({type: 'LOGIN_STATE_CHANGE', loggingIn: false});
+      dispatch({type: 'APP_LOADING', loading: false})
     })
-      .finally(() => {
-        dispatch({type: 'LOGIN_STATE_CHANGE', loggingIn: false});
-        dispatch({type: 'APP_LOADING', loading: false})
-      });
   }
 }
 

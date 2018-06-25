@@ -91,7 +91,8 @@ module.exports = {
       '@service':  path.resolve('src/service'),
       '@img':  path.resolve('src/assets/images'),
       '@util':  path.resolve('src/util/'),
-      '@const':  path.resolve('src/constants/')
+      '@const':  path.resolve('src/constants/'),
+      '@action':  path.resolve('src/actions/'),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
