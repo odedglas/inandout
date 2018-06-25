@@ -24,7 +24,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import { signOut } from '../../actions/authentication';
 import {ROUTER as routes} from '../../constants';
-
+import theme from '@service/theme';
 class UserProfileMenu extends React.Component {
 
   static propTypes = {
@@ -93,7 +93,7 @@ class UserProfileMenu extends React.Component {
             eventsEnabled={open}
           >
             <ClickAwayListener onClickAway={this.handleClose}>
-              <Grow in={open} id="menu-list-grow" style={{ transformOrigin: '0 0 0' }}>
+              <Grow in={open} id="menu-list-grow">
                 <Paper className={'user-menu-holder'}>
                   <MenuList role="menu">
                     <div className={'user-info'}>

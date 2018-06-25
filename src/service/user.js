@@ -4,7 +4,12 @@ import themeService from './theme';
 export default {
 
   fetchUser: id => firebaseService.fetch(`/users/${id}`).then(res =>  {
-    return {id: res.id, ...res.user}
+
+    return {
+      id: res.id,
+      projects: getUserProjectsMeta(res.projects),
+      ...res.user
+    }
   }),
   createUser: (id, displayName, email) => {
 
@@ -27,3 +32,10 @@ export default {
 }
 
 const getInitials = str =>str.split(" ").map((n)=>n[0]).slice(0,2).join("");
+
+const getUserProjectsMeta = projects => {
+
+  //Getting user projects meta
+  const userProjects = projects ? Object.keys(projects) : [];
+  return userProjects.map(userProject => projects[userProject].projectKey);
+};

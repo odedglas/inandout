@@ -7,7 +7,8 @@ const initialState = {
     email: undefined,
     initials: undefined,
     avatarImage: undefined,
-    avatarColor: undefined
+    avatarColor: undefined,
+    projects:[]
   }
 };
 

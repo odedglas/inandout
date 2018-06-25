@@ -3,6 +3,7 @@ export const ROUTER = {
   SIGN_UP        : '/signup',
   FORGOT_PASSWORD: '/forgot-pw',
   DASHBOARD      : '/dashboard',
+  PROJECT        : '/dashboard/project/:projectName',
   WELCOME        : '/welcome',
   HOME           : '/'
 };

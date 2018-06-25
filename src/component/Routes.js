@@ -22,7 +22,7 @@ const Dashboard = asyncComponent({
 const AuthenticatedRoute = ({authenticated, component: Component, ...routeProps}) => {
   return (
     <Route {...routeProps} render={(props) => {
-      console.log("Trying to acces private route with : " + (authenticated ? 'true' : 'false') + ", path is : ");
+      //console.log("Trying to acces private route with : " + (authenticated ? 'true' : 'false') + ", path is : " + props.location.pathname);
       return (
         authenticated
           ? <Component {...props} />
@@ -37,7 +37,7 @@ const AuthenticatedRoute = ({authenticated, component: Component, ...routeProps}
 
 const UnAuthenticatedRoute = ({authenticated, component: Component, ...routeProps}) => (
   <Route {...routeProps} render={(props) => {
-    console.log("Trying to acces none authenticated route with : " + (authenticated ? 'true' : 'false'));
+    //console.log("Trying to acces none authenticated route with : " + (authenticated ? 'true' : 'false'));
     return (
       !authenticated
         ? <Component {...props} />
@@ -49,7 +49,7 @@ const UnAuthenticatedRoute = ({authenticated, component: Component, ...routeProp
 );
 
 const getRoutes = (isAuthenticated, location) => {
-  console.log(`App rendering, Authenticated: ${isAuthenticated}`);
+  //console.log(`App rendering, Authenticated: ${isAuthenticated}`);
   return (
     <Switch>
       <Route exact path={routes.SIGN_UP}
@@ -59,7 +59,7 @@ const getRoutes = (isAuthenticated, location) => {
                             authenticated={isAuthenticated}
                             component={Login}/>
 
-      <AuthenticatedRoute exact path={routes.DASHBOARD}
+      <AuthenticatedRoute path={routes.DASHBOARD}
                           authenticated={isAuthenticated}
                           location={location}
                           component={Dashboard}/>

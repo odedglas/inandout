@@ -7,10 +7,10 @@ import {
 import ReactDOM from 'react-dom';
 
 import NotificationsDrawer from './drawer/NotificationsDrawer';
-
 import {ROUTER as routes} from '../../constants';
 import Header from './Header';
 import Landing from './Landing';
+import ProjectHome from './project/ProjectHome';
 
 class Dashboard extends Component {
 
@@ -21,6 +21,7 @@ class Dashboard extends Component {
   };
 
   componentDidMount() {
+
     const node = ReactDOM.findDOMNode(this);
     const dashboardBody = node.querySelector('.dashboard-body');
     dashboardBody.addEventListener('scroll', this.onScroll);
@@ -44,7 +45,9 @@ class Dashboard extends Component {
       showNotificationsBar: !this.state.showNotificationsBar,
     });
   };
-
+  onRippleRef = node => {
+    this.ripple = node;
+  };
 
   render() {
 
@@ -63,10 +66,14 @@ class Dashboard extends Component {
         <Header transparentMode={false}
                 withShade={headerShade}
                 toggleNotificationsDrawer={this.toggleNotificationsDrawer}/>
+
         <div className={'dashboard-body'} style={isLanding ? landingHeaderBackground : {}}>
           <Switch>
             <Route exact path={routes.DASHBOARD}
                    component={Landing}/>
+
+            <Route path={routes.PROJECT}
+                   component={() => <ProjectHome  project={location.state && location.state.selectedProject}/>}/>
           </Switch>
           <NotificationsDrawer open={showNotificationsBar} toggleNotificationsDrawer={this.toggleNotificationsDrawer}>
 

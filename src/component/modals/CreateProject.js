@@ -79,7 +79,6 @@ class CreateProjectModal extends React.Component {
         setLoading(false);
 
       });
-
     }
 
   };

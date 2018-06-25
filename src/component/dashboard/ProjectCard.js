@@ -1,5 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {
+  withRouter
+} from 'react-router-dom';
+import { compose } from 'recompose';
+
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -37,6 +42,19 @@ class ProjectCard extends Component {
     this.setState({show:true})
   }
 
+  gotoProject = () => {
+
+    let project = this.props.project;
+    const projectName = project.name;
+    console.log("Navigation to : /dashboard/project/" + projectName);
+    this.props.history.push({
+      pathname: '/dashboard/project/' + projectName,
+      state: {
+        selectedProject: project
+      }
+    });
+  };
+
   render () {
 
     const { classes, project } = this.props;
@@ -63,7 +81,7 @@ class ProjectCard extends Component {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small">VIEW PROJECT</Button>
+              <Button size="small" onClick={this.gotoProject}>VIEW PROJECT</Button>
             </CardActions>
           </Card>
         </Zoom>
@@ -72,4 +90,7 @@ class ProjectCard extends Component {
   }
 }
 
-export default withStyles(styles)(ProjectCard);
+export default compose(
+  withStyles(styles),
+  withRouter
+)(ProjectCard);

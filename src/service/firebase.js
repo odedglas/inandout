@@ -24,21 +24,42 @@ export default {
   fetch(path) {
 
     return database.ref(path).once('value').then((snapshot) => {
+
       return {
         id: snapshot.key,
         ...snapshot.val()
       };
     });
   },
+  fetchByKeys(path, keys) {
+
+    let promises = [];
+    keys.forEach(key => {
+
+      promises.push(
+        this.fetch(`${path}/${key}`)
+      );
+    });
+
+    return Promise.all(promises);
+  },
   createProject(project) {
 
     project.owner = this.user.id;
 
-    const ref = database.ref('projects').push(project)
+    const ref = database.ref(`projects`).push(project)
       .then(res => {
+
+        const projectKey = res.key;
+
+        //Adding to user projects
+        database.ref(`users/${project.owner}/projects`).push({
+          projectKey
+        });
+
         return {
           ...project,
-          id: res.key
+          id: projectKey
         }
       });
 

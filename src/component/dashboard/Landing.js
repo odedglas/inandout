@@ -1,23 +1,38 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
 import CreateProjectModal from '../modals/CreateProject'
 import ProjectCard from './ProjectCard';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import projectsService from '@service/project'
+import firebaseService from '@service/firebase'
+import { setLoading } from "@action/loading";
 
 class Landing extends React.Component {
 
   state = {
-    projects              : [
-      {name: 'Project 1', id: '123asda12'},
-      {name: 'Project 2', id: '123a2132'},
-      {name: 'Project 3', id: '123123da12'},
-      {name: 'Project 4', id: '12312ssss12'},
-      {name: 'Project 5', id: '12312ssss12ss'},
-    ],
+    projects              : [],
     showCreateProjectModal: false,
+    fetchingProjects: true,
   };
+
+  componentWillMount() {
+    const userProjectMeta = firebaseService.user.projects;
+
+    if(userProjectMeta.length > 0) {
+
+      projectsService.fetchCurrentUserProjects().then(projects => {
+        this.setState({ projects, fetchingProjects: false});
+      })
+    }
+    else {
+      this.setState({ fetchingProjects: false });
+    }
+  }
 
   showCreateProjectModal = () => {
     this.setState({showCreateProjectModal: true});
@@ -29,7 +44,10 @@ class Landing extends React.Component {
 
   render() {
 
-    const {projects, showCreateProjectModal} = this.state;
+    const {projects, showCreateProjectModal, fetchingProjects} = this.state;
+
+    const hasProjects = projects.length > 0;
+    const shouldShowAddProjectHelper = !fetchingProjects && !hasProjects;
 
     return (
       <div className={'lading-page'}>
@@ -45,14 +63,19 @@ class Landing extends React.Component {
         </div>
         <div className={'projects-container'}>
           <div className={'centered'}>
-            {projects.length > 0 ? <div className={'title'}> Your Projects </div> : <Button color="primary"
-                                                                                            onClick={this.showCreateProjectModal}>
+
+            {fetchingProjects ? <CircularProgress size={50}/> : null}
+
+            {hasProjects ? <div className={'title'}> Your Projects </div>  : null}
+
+            {shouldShowAddProjectHelper ? <Button color="primary" onClick={this.showCreateProjectModal}>
               &#43; Add Project
-            </Button>
+            </Button> : null
             }
+
             <div className={'projects-inner'}>
               {
-                projects.map(project => <ProjectCard key={project.id} project={project}/>)
+                projects.map(project => <ProjectCard onProjectClick={this.gotoProject} key={project.id} project={project}/>)
               }
             </div>
           </div>
@@ -73,4 +96,4 @@ class Landing extends React.Component {
   }
 }
 
-export default Landing;
+export default connect( null, {setLoading})(Landing);
