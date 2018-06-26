@@ -31,11 +31,9 @@
 
       .icon {
         margin: 2rem;
-        height:184px;
-
-        img {
-          height: 100%;
-        }
+        height: 184px;
+        width: 184px;
+        background-image: url('~@img/hot-air-balloon.svg');
       }
 
       .context {

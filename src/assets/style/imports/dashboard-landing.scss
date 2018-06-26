@@ -1,0 +1,130 @@
+@import '../variables';
+
+.lading-page {
+  flex: 1;
+
+  .landing-header {
+    height: 250px;
+    padding: 3rem 0;
+    background-color: white;
+
+    @include mq('tablet-wide', 'max') {
+      background-position: right bottom;
+    }
+
+    .landing-text span {
+      color: $light-text;
+      font-size: 17px;
+      line-height: 24px;
+
+      h2 {
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    .triangle {
+      width: 0;
+      height: 0;
+      border-top: 330px solid #4682b4;
+      border-left: 960px solid transparent;
+      position: absolute;
+      right: 0;
+      top: 0;
+
+      @include mq('desktop-wide', 'max') {
+        border-left: 660px solid transparent;
+      }
+
+      @include mq('tablet-wide', 'max') {
+        border-left: 460px solid transparent;
+        border-top: 280px solid #4682b4;
+      }
+
+      @include mq('tablet', 'max') {
+        border-left: 360px solid transparent;
+        border-top: 230px solid #4682b4;
+      }
+
+      @include mq('tablet-small', 'max') {
+        border-left: 210px solid transparent;
+        border-top: 180px solid #4682b4;
+      }
+    }
+  }
+
+  .projects-container {
+    position: relative;
+    top: -120px;
+
+    .title {
+      color: $light-text;
+      margin-bottom: 2rem;
+    }
+
+    .no-projects {
+      color: $light-text;
+      font-size: 17px;
+      line-height: 24px;
+    }
+
+    .projects-inner {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+
+      .project-card {
+        width: 320px;
+        margin: .5rem 1.5rem .5rem 0;
+        transition: box-shadow .25s,
+        background-color .15s ease,
+        transform 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+
+        @include mq('tablet-wide', 'max') {
+          width: 280px;
+        }
+
+        @include mq('tablet', 'max') {
+          width: 100%;
+          flex: 1
+        }
+
+        &:hover {
+          //background-color: lighten($background-color,2%);
+          box-shadow: 0 4px 8px 0px rgba(0, 0, 0, 0.2),
+          0px 4px 4px 0px rgba(0, 0, 0, 0.14),
+          0px 6px 2px -4px rgba(0, 0, 0, 0.12);
+        }
+      }
+    }
+
+  }
+
+  .add-project {
+    position: absolute;
+    bottom: 20px;
+    right: 40px;
+  }
+
+  .centered {
+    width: 1100px;
+    margin: 0 auto;
+    padding: 0 1rem;
+
+    @include mq('desktop', 'max') {
+      width: 960px;
+    }
+
+    @include mq('tablet-wide', 'max') {
+      width: 700px;
+    }
+
+    @include mq('tablet', 'max') {
+      width: 550px;
+    }
+
+    @include mq('tablet-small', 'max') {
+      width: 500px;
+    }
+  }
+}

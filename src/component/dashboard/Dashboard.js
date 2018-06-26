@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {
   Route,
   Switch,
   withRouter
 } from 'react-router-dom';
-import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
 
-import { setLoading } from "@action/loading";
+import { fetchUserProjects } from "@action/project";
 
 import NotificationsDrawer from './drawer/NotificationsDrawer';
 import {ROUTER as routes} from '../../constants';
@@ -16,40 +16,23 @@ import Header from './Header';
 import Landing from './Landing';
 import ProjectHome from './project/ProjectHome';
 
-
 class Dashboard extends Component {
 
+  static propTypes = {
+    fetchUserProjects: PropTypes.func.isRequired
+  };
+
   state = {
-    dashboardBodyRef: undefined,
     headerShade: false,
     showNotificationsBar: false,
   };
 
-  componentWillMount() {
-
-  }
-
   componentDidMount() {
 
-    const node = ReactDOM.findDOMNode(this);
-    const dashboardBody = node.querySelector('.dashboard-body');
-    dashboardBody.addEventListener('scroll', this.onScroll);
-
-    this.setState({ dashboardBodyRef: dashboardBody})
-  }
-
-  componentWillUnmount() {
-
-    this.state.dashboardBodyRef.removeEventListener('scroll', this.onScroll);
+    //Loading user projects
+    this.props.fetchUserProjects();
 
   }
-
-  onScroll = (e) => {
-
-    const bodyScrollTop = this.state.dashboardBodyRef.scrollTop;
-    this.setState({ headerShade: bodyScrollTop > 0})
-  };
-
   toggleNotificationsDrawer = () => {
     this.setState({
       showNotificationsBar: !this.state.showNotificationsBar,
@@ -60,12 +43,7 @@ class Dashboard extends Component {
     const { location } = this.props;
     const { headerShade, showNotificationsBar } = this.state;
 
-    let dashboardBackground = {};
-
     const isLanding = location.pathname === routes.DASHBOARD;
-    if(isLanding) {
-      dashboardBackground['backgroundImage'] =`url('${require('@img/dashboard-header.jpg')}')`;
-    }
 
     return (
       <div className={'dashboard-container'}>
@@ -73,7 +51,7 @@ class Dashboard extends Component {
                 withShade={headerShade}
                 toggleNotificationsDrawer={this.toggleNotificationsDrawer}/>
 
-        <div className={'dashboard-body'} style={dashboardBackground}>
+        <div className={'dashboard-body ' + (isLanding ? 'landing' : '')}>
           <Switch>
             <Route exact path={routes.DASHBOARD}
                    component={Landing}/>
@@ -93,5 +71,5 @@ class Dashboard extends Component {
 
 export default compose(
   withRouter,
-  connect(null, {setLoading})
+  connect(null, { fetchUserProjects })
 )(Dashboard);

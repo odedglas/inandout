@@ -5,13 +5,10 @@ import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
-const emptyContentIcon = require('@img/hot-air-balloon.svg')
-
 class NotificationsDrawer extends Component {
 
   state = {
     notifications: [],
-    emptyContentIcon: emptyContentIcon,
   };
 
   static propTypes = {
@@ -22,7 +19,7 @@ class NotificationsDrawer extends Component {
   render () {
 
     const { toggleNotificationsDrawer, open } = this.props;
-    const { notifications, emptyContentIcon } = this.state;
+    const { notifications } = this.state;
     const isEmpty = notifications.length === 0;
 
     return (
@@ -53,7 +50,6 @@ class NotificationsDrawer extends Component {
               !isEmpty ? 'I have content'
                 : <div className={'empty-notifications'}>
                   <div className={'icon'}>
-                    <img src={emptyContentIcon} alt="no-alerts" />
                   </div>
                   <div className={'context'}>
                     You don't have any notifications

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
 import CreateProjectModal from '../modals/CreateProject'
@@ -8,30 +9,19 @@ import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import projectsService from '@service/project'
-import firebaseService from '@service/firebase'
 import { setLoading } from "@action/loading";
 
 class Landing extends React.Component {
 
-  state = {
-    projects              : [],
-    showCreateProjectModal: false,
-    fetchingProjects: false,
+
+  static propTypes = {
+    projects: PropTypes.array,
+    fetchingProjects: PropTypes.bool.isRequired,
   };
 
-  componentWillMount() {
-    const userProjectMeta = firebaseService.user.projects;
-
-    if(userProjectMeta.length > 0) {
-
-      this.setState({ fetchingProjects: true });
-
-      projectsService.fetchCurrentUserProjects().then(projects => {
-        this.setState({ projects, fetchingProjects: false});
-      })
-    }
-  }
+  state = {
+    showCreateProjectModal: false,
+  };
 
   showCreateProjectModal = () => {
     this.setState({showCreateProjectModal: true});
@@ -43,7 +33,8 @@ class Landing extends React.Component {
 
   render() {
 
-    const {projects, showCreateProjectModal, fetchingProjects} = this.state;
+    const { showCreateProjectModal } = this.state;
+    const {projects, fetchingProjects} = this.props;
 
     const hasProjects = projects.length > 0;
     const shouldShowAddProjectHelper = !fetchingProjects && !hasProjects;
@@ -78,7 +69,10 @@ class Landing extends React.Component {
 
             <div className={'projects-inner'}>
               {
-                projects.map(project => <ProjectCard onProjectClick={this.gotoProject} key={project.id} project={project}/>)
+                projects.map(project => <ProjectCard onProjectClick={this.gotoProject}
+                                                     key={project.id}
+                                                     showAnimation={fetchingProjects}
+                                                     project={project}/>)
               }
             </div>
           </div>
@@ -99,4 +93,8 @@ class Landing extends React.Component {
   }
 }
 
-export default connect( null, {setLoading})(Landing);
+export default connect( state => ({
+  projects: state.project.projects,
+  fetchingProjects: state.project.fetchingProjects,
+}), {setLoading})(Landing);
+

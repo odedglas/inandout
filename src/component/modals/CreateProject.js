@@ -26,10 +26,9 @@ import GroupIcon from '@material-ui/icons/Group';
 import HomeIcon from '@material-ui/icons/Home'
 
 import withValidation from '../hoc/withValidation';
-import { setLoading } from "@action/loading";
+import { createProject } from "@action/project";
 import { PROJECT_TYPES } from '@const/';
 import util from '@util/';
-import projectService from '@service/project';
 
 const INITIAL_STATE = {
   projectType: '',
@@ -47,7 +46,7 @@ class CreateProjectModal extends React.Component {
     clearValidation: PropTypes.func.isRequired,
     onValidationChange: PropTypes.func.isRequired,
     validation: PropTypes.object.isRequired,
-    setLoading: PropTypes.func.isRequired,
+    createProject: PropTypes.func.isRequired,
   };
 
   state = {...INITIAL_STATE};
@@ -65,30 +64,25 @@ class CreateProjectModal extends React.Component {
 
   createProject = () => {
 
-    const { validate, setLoading } = this.props;
+    const { validate, createProject } = this.props;
 
     const validationResult = validate(this.state);
 
     if(validationResult.isValid) {
-      const {  projectType, projectName, projectDescription } = this.state;
-      setLoading(true);
 
-      projectService.createProject(
-        projectName,
-        projectType,
-        projectDescription
-      ).then((project) => {
+      createProject(
+        this.state,
+        (project) => {
 
-        this.handleClose();
-        setLoading(false);
-
-        this.props.history.push({
-          pathname: '/dashboard/project/' + projectName,
-          state: {
-            selectedProject: project
-          }
-        });
-      });
+          this.props.onClose();
+          this.props.history.push({
+            pathname: '/dashboard/project/' + project.name,
+            state: {
+              selectedProject: project
+            }
+          });
+        }
+      )
     }
 
   };
@@ -234,5 +228,5 @@ export default compose(
       message  : 'Please choose project type.'
     },
   ]),
-  connect( null, {setLoading})
+  connect( null, {createProject})
 )(CreateProjectModal);

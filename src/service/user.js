@@ -6,9 +6,11 @@ export default {
   fetchUser: id => firebaseService.fetch(`/users/${id}`).then(res =>  {
 
     return {
-      id: res.id,
-      projects: getUserProjectsMeta(res.projects),
-      ...res.user
+      user: {
+        id: res.id,
+        ...res.user
+      },
+      projectsKeys: getUserProjectsMeta(res.projects),
     }
   }),
   createUser: (id, displayName, email) => {

@@ -2,11 +2,7 @@ import firebaseService from './firebase';
 
 export default {
 
-  fetchCurrentUserProjects: () => {
-    const userProjectKeys = firebaseService.user.projects;
-
-    return firebaseService.fetchByKeys('/projects', userProjectKeys);
-  },
+  fetchUserProjects: (projectKeys) => firebaseService.fetchByKeys('/projects', projectKeys),
   fetchProject: id => firebaseService.fetch(`/projects/${id}`).then(res => {
     return {id: res.id, ...res.project}
   }),

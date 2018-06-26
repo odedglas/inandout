@@ -2,6 +2,13 @@ import firebaseService from '@service/firebase';
 import authService from '@service/auth';
 import userService from '@service/user';
 
+
+const fetchUserSuccess = (dispatch, { authUser, user, projectsKeys}) => {
+  dispatch({type: 'SET_USER', user});
+  dispatch({type: 'SET_PROJECTS_KEYS', projectsKeys});
+  dispatch({type: 'AUTHENTICATION_SUCCESS', authUser});
+};
+
 export function createAuthenticationListener(location) {
 
   return dispatch => {
@@ -14,10 +21,12 @@ export function createAuthenticationListener(location) {
       if(authUser !== null) {
 
         //Auth went well, Fetching up user
-        userService.fetchUser(authUser.uid).then( user => {
+        userService.fetchUser(authUser.uid).then( res => {
 
-          dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser});
-          dispatch({type: 'SET_USER', user: user});
+          fetchUserSuccess(
+            dispatch,
+            {authUser, user:res.user, projectsKeys: res.projectsKeys}
+          );
         });
       }
       else {
@@ -33,25 +42,23 @@ export function loginWithPassword(email, password, onSuccess, onError) {
   return dispatch => {
 
     dispatch({type: 'APP_LOADING', loading: true});
-    dispatch({type: 'LOGIN_STATE_CHANGE', loggingIn: true});
 
     authService.loginWithPassword(email, password).then(authUser => {
 
-      userService.fetchUser(authUser.user.uid).then( user => {
+      userService.fetchUser(authUser.user.uid).then( res => {
 
-        //Auth success
-        dispatch({type: 'SET_USER', user: user});
-        dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: authUser});
+        fetchUserSuccess(
+          dispatch,
+          {authUser, user:res.user, projectsKeys: res.projectsKeys}
+        );
 
         onSuccess();
       }).finally(() => {
-          dispatch({type: 'LOGIN_STATE_CHANGE', loggingIn: false});
           dispatch({type: 'APP_LOADING', loading: false})
         });
     }).catch(e => {
       console.log('Failed to login : ' + e);
       onError(e);
-      dispatch({type: 'LOGIN_STATE_CHANGE', loggingIn: false});
       dispatch({type: 'APP_LOADING', loading: false})
     })
   }
@@ -61,7 +68,6 @@ export function signUp(email, password, displayName, onSuccess, onError) {
   return dispatch => {
 
     dispatch({type: 'APP_LOADING', loading: true});
-    dispatch({type: 'LOGIN_STATE_CHANGE', loggingIn: true});
 
     authService.signUp(email, password, displayName).then(res => {
 
@@ -73,7 +79,6 @@ export function signUp(email, password, displayName, onSuccess, onError) {
 
     }).catch(onError)
       .finally(() => {
-      dispatch({type: 'LOGIN_STATE_CHANGE', loggingIn: false});
       dispatch({type: 'APP_LOADING', loading: false})
     });
   }
