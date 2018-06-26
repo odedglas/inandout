@@ -5,12 +5,17 @@ import {
   withRouter
 } from 'react-router-dom';
 import ReactDOM from 'react-dom';
+import {connect} from 'react-redux';
+import {compose} from 'recompose';
+
+import { setLoading } from "@action/loading";
 
 import NotificationsDrawer from './drawer/NotificationsDrawer';
 import {ROUTER as routes} from '../../constants';
 import Header from './Header';
 import Landing from './Landing';
 import ProjectHome from './project/ProjectHome';
+
 
 class Dashboard extends Component {
 
@@ -19,6 +24,10 @@ class Dashboard extends Component {
     headerShade: false,
     showNotificationsBar: false,
   };
+
+  componentWillMount() {
+
+  }
 
   componentDidMount() {
 
@@ -32,6 +41,7 @@ class Dashboard extends Component {
   componentWillUnmount() {
 
     this.state.dashboardBodyRef.removeEventListener('scroll', this.onScroll);
+
   }
 
   onScroll = (e) => {
@@ -45,29 +55,25 @@ class Dashboard extends Component {
       showNotificationsBar: !this.state.showNotificationsBar,
     });
   };
-  onRippleRef = node => {
-    this.ripple = node;
-  };
-
   render() {
 
     const { location } = this.props;
     const { headerShade, showNotificationsBar } = this.state;
 
-    const landingHeaderBackground = {
-      'backgroundImage'    : `url('${require('@img/dashboard-header.jpg')}')`
-    };
+    let dashboardBackground = {};
 
     const isLanding = location.pathname === routes.DASHBOARD;
+    if(isLanding) {
+      dashboardBackground['backgroundImage'] =`url('${require('@img/dashboard-header.jpg')}')`;
+    }
 
     return (
-
       <div className={'dashboard-container'}>
         <Header transparentMode={false}
                 withShade={headerShade}
                 toggleNotificationsDrawer={this.toggleNotificationsDrawer}/>
 
-        <div className={'dashboard-body'} style={isLanding ? landingHeaderBackground : {}}>
+        <div className={'dashboard-body'} style={dashboardBackground}>
           <Switch>
             <Route exact path={routes.DASHBOARD}
                    component={Landing}/>
@@ -85,4 +91,7 @@ class Dashboard extends Component {
   }
 }
 
-export default withRouter(Dashboard);
+export default compose(
+  withRouter,
+  connect(null, {setLoading})
+)(Dashboard);

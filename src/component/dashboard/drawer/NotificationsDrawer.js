@@ -5,11 +5,13 @@ import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
+const emptyContentIcon = require('@img/hot-air-balloon.svg')
+
 class NotificationsDrawer extends Component {
 
   state = {
     notifications: [],
-    emptyContentIcon: require('@img/hot-air-balloon.svg'),
+    emptyContentIcon: emptyContentIcon,
   };
 
   static propTypes = {

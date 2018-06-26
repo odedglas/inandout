@@ -22,9 +22,8 @@ import FeedbackIcon from '@material-ui/icons/Feedback';
 import Divider from '@material-ui/core/Divider';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { signOut } from '../../actions/authentication';
-import {ROUTER as routes} from '../../constants';
-import theme from '@service/theme';
+import { signOut } from '@action/authentication';
+import {ROUTER as routes} from '@const/';
 class UserProfileMenu extends React.Component {
 
   static propTypes = {

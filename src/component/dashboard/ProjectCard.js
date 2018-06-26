@@ -81,7 +81,9 @@ class ProjectCard extends Component {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" onClick={this.gotoProject}>VIEW PROJECT</Button>
+              <Button size="small"
+                      color={'secondary'}
+                      onClick={this.gotoProject}>VIEW PROJECT</Button>
             </CardActions>
           </Card>
         </Zoom>

@@ -4,12 +4,12 @@ import {
   BrowserRouter as Router,
   Route,
 } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
-import { asyncComponent } from 'react-async-component';
+import {connect} from 'react-redux';
+import {compose} from 'recompose';
+import {asyncComponent} from 'react-async-component';
 
 import LoadingMask from './common/LoadingMask';
-import { getRoutes } from './Routes'
+import {getRoutes} from './Routes'
 import withAuthentication from './hoc/withAuthentication';
 
 const Welcome = asyncComponent({
@@ -28,17 +28,19 @@ class App extends Component {
 
     return (
       <Router>
-        <Route
-          render={({ location }) => (
-            authenticating ? <Welcome /> :
-              <LoadingMask loading={loading}>
-                <div className={'col-flex h-100'}>
-                  { getRoutes(isAuthenticated, location) }
-                  <hr/>
-                </div>
-              </LoadingMask>
-          )}
-        />
+        <LoadingMask loading={loading}>
+          {
+            authenticating ? <Welcome/> :
+              <Route
+                render={({location}) => (
+                  <div className={'col-flex h-100'}>
+                    {getRoutes(isAuthenticated, location)}
+                    <hr/>
+                  </div>
+                )}
+              />
+          }
+        </LoadingMask>
       </Router>
     );
   }

@@ -17,7 +17,7 @@ class Landing extends React.Component {
   state = {
     projects              : [],
     showCreateProjectModal: false,
-    fetchingProjects: true,
+    fetchingProjects: false,
   };
 
   componentWillMount() {
@@ -25,12 +25,11 @@ class Landing extends React.Component {
 
     if(userProjectMeta.length > 0) {
 
+      this.setState({ fetchingProjects: true });
+
       projectsService.fetchCurrentUserProjects().then(projects => {
         this.setState({ projects, fetchingProjects: false});
       })
-    }
-    else {
-      this.setState({ fetchingProjects: false });
     }
   }
 
@@ -68,9 +67,13 @@ class Landing extends React.Component {
 
             {hasProjects ? <div className={'title'}> Your Projects </div>  : null}
 
-            {shouldShowAddProjectHelper ? <Button color="primary" onClick={this.showCreateProjectModal}>
-              &#43; Add Project
-            </Button> : null
+            {shouldShowAddProjectHelper ? <div className={'no-projects'}>
+                <div>You have no existing projects, It's all starts here:</div>
+                <Button color="primary" onClick={this.showCreateProjectModal}>
+                  &#43; Add Project
+                </Button>
+              </div>
+              : null
             }
 
             <div className={'projects-inner'}>

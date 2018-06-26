@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
+import {
+  withRouter
+} from 'react-router-dom';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -18,6 +21,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import PersonIcon from '@material-ui/icons/Person';
+import SmallBusinessIcon from '@material-ui/icons/LocalGroceryStore';
 import GroupIcon from '@material-ui/icons/Group';
 import HomeIcon from '@material-ui/icons/Home'
 
@@ -73,11 +77,17 @@ class CreateProjectModal extends React.Component {
         projectName,
         projectType,
         projectDescription
-      ).then(() => {
+      ).then((project) => {
 
         this.handleClose();
         setLoading(false);
 
+        this.props.history.push({
+          pathname: '/dashboard/project/' + projectName,
+          state: {
+            selectedProject: project
+          }
+        });
       });
     }
 
@@ -129,6 +139,8 @@ class CreateProjectModal extends React.Component {
               <Select
                 value={projectType}
                 fullWidth
+                className={'dicks'}
+                MenuProps={{'className': 'select-project-type'}}
                 onChange={(event) => this.handleChange(event.target.value, 'projectType')}
                 renderValue={(v) => this.getSelectedProjectLabel(v)}
                 inputProps={{
@@ -136,6 +148,15 @@ class CreateProjectModal extends React.Component {
                   id: 'project-type',
                 }}
               >
+
+                <MenuItem value={PROJECT_TYPES.PERSONAL.key}>
+                  <ListItemIcon className={'menu-icon'}>
+                    <PersonIcon />
+                  </ListItemIcon>
+                  <ListItemText className={'menu-text'}
+                                secondary={PROJECT_TYPES.PERSONAL.description}
+                                primary={PROJECT_TYPES.PERSONAL.label}/>
+                </MenuItem>
 
                 <MenuItem value={PROJECT_TYPES.HOUSE_HOLD.key}>
                   <ListItemIcon className={'menu-icon'}>
@@ -148,7 +169,7 @@ class CreateProjectModal extends React.Component {
 
                 <MenuItem value={PROJECT_TYPES.SMALL_BUSINESS.key}>
                   <ListItemIcon className={'menu-icon'}>
-                    <PersonIcon />
+                    <SmallBusinessIcon />
                   </ListItemIcon>
                   <ListItemText className={'menu-text'}
                                 secondary={PROJECT_TYPES.SMALL_BUSINESS.description}
@@ -195,6 +216,7 @@ class CreateProjectModal extends React.Component {
 }
 
 export default compose(
+  withRouter,
   withValidation([
     {
       field    : 'projectName',
