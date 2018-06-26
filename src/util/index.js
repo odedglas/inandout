@@ -15,6 +15,10 @@ export default {
   isPromise(p) {
     return !this.isUndefined(p) && typeof p.then === 'function'
   },
+  isObject(o) {
+
+    return o !== null && typeof o === 'object';
+  },
   whilePromise(promise, val, fn) {
     return promise(val).then(fn).then((wrapper) => {
       return !wrapper.done ? this.whilePromise(promise, wrapper.value, fn) : wrapper.value;

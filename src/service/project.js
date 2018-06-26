@@ -4,8 +4,8 @@ import util from '@util/'
 export default {
 
   fetchUserProjects: (projectKeys) => firebaseService.fetchByKeys('/projects', projectKeys),
-  fetchProject: id => firebaseService.fetch(`/projects/${id}`).then(res => {
-    return {id: res.id, ...res.project}
+  fetchProject: identifier => firebaseService.fetch(`/projectsIdentifier/${identifier}`).then(res => {
+    return  firebaseService.fetch(`/projects/${res.value}`);
   }),
   createProject: (name, type, description) => {
 

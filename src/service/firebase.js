@@ -3,6 +3,8 @@ import 'firebase/auth';
 import 'firebase/database';
 import {config} from '../config/firebase';
 
+import util from '@util/'
+
 if (!firebase.apps.length) {
   console.log('Initalizing firbase, existing apps: ' + firebase.apps.length);
   firebase.initializeApp(config);
@@ -24,6 +26,17 @@ export default {
   fetch(path) {
 
     return database.ref(path).once('value').then((snapshot) => {
+
+      const fetchResult = {
+        id: snapshot.key
+      };
+
+      const value = snapshot.val();
+      if(!util.isObject(value)) {
+
+        fetchResult.value = value;
+        return fetchResult;
+      }
 
       return {
         id: snapshot.key,

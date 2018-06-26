@@ -1,5 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  withRouter
+} from 'react-router-dom';
+
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { PROJECT_TYPES } from '@const/';
 import util from '@util/';
@@ -13,27 +18,33 @@ class ProjectHome extends React.Component {
   };
 
   state = {
-    loadedProject: {}
+    loadedProject: {},
+    loading: false,
   };
 
   componentWillMount() {
 
-    //TODO -> Should support project fetch for deep link by project name ******
-    const project = this.props.project;
+    const { project, match } = this.props;
+
     if(!project) {
-      console.log("loading without preload should fetch!")
-      this.setState({ loadedProject: {id: 'no key loaded' }})
+
+      this.setState({ loading: true });
+      projectService.fetchProject(match.params.identifier).then(project => {
+        debugger;
+        this.setState({ loadedProject: project, loading: false})
+      });
     }
   }
 
   render() {
 
     const { project } = this.props;
-    const { loadedProject } = this.state;
+    const { loadedProject, loading } = this.state;
 
     const _project = project || loadedProject;
     return (
       <div>
+        { loading ? <CircularProgress size={50}/> : null}
         I R PROJECT HOME DUDE!!!
         Display for KEY -> { _project.id }
       </div>
@@ -41,4 +52,4 @@ class ProjectHome extends React.Component {
   }
 }
 
-export default ProjectHome;
+export default withRouter(ProjectHome);
