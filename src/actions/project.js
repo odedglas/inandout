@@ -1,22 +1,22 @@
 import projectService from '@service/project'
 
 export function fetchUserProjects() {
-  return (dispatch, getState) =>  {
+  return (dispatch, getState) => {
 
-    dispatch({ type: 'FETCH_PROJECTS', fetching: true});
+    dispatch({type: 'FETCH_PROJECTS', fetching: true});
     const projectKeys = getState().project.keys;
 
     projectService.fetchUserProjects(
       projectKeys
     ).then(projects => {
 
-      dispatch({ type: 'SET_PROJECTS', projects });
+      dispatch({type: 'SET_PROJECTS', projects});
     })
-      .finally(() => dispatch({ type: 'FETCH_PROJECTS', fetching: false}));
+      .finally(() => dispatch({type: 'FETCH_PROJECTS', fetching: false}));
   }
 }
 
-export function createProject({ projectName, projectType, projectDescription}, onSuccess) {
+export function createProject({projectName, projectType, projectDescription}, onSuccess) {
 
   return dispatch => {
 
@@ -25,7 +25,7 @@ export function createProject({ projectName, projectType, projectDescription}, o
     projectService.createProject(
       projectName,
       projectType,
-      projectDescription
+      projectDescription,
     ).then((project) => {
 
       dispatch({type: 'ADD_PROJECT', project});
@@ -33,5 +33,6 @@ export function createProject({ projectName, projectType, projectDescription}, o
 
     })
       .finally(() => dispatch({type: 'APP_LOADING', loading: false}));
+
   }
 }

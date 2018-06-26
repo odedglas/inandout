@@ -53,10 +53,10 @@ class ProjectCard extends Component {
   gotoProject = () => {
 
     let project = this.props.project;
-    const projectName = project.name;
+    const identifier = project.identifier;
 
     this.props.history.push({
-      pathname: '/dashboard/project/' + projectName,
+      pathname: '/dashboard/project/' + identifier,
       state: {
         selectedProject: project
       }

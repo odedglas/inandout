@@ -1,4 +1,5 @@
 import firebaseService from './firebase';
+import util from '@util/'
 
 export default {
 
@@ -12,8 +13,27 @@ export default {
       name,
       type,
       description,
+      owner: firebaseService.user.id
     };
 
-    return firebaseService.createProject(project);
+    let unique = name;
+    const validateUniqueness = (name) => firebaseService.database.ref('projectsIdentifier/' + name).once('value');
+
+    return util.whilePromise(validateUniqueness, unique, (res) => {
+      const currentUnique = res.key;
+      const isValid = res.val() === null;
+      return {
+        done: isValid,
+        value: isValid ? currentUnique : generateProjectIdentifier(currentUnique)
+      };
+    }).then((unique) => {
+
+      project.identifier = unique;
+      return firebaseService.createProject(project);
+    })
+
+
   },
 }
+
+const generateProjectIdentifier = name => `${name.toLowerCase().replaceAll(" ", "").replaceAll("-", "")}-${util.randomAlphaNumeric(4)}`;

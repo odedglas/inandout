@@ -45,9 +45,7 @@ export default {
   },
   createProject(project) {
 
-    project.owner = this.user.id;
-
-    const ref = database.ref(`projects`).push(project)
+    return database.ref(`projects`).push(project)
       .then(res => {
 
         const projectKey = res.key;
@@ -57,12 +55,15 @@ export default {
           projectKey
         });
 
+        //Adding to projects identifiers
+        database.ref('projectsIdentifier/' + project.identifier).set(
+          projectKey
+        );
+
         return {
           ...project,
           id: projectKey
         }
       });
-
-    return ref;
   }
 }

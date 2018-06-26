@@ -23,7 +23,6 @@ class Dashboard extends Component {
   };
 
   state = {
-    headerShade: false,
     showNotificationsBar: false,
   };
 
@@ -31,24 +30,25 @@ class Dashboard extends Component {
 
     //Loading user projects
     this.props.fetchUserProjects();
-
   }
+
   toggleNotificationsDrawer = () => {
     this.setState({
       showNotificationsBar: !this.state.showNotificationsBar,
     });
   };
+
   render() {
 
     const { location } = this.props;
-    const { headerShade, showNotificationsBar } = this.state;
+    const { showNotificationsBar } = this.state;
 
     const isLanding = location.pathname === routes.DASHBOARD;
 
     return (
       <div className={'dashboard-container'}>
         <Header transparentMode={false}
-                withShade={headerShade}
+                withShade={true}
                 toggleNotificationsDrawer={this.toggleNotificationsDrawer}/>
 
         <div className={'dashboard-body ' + (isLanding ? 'landing' : '')}>
