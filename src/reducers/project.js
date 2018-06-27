@@ -2,7 +2,7 @@ const initialState = {
   keys: [],
   projects: [],
   fetchingProjects: false,
-  selectedProject: undefined,
+  selectedProject: {},
 };
 
 export default function (state = initialState, action) {

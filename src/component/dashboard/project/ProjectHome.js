@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Route,
-  Switch,
   withRouter
 } from 'react-router-dom';
 import {connect} from 'react-redux';
@@ -10,16 +8,11 @@ import {compose} from 'recompose';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import Budgets from './budgets/Budgets';
-import ProjectCalendar from './calendar/ProjectCalendar';
-import Categories from './categories/Categories';
-import Customers from './customers/Customers';
-import Todos from './todo/Todos';
-import Transactions from './transactions/Transactions';
-
-import {ROUTER as routes} from '@const/';
+import Breadcrumbs from './Breadcrumbs';
 import { selectProject } from "@action/project";
 import projectService from '@service/project';
+import util from '@util/';
+import { getProjectRoutes } from './ProjectRoutes';
 
 class ProjectHome extends React.Component {
 
@@ -36,7 +29,7 @@ class ProjectHome extends React.Component {
 
     const { selectedProject, match } = this.props;
 
-    if(!selectedProject) {
+    if(util.isEmptyObject(selectedProject)) {
 
       this.setState({ loading: true });
       projectService.fetchProject(match.params.identifier).then(project => {
@@ -50,35 +43,23 @@ class ProjectHome extends React.Component {
   render() {
 
     const { selectedProject } = this.props;
-    const { loadedProject, loading } = this.state;
+    const { loading } = this.state;
 
-    const _project = selectedProject || loadedProject;
     return (
-      <div className={'scrollable'}>
-        { loading ? <CircularProgress size={50}/> : null}
-        I R PROJECT HOME DUDE!!!
-        Display for KEY -> { _project.id }
+      <div className={'project-home'}>
 
-        <Switch>
-          <Route exact path={routes.BUDGETS}
-                 component={Budgets}/>
+        <Breadcrumbs project={selectedProject}/>
 
-          <Route exact path={routes.TRANSACTIONS}
-                 component={Transactions}/>
+        <div className={'content scrollable'}>
 
-          <Route exact path={routes.CATEGORIES}
-                 component={Categories}/>
+          { loading ? <CircularProgress size={50}/> : null}
+          I R PROJECT HOME DUDE!!!
+          Display for KEY -> { selectedProject.id }
 
-          <Route exact path={routes.CUSTOMERS}
-                 component={Customers}/>
+          {getProjectRoutes()}
 
-          <Route exact path={routes.PROJECT_CALENDAR}
-                 component={ProjectCalendar}/>
+        </div>
 
-          <Route exact path={routes.TODOS}
-                 component={Todos}/>
-
-        </Switch>
       </div>
     );
   }

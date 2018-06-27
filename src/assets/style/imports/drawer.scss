@@ -54,7 +54,7 @@ $drawer-collapsed-width: 75px;
 $drawer-open-width: 210px;
 
 .project-drawer {
-
+  z-index:0 !important;
   position: relative !important;
   transition: width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
   white-space: nowrap;
@@ -63,6 +63,10 @@ $drawer-open-width: 210px;
   &.collapsed {
     width: $drawer-collapsed-width;
     overflow-x: hidden;
+  }
+
+  .toggle-drawer {
+    height: $breadcrumbs-height;
   }
 
   .drawer-link {

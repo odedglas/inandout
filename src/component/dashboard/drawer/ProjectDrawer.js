@@ -74,7 +74,7 @@ class ProjectDrawer extends Component {
         }}
         open={this.state.open}
       >
-        <ListItem button onClick={this.handleDrawerClose}>
+        <ListItem button onClick={this.handleDrawerClose} className={'toggle-drawer'}>
           <ListItemIcon>
             {open ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
           </ListItemIcon>
