@@ -1,0 +1,13 @@
+@import '../variables';
+
+.project-home {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: calc(100% - #{$header-outer-height});
+
+  .content {
+    height: calc(100% - #{$header-outer-height} - #{$breadcrumbs-height});
+    padding: 2rem;
+  }
+}
