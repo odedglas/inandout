@@ -12,8 +12,8 @@ import { fetchUserProjects } from "@action/project";
 
 import NotificationsDrawer from './drawer/NotificationsDrawer';
 import {ROUTER as routes} from '@const/';
-import Header from './Header';
-import Landing from './Landing';
+import Header from './header/Header';
+import Landing from './landing/Landing';
 import ProjectHome from './project/ProjectHome';
 
 import ProjectDrawer from './drawer/ProjectDrawer';

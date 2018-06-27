@@ -49,8 +49,6 @@ class ProjectDrawer extends Component {
       path
     ) : path;
 
-    console.log("Full path is : " + fullPath);
-
     return (
       <ListItem button className={'p-0'}>
         <NavLink activeClassName='is-active' className={'drawer-link'} exact={true} to={fullPath}>

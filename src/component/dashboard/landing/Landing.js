@@ -6,7 +6,7 @@ import {
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
 
-import CreateProjectModal from '../modals/CreateProject'
+import CreateProjectModal from '../../modals/CreateProject'
 import ProjectCard from './ProjectCard';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
