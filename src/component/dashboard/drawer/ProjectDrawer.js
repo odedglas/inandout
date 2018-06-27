@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {NavLink } from 'react-router-dom';
+import {compose} from 'recompose';
+import {NavLink, withRouter} from 'react-router-dom';
 
 import Drawer from '@material-ui/core/Drawer';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -11,12 +12,15 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import DraftsIcon from '@material-ui/icons/CheckBox';
+import TodosIcon from '@material-ui/icons/CheckBox';
 import BudgetsIcon from '@material-ui/icons/AttachMoney';
+import TransactionsIcon from '@material-ui/icons/Transform';
 import CustomersIcon from '@material-ui/icons/Group';
 import CalendarIcon from '@material-ui/icons/DateRange';
 import HomeIcon from '@material-ui/icons/Home';
 import CategoriesIcon from '../../icon/CategoriesIcon';
+
+import navigationUtil from '@util/navigation'
 
 class ProjectDrawer extends Component {
 
@@ -38,9 +42,18 @@ class ProjectDrawer extends Component {
 
   drawerItem = (path, icon, text) => {
 
+    const selectedProject = this.props.selectedProject;
+
+    const fullPath = selectedProject ? navigationUtil.projectLink(
+      selectedProject,
+      path
+    ) : path;
+
+    console.log("Full path is : " + fullPath);
+
     return (
       <ListItem button className={'p-0'}>
-        <NavLink activeClassName='is-active' className={'drawer-link'} exact={true} to={path}>
+        <NavLink activeClassName='is-active' className={'drawer-link'} exact={true} to={fullPath}>
           <ListItemIcon className={'icon'}>
             {icon}
           </ListItemIcon>
@@ -53,7 +66,6 @@ class ProjectDrawer extends Component {
   render() {
 
     const { open } = this.state;
-    const { selectedProject } = this.props;
     const drawerClasses = `project-drawer ${!open ? 'collapsed' : ''}`;
 
     return (
@@ -70,18 +82,22 @@ class ProjectDrawer extends Component {
           </ListItemIcon>
         </ListItem>
         <Divider/>
-        {this.drawerItem(`/dashboard/project/${selectedProject && selectedProject.identifier}`, <HomeIcon/>, 'Home')}
-        {this.drawerItem('/dashboard', <BudgetsIcon/>, 'Budgets')}
-        {this.drawerItem('/dashboard', <CategoriesIcon/>, 'Categories')}
-        {this.drawerItem('/dashboard', <CustomersIcon/>, 'Customers')}
-        {this.drawerItem('/dashboard', <CalendarIcon/>, 'Calendar')}
-        {this.drawerItem('/dashboard', <DraftsIcon/>, 'Todo\'s')}
+
+        {this.drawerItem(``, <HomeIcon/>, 'Home')}
+        {this.drawerItem('budgets', <BudgetsIcon/>, 'Budgets')}
+        {this.drawerItem('transactions', <TransactionsIcon/>, 'Transactions')}
+        {this.drawerItem('categories', <CategoriesIcon/>, 'Categories')}
+        {this.drawerItem('customers', <CustomersIcon/>, 'Customers')}
+        {this.drawerItem('calendar', <CalendarIcon/>, 'Calendar')}
+        {this.drawerItem('todos', <TodosIcon/>, 'Todo\'s')}
       </Drawer>
     );
   }
 }
 
-export default connect(state => ({
-  selectedProject: state.project.selectedProject,
-}), {})(ProjectDrawer);
-
+export default compose(
+  withRouter,
+  connect(state => ({
+    selectedProject: state.project.selectedProject,
+  }), {})
+)(ProjectDrawer);

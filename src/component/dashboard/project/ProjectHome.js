@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  Route,
+  Switch,
   withRouter
 } from 'react-router-dom';
 import {connect} from 'react-redux';
@@ -8,11 +10,16 @@ import {compose} from 'recompose';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import Budgets from './budgets/Budgets';
+import ProjectCalendar from './calendar/ProjectCalendar';
+import Categories from './categories/Categories';
+import Customers from './customers/Customers';
+import Todos from './todo/Todos';
+import Transactions from './transactions/Transactions';
+
+import {ROUTER as routes} from '@const/';
 import { selectProject } from "@action/project";
-
-import { PROJECT_TYPES } from '@const/';
 import projectService from '@service/project';
-
 
 class ProjectHome extends React.Component {
 
@@ -52,6 +59,26 @@ class ProjectHome extends React.Component {
         I R PROJECT HOME DUDE!!!
         Display for KEY -> { _project.id }
 
+        <Switch>
+          <Route exact path={routes.BUDGETS}
+                 component={Budgets}/>
+
+          <Route exact path={routes.TRANSACTIONS}
+                 component={Transactions}/>
+
+          <Route exact path={routes.CATEGORIES}
+                 component={Categories}/>
+
+          <Route exact path={routes.CUSTOMERS}
+                 component={Customers}/>
+
+          <Route exact path={routes.PROJECT_CALENDAR}
+                 component={ProjectCalendar}/>
+
+          <Route exact path={routes.TODOS}
+                 component={Todos}/>
+
+        </Switch>
       </div>
     );
   }

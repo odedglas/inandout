@@ -11,7 +11,7 @@ import {compose} from 'recompose';
 import { fetchUserProjects } from "@action/project";
 
 import NotificationsDrawer from './drawer/NotificationsDrawer';
-import {ROUTER as routes} from '../../constants';
+import {ROUTER as routes} from '@const/';
 import Header from './Header';
 import Landing from './Landing';
 import ProjectHome from './project/ProjectHome';

@@ -4,6 +4,12 @@ export const ROUTER = {
   FORGOT_PASSWORD: '/forgot-pw',
   DASHBOARD      : '/dashboard',
   PROJECT        : '/dashboard/project/:identifier',
+  BUDGETS        : '/dashboard/project/:identifier/budgets',
+  CATEGORIES        : '/dashboard/project/:identifier/categories',
+  TRANSACTIONS        : '/dashboard/project/:identifier/transactions',
+  CUSTOMERS        : '/dashboard/project/:identifier/customers',
+  PROJECT_CALENDAR        : '/dashboard/project/:identifier/calendar',
+  TODOS        : '/dashboard/project/:identifier/todos',
   WELCOME        : '/welcome',
   HOME           : '/'
 };
