@@ -1,4 +1,5 @@
 const avatarPalette = {
+  colors: ['red', 'pink', 'purple', 'deeppurple','indigo' ,'blue', 'lightblue', 'cynan', 'teal', 'green', 'lightgreen', 'lime', 'yellow', 'amber', 'orage', 'deeporange', 'brown', 'grey', 'bluegrey'],
   // Red, Pink, Purple, Deep Purple, Indigo, Blue, Light Blue, Cyan, Teal, Green, Light Green, Lime, Yellow, Amber, Orange, Deep Orange, Brown, Grey, Blue Grey
   '200': ['#EF9A9A', '#F48FB1', '#CE93D8', '#B39DDB', '#9FA8DA', '#90CAF9', '#81D4FA', '#80DEEA', '#80CBC4', '#A5D6A7', '#C5E1A5', '#E6EE9C', '#FFF59D', '#FFE082', '#FFCC80', '#FFAB91', '#BCAAA4', '#EEEEEE', '#B0BEC5'],
   '300': ['#E57373', '#F06292', '#BA68C8', '#9575CD', '#7986CB', '#64B5F6', '#4FC3F7', '#4DD0E1', '#4DB6AC', '#81C784', '#AED581', '#DCE775', '#FFF176', '#FFD54F', '#FFB74D', '#FF8A65', '#A1887F', '#E0E0E0', '#90A4AE'],
@@ -53,6 +54,15 @@ export default {
     const selectedShade =  avatarPalette[shade];
     return selectedShade[getRandomInt(selectedShade.length)]
 
+  },
+
+  getColor: (color, shade) => {
+
+    shade = shade ? shade : 500;
+    const pallete = avatarPalette[shade];
+
+    const normalizedColor = color.toLowerCase().replaceAll(" ","");
+    return pallete[avatarPalette.colors.indexOf(normalizedColor)];
   }
 }
 

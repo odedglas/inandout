@@ -22,7 +22,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import PersonIcon from '@material-ui/icons/Person';
 import SmallBusinessIcon from '@material-ui/icons/LocalGroceryStore';
-import GroupIcon from '@material-ui/icons/Group';
+import MediumBusinessIcon from '@material-ui/icons/LocalMall';
 import HomeIcon from '@material-ui/icons/Home'
 
 import withValidation from '../hoc/withValidation';
@@ -172,7 +172,7 @@ class CreateProjectModal extends React.Component {
 
                 <MenuItem value={PROJECT_TYPES.MEDIUM_BUSINESS.key}  disabled={true}>
                   <ListItemIcon className={'menu-icon'}>
-                    <GroupIcon />
+                    <MediumBusinessIcon />
                   </ListItemIcon>
                   <ListItemText className={'menu-text'}
                                 secondary={PROJECT_TYPES.MEDIUM_BUSINESS.description}

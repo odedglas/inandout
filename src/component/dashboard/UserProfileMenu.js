@@ -20,7 +20,6 @@ import HelpIcon from '@material-ui/icons/Help';
 import SettingsIcon from '@material-ui/icons/Settings';
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import Divider from '@material-ui/core/Divider';
-import Tooltip from '@material-ui/core/Tooltip';
 
 import { signOut } from '@action/authentication';
 import {ROUTER as routes} from '@const/';
@@ -76,15 +75,13 @@ class UserProfileMenu extends React.Component {
                 this.userMenuTarget = node;
               }}
             >
-              <Tooltip title={'User Profile'} className={'tooltip'}>
-                <Avatar className={'avatar mx-3'}
-                        aria-owns={open ? 'menu-list-grow' : null}
-                        aria-haspopup="true"
-                        onClick={this.handleToggle}
-                        style={avatarBackground}>
-                  {user.initials}
-                </Avatar>
-              </Tooltip>
+              <Avatar className={'avatar mx-3'}
+                      aria-owns={open ? 'menu-list-grow' : null}
+                      aria-haspopup="true"
+                      onClick={this.handleToggle}
+                      style={avatarBackground}>
+                {user.initials}
+              </Avatar>
             </div>
           </Target>
           <Popper
@@ -101,6 +98,7 @@ class UserProfileMenu extends React.Component {
                       </div>
                       <div className={'details'}>
                         <h3> {user.displayName} </h3>
+                        <span>{user.email}</span>
                       </div>
                     </div>
                     <Divider />

@@ -34,6 +34,28 @@ export default {
     return text;
 
   },
+  sortJsonFN: (props) => {
+
+    return function (a, b) {
+
+      for (let i = 0; i < props.length; i++) {
+        const prop = props[i];
+        const name = prop.name;
+        const reverse = prop.reverse;
+
+        //Getting as path ( if was sent x.y.z.o )
+        const aProp = a[name];
+        const bProp = b[name];
+
+        if (aProp < bProp)
+          return reverse ? 1 : -1;
+        if (aProp > bProp)
+          return reverse ? -1 : 1;
+      }
+      return 0;
+    };
+
+  },
 }
 
 // *** Overrides *** //
