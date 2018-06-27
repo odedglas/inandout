@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  withRouter,
+} from 'react-router-dom';
 import {connect} from 'react-redux';
+import {compose} from 'recompose';
 
 import CreateProjectModal from '../modals/CreateProject'
 import ProjectCard from './ProjectCard';
@@ -9,7 +13,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { setLoading } from "@action/loading";
+import { selectProject } from "@action/project";
 
 class Landing extends React.Component {
 
@@ -17,6 +21,7 @@ class Landing extends React.Component {
   static propTypes = {
     projects: PropTypes.array,
     fetchingProjects: PropTypes.bool.isRequired,
+    selectProject: PropTypes.func.isRequired,
   };
 
   state = {
@@ -31,6 +36,17 @@ class Landing extends React.Component {
     this.setState({showCreateProjectModal: false})
   };
 
+  gotoProject = project => {
+
+    const identifier = project.identifier;
+    this.props.selectProject(project);
+
+    this.props.history.push({
+      pathname: '/dashboard/project/' + identifier,
+    });
+
+  };
+
   render() {
 
     const { showCreateProjectModal } = this.state;
@@ -40,7 +56,7 @@ class Landing extends React.Component {
     const shouldShowAddProjectHelper = !fetchingProjects && !hasProjects;
 
     return (
-      <div className={'lading-page'}>
+      <div className={'lading-page scrollable'}>
         <div className={'landing-header'}>
           <div className={'centered'}>
             <div className={'landing-text'}>
@@ -93,8 +109,10 @@ class Landing extends React.Component {
   }
 }
 
-export default connect( state => ({
-  projects: state.project.projects,
-  fetchingProjects: state.project.fetchingProjects,
-}), {setLoading})(Landing);
-
+export default compose(
+  withRouter,
+  connect( state => ({
+    projects: state.project.projects,
+    fetchingProjects: state.project.fetchingProjects,
+  }), {selectProject})
+)(Landing);

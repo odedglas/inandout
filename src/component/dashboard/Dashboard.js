@@ -16,6 +16,7 @@ import Header from './Header';
 import Landing from './Landing';
 import ProjectHome from './project/ProjectHome';
 
+import ProjectDrawer from './drawer/ProjectDrawer';
 class Dashboard extends Component {
 
   static propTypes = {
@@ -51,17 +52,23 @@ class Dashboard extends Component {
                 withShade={true}
                 toggleNotificationsDrawer={this.toggleNotificationsDrawer}/>
 
-        <div className={'dashboard-body ' + (isLanding ? 'landing' : '')}>
-          <Switch>
-            <Route exact path={routes.DASHBOARD}
-                   component={Landing}/>
 
-            <Route path={routes.PROJECT}
-                   component={() => <ProjectHome  project={location.state && location.state.selectedProject}/>}/>
-          </Switch>
+        <div className={'flex h-100'}>
+          { !isLanding ? <ProjectDrawer /> : null }
+          <div className={'dashboard-body ' + (isLanding ? 'landing' : '')}>
+            <Switch>
+              <Route exact path={routes.DASHBOARD}
+                     component={Landing}/>
+
+              <Route path={routes.PROJECT}
+                     component={() => <ProjectHome  project={location.state && location.state.selectedProject}/>}/>
+            </Switch>
+        </div>
+
           <NotificationsDrawer open={showNotificationsBar} toggleNotificationsDrawer={this.toggleNotificationsDrawer}>
 
           </NotificationsDrawer>
+
         </div>
       </div>
     );

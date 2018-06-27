@@ -36,3 +36,8 @@ export function createProject({projectName, projectType, projectDescription}, on
 
   }
 }
+
+export function selectProject(project) {
+
+  return dispatch =>  dispatch({ type: 'SET_SELECTED_PROJECT', project });
+}

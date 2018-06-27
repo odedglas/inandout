@@ -19,6 +19,10 @@ export default {
 
     return o !== null && typeof o === 'object';
   },
+  isEmptyObject(o) {
+
+    return this.isObject(o) && Object.keys(o).length === 0
+  },
   whilePromise(promise, val, fn) {
     return promise(val).then(fn).then((wrapper) => {
       return !wrapper.done ? this.whilePromise(promise, wrapper.value, fn) : wrapper.value;

@@ -8,13 +8,13 @@
     color: white;
     padding: .5rem 1rem;
     font-size: 1.25rem;
-    display:flex;
+    display: flex;
     align-items: center;
     box-shadow: $header-shadow;
     height: 55px;
 
     .text {
-      flex:1
+      flex: 1
     }
     .close {
       @include offwhiteIcon()
@@ -25,9 +25,9 @@
     padding: 3rem 0;
 
     .empty-notifications {
-      display:flex;
-      flex-direction:column;
-      align-items:center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
 
       .icon {
         margin: 2rem;
@@ -42,10 +42,41 @@
         color: $light-text;
 
         span {
-          display:block;
-          margin-top:2rem;
+          display: block;
+          margin-top: 2rem;
         }
       }
     }
   }
+}
+
+$drawer-collapsed-width: 75px;
+$drawer-open-width: 210px;
+
+.project-drawer {
+
+  position: relative !important;
+  transition: width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+  white-space: nowrap;
+  width: $drawer-open-width;
+
+  &.collapsed {
+    width: $drawer-collapsed-width;
+    overflow-x: hidden;
+  }
+
+  .drawer-link {
+    display: flex;
+    padding: 0.75rem 1.5rem;
+    flex: 1;
+
+    &.is-active {
+
+      .icon,
+      .drawer-item-text > span {
+        color: $logo-color;
+      }
+    }
+  }
+
 }

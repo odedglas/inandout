@@ -1,7 +1,8 @@
 const initialState = {
   keys: [],
   projects: [],
-  fetchingProjects: false
+  fetchingProjects: false,
+  selectedProject: undefined,
 };
 
 export default function (state = initialState, action) {
@@ -16,6 +17,12 @@ export default function (state = initialState, action) {
         ...state,
         fetchingProjects: action.fetching
       };
+    case 'SET_SELECTED_PROJECT': {
+      return {
+        ...state,
+        selectedProject: action.project
+      }
+    }
     case 'SET_PROJECTS':
       return {
         ...state,

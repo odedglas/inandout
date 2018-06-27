@@ -27,6 +27,7 @@ class ProjectCard extends Component {
 
   static propTypes = {
     project: PropTypes.object.isRequired,
+    onProjectClick: PropTypes.func.isRequired,
     showAnimation: PropTypes.bool,
   };
 
@@ -45,17 +46,11 @@ class ProjectCard extends Component {
       });
   }
 
-  gotoProject = () => {
+  handleProjectClick = () => {
 
     let project = this.props.project;
-    const identifier = project.identifier;
 
-    this.props.history.push({
-      pathname: '/dashboard/project/' + identifier,
-      state: {
-        selectedProject: project
-      }
-    });
+    this.props.onProjectClick(project);
   };
 
   projectIcon = type => {
@@ -69,6 +64,8 @@ class ProjectCard extends Component {
         return {icon: <SmallBusinessIcon/>, color: themeService.getColor('deep purple') };
       case PROJECT_TYPES.MEDIUM_BUSINESS.key:
         return {icon: <MediumBusinessIcon/>, color: themeService.getColor('green') };
+      default :
+        return null;
     }
   };
 
@@ -97,7 +94,7 @@ class ProjectCard extends Component {
         <CardActions>
           <Button size="small"
                   color={'secondary'}
-                  onClick={this.gotoProject}>VIEW PROJECT</Button>
+                  onClick={this.handleProjectClick}>VIEW PROJECT</Button>
         </CardActions>
       </Card>
     );
@@ -121,4 +118,4 @@ class ProjectCard extends Component {
   }
 }
 
-export default withRouter(ProjectCard);
+export default ProjectCard;
