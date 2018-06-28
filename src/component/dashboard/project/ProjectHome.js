@@ -7,12 +7,15 @@ import {connect} from 'react-redux';
 import {compose} from 'recompose';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
+import ProjectBreadcrumb from './breadcrumbs/ProjectBreadcrumb';
 
-import Breadcrumbs from './Breadcrumbs';
-import { selectProject } from "@action/project";
+import Breadcrumbs from './breadcrumbs/Breadcrumbs';
+import Breadcrumb from './breadcrumbs/Breadcrumb';
+import {selectProject} from "@action/project";
 import projectService from '@service/project';
 import util from '@util/';
-import { getProjectRoutes } from './ProjectRoutes';
+import {getProjectRoutes} from './ProjectRoutes';
+
 
 class ProjectHome extends React.Component {
 
@@ -21,40 +24,47 @@ class ProjectHome extends React.Component {
   };
 
   state = {
-    loadedProject: {},
     loading: false,
   };
 
-  componentWillMount() {
+  componentDidMount() {
 
-    const { selectedProject, match } = this.props;
+    const {selectedProject, match} = this.props;
 
-    if(util.isEmptyObject(selectedProject)) {
+    if (util.isEmptyObject(selectedProject)) {
 
-      this.setState({ loading: true });
+      this.setState({loading: true});
       projectService.fetchProject(match.params.identifier).then(project => {
 
         this.props.selectProject(project);
-        this.setState({ loadedProject: project, loading: false})
+        this.setState({loading: false})
       });
     }
   }
 
   render() {
 
-    const { selectedProject } = this.props;
-    const { loading } = this.state;
+    const {selectedProject} = this.props;
+    const {loading} = this.state;
 
     return (
       <div className={'project-home'}>
 
         <Breadcrumbs project={selectedProject}/>
 
+        <Breadcrumb item={{
+          id: 'projectCrumb',
+          render: (val) => <ProjectBreadcrumb selectedProjectId={val}/>,
+          value: selectedProject.id,
+          path: '/dashboard'
+        }}
+        />
+
         <div className={'content scrollable'}>
 
-          { loading ? <CircularProgress size={50}/> : null}
+          {loading ? <CircularProgress size={50}/> : null}
           I R PROJECT HOME DUDE!!!
-          Display for KEY -> { selectedProject.id }
+          Display for KEY -> {selectedProject.id}
 
           {getProjectRoutes()}
 
@@ -67,7 +77,7 @@ class ProjectHome extends React.Component {
 
 export default compose(
   withRouter,
-  connect( state => ({
+  connect(state => ({
     selectedProject: state.project.selectedProject,
   }), {selectProject})
 )(ProjectHome);

@@ -1,9 +1,18 @@
-import React from 'react';
+import React, {Component} from 'react';
+import Breadcrumb from '../breadcrumbs/Breadcrumb';
 
-const Budgets = () =>
-  <div className={'welcome-container'}>
+class Budgets extends Component {
 
-    I R Budgets
-  </div>;
+  render() {
+
+    return (
+      <div className={'welcome-container'}>
+        <Breadcrumb item={{id:'budgetsCrumb' ,value:'Budgets', path:'/dashboard'}}/>
+
+        I R Budgets
+      </div>
+    );
+  }
+}
 
 export default Budgets;

@@ -1,10 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  withRouter
+} from 'react-router-dom';
+
 import { connect } from 'react-redux';
+import {compose} from 'recompose';
+
 import IconButton from '@material-ui/core/IconButton';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Tooltip from '@material-ui/core/Tooltip';
 import UserProfileMenu from './UserProfileMenu'
+
+import {ROUTER} from '@const/'
 
 class Header extends React.Component {
 
@@ -18,6 +26,10 @@ class Header extends React.Component {
     this.props.toggleNotificationsDrawer();
   };
 
+  gotoHome = () => {
+    this.props.history.push(ROUTER.DASHBOARD);
+  };
+
   render () {
 
     const { transparentMode, withShade, user } = this.props;
@@ -25,7 +37,7 @@ class Header extends React.Component {
 
     return (
       <div className={containerCls}>
-        <div className={'logo'}>
+        <div className={'logo'} onClick={this.gotoHome}>
           <img src={require('@img/logo-white.png')} alt='logo' />
         </div>
         <div className={'flex'}> </div>
@@ -41,6 +53,10 @@ class Header extends React.Component {
     );
   }
 }
-export default connect(state => ({
-  user: state.user.currentUser,
-}), {})(Header);
+
+export default compose(
+  withRouter,
+  connect(state => ({
+    user: state.user.currentUser,
+  }), {})
+)(Header);

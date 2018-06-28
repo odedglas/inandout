@@ -46,8 +46,10 @@ class ProjectDrawer extends Component {
       path
     ) : path;
 
+    const isActive = fullPath === this.props.location.pathname;
+
     return (
-      <ListItem button className={'p-0'}>
+      <ListItem button className={`drawer-item p-0 ${isActive ? 'active' : ''}`}>
         <NavLink activeClassName='is-active' className={'drawer-link'} exact={true} to={fullPath}>
           <ListItemIcon className={'icon'}>
             {icon}
@@ -62,7 +64,7 @@ class ProjectDrawer extends Component {
 
     const { open } = this.props;
     const drawerClasses = `project-drawer ${!open ? 'collapsed' : ''}`;
-    console.log("Project drawer render, Open is : " + open);
+
     return (
       <Drawer
         variant="permanent"

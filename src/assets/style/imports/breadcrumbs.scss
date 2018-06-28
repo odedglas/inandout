@@ -8,7 +8,81 @@
   align-items: center;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, .1);
 
-  .breadcrumb {
+  .breadcrumb-holder {
+    display: flex;
+    align-items: center;
 
+    .divider {
+      font-size: 0.9rem;
+      color: $light-text
+    }
+
+    .breadcrumb {
+      transition: box-shadow .2s cubic-bezier(0,.5,.265,2),;
+      border-radius: 5px;
+      font-size: 0.925rem;
+      padding: 5px 10px!important;
+
+      &:not(.active) {
+        cursor: pointer;
+      }
+
+      .project-breadcrumb {
+
+        .value {
+
+          &:after {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-left: .2em;
+            vertical-align: middle;
+            color: $light-text;
+            content: "";
+            border-top: .3em solid;
+            border-right: .3em solid transparent;
+            border-left: .3em solid transparent;
+          }
+        }
+      }
+
+      &:hover:not(.active){
+        box-shadow: 0 3px 10px 0 rgba(0,0,0,.2);
+        background: #e0e3e7;
+      }
+
+      &.single {
+        cursor: pointer;
+
+        &:hover {
+          box-shadow: 0 3px 10px 0 rgba(0,0,0,.2);
+          background: #e0e3e7;
+        }
+      }
+
+      &.active {
+        color: $active-text-color;
+      }
+
+      .description{
+        color: $light-text;
+      }
+    }
+
+    .divider {
+
+    }
   }
+}
+
+.projects-menu {
+
+  .menu-item {
+
+    .active > span {
+      color: $active-text-color;
+    }
+  }
+
+
 }

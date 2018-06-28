@@ -69,16 +69,21 @@ $drawer-open-width: 210px;
     height: $breadcrumbs-height;
   }
 
+  .drawer-item {
+    &.active {
+      color: $active-text-color;
+    }
+  }
+
   .drawer-link {
     display: flex;
     padding: 0.75rem 1.5rem;
     flex: 1;
 
     &.is-active {
-
       .icon,
       .drawer-item-text > span {
-        color: $logo-color;
+        color: $active-text-color;
       }
     }
   }

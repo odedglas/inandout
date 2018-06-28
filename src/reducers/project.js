@@ -10,8 +10,6 @@ const initialState = {
   drawerOpen: localStorageService.get(projectDrawerLocalStorageKey),
 };
 
-console.log("Reduce init project drawer - > " + localStorageService.get(projectDrawerLocalStorageKey));
-
 export default function (state = initialState, action) {
   switch (action.type) {
     case 'SET_PROJECTS_KEYS':

@@ -61,7 +61,7 @@ class Dashboard extends Component {
                      component={Landing}/>
 
               <Route path={routes.PROJECT}
-                     component={() => <ProjectHome  project={location.state && location.state.selectedProject}/>}/>
+                     component={ProjectHome}/>
             </Switch>
         </div>
 

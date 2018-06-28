@@ -77,9 +77,6 @@ class CreateProjectModal extends React.Component {
           this.props.onClose();
           this.props.history.push({
             pathname: '/dashboard/project/' + project.identifier,
-            state: {
-              selectedProject: project
-            }
           });
         }
       )

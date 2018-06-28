@@ -29,6 +29,7 @@ export function createProject({projectName, projectType, projectDescription}, on
     ).then((project) => {
 
       dispatch({type: 'ADD_PROJECT', project});
+      dispatch({ type: 'SET_SELECTED_PROJECT', project });
       onSuccess(project);
 
     })
