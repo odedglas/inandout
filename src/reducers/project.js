@@ -1,9 +1,16 @@
+import localStorageService from '@service/localstorage';
+
+const projectDrawerLocalStorageKey = 'project-drawer-open';
+
 const initialState = {
   keys: [],
   projects: [],
   fetchingProjects: false,
   selectedProject: {},
+  drawerOpen: localStorageService.get(projectDrawerLocalStorageKey),
 };
+
+console.log("Reduce init project drawer - > " + localStorageService.get(projectDrawerLocalStorageKey));
 
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -39,6 +46,14 @@ export default function (state = initialState, action) {
           ...state.keys,
           action.project.id
         ]
+      };
+    case 'TOGGLE_PROJECT_DRAWER':
+      //Saving to local storage
+      localStorageService.set(projectDrawerLocalStorageKey, action.open);
+
+      return {
+        ...state,
+        drawerOpen: action.open
       };
     default:
       return state;

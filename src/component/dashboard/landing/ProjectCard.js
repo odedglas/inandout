@@ -88,7 +88,7 @@ class ProjectCard extends Component {
         </CardContent>
         <CardActions>
           <Button size="small"
-                  color={'secondary'}
+                  color={'primary'}
                   onClick={this.handleProjectClick}>VIEW PROJECT</Button>
         </CardActions>
       </Card>

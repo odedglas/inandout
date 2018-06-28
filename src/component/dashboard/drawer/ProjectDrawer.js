@@ -21,23 +21,20 @@ import HomeIcon from '@material-ui/icons/Home';
 import CategoriesIcon from '../../icon/CategoriesIcon';
 
 import navigationUtil from '@util/navigation'
+import { toggleProjectDrawer } from '@action/project';
 
 class ProjectDrawer extends Component {
 
   static propTypes = {
     selectedProject: PropTypes.object,
+    toggleProjectDrawer: PropTypes.func.isRequired,
   };
 
-  state = {
-    open: true,
-  };
+  handleDrawerToggle = () => {
 
-  handleDrawerOpen = () => {
-    this.setState({open: true});
-  };
+    const newOpenState = !this.props.open;
 
-  handleDrawerClose = () => {
-    this.setState({open: !this.state.open});
+    this.props.toggleProjectDrawer(newOpenState);
   };
 
   drawerItem = (path, icon, text) => {
@@ -63,18 +60,18 @@ class ProjectDrawer extends Component {
 
   render() {
 
-    const { open } = this.state;
+    const { open } = this.props;
     const drawerClasses = `project-drawer ${!open ? 'collapsed' : ''}`;
-
+    console.log("Project drawer render, Open is : " + open);
     return (
       <Drawer
         variant="permanent"
         classes={{
           paper: drawerClasses,
         }}
-        open={this.state.open}
+        open={open}
       >
-        <ListItem button onClick={this.handleDrawerClose} className={'toggle-drawer'}>
+        <ListItem button onClick={this.handleDrawerToggle} className={'toggle-drawer'}>
           <ListItemIcon>
             {open ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
           </ListItemIcon>
@@ -97,5 +94,6 @@ export default compose(
   withRouter,
   connect(state => ({
     selectedProject: state.project.selectedProject,
-  }), {})
+    open: state.project.drawerOpen,
+  }), {toggleProjectDrawer})
 )(ProjectDrawer);

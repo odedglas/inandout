@@ -41,3 +41,7 @@ export function selectProject(project) {
 
   return dispatch =>  dispatch({ type: 'SET_SELECTED_PROJECT', project });
 }
+
+export function toggleProjectDrawer(open) {
+  return dispatch => dispatch({ type: 'TOGGLE_PROJECT_DRAWER', open });
+}

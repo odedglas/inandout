@@ -14,7 +14,7 @@ class Breadcrumbs extends Component {
     return (
       <div className={'breadcrumbs px-4'}>
 
-        <div className={'breadcrumb'}>
+        <div className={'breadcrumb project-breadcrumb'}>
           <span className={'description'}>Project: </span>
           <span className={'value'}>{project.name} </span>
         </div>
