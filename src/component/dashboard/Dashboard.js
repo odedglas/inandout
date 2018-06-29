@@ -14,7 +14,7 @@ import NotificationsDrawer from './drawer/NotificationsDrawer';
 import {ROUTER as routes} from '@const/';
 import Header from './header/Header';
 import Landing from './landing/Landing';
-import ProjectHome from './project/ProjectHome';
+import Project from './project/Project';
 
 import ProjectDrawer from './drawer/ProjectDrawer';
 
@@ -62,7 +62,7 @@ class Dashboard extends Component {
                      component={Landing}/>
 
               <Route path={routes.PROJECT}
-                     component={ProjectHome}/>
+                     component={Project}/>
             </Switch>
           </div>
 

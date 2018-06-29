@@ -7,6 +7,10 @@ import {asyncComponent} from 'react-async-component';
 
 import {ROUTER as routes} from '@const/';
 
+const ProjectHome = asyncComponent({
+  resolve: () => import('./home/ProjectHome')
+});
+
 const Budgets = asyncComponent({
   resolve: () => import('./budgets/Budgets')
 });
@@ -35,6 +39,9 @@ export function getProjectRoutes(location) {
 
   return (
     <Switch location={location}>
+
+      <Route exact path={routes.PROJECT}
+             component={ProjectHome}/>
 
       <Route exact path={routes.BUDGETS}
              component={Budgets}/>

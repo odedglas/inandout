@@ -7,15 +7,16 @@ import {connect} from 'react-redux';
 import {compose} from 'recompose';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
-import ProjectBreadcrumb from './breadcrumbs/ProjectBreadcrumb';
 
 import Breadcrumbs from './breadcrumbs/Breadcrumbs';
 import Breadcrumb from './breadcrumbs/Breadcrumb';
+import ProjectBreadcrumb from './breadcrumbs/ProjectBreadcrumb';
+
 import {fetchProject} from "@action/project";
 import util from '@util/';
 import {getProjectRoutes} from './ProjectRoutes';
 
-class ProjectHome extends React.Component {
+class Project extends React.Component {
 
   static propTypes = {
     selectedProject: PropTypes.object,
@@ -38,7 +39,7 @@ class ProjectHome extends React.Component {
     const {selectedProject, loading, location} = this.props;
 
     return (
-      <div className={'project-home'}>
+      <div className={'project-container'}>
 
         <Breadcrumbs project={selectedProject}/>
 
@@ -69,4 +70,4 @@ export default compose(
     selectedProject: state.project.selectedProject,
     loading: state.project.loadingProject,
   }), {fetchProject})
-)(ProjectHome);
+)(Project);

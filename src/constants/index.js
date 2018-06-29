@@ -38,5 +38,5 @@ export const PROJECT_TYPES = {
 };
 
 export const LOCAL_STORAGE = {
-  PROJECT_DRAWER_OPEN: '',
+  PROJECT_DRAWER_OPEN: 'project-drawer-open',
 };
