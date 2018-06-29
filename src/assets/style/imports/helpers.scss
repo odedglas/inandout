@@ -1977,6 +1977,13 @@
   display:flex;
 }
 
+.flex-center {
+  flex:1;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .col-flex {
   display:flex;
   flex:1;

@@ -51,7 +51,7 @@
         background: #e0e3e7;
       }
 
-      &.single {
+      &.single:not(.empty) {
         cursor: pointer;
 
         &:hover {

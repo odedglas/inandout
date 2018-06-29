@@ -36,3 +36,7 @@ export const PROJECT_TYPES = {
     description: 'Same as above + Shift Manager / Project Management',
   }
 };
+
+export const LOCAL_STORAGE = {
+  PROJECT_DRAWER_OPEN: '',
+};

@@ -1,9 +1,28 @@
-import React from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types'
+import {connect} from 'react-redux';
 
-const Todos = () =>
-  <div className={'welcome-container'}>
+import Breadcrumb from '../breadcrumbs/Breadcrumb';
 
-    I R Todos
-  </div>;
+class Todos extends Component {
 
-export default Todos;
+  static propTypes = {
+    selectedProject: PropTypes.any
+  };
+
+  render() {
+    const { selectedProject } = this.props;
+
+    return (
+      <div className={'welcome-container'}>
+        <Breadcrumb item={{id:'todosCrumb' ,value:'Todo\'s', path:'/dashboard'}}/>
+
+        I R Todos for { selectedProject.name }
+      </div>
+    );
+  }
+}
+
+export default connect(state => ({
+  selectedProject: state.project.selectedProject,
+}), {})(Todos);

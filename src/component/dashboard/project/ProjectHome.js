@@ -11,41 +11,31 @@ import ProjectBreadcrumb from './breadcrumbs/ProjectBreadcrumb';
 
 import Breadcrumbs from './breadcrumbs/Breadcrumbs';
 import Breadcrumb from './breadcrumbs/Breadcrumb';
-import {selectProject} from "@action/project";
-import projectService from '@service/project';
+import {fetchProject} from "@action/project";
 import util from '@util/';
 import {getProjectRoutes} from './ProjectRoutes';
-
 
 class ProjectHome extends React.Component {
 
   static propTypes = {
-    selectedProject: PropTypes.object
-  };
-
-  state = {
-    loading: false,
+    selectedProject: PropTypes.object,
+    fetchProject: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired
   };
 
   componentDidMount() {
 
-    const {selectedProject, match} = this.props;
+    const {selectedProject, fetchProject, match} = this.props;
 
+    //Fetching project if none was selected.
     if (util.isEmptyObject(selectedProject)) {
-
-      this.setState({loading: true});
-      projectService.fetchProject(match.params.identifier).then(project => {
-
-        this.props.selectProject(project);
-        this.setState({loading: false})
-      });
+      fetchProject(match.params.identifier);
     }
   }
 
   render() {
 
-    const {selectedProject} = this.props;
-    const {loading} = this.state;
+    const {selectedProject, loading, location} = this.props;
 
     return (
       <div className={'project-home'}>
@@ -61,13 +51,11 @@ class ProjectHome extends React.Component {
         />
 
         <div className={'content scrollable'}>
-
-          {loading ? <CircularProgress size={50}/> : null}
-          I R PROJECT HOME DUDE!!!
-          Display for KEY -> {selectedProject.id}
-
-          {getProjectRoutes()}
-
+          <div className="flex-center">
+            {
+              loading ? <CircularProgress size={50}/> : getProjectRoutes(location)
+            }
+          </div>
         </div>
 
       </div>
@@ -79,5 +67,6 @@ export default compose(
   withRouter,
   connect(state => ({
     selectedProject: state.project.selectedProject,
-  }), {selectProject})
+    loading: state.project.loadingProject,
+  }), {fetchProject})
 )(ProjectHome);

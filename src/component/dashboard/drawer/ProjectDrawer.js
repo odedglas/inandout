@@ -39,14 +39,14 @@ class ProjectDrawer extends Component {
 
   drawerItem = (path, icon, text) => {
 
-    const selectedProject = this.props.selectedProject;
+    const { selectedProject, location} = this.props;
 
-    const fullPath = selectedProject ? navigationUtil.projectLink(
+    const fullPath = navigationUtil.projectLink(
       selectedProject,
       path
-    ) : path;
+    );
 
-    const isActive = fullPath === this.props.location.pathname;
+    const isActive = fullPath === location.pathname;
 
     return (
       <ListItem button className={`drawer-item p-0 ${isActive ? 'active' : ''}`}>
@@ -62,7 +62,7 @@ class ProjectDrawer extends Component {
 
   render() {
 
-    const { open } = this.props;
+    const { open} = this.props;
     const drawerClasses = `project-drawer ${!open ? 'collapsed' : ''}`;
 
     return (

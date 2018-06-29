@@ -116,6 +116,7 @@ class CreateProjectModal extends React.Component {
                 autoFocus
                 value={projectName}
                 error={validation.projectName.isInvalid}
+                placeholder={'My awesome project'}
                 onChange={(event) => this.handleChange(event.target.value, 'projectName')}
                 margin="dense"
                 id="project-name"

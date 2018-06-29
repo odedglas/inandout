@@ -68,6 +68,7 @@ class ProjectCard extends Component {
 
     const {project} = this.props;
     const iconMeta = this.projectIcon(project.type);
+
     return (
       <Card className={'project-card'}>
         <CardHeader

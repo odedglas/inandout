@@ -1,4 +1,25 @@
 import projectService from '@service/project'
+import localStorageService from '@service/localstorage'
+import {LOCAL_STORAGE} from '@const/'
+
+export function fetchProject(identifier) {
+  return dispatch => {
+
+    const projectTemplate = {identifier};
+
+    dispatch({type: 'SET_SELECTED_PROJECT', project: projectTemplate});
+    dispatch({type: 'LOAD_PROJECT', loading: true});
+
+    projectService.fetchProject(identifier).then(project => {
+
+      setTimeout(() => {
+        dispatch({type: 'SET_SELECTED_PROJECT', project});
+        dispatch({type: 'LOAD_PROJECT', loading: false})
+      },2500)
+
+    })
+  }
+}
 
 export function fetchUserProjects() {
   return (dispatch, getState) => {
@@ -44,5 +65,9 @@ export function selectProject(project) {
 }
 
 export function toggleProjectDrawer(open) {
-  return dispatch => dispatch({ type: 'TOGGLE_PROJECT_DRAWER', open });
+  return dispatch => {
+    //Saving to local storage
+    localStorageService.set(LOCAL_STORAGE.PROJECT_DRAWER_OPEN, open);
+    dispatch({ type: 'TOGGLE_PROJECT_DRAWER', open });
+  }
 }

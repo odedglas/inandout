@@ -16,7 +16,7 @@ export default {
       owner: firebaseService.user.id
     };
 
-    let unique = name;
+    let unique = normalizeProjectName(name);
     const validateUniqueness = (name) => firebaseService.database.ref('projectsIdentifier/' + name).once('value');
 
     return util.whilePromise(validateUniqueness, unique, (res) => {
@@ -35,5 +35,5 @@ export default {
 
   },
 }
-
-const generateProjectIdentifier = name => `${name.toLowerCase().replaceAll(" ", "").replaceAll("-", "")}-${util.randomAlphaNumeric(4)}`;
+const normalizeProjectName = name => name.toLowerCase().replaceAll(" ", "-");
+const generateProjectIdentifier = name => `${normalizeProjectName(name)}-${util.randomAlphaNumeric(4)}`;

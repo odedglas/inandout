@@ -4,6 +4,7 @@ import {
   Switch,
 } from 'react-router-dom';
 import {asyncComponent} from 'react-async-component';
+
 import {ROUTER as routes} from '@const/';
 
 const Budgets = asyncComponent({
@@ -30,9 +31,11 @@ const Transactions = asyncComponent({
   resolve: () => import('./transactions/Transactions')
 });
 
-export function getProjectRoutes() {
+export function getProjectRoutes(location) {
+
   return (
-    <Switch>
+    <Switch location={location}>
+
       <Route exact path={routes.BUDGETS}
              component={Budgets}/>
 
@@ -52,5 +55,6 @@ export function getProjectRoutes() {
              component={Todos}/>
 
     </Switch>
+
   );
 }

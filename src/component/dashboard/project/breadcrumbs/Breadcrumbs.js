@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
+import util from '@util/'
+
 class Breadcrumbs extends Component {
 
   static propTypes = {
@@ -20,8 +22,9 @@ class Breadcrumbs extends Component {
 
           const isSingle = length === 1;
           const isLast = i === length-1;
+          const isEmpty = util.isUndefined(breadcrumb.value);
 
-          const breadcrumbItemClassList = `breadcrumb ${isLast ? 'active' : ''} ${isSingle ? 'single' : ''}`;
+          const breadcrumbItemClassList = `breadcrumb ${isLast ? 'active' : ''} ${isSingle ? 'single' : ''} ${isEmpty ? 'empty' : ''}`;
 
           return (
             <div className={'breadcrumb-holder'} key={breadcrumb.id}>

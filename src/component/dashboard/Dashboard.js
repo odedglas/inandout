@@ -8,7 +8,7 @@ import {
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
 
-import { fetchUserProjects } from "@action/project";
+import {fetchUserProjects} from "@action/project";
 
 import NotificationsDrawer from './drawer/NotificationsDrawer';
 import {ROUTER as routes} from '@const/';
@@ -17,6 +17,7 @@ import Landing from './landing/Landing';
 import ProjectHome from './project/ProjectHome';
 
 import ProjectDrawer from './drawer/ProjectDrawer';
+
 class Dashboard extends Component {
 
   static propTypes = {
@@ -41,8 +42,8 @@ class Dashboard extends Component {
 
   render() {
 
-    const { location } = this.props;
-    const { showNotificationsBar } = this.state;
+    const {location} = this.props;
+    const {showNotificationsBar} = this.state;
 
     const isLanding = location.pathname === routes.DASHBOARD;
 
@@ -54,7 +55,7 @@ class Dashboard extends Component {
 
 
         <div className={'flex h-100'}>
-          { !isLanding ? <ProjectDrawer /> : null }
+          {!isLanding ? <ProjectDrawer/> : null}
           <div className={'dashboard-body ' + (isLanding ? 'landing' : '')}>
             <Switch>
               <Route exact path={routes.DASHBOARD}
@@ -63,7 +64,7 @@ class Dashboard extends Component {
               <Route path={routes.PROJECT}
                      component={ProjectHome}/>
             </Switch>
-        </div>
+          </div>
 
           <NotificationsDrawer open={showNotificationsBar} toggleNotificationsDrawer={this.toggleNotificationsDrawer}>
 
@@ -78,5 +79,5 @@ class Dashboard extends Component {
 
 export default compose(
   withRouter,
-  connect(null, { fetchUserProjects })
+  connect(null, {fetchUserProjects})
 )(Dashboard);

@@ -38,8 +38,10 @@ class ProjectBreadCrumb extends React.Component {
   handleItemClick = (id) => {
 
     this.handleClose();
+
     const project = this.props.projects.filter(p => p.id === id)[0];
     this.props.selectProject(project);
+
     this.props.history.push(
       navigationUtil.projectLink(project)
     );
@@ -56,6 +58,7 @@ class ProjectBreadCrumb extends React.Component {
     const {selectedProjectId, projects} = this.props;
     const {anchorEl} = this.state;
 
+
     //Removing current project from list
     //TODO -> Should this be moved into redux connected ?
     const selectedProject = projects.find(p => p.id === selectedProjectId) || {};
@@ -66,9 +69,9 @@ class ProjectBreadCrumb extends React.Component {
         <span aria-owns={anchorEl ? 'projects-menu' : null}
               aria-haspopup="true"
               className={'menu-trigger'}
-              onClick={this.handleClick}>
+              onClick={selectedProjectId && this.handleClick}>
           <span className={'description'}> Project: </span>
-          <span className={' value pl-2'}> {selectedProject.name} </span>
+          <span className={' value pl-2'}> {selectedProjectId ? selectedProject.name : ' -- '} </span>
         </span>
         <Menu
           id="projects-menu"

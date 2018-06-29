@@ -1,9 +1,28 @@
-import React from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types'
+import {connect} from 'react-redux';
 
-const Categories = () =>
-  <div className={'welcome-container'}>
+import Breadcrumb from '../breadcrumbs/Breadcrumb';
 
-    I R Categories
-  </div>;
+class Categories extends Component {
 
-export default Categories;
+  static propTypes = {
+    selectedProject: PropTypes.any
+  };
+
+  render() {
+    const { selectedProject } = this.props;
+
+    return (
+      <div className={'welcome-container'}>
+        <Breadcrumb item={{id:'categoriesCrumb' ,value:'Categories', path:'/dashboard'}}/>
+
+        I R Categories for { selectedProject.name }
+      </div>
+    );
+  }
+}
+
+export default connect(state => ({
+  selectedProject: state.project.selectedProject,
+}), {})(Categories);
