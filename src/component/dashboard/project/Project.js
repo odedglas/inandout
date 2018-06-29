@@ -30,6 +30,7 @@ class Project extends React.Component {
 
     //Fetching project if none was selected.
     if (util.isEmptyObject(selectedProject)) {
+      console.log("No selected project, Fetching ->" + match.params.identifier);
       fetchProject(match.params.identifier);
     }
   }
