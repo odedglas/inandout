@@ -31,6 +31,19 @@ export default {
       return user;
     });
   },
+
+  fetchUsers: () => {
+
+    return firebaseService.fetchArray('/users').then(result => {
+
+        return result.map(holder => {
+          return {
+            id: holder.id,
+            ...holder.user
+          }
+        })
+    });
+  },
 }
 
 const getInitials = str =>str.split(" ").map((n)=>n[0]).slice(0,2).join("");

@@ -13,7 +13,8 @@ export default {
       name,
       type,
       description,
-      owner: firebaseService.user.id
+      owner: firebaseService.user.id,
+      isNew: true,
     };
 
     let unique = normalizeProjectName(name);

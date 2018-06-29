@@ -11,6 +11,7 @@ class Customers extends Component {
   };
 
   render() {
+
     const { selectedProject } = this.props;
 
     return (

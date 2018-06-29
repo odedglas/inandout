@@ -55,7 +55,10 @@ class Project extends React.Component {
         <div className={'content scrollable'}>
           <div className="flex-center">
             {
-              loading ? <CircularProgress size={50}/> : getProjectRoutes(location)
+              loading ? <CircularProgress size={50}/> :null
+            }
+            {
+              getProjectRoutes(location)
             }
           </div>
         </div>

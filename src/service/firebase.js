@@ -44,6 +44,23 @@ export default {
       };
     });
   },
+
+  fetchArray(path) {
+
+    return database.ref(path).once('value').then((snapshot) => {
+
+        const value = snapshot.val();
+        const keys = Object.keys(value);
+
+        return keys.map(key => {
+
+          return {
+            id: key,
+            ...value[key]
+          }
+        })
+    });
+  },
   fetchByKeys(path, keys) {
 
     let promises = [];

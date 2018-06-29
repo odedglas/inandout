@@ -22,7 +22,6 @@ import FeedbackIcon from '@material-ui/icons/Feedback';
 import Divider from '@material-ui/core/Divider';
 
 import { signOut } from '@action/authentication';
-import {ROUTER as routes} from '@const/';
 class UserProfileMenu extends React.Component {
 
   static propTypes = {
@@ -48,12 +47,9 @@ class UserProfileMenu extends React.Component {
 
   doSignOut = () => {
 
-    const { history } = this.props;
     this.setState({ open: false });
 
-    this.props.signOut(
-      () => history.push(routes.LOGIN)
-    );
+    this.props.signOut();
   };
 
   render () {
