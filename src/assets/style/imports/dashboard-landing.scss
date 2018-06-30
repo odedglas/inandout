@@ -67,13 +67,15 @@
     }
 
     .projects-inner {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
+
       margin-bottom: 1rem;
 
       & > div {
         display: flex;
+
+        @include mq('tablet', 'max') {
+          flex: 1
+        }
       }
 
       .project-card {

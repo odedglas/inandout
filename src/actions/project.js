@@ -15,7 +15,7 @@ export function fetchProject(identifier) {
       setTimeout(() => {
         dispatch({type: 'SET_SELECTED_PROJECT', project});
         dispatch({type: 'LOAD_PROJECT', loading: false})
-      },2500)
+      },1000)
 
     })
   }

@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
-
 import {fetchUserProjects} from "@action/project";
 
 import NotificationsDrawer from './drawer/NotificationsDrawer';
@@ -52,7 +51,6 @@ class Dashboard extends Component {
         <Header transparentMode={false}
                 withShade={true}
                 toggleNotificationsDrawer={this.toggleNotificationsDrawer}/>
-
 
         <div className={'flex h-100'}>
           {!isLanding ? <ProjectDrawer/> : null}

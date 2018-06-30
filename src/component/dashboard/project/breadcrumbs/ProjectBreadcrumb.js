@@ -42,6 +42,7 @@ class ProjectBreadCrumb extends React.Component {
     const project = this.props.projects.filter(p => p.id === id)[0];
     this.props.selectProject(project);
 
+    //TODO - Should this remain on user current module e.g budgets
     this.props.history.push(
       navigationUtil.projectLink(project)
     );

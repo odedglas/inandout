@@ -1,13 +1,21 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-
+import {compose} from 'recompose';
+import {
+  withRouter
+} from 'react-router-dom';
 import util from '@util/'
 
 class Breadcrumbs extends Component {
 
   static propTypes = {
     breadcrumbs: PropTypes.array.isRequired,
+  };
+
+  handleItemClick = (item) => {
+
+    !item.render && this.props.history.push(item.path)
   };
 
   render () {
@@ -28,7 +36,7 @@ class Breadcrumbs extends Component {
 
           return (
             <div className={'breadcrumb-holder'} key={breadcrumb.id}>
-              <div className={breadcrumbItemClassList}>
+              <div className={breadcrumbItemClassList} onClick={() => !isLast && this.handleItemClick(breadcrumb)}>
                 {!breadcrumb.render ? breadcrumb.value : breadcrumb.render(breadcrumb.value)}
               </div>
               {!isLast ? <span className={'divider mx-2'}> / </span> : null }
@@ -41,6 +49,9 @@ class Breadcrumbs extends Component {
   }
 }
 
-export default connect( state => ({
-  breadcrumbs: state.breadcrumbs,
-}), {})(Breadcrumbs);
+export default compose(
+  withRouter,
+  connect( state => ({
+    breadcrumbs: state.breadcrumbs,
+  }), {})
+)(Breadcrumbs);

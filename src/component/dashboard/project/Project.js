@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
+import { CSSTransition } from 'react-transition-group';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -53,14 +54,19 @@ class Project extends React.Component {
         />
 
         <div className={'content scrollable'}>
-          <div className="flex-center">
-            {
-              loading ? <CircularProgress size={50}/> :null
-            }
-            {
-              getProjectRoutes(location)
-            }
+          <div className="flex-center" style={{position: 'absolute'}}>
+            <CSSTransition
+              in={loading}
+              timeout={300}
+              classNames="fade"
+              unmountOnExit
+            >
+              <CircularProgress size={50}/>
+            </CSSTransition>
           </div>
+          {
+            !loading ? getProjectRoutes(location) : null
+          }
         </div>
 
       </div>

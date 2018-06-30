@@ -83,7 +83,7 @@ class Landing extends React.Component {
               : null
             }
 
-            <div className={'projects-inner'}>
+            <div className={'projects-inner row'}>
               {
                 projects.map(project => <ProjectCard onProjectClick={this.gotoProject}
                                                      key={project.id}
