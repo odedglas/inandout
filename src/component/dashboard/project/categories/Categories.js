@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 
 import DynamicIcon from "@common/DynamicIcon";
 import PageTitle from "@common/PageTitle";
+import CreateCategory from '../../../modals/CreateCategory'
 
 import Zoom from '@material-ui/core/Zoom';
 
@@ -19,12 +20,18 @@ class Categories extends Component {
     categories: PropTypes.array
   };
 
-  showCreateCategory = () => {
+  state = {
+    showCreateCategoryModal: false,
+  };
 
+  showHideCreateCategory = (show) => {
+
+    this.setState({ showCreateCategoryModal: !!show })
   };
 
   render() {
     const {selectedProject, categories} = this.props;
+    const {showCreateCategoryModal} = this.state;
 
     return (
       <div className={'categories-container'}>
@@ -49,11 +56,14 @@ class Categories extends Component {
             )
           })}
         </div>
+        <CreateCategory open={showCreateCategoryModal}
+                        projectId={selectedProject.id}
+                        onClose={this.showHideCreateCategory}/>
         <Tooltip title={'Create Category'} placement={'top'}>
           <Zoom in={true} timeout={400}>
             <Button variant="fab"
                     color="secondary"
-                    onClick={this.showCreateCategory}
+                    onClick={() => this.showHideCreateCategory(true)}
                     aria-label="add"
                     className={'add-category'}>
               <DynamicIcon name={'add'}/>
@@ -67,5 +77,5 @@ class Categories extends Component {
 
 export default connect(state => ({
   selectedProject: state.project.selectedProject,
-  categories: state.category.defaultCategories,
+  categories: state.category.categories,
 }), {})(Categories);

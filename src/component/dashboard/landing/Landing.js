@@ -20,7 +20,7 @@ class Landing extends React.Component {
 
   static propTypes = {
     projects: PropTypes.array,
-    fetchingProjects: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
     selectProject: PropTypes.func.isRequired,
   };
 
@@ -50,10 +50,10 @@ class Landing extends React.Component {
   render() {
 
     const { showCreateProjectModal } = this.state;
-    const {projects, fetchingProjects} = this.props;
+    const {projects, loading} = this.props;
 
     const hasProjects = projects.length > 0;
-    const shouldShowAddProjectHelper = !fetchingProjects && !hasProjects;
+    const shouldShowAddProjectHelper = !loading && !hasProjects;
 
     return (
       <div className={'lading-page scrollable'}>
@@ -70,7 +70,7 @@ class Landing extends React.Component {
         <div className={'projects-container'}>
           <div className={'centered'}>
 
-            {fetchingProjects ? <CircularProgress size={50}/> : null}
+            {loading ? <CircularProgress size={50}/> : null}
 
             {hasProjects ? <div className={'title'}> Your Projects </div>  : null}
 
@@ -87,7 +87,7 @@ class Landing extends React.Component {
               {
                 projects.map(project => <ProjectCard onProjectClick={this.gotoProject}
                                                      key={project.id}
-                                                     showAnimation={fetchingProjects}
+                                                     showAnimation={loading}
                                                      project={project}/>)
               }
             </div>
@@ -113,6 +113,6 @@ export default compose(
   withRouter,
   connect( state => ({
     projects: state.project.projects,
-    fetchingProjects: state.project.fetchingProjects,
+    loading: state.dashboard.loading,
   }), {selectProject})
 )(Landing);

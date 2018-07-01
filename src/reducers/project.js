@@ -27,19 +27,14 @@ export default function (state = initialState, action) {
     case 'SET_SELECTED_PROJECT': {
       return {
         ...state,
-        selectedProject: action.project
+        selectedProject: action.project,
+        preSelectedProject: undefined,
       }
     }
     case 'SET_PROJECTS':
-
-      const preSelectedIdentifier = state.preSelectedProject;
-      const selectedProject = preSelectedIdentifier ? action.projects.find(p => p.identifier === preSelectedIdentifier) : {};
-
       return {
         ...state,
-        projects: action.projects,
-        selectedProject: selectedProject,
-        preSelectedIdentifier: undefined
+        projects: action.projects
       };
     case 'ADD_PROJECT':
       return {

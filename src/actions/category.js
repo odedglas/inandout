@@ -8,8 +8,18 @@ export function fetchDefaults() {
 
     categoryService.fetchDefaults().then((categories) => {
 
-      dispatch({type: 'SET_DEFAULTS', categories});
+      dispatch({type: 'SET_DEFAULTS_CATEGORIES', categories});
     })
       .finally(() => dispatch({type: 'REMOVE_DASHBOARD_LOADING', loadKey: categoriesLoadKey}));
+  }
+}
+
+export function createCategory(projectId, { name, icon, color }) {
+
+  return dispatch => {
+      debugger;
+    categoryService.createCategory(projectId, name, icon, color).then(d => {
+
+    })
   }
 }

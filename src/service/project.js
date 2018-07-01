@@ -3,7 +3,25 @@ import util from '@util/'
 
 export default {
 
-  fetchUserProjects: (projectKeys) => firebaseService.fetchByKeys('/projects', projectKeys),
+  fetchUserProjects: (projectKeys) => firebaseService.fetchByKeys('/projects', projectKeys).then(d => {
+
+    return d.map( p => {
+
+      //Flattening categories
+      let categories = p.categories;
+      if(categories){
+
+        p.categories =  Object.keys(p.categories).map(key =>{
+          return {
+            id:key,
+            ...categories[key]
+          }
+        });
+      }
+      return p;
+    });
+
+  }),
   fetchProject: identifier => firebaseService.fetch(`/projectsIdentifier/${identifier}`).then(res => {
     return  firebaseService.fetch(`/projects/${res.value}`);
   }),

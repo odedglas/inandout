@@ -1,31 +1,8 @@
 import projectService from '@service/project'
-import categoryService from '@service/category'
 import localStorageService from '@service/localstorage'
 import {LOCAL_STORAGE} from '@const/'
 
 const projectsLoadKey = 'userProjects';
-
-export function fetchProject(identifier) {
-  return dispatch => {
-
-    const projectTemplate = {identifier};
-
-    dispatch({type: 'SET_SELECTED_PROJECT', project: projectTemplate});
-    dispatch({type: 'LOAD_PROJECT', loading: true});
-
-    projectService.fetchProject(identifier).then(project => {
-
-      dispatch({type: 'SET_SELECTED_PROJECT', project});
-
-      //Fetching categories
-      categoryService.fetchDefaults().then((categories) => {
-
-        dispatch({type: 'SET_DEFAULTS', categories});
-        dispatch({type: 'LOAD_PROJECT', loading: false})
-      });
-    });
-  }
-}
 
 export function setPreSelectedProject(identifier) {
   return dispatch => dispatch({type: 'SET_PRE_SELECTED_PROJECT', identifier});
@@ -42,6 +19,14 @@ export function fetchUserProjects() {
     ).then(projects => {
 
       dispatch({type: 'SET_PROJECTS', projects});
+
+      const preSelectedIdentifier = getState().project.preSelectedProject;
+      const selectedProject = preSelectedIdentifier ? projects.find(p => p.identifier === preSelectedIdentifier) : null;
+
+      if(selectedProject) {
+        dispatch(selectProject(selectedProject));
+      }
+
     })
       .finally(() =>  dispatch({type: 'REMOVE_DASHBOARD_LOADING', loadKey: projectsLoadKey}));
   }
@@ -71,7 +56,10 @@ export function createProject({projectName, projectType, projectDescription}, on
 
 export function selectProject(project) {
 
-  return dispatch =>  dispatch({ type: 'SET_SELECTED_PROJECT', project });
+  return dispatch =>  {
+    dispatch({ type: 'SET_SELECTED_PROJECT', project });
+    dispatch({ type: 'SET_CUSTOM_CATEGORIES', categories: project.categories });
+  }
 }
 
 export function toggleProjectDrawer(open) {

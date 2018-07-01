@@ -95,5 +95,15 @@ export default {
           id: projectKey
         }
       });
+  },
+  createCategory(projectId, category) {
+
+    return database.ref(`/projects/${projectId}/categories`).push(category).then(res => {
+      debugger;
+      return {
+        ...category,
+        id: res.key
+      }
+    })
   }
 }
