@@ -13,26 +13,23 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
 import Grow from '@material-ui/core/Grow';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 
 import DynamicIcon from '@common/DynamicIcon';
+import ColorPicker from '@common/ColorPicker'
+import IconPicker from '@common/IconPicker'
 
 import withValidation from '../hoc/withValidation';
-import { createCategory } from "@action/category";
-import { PROJECT_TYPES } from '@const/';
-import util from '@util/';
+import {createCategory} from "@action/category";
+
 import themeService from '@service/theme';
 
 const INITIAL_STATE = {
   name: '',
   icon: 'person',
   color: themeService.getAvatarRandomColor(600),
+  iconPickerRef: undefined,
 };
 
 class CreateCategoryModal extends React.Component {
@@ -46,7 +43,7 @@ class CreateCategoryModal extends React.Component {
     onValidationChange: PropTypes.func.isRequired,
     validation: PropTypes.object.isRequired,
     createCategory: PropTypes.func.isRequired,
-    projectId: PropTypes.string,
+    project: PropTypes.object,
   };
 
   state = {...INITIAL_STATE};
@@ -62,26 +59,34 @@ class CreateCategoryModal extends React.Component {
 
   handleCategoryCreate = () => {
 
-    const { validate, createCategory, projectId} = this.props;
+    const {validate, createCategory, project} = this.props;
     const validationResult = validate(this.state);
 
-    if(validationResult.isValid) {
+    if (validationResult.isValid) {
 
-      createCategory(projectId, this.state);
+      const {name, icon, color} = this.state;
+      createCategory(
+        project,
+        {name, icon, color},
+        () => this.handleClose()
+        );
     }
 
   };
 
   handleClose = () => {
-    this.props.clearValidation();
-    this.setState({...INITIAL_STATE});
     this.props.onClose();
+    this.props.clearValidation();
+    this.setState({
+      ...INITIAL_STATE,
+      color: themeService.getAvatarRandomColor(600)
+    });
   };
 
   render() {
 
-    const { open, validation} = this.props;
-    const { name, icon, color } = this.state;
+    const {open, validation} = this.props;
+    const {name, icon, color} = this.state;
 
     return (
       <div>
@@ -104,7 +109,7 @@ class CreateCategoryModal extends React.Component {
                 autoFocus
                 value={name}
                 error={validation.name.isInvalid}
-                placeholder={'My awesome project'}
+                placeholder={'My new category'}
                 onChange={(event) => this.handleChange(event.target.value, 'name')}
                 margin="dense"
                 id="category-name"
@@ -112,6 +117,29 @@ class CreateCategoryModal extends React.Component {
                 title={validation.name.message}
                 fullWidth
               />
+            </div>
+
+            <div className={'row py-1 category-theme'}>
+              <div className={'col-sm-5 px-0 separator'}>
+                <div className={'cell  mb-2'}>
+                  <span className={'label'}>Color:</span>
+                  <ColorPicker selectedColor={color}
+                               onChange={color => this.handleChange(color, 'color')}/>
+                </div>
+                <div className={'cell'}>
+                  <span className={'label'}>Icon:</span>
+                  <IconPicker selectedIcon={icon}
+                              onChange={icon => this.handleChange(icon, 'icon')}/>
+                </div>
+              </div>
+              <div className={'col px-0'}>
+                <div className={'preview'}>
+                  <span className={'label pb-1'}>Preview</span>
+                  <Avatar style={{'backgroundColor': color}} className={'category-avatar'}>
+                    <DynamicIcon name={icon}/>
+                  </Avatar>
+                </div>
+              </div>
             </div>
           </DialogContent>
           <DialogActions className={'modal-actions'}>
@@ -134,10 +162,10 @@ export default compose(
   withRouter,
   withValidation([
     {
-      field    : 'name',
-      method   : (v, f, state, validator, args) => !validator.isEmpty(v),
-      message  : 'Please provide a category name.'
+      field: 'name',
+      method: (v, f, state, validator, args) => !validator.isEmpty(v),
+      message: 'Please provide a category name.'
     },
   ]),
-  connect( null, {createCategory})
+  connect(null, {createCategory})
 )(CreateCategoryModal);

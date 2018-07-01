@@ -1,5 +1,6 @@
 import React from 'react';
 
+// -- Categories -- //
 import TransportationIcon from '../icon/TransportationIcon';
 import ClothIcon from '../icon/ClothIcon';
 import CategoriesIcon from '../icon/CategoriesIcon';
@@ -22,6 +23,25 @@ import SmallBusinessIcon from '@material-ui/icons/LocalGroceryStore';
 import MediumBusinessIcon from '@material-ui/icons/LocalMall';
 import AddIcon from '@material-ui/icons/Add';
 
+// -- Custom Categories -- //
+import GiftIcon from '@material-ui/icons/Redeem';
+import GamesIcon from '@material-ui/icons/Games';
+import MusicIcon from '@material-ui/icons/MusicNote';
+import ToysIcon from '@material-ui/icons/Toys';
+import CreationIcon from '@material-ui/icons/Brush';
+import FlowersIcon from '@material-ui/icons/LocalFlorist';
+import MoviesIcon from '@material-ui/icons/LocalMovies';
+import OutdoorIcon from '@material-ui/icons/Terrain';
+import KitchenIcon from '@material-ui/icons/Kitchen';
+import SeaIcon from '@material-ui/icons/BeachAccess';
+import HotIcon from '@material-ui/icons/Whatshot';
+import GlobalIcon from '@material-ui/icons/Public';
+import CakeIcon from '@material-ui/icons/Cake';
+import CoffeeIcon from '@material-ui/icons/LocalCafe';
+import GasIcon from '@material-ui/icons/LocalGasStation';
+import FlightIcon from '@material-ui/icons/LocalAirport';
+
+// -- Drawer -- //
 import TodosIcon from '@material-ui/icons/CheckBox';
 import BudgetsIcon from '@material-ui/icons/AttachMoney';
 import TransactionsIcon from '@material-ui/icons/Transform';
@@ -56,6 +76,22 @@ const iconMap = {
   'customers': CustomersIcon,
   'calendar': CalendarIcon,
   'notification': NotificationsIcon,
+  'gift': GiftIcon,
+  'games': GamesIcon,
+  'music': MusicIcon,
+  'toys': ToysIcon,
+  'creation': CreationIcon,
+  'flower': FlowersIcon,
+  'movie': MoviesIcon,
+  'outdoor': OutdoorIcon,
+  'kitchen': KitchenIcon,
+  'sea': SeaIcon,
+  'hot': HotIcon,
+  'cake': CakeIcon,
+  'coffee': CoffeeIcon,
+  'global': GlobalIcon,
+  'gas': GasIcon,
+  'flight': FlightIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {

@@ -63,7 +63,9 @@ export default {
 
     const normalizedColor = color.toLowerCase().replaceAll(" ","");
     return pallete[avatarPalette.colors.indexOf(normalizedColor)];
-  }
+  },
+
+  getPalette: (shade) => avatarPalette[shade]
 }
 
 const getRandomInt = (max) => Math.floor(Math.random() * (max));

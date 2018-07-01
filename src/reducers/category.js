@@ -16,7 +16,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         customCategories: action.categories,
-        categories: [...state.categories, ...state.defaultCategories]
+        categories: [...action.categories, ...state.defaultCategories]
       };
 
     default:

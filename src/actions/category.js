@@ -14,12 +14,22 @@ export function fetchDefaults() {
   }
 }
 
-export function createCategory(projectId, { name, icon, color }) {
+export function createCategory(project, { name, icon, color }, onSuccess) {
 
   return dispatch => {
-      debugger;
-    categoryService.createCategory(projectId, name, icon, color).then(d => {
 
-    })
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    categoryService.createCategory(project.id, name, icon, color).then(category => {
+
+      let currentCategories = project.categories || [];
+      currentCategories = currentCategories.concat(category);
+      project.categories = currentCategories;
+
+      dispatch({ type: 'SET_CUSTOM_CATEGORIES', categories: currentCategories });
+      dispatch({ type: 'SET_SELECTED_PROJECT', project });
+
+      onSuccess();
+    }).finally(() =>  dispatch({type: 'APP_LOADING', loading: false}))
   }
 }
