@@ -12,13 +12,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import TodosIcon from '@material-ui/icons/CheckBox';
-import BudgetsIcon from '@material-ui/icons/AttachMoney';
-import TransactionsIcon from '@material-ui/icons/Transform';
-import CustomersIcon from '@material-ui/icons/Group';
-import CalendarIcon from '@material-ui/icons/DateRange';
-import HomeIcon from '@material-ui/icons/Home';
-import CategoriesIcon from '../../icon/CategoriesIcon';
+import DynamicIcon from '@common/DynamicIcon';
 
 import navigationUtil from '@util/navigation'
 import { toggleProjectDrawer } from '@action/project';
@@ -80,13 +74,13 @@ class ProjectDrawer extends Component {
         </ListItem>
         <Divider/>
 
-        {this.drawerItem(``, <HomeIcon/>, 'Home')}
-        {this.drawerItem('budgets', <BudgetsIcon/>, 'Budgets')}
-        {this.drawerItem('transactions', <TransactionsIcon/>, 'Transactions')}
-        {this.drawerItem('categories', <CategoriesIcon/>, 'Categories')}
-        {this.drawerItem('customers', <CustomersIcon/>, 'Customers')}
-        {this.drawerItem('calendar', <CalendarIcon/>, 'Calendar')}
-        {this.drawerItem('todos', <TodosIcon/>, 'Todo\'s')}
+        {this.drawerItem(``, <DynamicIcon name={'home'}/>, 'Home')}
+        {this.drawerItem('budgets',  <DynamicIcon name={'budgets'}/>, 'Budgets')}
+        {this.drawerItem('transactions',  <DynamicIcon name={'transactions'}/>, 'Transactions')}
+        {this.drawerItem('categories',  <DynamicIcon name={'categories'}/>, 'Categories')}
+        {this.drawerItem('customers',  <DynamicIcon name={'customers'}/>, 'Customers')}
+        {this.drawerItem('calendar',  <DynamicIcon name={'calendar'}/>, 'Calendar')}
+        {this.drawerItem('todos',  <DynamicIcon name={'todo'}/>, 'Todo\'s')}
       </Drawer>
     );
   }

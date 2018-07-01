@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import {compose} from 'recompose';
 
 import IconButton from '@material-ui/core/IconButton';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import DynamicIcon from '@common/DynamicIcon';
 import Tooltip from '@material-ui/core/Tooltip';
 import UserProfileMenu from './UserProfileMenu'
 
@@ -44,7 +44,7 @@ class Header extends React.Component {
         <div>
           <Tooltip title={'Notifications'} className={'tooltip'}>
             <IconButton className={'notifications-button'} onClick={this.toggleNotificationsDrawer}>
-              <NotificationsIcon/>
+              <DynamicIcon name={'notification'}/>
             </IconButton>
           </Tooltip>
         </div>

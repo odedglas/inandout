@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -11,10 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import Zoom from '@material-ui/core/Zoom';
 
-import PersonIcon from '@material-ui/icons/Person';
-import SmallBusinessIcon from '@material-ui/icons/LocalGroceryStore';
-import MediumBusinessIcon from '@material-ui/icons/LocalMall';
-import HomeIcon from '@material-ui/icons/Home';
+import DynamicIcon from '@common/DynamicIcon';
 
 import themeService from '@service/theme'
 import { PROJECT_TYPES } from '@const/'
@@ -53,13 +48,13 @@ class ProjectCard extends Component {
 
     switch(type) {
       case PROJECT_TYPES.PERSONAL.key:
-        return {icon: <PersonIcon/>, color: themeService.getColor('pink') };
+        return {icon: <DynamicIcon name={'person'}/>, color: themeService.getColor('pink') };
       case PROJECT_TYPES.HOUSE_HOLD.key:
-        return {icon: <HomeIcon/>, color: themeService.getColor('deep orange') };
+        return {icon: <DynamicIcon name={'home'}/>, color: themeService.getColor('deep orange') };
       case PROJECT_TYPES.SMALL_BUSINESS.key:
-        return {icon: <SmallBusinessIcon/>, color: themeService.getColor('deep purple') };
+        return {icon: <DynamicIcon name={'smallBusiness'}/>, color: themeService.getColor('deep purple') };
       case PROJECT_TYPES.MEDIUM_BUSINESS.key:
-        return {icon: <MediumBusinessIcon/>, color: themeService.getColor('green') };
+        return {icon: <DynamicIcon name={'mediumBusiness'}/>, color: themeService.getColor('green') };
       default :
         return null;
     }

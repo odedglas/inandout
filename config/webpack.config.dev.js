@@ -93,6 +93,7 @@ module.exports = {
       '@util':  path.resolve('src/util/'),
       '@const':  path.resolve('src/constants/'),
       '@action':  path.resolve('src/actions/'),
+      '@common':  path.resolve('src/component/common/'),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).

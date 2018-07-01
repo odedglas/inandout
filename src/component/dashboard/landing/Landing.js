@@ -9,11 +9,11 @@ import {compose} from 'recompose';
 import CreateProjectModal from '../../modals/CreateProject'
 import ProjectCard from './ProjectCard';
 import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { selectProject } from "@action/project";
+import DynamicIcon from "../../common/DynamicIcon";
 
 class Landing extends React.Component {
 
@@ -101,7 +101,7 @@ class Landing extends React.Component {
                   aria-label="add"
                   onClick={this.showCreateProjectModal}
                   className={'add-project'}>
-            <AddIcon/>
+            <DynamicIcon name={'add'}/>
           </Button>
         </Tooltip>
       </div>

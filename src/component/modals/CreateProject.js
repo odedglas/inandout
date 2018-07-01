@@ -20,10 +20,8 @@ import Grow from '@material-ui/core/Grow';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import PersonIcon from '@material-ui/icons/Person';
-import SmallBusinessIcon from '@material-ui/icons/LocalGroceryStore';
-import MediumBusinessIcon from '@material-ui/icons/LocalMall';
-import HomeIcon from '@material-ui/icons/Home'
+
+import DynamicIcon from '@common/DynamicIcon';
 
 import withValidation from '../hoc/withValidation';
 import { createProject } from "@action/project";
@@ -143,7 +141,7 @@ class CreateProjectModal extends React.Component {
 
                 <MenuItem value={PROJECT_TYPES.PERSONAL.key}>
                   <ListItemIcon className={'menu-icon'}>
-                    <PersonIcon />
+                    <DynamicIcon name={'person'}/>
                   </ListItemIcon>
                   <ListItemText className={'menu-text'}
                                 secondary={PROJECT_TYPES.PERSONAL.description}
@@ -152,7 +150,7 @@ class CreateProjectModal extends React.Component {
 
                 <MenuItem value={PROJECT_TYPES.HOUSE_HOLD.key}>
                   <ListItemIcon className={'menu-icon'}>
-                    <HomeIcon />
+                    <DynamicIcon name={'home'}/>
                   </ListItemIcon>
                   <ListItemText className={'menu-text'}
                                 secondary={PROJECT_TYPES.HOUSE_HOLD.description}
@@ -161,7 +159,7 @@ class CreateProjectModal extends React.Component {
 
                 <MenuItem value={PROJECT_TYPES.SMALL_BUSINESS.key}>
                   <ListItemIcon className={'menu-icon'}>
-                    <SmallBusinessIcon />
+                    <DynamicIcon name={'smallBusiness'}/>
                   </ListItemIcon>
                   <ListItemText className={'menu-text'}
                                 secondary={PROJECT_TYPES.SMALL_BUSINESS.description}
@@ -170,7 +168,7 @@ class CreateProjectModal extends React.Component {
 
                 <MenuItem value={PROJECT_TYPES.MEDIUM_BUSINESS.key}  disabled={true}>
                   <ListItemIcon className={'menu-icon'}>
-                    <MediumBusinessIcon />
+                    <DynamicIcon name={'mediumBusiness'}/>
                   </ListItemIcon>
                   <ListItemText className={'menu-text'}
                                 secondary={PROJECT_TYPES.MEDIUM_BUSINESS.description}
