@@ -13,7 +13,7 @@ import Breadcrumbs from './breadcrumbs/Breadcrumbs';
 import Breadcrumb from './breadcrumbs/Breadcrumb';
 import ProjectBreadcrumb from './breadcrumbs/ProjectBreadcrumb';
 
-import {fetchProject} from "@action/project";
+import {setPreSelectedProject} from "@action/project";
 import util from '@util/';
 import {getProjectRoutes} from './ProjectRoutes';
 
@@ -21,18 +21,17 @@ class Project extends React.Component {
 
   static propTypes = {
     selectedProject: PropTypes.object,
-    fetchProject: PropTypes.func.isRequired,
+    setPreSelectedProject: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired
   };
 
   componentDidMount() {
 
-    const {selectedProject, fetchProject, match} = this.props;
+    const {selectedProject, match} = this.props;
 
-    //Fetching project if none was selected.
+    //Setting preselected if none exists
     if (util.isEmptyObject(selectedProject)) {
-      console.log("No selected project, Fetching ->" + match.params.identifier);
-      fetchProject(match.params.identifier);
+      this.props.setPreSelectedProject(match.params.identifier)
     }
   }
 
@@ -78,6 +77,6 @@ export default compose(
   withRouter,
   connect(state => ({
     selectedProject: state.project.selectedProject,
-    loading: state.project.loadingProject,
-  }), {fetchProject})
+    loading: state.dashboard.loading,
+  }), {setPreSelectedProject})
 )(Project);

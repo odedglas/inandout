@@ -6,6 +6,15 @@
   flex-direction: column;
   height: calc(100% - #{$header-outer-height});
 
+  .page-title {
+    display:flex;
+    color: $page-title-color;
+
+    .text {
+      font-size: 1.25rem;
+    }
+  }
+
   .content {
     height: calc(100% - #{$header-outer-height} - #{$breadcrumbs-height}) !important;
     padding: 2rem;

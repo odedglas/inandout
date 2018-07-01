@@ -7,7 +7,8 @@ import {
 } from 'react-router-dom';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
-import {fetchUserProjects} from "@action/project";
+
+import {init} from "@action/dashboard";
 
 import NotificationsDrawer from './drawer/NotificationsDrawer';
 import {ROUTER as routes} from '@const/';
@@ -20,7 +21,7 @@ import ProjectDrawer from './drawer/ProjectDrawer';
 class Dashboard extends Component {
 
   static propTypes = {
-    fetchUserProjects: PropTypes.func.isRequired
+    init: PropTypes.func.isRequired
   };
 
   state = {
@@ -29,8 +30,8 @@ class Dashboard extends Component {
 
   componentDidMount() {
 
-    //Loading user projects
-    this.props.fetchUserProjects();
+    //Dashboard init
+    this.props.init();
   }
 
   toggleNotificationsDrawer = () => {
@@ -77,5 +78,5 @@ class Dashboard extends Component {
 
 export default compose(
   withRouter,
-  connect(null, {fetchUserProjects})
+  connect(null, {init})
 )(Dashboard);

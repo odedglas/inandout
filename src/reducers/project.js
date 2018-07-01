@@ -6,8 +6,7 @@ const projectDrawerLocalStorageKey = LOCAL_STORAGE.PROJECT_DRAWER_OPEN;
 const initialState = {
   keys: [],
   projects: [],
-  fetchingProjects: false,
-  loadingProject: false,
+  preSelectedProject: undefined,
   selectedProject: {},
   drawerOpen: localStorageService.get(projectDrawerLocalStorageKey),
 };
@@ -19,16 +18,12 @@ export default function (state = initialState, action) {
         ...state,
         keys: action.projectsKeys
       };
-    case 'FETCH_PROJECTS' :
+    case 'SET_PRE_SELECTED_PROJECT':
       return {
         ...state,
-        fetchingProjects: action.fetching
+        preSelectedProject: action.identifier
       };
-      case 'LOAD_PROJECT' :
-      return {
-        ...state,
-        loadingProject: action.loading
-      };
+
     case 'SET_SELECTED_PROJECT': {
       return {
         ...state,
@@ -36,9 +31,15 @@ export default function (state = initialState, action) {
       }
     }
     case 'SET_PROJECTS':
+
+      const preSelectedIdentifier = state.preSelectedProject;
+      const selectedProject = preSelectedIdentifier ? action.projects.find(p => p.identifier === preSelectedIdentifier) : {};
+
       return {
         ...state,
-        projects: action.projects
+        projects: action.projects,
+        selectedProject: selectedProject,
+        preSelectedIdentifier: undefined
       };
     case 'ADD_PROJECT':
       return {
