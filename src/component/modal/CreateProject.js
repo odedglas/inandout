@@ -6,33 +6,20 @@ import {
   withRouter
 } from 'react-router-dom';
 
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Grow from '@material-ui/core/Grow';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-
+import CreationModal from './CreationModal';
 import DynamicIcon from '@common/DynamicIcon';
 
 import withValidation from '../hoc/withValidation';
 import { createProject } from "@action/project";
 import { PROJECT_TYPES } from '@const/';
 import util from '@util/';
-
-const INITIAL_STATE = {
-  projectType: '',
-  projectName: '',
-  projectDescription: '',
-};
 
 class CreateProjectModal extends React.Component {
 
@@ -47,160 +34,138 @@ class CreateProjectModal extends React.Component {
     createProject: PropTypes.func.isRequired,
   };
 
-  state = {...INITIAL_STATE};
+  modalContent = (model, validation, handleChange) => (
+    <div>
+      <div className={'form-control'}>
+        <TextField
+          autoFocus
+          value={model.projectName}
+          error={validation.projectName.isInvalid}
+          placeholder={'My awesome project'}
+          onChange={(event) => handleChange(event.target.value, 'projectName')}
+          margin="dense"
+          id="project-name"
+          label="Project Name"
+          title={validation.projectName.message}
+          fullWidth
+        />
+      </div>
 
-  handleChange = (value, name) => {
-    let update = {};
-    update[name] = value;
+      <FormControl className={'form-control'} error={validation && validation.projectType.isInvalid}>
+        <InputLabel htmlFor="project-type">Project Type</InputLabel>
+        <Select
+          value={model.projectType}
+          fullWidth
+          className={'dicks'}
+          MenuProps={{'className': 'select-project-type'}}
+          onChange={(event) => handleChange(event.target.value, 'projectType')}
+          renderValue={(v) => this.getSelectedProjectLabel(v)}
+          inputProps={{
+            name: 'project-type',
+            id: 'project-type',
+          }}
+        >
 
-    //Validating against new input
-    this.props.onValidationChange(this.state, update, name);
-    this.setState(update);
-  };
+          <MenuItem value={PROJECT_TYPES.PERSONAL.key}>
+            <ListItemIcon className={'menu-icon'}>
+              <DynamicIcon name={'person'}/>
+            </ListItemIcon>
+            <ListItemText className={'menu-text'}
+                          secondary={PROJECT_TYPES.PERSONAL.description}
+                          primary={PROJECT_TYPES.PERSONAL.label}/>
+          </MenuItem>
+
+          <MenuItem value={PROJECT_TYPES.HOUSE_HOLD.key}>
+            <ListItemIcon className={'menu-icon'}>
+              <DynamicIcon name={'home'}/>
+            </ListItemIcon>
+            <ListItemText className={'menu-text'}
+                          secondary={PROJECT_TYPES.HOUSE_HOLD.description}
+                          primary={PROJECT_TYPES.HOUSE_HOLD.label}/>
+          </MenuItem>
+
+          <MenuItem value={PROJECT_TYPES.SMALL_BUSINESS.key}>
+            <ListItemIcon className={'menu-icon'}>
+              <DynamicIcon name={'smallBusiness'}/>
+            </ListItemIcon>
+            <ListItemText className={'menu-text'}
+                          secondary={PROJECT_TYPES.SMALL_BUSINESS.description}
+                          primary={<span> {PROJECT_TYPES.SMALL_BUSINESS.label} </span>} />
+          </MenuItem>
+
+          <MenuItem value={PROJECT_TYPES.MEDIUM_BUSINESS.key}  disabled={true}>
+            <ListItemIcon className={'menu-icon'}>
+              <DynamicIcon name={'mediumBusiness'}/>
+            </ListItemIcon>
+            <ListItemText className={'menu-text'}
+                          secondary={PROJECT_TYPES.MEDIUM_BUSINESS.description}
+                          primary={<span> {PROJECT_TYPES.MEDIUM_BUSINESS.label} </span>} />
+          </MenuItem>
+        </Select>
+      </FormControl>
+
+      <div className={'form-control'}>
+        <TextField
+          value={model.projectDescription}
+          onChange={(event) => handleChange(event.target.value, 'projectDescription')}
+          margin="dense"
+          label="Project Description"
+          id="project-description"
+          fullWidth
+        />
+      </div>
+    </div>
+  );
 
   getSelectedProjectLabel = key => util.searchInConst(PROJECT_TYPES, key);
 
-  createProject = () => {
+  createProject = (model, close) => {
 
-    const { validate, createProject } = this.props;
+    const { createProject } = this.props;
 
-    const validationResult = validate(this.state);
+    createProject(
+      model,
+      (project) => {
 
-    if(validationResult.isValid) {
-
-      createProject(
-        this.state,
-        (project) => {
-
-          this.props.onClose();
-          this.props.history.push({
-            pathname: '/dashboard/project/' + project.identifier,
-          });
-        }
-      )
-    }
-
-  };
-
-  handleClose = () => {
-    this.props.clearValidation();
-    this.setState({...INITIAL_STATE});
-    this.props.onClose();
+        close();
+        this.props.history.push({
+          pathname: '/dashboard/project/' + project.identifier,
+        });
+      }
+    )
   };
 
   render() {
+    const {
+      open,
+      validation,
+      clearValidation,
+      validate,
+      onClose,
+      onValidationChange,
+    } = this.props;
 
-    const { open, validation} = this.props;
-    const { projectType, projectName, projectDescription } = this.state;
+    const editMode = false;
+    const model = {};
 
     return (
-      <div>
-        <Dialog
-          open={open}
-          onClose={this.handleClose}
-          disableRestoreFocus={true}
-          TransitionComponent={Grow}
-          transitionDuration={300}
-          className={'modal'}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle className={'modal-title'}>Create New Project</DialogTitle>
-          <DialogContent className={'modal-content'}>
-            <DialogContentText>
-              To create a new project, Fill up it's name and choose your template.
-            </DialogContentText>
-            <div className={'form-control'}>
-              <TextField
-                autoFocus
-                value={projectName}
-                error={validation.projectName.isInvalid}
-                placeholder={'My awesome project'}
-                onChange={(event) => this.handleChange(event.target.value, 'projectName')}
-                margin="dense"
-                id="project-name"
-                label="Project Name"
-                title={validation.projectName.message}
-                fullWidth
-              />
-            </div>
-
-            <FormControl className={'form-control'} error={validation && validation.projectType.isInvalid}>
-              <InputLabel htmlFor="project-type">Project Type</InputLabel>
-              <Select
-                value={projectType}
-                fullWidth
-                className={'dicks'}
-                MenuProps={{'className': 'select-project-type'}}
-                onChange={(event) => this.handleChange(event.target.value, 'projectType')}
-                renderValue={(v) => this.getSelectedProjectLabel(v)}
-                inputProps={{
-                  name: 'project-type',
-                  id: 'project-type',
-                }}
-              >
-
-                <MenuItem value={PROJECT_TYPES.PERSONAL.key}>
-                  <ListItemIcon className={'menu-icon'}>
-                    <DynamicIcon name={'person'}/>
-                  </ListItemIcon>
-                  <ListItemText className={'menu-text'}
-                                secondary={PROJECT_TYPES.PERSONAL.description}
-                                primary={PROJECT_TYPES.PERSONAL.label}/>
-                </MenuItem>
-
-                <MenuItem value={PROJECT_TYPES.HOUSE_HOLD.key}>
-                  <ListItemIcon className={'menu-icon'}>
-                    <DynamicIcon name={'home'}/>
-                  </ListItemIcon>
-                  <ListItemText className={'menu-text'}
-                                secondary={PROJECT_TYPES.HOUSE_HOLD.description}
-                                primary={PROJECT_TYPES.HOUSE_HOLD.label}/>
-                </MenuItem>
-
-                <MenuItem value={PROJECT_TYPES.SMALL_BUSINESS.key}>
-                  <ListItemIcon className={'menu-icon'}>
-                    <DynamicIcon name={'smallBusiness'}/>
-                  </ListItemIcon>
-                  <ListItemText className={'menu-text'}
-                                secondary={PROJECT_TYPES.SMALL_BUSINESS.description}
-                                primary={<span> {PROJECT_TYPES.SMALL_BUSINESS.label} </span>} />
-                </MenuItem>
-
-                <MenuItem value={PROJECT_TYPES.MEDIUM_BUSINESS.key}  disabled={true}>
-                  <ListItemIcon className={'menu-icon'}>
-                    <DynamicIcon name={'mediumBusiness'}/>
-                  </ListItemIcon>
-                  <ListItemText className={'menu-text'}
-                                secondary={PROJECT_TYPES.MEDIUM_BUSINESS.description}
-                                primary={<span> {PROJECT_TYPES.MEDIUM_BUSINESS.label} </span>} />
-                </MenuItem>
-              </Select>
-            </FormControl>
-
-            <div className={'form-control'}>
-              <TextField
-                value={projectDescription}
-                onChange={(event) => this.handleChange(event.target.value, 'projectDescription')}
-                margin="dense"
-                label="Project Description"
-                id="project-description"
-                fullWidth
-              />
-            </div>
-
-          </DialogContent>
-          <DialogActions className={'modal-actions'}>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.createProject}
-                    color="primary"
-                    variant="contained">
-              Create
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
+      <CreationModal open={open}
+                     onClose={onClose}
+                     title={'Create New Project'}
+                     context={' To create a new project, Fill up it\'s name and choose your template.'}
+                     editMode={editMode}
+                     model={model}
+                     getInitialState={() => ({
+                       projectType: '',
+                       projectName: '',
+                       projectDescription: '',
+                     })}
+                     renderContent={this.modalContent}
+                     onCreate={this.createProject}
+                     validate={validate}
+                     validation={validation}
+                     onValidationChange={onValidationChange}
+                     clearValidation={clearValidation}/>
     );
   }
 }

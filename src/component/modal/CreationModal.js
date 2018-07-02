@@ -9,8 +9,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Grow from '@material-ui/core/Grow';
 
-import {createCategory, editCategory} from "@action/category";
-
 class CreationModal extends React.Component {
 
   static propTypes = {
