@@ -4,6 +4,16 @@ import {connect} from 'react-redux';
 
 import Breadcrumb from '../breadcrumbs/Breadcrumb';
 
+
+const budgets = [
+  {
+    name: 'Home expenses',
+    categories:['-LGJxyxcd2of6FONr-uD', '-LGJxyxeeazW-JcjkT-s'],
+    limit: 1200,
+    warningLimit: 440,
+  }
+];
+
 class Budgets extends Component {
 
   static propTypes = {

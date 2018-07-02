@@ -14,6 +14,25 @@ export const ROUTER = {
   HOME           : '/'
 };
 
+export const CURRENCIES = [
+  {
+    value: 'USD',
+    label: '$',
+  },
+  {
+    value: 'EUR',
+    label: '€',
+  },
+  {
+    value: 'NIS',
+    label: '₪',
+  },
+  {
+    value: 'JPY',
+    label: '¥',
+  }
+];
+
 export const PROJECT_TYPES = {
   PERSONAL: {
     key: 'personal',

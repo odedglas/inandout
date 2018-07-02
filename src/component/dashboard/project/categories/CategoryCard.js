@@ -51,7 +51,7 @@ class CategoryCard extends Component {
 
     showConfirmation({
       title:'Remove This Category ?',
-      body: 'Removing this category will cause all it\'s related transaction to become un-categorized.',
+      body: 'Removing this category will cause all it\'s related transactions / budgets to become un-categorized and loose context.',
       icon: 'delete',
       onConfirm: () => {
 

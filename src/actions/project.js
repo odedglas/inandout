@@ -32,7 +32,7 @@ export function fetchUserProjects() {
   }
 }
 
-export function createProject({projectName, projectType, projectDescription}, onSuccess) {
+export function createProject({projectName, projectType, projectDescription, projectCurrency}, onSuccess) {
 
   return dispatch => {
 
@@ -42,6 +42,7 @@ export function createProject({projectName, projectType, projectDescription}, on
       projectName,
       projectType,
       projectDescription,
+      projectCurrency
     ).then((project) => {
 
       dispatch({type: 'ADD_PROJECT', project});

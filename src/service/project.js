@@ -28,12 +28,13 @@ export default {
   fetchProject: identifier => firebaseService.fetch(`/projectsIdentifier/${identifier}`).then(res => {
     return firebaseService.fetch(`/projects/${res.value}`);
   }),
-  createProject: (name, type, description) => {
+  createProject: (name, type, description, currency) => {
 
     const project = {
       name,
       type,
       description,
+      currency,
       owner: firebaseService.user.id,
     };
 

@@ -56,10 +56,10 @@ class AreYouSure extends Component {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary" autoFocus>
+            <Button onClick={this.handleClose} color="secondary" autoFocus>
               Cancel
             </Button>
-            <Button onClick={this.handleConfirm} color="secondary" >
+            <Button onClick={this.handleConfirm} color="primary" >
               Confirm
             </Button>
           </DialogActions>

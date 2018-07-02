@@ -18,7 +18,7 @@ import DynamicIcon from '@common/DynamicIcon';
 
 import withValidation from '../hoc/withValidation';
 import { createProject } from "@action/project";
-import { PROJECT_TYPES } from '@const/';
+import { PROJECT_TYPES, CURRENCIES } from '@const/';
 import util from '@util/';
 
 class CreateProjectModal extends React.Component {
@@ -106,6 +106,25 @@ class CreateProjectModal extends React.Component {
 
       <div className={'form-control'}>
         <TextField
+          select
+          fullWidth
+          error={validation.projectName.isInvalid}
+          placeholder={'Please select your currency'}
+          label="Project Currency"
+          value={model.projectCurrency}
+          onChange={(event) => handleChange(event.target.value, 'projectCurrency')}
+        >
+          {CURRENCIES.map(option => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
+
+      </div>
+
+      <div className={'form-control'}>
+        <TextField
           value={model.projectDescription}
           onChange={(event) => handleChange(event.target.value, 'projectDescription')}
           margin="dense"
@@ -158,6 +177,7 @@ class CreateProjectModal extends React.Component {
                      getInitialState={() => ({
                        projectType: '',
                        projectName: '',
+                       projectCurrency: '',
                        projectDescription: '',
                      })}
                      renderContent={this.modalContent}
@@ -187,6 +207,11 @@ export default compose(
       field    : 'projectType',
       method   : (v, f, state, validator, args) => !validator.isEmpty(v),
       message  : 'Please choose project type.'
+    },
+    {
+      field    : 'projectCurrency',
+      method   : (v, f, state, validator, args) => !validator.isEmpty(v),
+      message  : 'Please choose project currency.'
     },
   ]),
   connect( null, {createProject})
