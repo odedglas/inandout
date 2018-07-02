@@ -44,7 +44,6 @@ export default {
       };
     });
   },
-
   fetchArray(path) {
 
     return database.ref(path).once('value').then((snapshot) => {
@@ -73,6 +72,14 @@ export default {
 
     return Promise.all(promises);
   },
+  update(path, item) {
+    return database.ref(path).set({
+      ...item
+    })
+  },
+  remove(path) {
+    return database.ref(path).remove();
+  },
   createProject(project) {
 
     return database.ref(`projects`).push(project)
@@ -81,9 +88,9 @@ export default {
         const projectKey = res.key;
 
         //Adding to user projects
-        database.ref(`users/${project.owner}/projects`).push({
+        database.ref(`users/${project.owner}/projects`).push(
           projectKey
-        });
+        );
 
         //Adding to projects identifiers
         database.ref('projectsIdentifier/' + project.identifier).set(
@@ -105,5 +112,9 @@ export default {
         id: res.key
       }
     })
+  },
+  excludeCategory(projectId, categoryId) {
+
+    return database.ref(`/projects/${projectId}/excludedCategories`).push(categoryId);
   }
 }

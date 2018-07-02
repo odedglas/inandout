@@ -52,5 +52,5 @@ const getUserProjectsMeta = projects => {
 
   //Getting user projects meta
   const userProjects = projects ? Object.keys(projects) : [];
-  return userProjects.map(userProject => projects[userProject].projectKey);
+  return userProjects.map(userProject => projects[userProject]);
 };

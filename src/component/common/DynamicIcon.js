@@ -24,7 +24,7 @@ import MediumBusinessIcon from '@material-ui/icons/LocalMall';
 import AddIcon from '@material-ui/icons/Add';
 
 // -- Custom Categories -- //
-import GiftIcon from '@material-ui/icons/Redeem';
+import GiftIcon from '@material-ui/icons/CardGiftcard';
 import GamesIcon from '@material-ui/icons/Games';
 import MusicIcon from '@material-ui/icons/MusicNote';
 import ToysIcon from '@material-ui/icons/Toys';
@@ -40,6 +40,9 @@ import CakeIcon from '@material-ui/icons/Cake';
 import CoffeeIcon from '@material-ui/icons/LocalCafe';
 import GasIcon from '@material-ui/icons/LocalGasStation';
 import FlightIcon from '@material-ui/icons/LocalAirport';
+
+// -- Actions -- //
+import DeleteIcon from '@material-ui/icons/Delete';
 
 // -- Drawer -- //
 import TodosIcon from '@material-ui/icons/CheckBox';
@@ -92,6 +95,7 @@ const iconMap = {
   'global': GlobalIcon,
   'gas': GasIcon,
   'flight': FlightIcon,
+  'delete': DeleteIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {

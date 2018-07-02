@@ -5,11 +5,12 @@ import {connect} from 'react-redux';
 import Breadcrumb from '../breadcrumbs/Breadcrumb';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
-import Avatar from '@material-ui/core/Avatar';
 
 import DynamicIcon from "@common/DynamicIcon";
 import PageTitle from "@common/PageTitle";
-import CreateCategory from '../../../modals/CreateCategory'
+import CreateCategory from '@modal/CreateCategory'
+
+import CategoryCard from './CategoryCard';
 
 import Zoom from '@material-ui/core/Zoom';
 
@@ -17,21 +18,25 @@ class Categories extends Component {
 
   static propTypes = {
     selectedProject: PropTypes.any,
-    categories: PropTypes.array
+    categories: PropTypes.array,
   };
 
   state = {
     showCreateCategoryModal: false,
+    editCategory: {},
   };
 
-  showHideCreateCategory = (show) => {
+  showHideCreateCategory = (show, category) => {
 
-    this.setState({ showCreateCategoryModal: !!show })
+    this.setState({
+      showCreateCategoryModal: !!show,
+      editCategory: category
+    })
   };
 
   render() {
     const {selectedProject, categories} = this.props;
-    const {showCreateCategoryModal} = this.state;
+    const {showCreateCategoryModal, editCategory} = this.state;
 
     return (
       <div className={'categories-container'}>
@@ -40,24 +45,16 @@ class Categories extends Component {
         <PageTitle text={'Categories'} icon={'categories'}/>
 
         <div className={'row px-4'}>
-          {categories.map(category => {
-
-            return (
-              <div className={'category col-sm-12 col-md-3'} key={category.id}>
-                <div>
-                  <Avatar style={{'backgroundColor': category.color}}>
-                    <DynamicIcon name={category.icon}/>
-                  </Avatar>
-                </div>
-                <div className={'category-name mt-3 py-2'}>
-                  {category.name}
-                </div>
-              </div>
-            )
-          })}
+          {categories.map(
+            category => <CategoryCard key={category.id}
+                                      project={selectedProject}
+                                      editCategory={(category) => this.showHideCreateCategory(true, category)}
+                                      category={category} />
+          )}
         </div>
 
         <CreateCategory open={showCreateCategoryModal}
+                        category={editCategory}
                         project={selectedProject}
                         onClose={this.showHideCreateCategory}/>
 

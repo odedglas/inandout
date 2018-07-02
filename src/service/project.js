@@ -3,27 +3,30 @@ import util from '@util/'
 
 export default {
 
-  fetchUserProjects: (projectKeys) => firebaseService.fetchByKeys('/projects', projectKeys).then(d => {
+  fetchUserProjects: (projectKeys) => firebaseService.fetchByKeys('/projects', projectKeys).then(projects => {
 
-    return d.map( p => {
+    return projects.map(p => {
 
       //Flattening categories
-      let categories = p.categories;
-      if(categories){
+      const categories =  p.categories || [];
+      p.categories = Object.keys(categories).map(key => {
+        return {
+          id: key,
+          ...categories[key]
+        }
+      });
 
-        p.categories =  Object.keys(p.categories).map(key =>{
-          return {
-            id:key,
-            ...categories[key]
-          }
-        });
-      }
+      const excludedCategories = p.excludedCategories || [];
+      p.excludedCategories = Object.keys(excludedCategories).map(key => {
+        return excludedCategories[key]
+      });
+
       return p;
     });
 
   }),
   fetchProject: identifier => firebaseService.fetch(`/projectsIdentifier/${identifier}`).then(res => {
-    return  firebaseService.fetch(`/projects/${res.value}`);
+    return firebaseService.fetch(`/projects/${res.value}`);
   }),
   createProject: (name, type, description) => {
 
@@ -32,7 +35,6 @@ export default {
       type,
       description,
       owner: firebaseService.user.id,
-      isNew: true,
     };
 
     let unique = normalizeProjectName(name);
@@ -50,7 +52,6 @@ export default {
       project.identifier = unique;
       return firebaseService.createProject(project);
     })
-
 
   },
 }

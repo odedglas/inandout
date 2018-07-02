@@ -93,9 +93,10 @@ export const defaultCategories = [
   },
 ];
 
-export const CategoryType = {
+export const CategoryType = PropTypes.shape({
   name: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
-  color: PropTypes.string,
-  icon: PropTypes.string,
-};
+  icon: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
+  isCustom: PropTypes.bool
+});

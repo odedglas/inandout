@@ -9,7 +9,7 @@ import {connect} from 'react-redux';
 import {compose} from 'recompose';
 
 import {init} from "@action/dashboard";
-
+import AreYouSure from '@modal/AreYouSure'
 import NotificationsDrawer from './drawer/NotificationsDrawer';
 import {ROUTER as routes} from '@const/';
 import Header from './header/Header';
@@ -21,7 +21,7 @@ import ProjectDrawer from './drawer/ProjectDrawer';
 class Dashboard extends Component {
 
   static propTypes = {
-    init: PropTypes.func.isRequired
+    init: PropTypes.func.isRequired,
   };
 
   state = {
@@ -69,6 +69,7 @@ class Dashboard extends Component {
 
           </NotificationsDrawer>
 
+          <AreYouSure/>
         </div>
       </div>
     );

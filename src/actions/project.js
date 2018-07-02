@@ -57,8 +57,9 @@ export function createProject({projectName, projectType, projectDescription}, on
 export function selectProject(project) {
 
   return dispatch =>  {
+
     dispatch({ type: 'SET_SELECTED_PROJECT', project });
-    dispatch({ type: 'SET_CUSTOM_CATEGORIES', categories: project.categories || [] });
+    dispatch({ type: 'SET_CUSTOM_CATEGORIES', categories: project.categories, excluded: project.excludedCategories});
   }
 }
 

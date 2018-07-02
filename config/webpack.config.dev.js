@@ -94,6 +94,8 @@ module.exports = {
       '@const':  path.resolve('src/constants/'),
       '@action':  path.resolve('src/actions/'),
       '@common':  path.resolve('src/component/common/'),
+      '@modal':  path.resolve('src/component/modal/'),
+      '@model':  path.resolve('src/model/'),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).

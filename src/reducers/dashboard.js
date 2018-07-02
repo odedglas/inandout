@@ -1,6 +1,8 @@
 const initialState = {
   actions: [],
   loading: false,
+  showConfirmModal: false,
+  confirmPayload: {},
 };
 
 export default function (state = initialState, action) {
@@ -17,6 +19,17 @@ export default function (state = initialState, action) {
         ...state,
         actions: filtered,
         loading: filtered.length > 0,
+      };
+    case 'SHOW_CONFIRMATION':
+      return {
+        ...state,
+        showConfirmModal: true,
+        confirmPayload:action.payload,
+      };
+    case 'HIDE_CONFIRMATION':
+      return {
+        ...state,
+        showConfirmModal: false,
       };
 
     default:

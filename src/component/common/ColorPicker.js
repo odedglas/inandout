@@ -39,7 +39,7 @@ export class ColorPicker extends Component {
               colors.map(color => {
                 const colorStyle = {backgroundColor: color, color: color};
                 return (
-                  <div className={'color'}
+                  <div className={`color ${color === selectedColor ? 'selected' : ''}`}
                        key={color}
                        style={colorStyle}
                        onClick={() => itemClick(color)}>

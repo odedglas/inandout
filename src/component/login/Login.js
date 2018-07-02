@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {SignUpLink} from '../signup/SignUp'
-import SnackbarNotification from '../framework/SnackbarNotification';
+import SnackbarNotification from '../common/SnackbarNotification';
 import {ROUTER as routes} from '../../constants';
 import {loginWithPassword} from '../../actions/authentication'
 import validationService from '@service/validation';

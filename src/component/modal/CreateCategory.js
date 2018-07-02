@@ -21,15 +21,16 @@ import ColorPicker from '@common/ColorPicker'
 import IconPicker from '@common/IconPicker'
 
 import withValidation from '../hoc/withValidation';
-import {createCategory} from "@action/category";
+import {createCategory, editCategory} from "@action/category";
 
 import themeService from '@service/theme';
+import util from '@util/';
 
 const INITIAL_STATE = {
   name: '',
   icon: 'person',
   color: themeService.getAvatarRandomColor(600),
-  iconPickerRef: undefined,
+  editMode: false,
 };
 
 class CreateCategoryModal extends React.Component {
@@ -43,10 +44,30 @@ class CreateCategoryModal extends React.Component {
     onValidationChange: PropTypes.func.isRequired,
     validation: PropTypes.object.isRequired,
     createCategory: PropTypes.func.isRequired,
+    editCategory: PropTypes.func.isRequired,
     project: PropTypes.object,
+    category: PropTypes.object,
   };
 
   state = {...INITIAL_STATE};
+
+  static getDerivedStateFromProps(props, state) {
+
+    const { category } = props;
+    const { name } = state;
+
+    if(category && !util.isEmptyObject(category) && name !== category.name && !state.editMode) {
+
+      return {
+        name: category.name,
+        icon: category.icon,
+        color: category.color,
+        editMode: true
+      }
+    }
+
+    return null;
+  }
 
   handleChange = (value, name) => {
     let update = {};
@@ -59,17 +80,22 @@ class CreateCategoryModal extends React.Component {
 
   handleCategoryCreate = () => {
 
-    const {validate, createCategory, project} = this.props;
+    const {validate, createCategory, editCategory, project, category} = this.props;
+    const {editMode} = this.state;
+
     const validationResult = validate(this.state);
 
     if (validationResult.isValid) {
 
       const {name, icon, color} = this.state;
-      createCategory(
+      const method = editMode ? editCategory : createCategory;
+
+      //Triggering Create / Edit
+      method(
         project,
-        {name, icon, color},
+        {name, icon, color, id: category ? category.id : undefined},
         () => this.handleClose()
-        );
+      );
     }
 
   };
@@ -86,7 +112,7 @@ class CreateCategoryModal extends React.Component {
   render() {
 
     const {open, validation} = this.props;
-    const {name, icon, color} = this.state;
+    const {name, icon, color, editMode} = this.state;
 
     return (
       <div>
@@ -149,7 +175,7 @@ class CreateCategoryModal extends React.Component {
             <Button onClick={this.handleCategoryCreate}
                     color="primary"
                     variant="contained">
-              Create
+              {!editMode ? 'Create' : 'Edit'}
             </Button>
           </DialogActions>
         </Dialog>
@@ -167,5 +193,5 @@ export default compose(
       message: 'Please provide a category name.'
     },
   ]),
-  connect(null, {createCategory})
+  connect(null, {createCategory, editCategory})
 )(CreateCategoryModal);
