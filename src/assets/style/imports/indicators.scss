@@ -1,0 +1,13 @@
+@import '../variables';
+
+.success-indicator {
+  color: $success-color;
+}
+
+.warning-indicator {
+  color: $warning-color;
+}
+
+.overage-indicator {
+  color: $error-color;
+}

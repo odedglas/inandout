@@ -15,6 +15,7 @@
     }
 
     .scrollable {
+      z-index: 1;
       overflow-y: auto;
       flex: 1;
       height: calc(100% - #{$header-outer-height});

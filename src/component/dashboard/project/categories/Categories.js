@@ -64,7 +64,7 @@ class Categories extends Component {
                     color="secondary"
                     onClick={() => this.showHideCreateCategory(true)}
                     aria-label="add"
-                    className={'add-category'}>
+                    className={'fab'}>
               <DynamicIcon name={'add'}/>
             </Button>
           </Zoom>

@@ -17,8 +17,10 @@ class ProjectHome extends React.Component {
     const {selectedProject} = this.props;
 
     return (
-      <div className={'welcome-container'}>
-
+      <div className={'row'}>
+        <div className={'col-sm-4'}> 1</div>
+        <div className={'col-sm-4'}>2</div>
+        <div className={'col-sm-4'}> 3</div>
         I R Home! for { selectedProject.name }
       </div>
     );

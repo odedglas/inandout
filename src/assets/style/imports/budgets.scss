@@ -1,0 +1,43 @@
+@import '../variables';
+
+.budget-panel {
+  color: $text-color;
+
+  .budget-summary {
+    align-items: center;
+    flex: 1;
+    font-size: 0.875rem;
+
+    .usage, .separator{
+      color: $light-text;
+    }
+
+    .categories {
+
+      .avatar {
+        height:30px;
+        width:30px;
+
+        .icon {
+          font-size: 1.25rem;
+        }
+      }
+
+      .category-name {
+        font-size: .75rem;
+        opacity:0;
+        transition: opacity 0.15s ease;
+      }
+    }
+  }
+
+  .budget-content {
+
+
+  }
+
+  .actions {
+    padding: 0.5rem;
+  }
+}
+

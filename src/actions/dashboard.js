@@ -7,6 +7,9 @@ export function init() {
     //User projects
     dispatch(fetchUserProjects());
     console.log("fetching user projects")
+
+    //Should fetch transactions
+
     //Default categories
     dispatch(fetchDefaults());
     console.log("fetching default categories")

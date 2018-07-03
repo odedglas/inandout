@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import DynamicIcon from "@common/DynamicIcon";
-import {CategoryType} from '@model/categories'
+import {CategoryType} from '@model/category'
 import {removeCategory, excludeDefaultCategory} from "@action/category";
 import {showConfirmation} from "@action/dashboard";
 

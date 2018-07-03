@@ -2,7 +2,7 @@
 
 .breadcrumbs {
   height: $breadcrumbs-height;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid $divider-color;
   background-color: white;
   display: flex;
   align-items: center;
@@ -18,7 +18,7 @@
     }
 
     .breadcrumb {
-      transition: box-shadow .2s cubic-bezier(0,.5,.265,2),;
+      transition: box-shadow .2s cubic-bezier(0,.5,.265,2);
       border-radius: 5px;
       font-size: 0.925rem;
       padding: 5px 10px!important;

@@ -6,7 +6,6 @@ import {config} from '../config/firebase';
 import util from '@util/'
 
 if (!firebase.apps.length) {
-  console.log('Initalizing firbase, existing apps: ' + firebase.apps.length);
   firebase.initializeApp(config);
 }
 

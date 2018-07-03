@@ -100,7 +100,7 @@ class Landing extends React.Component {
                   color="primary"
                   aria-label="add"
                   onClick={this.showCreateProjectModal}
-                  className={'add-project'}>
+                  className={'fab'}>
             <DynamicIcon name={'add'}/>
           </Button>
         </Tooltip>
