@@ -8,6 +8,10 @@
     flex: 1;
     font-size: 0.875rem;
 
+    .budget-name {
+      transition: font-size .2s ease;
+    }
+
     .usage, .separator{
       color: $light-text;
     }
@@ -22,22 +26,44 @@
           font-size: 1.25rem;
         }
       }
-
-      .category-name {
-        font-size: .75rem;
-        opacity:0;
-        transition: opacity 0.15s ease;
-      }
     }
   }
 
   .budget-content {
+    flex-direction: column;
+    .divider {
+      border-right: 1px solid $divider-color;
+    }
 
+    .statistics-title,
+    .transactions-title{
+      font-size: 0.925rem;
+      color: $light-text
+    }
 
+    .budge-usage-progress {
+      height:100px;
+
+      .CircularProgressbar {
+        height: 100%;
+      }
+    }
+
+    .transactions {
+      border-top: 1px solid $divider-color;
+    }
   }
 
   .actions {
     padding: 0.5rem;
   }
+
+  &.expanded {
+
+    .budget-name {
+      font-size: 1rem ;
+    }
+  }
+
 }
 

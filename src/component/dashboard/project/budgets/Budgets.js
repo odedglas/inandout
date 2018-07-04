@@ -51,6 +51,26 @@ const budgets = [
         icon: 'fitness'
       }
     ],
+    limit: 450,
+    actual: 225,
+  },
+  {
+    name: 'Another1',
+    id: 'tes2tsss',
+    categories: [
+      {
+        name: 'Insurance',
+        id: '1234555',
+        color: '#4FC3F7',
+        icon: 'insurance'
+      },
+      {
+        name: 'Drinks and Party',
+        id: '123231345',
+        color: '#B0BEC5',
+        icon: 'drinks'
+      },
+    ],
     limit: 4000,
     actual: 885,
   }
