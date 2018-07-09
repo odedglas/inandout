@@ -73,6 +73,21 @@ export default {
         return resolvedObject;
       }, {});
     });
+  },
+  updateById (array, item) {
+
+    const _array = [...array];
+    const index = array.findIndex(i => i.id === item.id);
+
+    _array.splice(index, 1, item);
+    return _array;
+  },
+  toIdsMap(array) {
+
+    return array ? array.reduce((map, item) => {
+      map[item.id] = item;
+      return map;
+    },{}) : {};
   }
 }
 

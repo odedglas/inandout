@@ -11,30 +11,16 @@ import BudgetPanel from './BudgetPanel';
 import PageTitle from "@common/PageTitle";
 
 import Breadcrumb from '../breadcrumbs/Breadcrumb';
+import transactionService from '@service/transaction';
+import budgetService from '@service/budget';
 
+const projectKey = '-LGOC58sci12TBNBgFIO';
 const budgets = [
   {
     name: 'Home expenses',
-    id: 'test',
     categories: [
-      {
-        name: 'Car and Transportation',
-        id: '1237',
-        color: '#EF9A9A',
-        icon: 'transportation'
-      },
-      {
-        name: 'Clothing',
-        id: '12349',
-        color: '#F48FB1',
-        icon: 'cloth'
-      },
-      {
-        name: 'Eating out',
-        id: '12348',
-        color: '#CE93D8',
-        icon: 'eating'
-      }
+      'LGJxyxahJotZKdD0InN',
+      'LGJxyxahJotZKdD0InM'
     ],
     limit: 1200,
     actual: 1000,
@@ -42,40 +28,96 @@ const budgets = [
   },
   {
     name: 'Car',
-    id: 'tes2t',
     categories: [
-      {
-        name: 'Fitness',
-        id: '12346',
-        color: '#9FA8DA',
-        icon: 'fitness'
-      }
+      'LGJxyxZP55gDmIqGsiI'
     ],
     limit: 450,
     actual: 225,
-  },
-  {
-    name: 'Another1',
-    id: 'tes2tsss',
-    categories: [
-      {
-        name: 'Insurance',
-        id: '1234555',
-        color: '#4FC3F7',
-        icon: 'insurance'
-      },
-      {
-        name: 'Drinks and Party',
-        id: '123231345',
-        color: '#B0BEC5',
-        icon: 'drinks'
-      },
-    ],
-    limit: 4000,
-    actual: 885,
   }
 ];
 
+/*
+budgets.forEach(b => {
+  budgetService.createBudget(projectKey, b)
+})
+*/
+
+let now = new Date();
+now = now.getTime();
+
+const transactions = [
+  {
+    income: true,
+    date: now,
+    amount: 1399,
+    description: 'Salary',
+    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
+  },
+  {
+    income: false,
+    date: now,
+    amount: 44,
+    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
+    category: '-LGJxyxZP55gDmIqGsiI'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
+  },
+  {
+    income: false,
+    date: now,
+    amount: 66,
+    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
+    category: '-LGJxyxZP55gDmIqGsiI'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
+  },
+  {
+    income: false,
+    date: now,
+    amount: 77,
+    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
+    category: '-LGJxyxZP55gDmIqGsiI'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
+  },
+  {
+    income: false,
+    date: now,
+    amount: 44,
+    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
+    category: '-LGJxyxZP55gDmIqGsiI'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
+  },
+  {
+    income: false,
+    date: now,
+    amount: 55,
+    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
+    category: '-LGJxyxahJotZKdD0InM'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
+  },
+  {
+    income: false,
+    date: now,
+    amount: 76,
+    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
+    category: '-LGJxyxahJotZKdD0InM'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
+  },
+  {
+    income: false,
+    date: now,
+    amount: 23,
+    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
+    category: '-LGJxyxahJotZKdD0InN'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
+  },
+  {
+    income: false,
+    date: now,
+    amount: 15,
+    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
+    category: '-LGJxyxahJotZKdD0InN'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
+  },
+
+];
+
+/*transactions.forEach(t => {
+  transactionService.createTransaction(
+    projectKey,
+    t
+  );
+})*/
 class Budgets extends Component {
 
   static propTypes = {
@@ -84,10 +126,11 @@ class Budgets extends Component {
 
   showHideCreateBudge = (show) => {
 
+
   };
 
   render() {
-    const {selectedProject} = this.props;
+    const {selectedProject, budgets} = this.props;
 
     return (
       <div className={'budgets-container'}>
@@ -121,5 +164,5 @@ class Budgets extends Component {
 
 export default connect(state => ({
   selectedProject: state.project.selectedProject,
-  categories: state.project.categories,
+  budgets: state.project.budgets,
 }), {})(Budgets);

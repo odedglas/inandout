@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-const baseFormat = 'DD/MMM/YY';
+const baseFormat = 'DD/MM/YY';
 
 export default {
 

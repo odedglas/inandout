@@ -1,5 +1,11 @@
+import firebaseService from './firebase';
 
 export default {
+
+  createBudget: (projectId, budget) => {
+
+    return firebaseService.createBudget(projectId, budget)
+  },
 
   getBudgetStatusIndicator: budget => {
 

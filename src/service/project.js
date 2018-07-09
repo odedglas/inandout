@@ -7,14 +7,8 @@ export default {
 
     return projects.map(p => {
 
-      //Flattening categories
-      const categories =  p.categories || [];
-      p.categories = Object.keys(categories).map(key => {
-        return {
-          id: key,
-          ...categories[key]
-        }
-      });
+      p.categories = toArray(p.categories);
+      p.budgets = toArray(p.budgets);
 
       const excludedCategories = p.excludedCategories || [];
       p.excludedCategories = Object.keys(excludedCategories).map(key => {
@@ -58,3 +52,9 @@ export default {
 }
 const normalizeProjectName = name => name.toLowerCase().replaceAll(" ", "-");
 const generateProjectIdentifier = name => `${normalizeProjectName(name)}-${util.randomAlphaNumeric(4)}`;
+const toArray = (object) => object ? Object.keys(object).map(key => {
+  return {
+    id: key,
+    ...object[key]
+  }
+}) : [];

@@ -59,3 +59,17 @@ export const PROJECT_TYPES = {
 export const LOCAL_STORAGE = {
   PROJECT_DRAWER_OPEN: 'project-drawer-open',
 };
+
+export const TRANSACTIONS_DATE_KEY_FORMAT = 'MMYY';
+
+export const TRANSACTIONS = {
+  TYPES: {
+    INCOME: 'income',
+    OUTCOME: 'outcome'
+  },
+  RECURRING: {
+    ONCE: 'once',
+    WEEKLY: 'weekly',
+    MONTHLY: 'monthly',
+  }
+};

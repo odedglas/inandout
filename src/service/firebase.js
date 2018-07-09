@@ -48,7 +48,7 @@ export default {
     return database.ref(path).once('value').then((snapshot) => {
 
         const value = snapshot.val();
-        const keys = Object.keys(value);
+        const keys = value ? Object.keys(value) : [];
 
         return keys.map(key => {
 
@@ -59,13 +59,13 @@ export default {
         })
     });
   },
-  fetchByKeys(path, keys) {
+  fetchByKeys(path, keys, isArray) {
 
     let promises = [];
     keys.forEach(key => {
 
       promises.push(
-        this.fetch(`${path}/${key}`)
+        this[isArray ? 'fetchArray' : 'fetch'](`${path}/${key}`)
       );
     });
 
@@ -115,5 +115,25 @@ export default {
   excludeCategory(projectId, categoryId) {
 
     return database.ref(`/projects/${projectId}/excludedCategories`).push(categoryId);
-  }
+  },
+  createTransaction(projectId, dateKey, transaction) {
+
+    return database.ref(`/transactions/${projectId}/${dateKey}`).push(transaction).then(res => {
+
+      return {
+        ...transaction,
+        id: res.key
+      }
+    })
+  },
+  createBudget(projectId, budget) {
+
+    return database.ref(`/projects/${projectId}/budgets`).push(budget).then(res => {
+
+      return {
+        ...budget,
+        id: res.key
+      }
+    })
+  },
 }

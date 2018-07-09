@@ -8,16 +8,25 @@ export function setPreSelectedProject(identifier) {
 
 export function selectProject(project) {
 
-  return (dispatch, getState) =>  {
+  return dispatch =>  {
 
-    const defaultCategories = filterExcluded(
-      getState().categories.defaults,
-      project.excludedCategories
-    );
-
-    const projectCategories = project.categories.reverse().concat(defaultCategories);
-
-    dispatch({ type: 'SET_SELECTED_PROJECT', project, categories: projectCategories });
+    dispatch({
+      type: 'SET_SELECTED_PROJECT',
+      project: {
+        id: project.id,
+        identifier: project.identifier,
+        owner: project.owner,
+        type: project.type,
+        name: project.name,
+        currency: project.currency,
+        description: project.description,
+      },
+      customers: project.customers,
+      budgets: project.budgets,
+      categories: project.categories,
+      transactions: project.transactions,
+      members: project.members,
+    });
   }
 }
 
@@ -78,10 +87,16 @@ export function updateCachedProject() {
 
   return (dispatch, getState) => {
 
+    //Extracting project
     const projectState = getState().project;
+
     const project = {
       ...projectState.selectedProject,
-      categories: projectState.categories.filter(c => c.isCustom).reverse()
+      customers: projectState.customers,
+      budgets: projectState.budgets,
+      categories: projectState.categories,
+      transactions: projectState.transactions,
+      members: projectState.members,
     };
 
     dispatch({ type: 'UPDATE_PROJECT', project });

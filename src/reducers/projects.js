@@ -1,3 +1,5 @@
+import util from '@util/';
+
 export default function (state = [], action) {
 
   switch (action.type) {
@@ -10,14 +12,8 @@ export default function (state = [], action) {
       ];
 
     case 'UPDATE_PROJECT':
-
-      const currentProjects = state;
-      const project = action.project;
-      let editProjectIndex = currentProjects.findIndex(p => p.id === project.id);
-      currentProjects[editProjectIndex] = project;
-
-      return [...currentProjects];
-
+      debugger;
+      return util.updateById(state, action.project);
     default:
       return state;
   }

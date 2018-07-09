@@ -1,5 +1,6 @@
 import localStorageService from '@service/localstorage';
 import {LOCAL_STORAGE} from '@const/'
+import util from '@util/';
 
 const projectDrawerLocalStorageKey = LOCAL_STORAGE.PROJECT_DRAWER_OPEN;
 
@@ -7,6 +8,9 @@ const initialState = {
   preSelectedProject: undefined,
   selectedProject: {},
   categories:[],
+  budgets: [],
+  transactions: [],
+  customers: [],
   drawerOpen: localStorageService.get(projectDrawerLocalStorageKey),
 };
 
@@ -23,7 +27,10 @@ export default function (state = initialState, action) {
         ...state,
         selectedProject: action.project,
         preSelectedProject: undefined,
-        categories: action.categories
+        categories: action.categories,
+        transactions: action.transactions,
+        customers: action.customers || [],
+        budgets: action.budgets || [],
       }
     }
     case 'ADD_PROJECT_CATEGORY' : {
@@ -34,14 +41,9 @@ export default function (state = initialState, action) {
     }
     case 'EDIT_PROJECT_CATEGORY' : {
 
-      const currentCategories = state.categories;
-      const category = action.category;
-      let editedCategoryIndex = currentCategories.findIndex(c => c.id === category.id);
-      currentCategories[editedCategoryIndex] = category;
-
       return {
         ...state,
-        categories: currentCategories,
+        categories: util.updateById(state.categories, action.category),
       };
     }
     case 'REMOVE_PROJECT_CATEGORY':
