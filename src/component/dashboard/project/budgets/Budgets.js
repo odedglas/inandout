@@ -11,6 +11,7 @@ import BudgetPanel from './BudgetPanel';
 import PageTitle from "@common/PageTitle";
 
 import Breadcrumb from '../breadcrumbs/Breadcrumb';
+import {BudgetType} from '@model/budget'
 import transactionService from '@service/transaction';
 import budgetService from '@service/budget';
 
@@ -35,16 +36,13 @@ const budgets = [
     actual: 225,
   }
 ];
-
 /*
 budgets.forEach(b => {
   budgetService.createBudget(projectKey, b)
 })
 */
-
 let now = new Date();
 now = now.getTime();
-
 const transactions = [
   {
     income: true,
@@ -111,7 +109,6 @@ const transactions = [
   },
 
 ];
-
 /*transactions.forEach(t => {
   transactionService.createTransaction(
     projectKey,
@@ -121,7 +118,7 @@ const transactions = [
 class Budgets extends Component {
 
   static propTypes = {
-    selectedProject: PropTypes.any
+    budgets: PropTypes.arrayOf(BudgetType)
   };
 
   showHideCreateBudge = (show) => {
@@ -130,7 +127,7 @@ class Budgets extends Component {
   };
 
   render() {
-    const {selectedProject, budgets} = this.props;
+    const {budgets} = this.props;
 
     return (
       <div className={'budgets-container'}>
@@ -163,6 +160,5 @@ class Budgets extends Component {
 }
 
 export default connect(state => ({
-  selectedProject: state.project.selectedProject,
   budgets: state.project.budgets,
 }), {})(Budgets);

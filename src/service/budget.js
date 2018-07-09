@@ -1,5 +1,7 @@
 import firebaseService from './firebase';
 
+import util from '@util/'
+
 export default {
 
   createBudget: (projectId, budget) => {
@@ -13,5 +15,22 @@ export default {
     const budgetUsage = (actual / limit) * 100;
 
     return `${budgetUsage <= 45 ? 'success' : budgetUsage <= 55 ? 'warning' : 'overage'}-indicator`;
+  },
+
+  mergeBudgets: (budgets, categories, transactions) => {
+
+    const categoriesMap = util.toIdsMap(categories);
+
+    return budgets.map(budget => {
+
+      const budgetCategories = budget.categories;
+      const budgetTransactions = transactions.filter(t => budgetCategories.indexOf(t.category.id) !== -1);
+
+      return {
+        ...budget,
+        categories: budgetCategories.map(cId => categoriesMap[cId]),
+        lastTransactions: budgetTransactions.splice(0, budgetTransactions.length > 4 ? 5 : budgetTransactions.length)
+      }
+    });
   }
 }

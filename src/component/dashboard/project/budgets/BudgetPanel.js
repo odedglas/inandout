@@ -87,12 +87,12 @@ class BudgetPanel extends Component {
    budgetContent = () => (
      <div>
        <div className={'row flex mb-4'}>
-         <div className={'col-sm-7 divider row'}>
-           <div className={'col-sm-12 mb-3'}>
+         <div className={'col-sm-12 mb-3'}>
                 <span className={'statistics-title'}>
                   Statistics
                 </span>
-           </div>
+         </div>
+         <div className={'col-sm-7 divider row'}>
            <div className={'col-sm-12'}>
              <BudgetLineChart />
            </div>

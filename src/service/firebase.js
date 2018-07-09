@@ -126,7 +126,7 @@ export default {
       }
     })
   },
-  createBudget(projectId, budget) {
+  createTransaction(projectId, budget) {
 
     return database.ref(`/projects/${projectId}/budgets`).push(budget).then(res => {
 

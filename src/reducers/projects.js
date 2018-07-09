@@ -12,7 +12,6 @@ export default function (state = [], action) {
       ];
 
     case 'UPDATE_PROJECT':
-      debugger;
       return util.updateById(state, action.project);
     default:
       return state;

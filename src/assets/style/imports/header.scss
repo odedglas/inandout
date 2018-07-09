@@ -36,6 +36,14 @@
     @include offwhiteIcon()
   }
 
+  .user-menu-popper {
+    pointer-events: none;
+
+    &.open {
+      pointer-events: auto;
+    }
+  }
+
   .user-menu-holder {
     transform-origin: right top !important;
     margin-top:.5rem;

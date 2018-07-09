@@ -6,12 +6,12 @@ export const TransactionType = PropTypes.shape({
   id: PropTypes.string.isRequired,
   type: PropTypes.oneOf(['income', 'outcome']),
   income: PropTypes.bool.isRequired,
-  owner: PropTypes.string.isRequired,
+  owner: PropTypes.object,
   category: CategoryType,
-  customerId: PropTypes.string,
+  customer: PropTypes.object,
   date: PropTypes.string.isRequired,
   amount: PropTypes.number.isRequired,
-  recurring: PropTypes.bool.isRequired,
+  recurring: PropTypes.bool,
   parentTransactionId: PropTypes.string,
   attachments: PropTypes.array
 });

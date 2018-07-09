@@ -85,6 +85,10 @@ $breakpoints: (
   @if $type == laytouFloat {
     $matchZIndex: 3
   }
+
+  @if $type == menu {
+    $matchZIndex: 98
+  }
   @if $type == modal {
     $matchZIndex: 99
   }

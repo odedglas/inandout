@@ -25,5 +25,26 @@ export default {
 
       }, {});
     })
-  }
+  },
+  mergeTransactions (transactions, customers, categories, usersMap) {
+
+    const customersMap = util.toIdsMap(customers);
+    const categoriesMap = util.toIdsMap(categories);
+
+    transactions = transactions.sort(util.sortJsonFN([
+      {name: 'date', reverse: true}
+    ]));
+
+    return transactions.map(transaction => {
+
+      return {
+        ...transaction,
+        date: date.format(transaction.date),
+        category: transaction.category ? categoriesMap[transaction.category] : 'UNCATEGORIZED',
+        customer: transaction.customer ? customersMap[transaction.customer] : undefined,
+        owner: usersMap[transaction.owner]
+      }
+
+    });
+  },
 }

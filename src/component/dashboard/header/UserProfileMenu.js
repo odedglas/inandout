@@ -82,11 +82,12 @@ class UserProfileMenu extends React.Component {
           </Target>
           <Popper
             placement="bottom-end"
+            className={`user-menu-popper ${open ? 'open' : ''}`}
             eventsEnabled={open}
           >
             <ClickAwayListener onClickAway={this.handleClose}>
-              <Grow in={open} id="menu-list-grow">
-                <Paper className={'user-menu-holder'}>
+              <Grow in={open} id="menu-list-grow" >
+                <Paper className={`user-menu-holder ${open ? 'open' : ''}`} >
                   <MenuList role="menu">
                     <div className={'user-info'}>
                       <div className={'user-image'}>

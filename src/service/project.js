@@ -1,4 +1,7 @@
 import firebaseService from './firebase';
+import budgetSerivce from './budget';
+import transactionService from './transaction';
+
 import util from '@util/'
 
 export default {
@@ -49,6 +52,34 @@ export default {
     })
 
   },
+  mergeProjectResults: (projects, transactions, defaultCategories, users) => {
+
+    const usersMap = util.toIdsMap(users);
+
+    return projects.map(project => {
+
+      const categories = filterExcluded(
+        defaultCategories,
+        project.excludedCategories
+      );
+
+      const customers = project.customers || [];
+      const members = project.members || [];
+      const budgets = project.budgets || [];
+      const projectTransactions = transactionService.mergeTransactions(transactions[project.id], customers, categories, usersMap);
+      const projectCategories = project.categories.reverse().concat(categories);
+
+      return {
+        ...project,
+        owner: usersMap[project.owner],
+        customers,
+        members: members.map(m => usersMap[m.id]),
+        transactions: projectTransactions,
+        budgets: budgetSerivce.mergeBudgets(budgets, categories, projectTransactions),
+        categories: projectCategories
+      }
+    })
+  }
 }
 const normalizeProjectName = name => name.toLowerCase().replaceAll(" ", "-");
 const generateProjectIdentifier = name => `${normalizeProjectName(name)}-${util.randomAlphaNumeric(4)}`;
@@ -58,3 +89,7 @@ const toArray = (object) => object ? Object.keys(object).map(key => {
     ...object[key]
   }
 }) : [];
+const filterExcluded = (categories, excluded) => {
+  excluded = Array.isArray(excluded) ? excluded : (excluded ? [excluded] : []);
+  return categories.filter(c => excluded.indexOf(c.id) === -1);
+};
