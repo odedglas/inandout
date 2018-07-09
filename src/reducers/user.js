@@ -1,15 +1,13 @@
 import firebaseServcie from '@service/firebase'
 
 const initialState = {
-  currentUser: {
-    id: undefined,
-    displayName: undefined,
-    email: undefined,
-    initials: undefined,
-    avatarImage: undefined,
-    avatarColor: undefined,
-    projects:[]
-  }
+  id: undefined,
+  displayName: undefined,
+  email: undefined,
+  initials: undefined,
+  avatarImage: undefined,
+  avatarColor: undefined,
+  projects:[]
 };
 
 export default function (state = initialState, action) {
@@ -19,7 +17,7 @@ export default function (state = initialState, action) {
       firebaseServcie.initUser(action.user);
       return {
         ...state,
-        currentUser: action.user,
+        ...action.user,
       };
 
     default:

@@ -13,7 +13,7 @@ import Breadcrumbs from './breadcrumbs/Breadcrumbs';
 import Breadcrumb from './breadcrumbs/Breadcrumb';
 import ProjectBreadcrumb from './breadcrumbs/ProjectBreadcrumb';
 
-import {setPreSelectedProject} from "@action/project";
+import {setPreSelectedProject, updateCachedProject} from "@action/project";
 import util from '@util/';
 import {getProjectRoutes} from './ProjectRoutes';
 
@@ -22,6 +22,7 @@ class Project extends React.Component {
   static propTypes = {
     selectedProject: PropTypes.object,
     setPreSelectedProject: PropTypes.func.isRequired,
+    updateCachedProject: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired
   };
 
@@ -33,6 +34,11 @@ class Project extends React.Component {
     if (util.isEmptyObject(selectedProject)) {
       this.props.setPreSelectedProject(match.params.identifier)
     }
+  }
+
+  componentWillUnmount () {
+
+    this.props.updateCachedProject();
   }
 
   render() {
@@ -78,5 +84,5 @@ export default compose(
   connect(state => ({
     selectedProject: state.project.selectedProject,
     loading: state.dashboard.loading,
-  }), {setPreSelectedProject})
+  }), {setPreSelectedProject, updateCachedProject})
 )(Project);

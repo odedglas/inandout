@@ -57,6 +57,6 @@ class Header extends React.Component {
 export default compose(
   withRouter,
   connect(state => ({
-    user: state.user.currentUser,
+    user: state.user,
   }), {})
 )(Header);

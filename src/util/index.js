@@ -38,7 +38,7 @@ export default {
     return text;
 
   },
-  sortJsonFN: (props) => {
+  sortJsonFN (props) {
 
     return function (a, b) {
 
@@ -60,6 +60,20 @@ export default {
     };
 
   },
+  promiseAllObjectProperties (object) {
+
+    if(!this.isObject(object)) {}
+
+    const keys = Object.keys(object);
+    const promises = keys.map(key => object[key]);
+
+    return Promise.all(promises).then(res => {
+      return res.reduce((resolvedObject, property, index) => {
+        resolvedObject[keys[index]] = property;
+        return resolvedObject;
+      }, {});
+    });
+  }
 }
 
 // *** Overrides *** //

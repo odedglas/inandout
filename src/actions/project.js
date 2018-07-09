@@ -1,66 +1,68 @@
-import projectService from '@service/project'
 import localStorageService from '@service/localstorage'
 import {LOCAL_STORAGE} from '@const/'
-
-const projectsLoadKey = 'userProjects';
+import categoryService from '@service/category'
 
 export function setPreSelectedProject(identifier) {
   return dispatch => dispatch({type: 'SET_PRE_SELECTED_PROJECT', identifier});
 }
 
-export function fetchUserProjects() {
-  return (dispatch, getState) => {
+export function selectProject(project) {
 
-    dispatch({type: 'ADD_DASHBOARD_LOADING', loadKey: projectsLoadKey});
-    const projectKeys = getState().project.keys;
+  return (dispatch, getState) =>  {
 
-    projectService.fetchUserProjects(
-      projectKeys
-    ).then(projects => {
+    const defaultCategories = filterExcluded(
+      getState().categories.defaults,
+      project.excludedCategories
+    );
 
-      dispatch({type: 'SET_PROJECTS', projects});
+    const projectCategories = project.categories.reverse().concat(defaultCategories);
 
-      const preSelectedIdentifier = getState().project.preSelectedProject;
-      const selectedProject = preSelectedIdentifier ? projects.find(p => p.identifier === preSelectedIdentifier) : null;
-
-      if(selectedProject) {
-        dispatch(selectProject(selectedProject));
-      }
-
-    })
-      .finally(() =>  dispatch({type: 'REMOVE_DASHBOARD_LOADING', loadKey: projectsLoadKey}));
+    dispatch({ type: 'SET_SELECTED_PROJECT', project, categories: projectCategories });
   }
 }
 
-export function createProject({projectName, projectType, projectDescription, projectCurrency}, onSuccess) {
+export function createCategory(project, { name, icon, color }, onSuccess) {
 
   return dispatch => {
 
     dispatch({type: 'APP_LOADING', loading: true});
 
-    projectService.createProject(
-      projectName,
-      projectType,
-      projectDescription,
-      projectCurrency
-    ).then((project) => {
+    categoryService.createCategory(project.id, name, icon, color).then(category => {
+      onSuccess();
 
-      dispatch({type: 'ADD_PROJECT', project});
-      dispatch({ type: 'SET_SELECTED_PROJECT', project });
-      onSuccess(project);
-
-    })
-      .finally(() => dispatch({type: 'APP_LOADING', loading: false}));
-
+      dispatch({type: 'ADD_PROJECT_CATEGORY', category});
+      dispatch({type: 'APP_LOADING', loading: false})
+    });
   }
 }
 
-export function selectProject(project) {
+export function editCategory(project, {id, name, icon, color }, onSuccess) {
 
-  return dispatch =>  {
+  return dispatch => {
 
-    dispatch({ type: 'SET_SELECTED_PROJECT', project });
-    dispatch({ type: 'SET_CUSTOM_CATEGORIES', categories: project.categories, excluded: project.excludedCategories});
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    categoryService.editCategory(project.id, id, name, icon, color).then(category => {
+
+      onSuccess();
+
+      dispatch({type: 'EDIT_PROJECT_CATEGORY', category});
+      dispatch({type: 'APP_LOADING', loading: false})
+    })
+  }
+}
+
+export function removeCategory(project, categoryId, exclude) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    categoryService[exclude ? 'excludeCategory' : 'removeCategory'](project.id, categoryId).then(() => {
+
+      dispatch({type: 'REMOVE_PROJECT_CATEGORY', categoryId});
+      dispatch({type: 'APP_LOADING', loading: false});
+    })
   }
 }
 
@@ -71,3 +73,22 @@ export function toggleProjectDrawer(open) {
     dispatch({ type: 'TOGGLE_PROJECT_DRAWER', open });
   }
 }
+
+export function updateCachedProject() {
+
+  return (dispatch, getState) => {
+
+    const projectState = getState().project;
+    const project = {
+      ...projectState.selectedProject,
+      categories: projectState.categories.filter(c => c.isCustom).reverse()
+    };
+
+    dispatch({ type: 'UPDATE_PROJECT', project });
+  }
+}
+
+const filterExcluded = (categories, excluded) =>  {
+  excluded = Array.isArray(excluded) ? excluded : (excluded ? [excluded] : []);
+  return categories.filter(c => excluded.indexOf(c.id) === -1);
+};

@@ -76,5 +76,5 @@ class Categories extends Component {
 
 export default connect(state => ({
   selectedProject: state.project.selectedProject,
-  categories: state.category.categories,
+  categories: state.project.categories,
 }), {})(Categories);

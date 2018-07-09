@@ -4,7 +4,8 @@ import user from './user'
 import loading from './loading'
 import dashboard from './dashboard'
 import project from './project'
-import category from './category'
+import projects from './projects'
+import categories from './categories'
 import breadcrumbs from './breadcrumbs'
 
 const appReducer = combineReducers({
@@ -12,8 +13,9 @@ const appReducer = combineReducers({
   user,
   loading,
   dashboard,
+  projects,
   project,
-  category,
+  categories,
   breadcrumbs,
 });
 

@@ -72,7 +72,7 @@ class Landing extends React.Component {
 
             {loading ? <CircularProgress size={50}/> : null}
 
-            {hasProjects ? <div className={'title'}> Your Projects </div>  : null}
+            {hasProjects ? <div className={'title'}> Your Projects: </div>  : null}
 
             {shouldShowAddProjectHelper ? <div className={'no-projects'}>
                 <div>You have no existing projects, It's all starts here:</div>
@@ -112,7 +112,7 @@ class Landing extends React.Component {
 export default compose(
   withRouter,
   connect( state => ({
-    projects: state.project.projects,
+    projects: state.projects,
     loading: state.dashboard.loading,
   }), {selectProject})
 )(Landing);

@@ -9,7 +9,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import DynamicIcon from "@common/DynamicIcon";
 import {CategoryType} from '@model/category'
-import {removeCategory, excludeDefaultCategory} from "@action/category";
+import {removeCategory} from "@action/project";
 import {showConfirmation} from "@action/dashboard";
 
 class CategoryCard extends Component {
@@ -18,7 +18,6 @@ class CategoryCard extends Component {
     category: CategoryType,
     editCategory: PropTypes.func.isRequired,
     removeCategory: PropTypes.func.isRequired,
-    excludeDefaultCategory: PropTypes.func.isRequired,
     showConfirmation: PropTypes.func.isRequired,
     project: PropTypes.object,
   };
@@ -45,7 +44,7 @@ class CategoryCard extends Component {
 
   handleCategoryRemove = () => {
 
-    const {category, removeCategory, excludeDefaultCategory, showConfirmation, project} = this.props;
+    const {category, removeCategory, showConfirmation, project} = this.props;
 
     this.handleMenuClose();
 
@@ -55,8 +54,7 @@ class CategoryCard extends Component {
       icon: 'delete',
       onConfirm: () => {
 
-        const actionHandler = category.isCustom ? removeCategory : excludeDefaultCategory;
-        actionHandler(project, category.id);
+        removeCategory(project, category.id, !category.isCustom);
       }
     });
 
@@ -113,6 +111,5 @@ class CategoryCard extends Component {
 
 export default connect(null, {
   removeCategory,
-  excludeDefaultCategory,
   showConfirmation
 })(CategoryCard);

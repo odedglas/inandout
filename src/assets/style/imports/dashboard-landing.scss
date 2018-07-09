@@ -3,7 +3,7 @@
 .lading-page {
 
   .landing-header {
-    height: 250px;
+    height: 330px;
     padding: 3rem 0;
     background-color: white;
 
@@ -11,14 +11,14 @@
       background-position: right bottom;
     }
 
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+
     .landing-text span {
       color: $light-text;
       font-size: 17px;
-      line-height: 24px;
-
-      h2 {
-        margin-bottom: 0.5rem;
-      }
+      line-height: 30px;
     }
 
     .triangle {

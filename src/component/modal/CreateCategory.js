@@ -14,7 +14,7 @@ import ColorPicker from '@common/ColorPicker'
 import IconPicker from '@common/IconPicker'
 
 import withValidation from '../hoc/withValidation';
-import {createCategory, editCategory} from "@action/category";
+import {createCategory, editCategory} from "@action/project";
 import CreationModal from './CreationModal';
 import themeService from '@service/theme';
 import util from '@util/';
@@ -41,7 +41,7 @@ class CreateCategoryModal extends React.Component {
     const {name, icon, color} = model;
 
     const editMode = !util.isEmptyObject(category);
-    const method =editMode ? editCategory : createCategory;
+    const method = editMode ? editCategory : createCategory;
 
     //Triggering Create / Edit
     method(
@@ -70,7 +70,7 @@ class CreateCategoryModal extends React.Component {
       </div>
 
       <div className={'row py-1 category-theme'}>
-        <div className={'col-sm-5 px-0 separator'}>
+        <div className={'col-sm-6 px-0 separator'}>
           <div className={'cell  mb-2'}>
             <span className={'label'}>Color:</span>
             <ColorPicker selectedColor={model.color}

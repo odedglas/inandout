@@ -51,7 +51,6 @@ export default compose(
   connect(state => ({
     isAuthenticated: state.authentication.authenticated,
     authenticating: state.authentication.authenticating,
-    currentUser: state.authentication.currentUser,
     loading: state.loading.isLoading,
   }), {})
 )(App);

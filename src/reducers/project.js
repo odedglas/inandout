@@ -4,20 +4,14 @@ import {LOCAL_STORAGE} from '@const/'
 const projectDrawerLocalStorageKey = LOCAL_STORAGE.PROJECT_DRAWER_OPEN;
 
 const initialState = {
-  keys: [],
-  projects: [],
   preSelectedProject: undefined,
   selectedProject: {},
+  categories:[],
   drawerOpen: localStorageService.get(projectDrawerLocalStorageKey),
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case 'SET_PROJECTS_KEYS':
-      return {
-        ...state,
-        keys: action.projectsKeys
-      };
     case 'SET_PRE_SELECTED_PROJECT':
       return {
         ...state,
@@ -29,24 +23,32 @@ export default function (state = initialState, action) {
         ...state,
         selectedProject: action.project,
         preSelectedProject: undefined,
+        categories: action.categories
       }
     }
-    case 'SET_PROJECTS':
+    case 'ADD_PROJECT_CATEGORY' : {
       return {
         ...state,
-        projects: action.projects
+        categories: [action.category, ...state.categories],
       };
-    case 'ADD_PROJECT':
+    }
+    case 'EDIT_PROJECT_CATEGORY' : {
+
+      const currentCategories = state.categories;
+      const category = action.category;
+      let editedCategoryIndex = currentCategories.findIndex(c => c.id === category.id);
+      currentCategories[editedCategoryIndex] = category;
+
       return {
         ...state,
-        projects: [
-          ...state.projects,
-          action.project
-        ],
-        keys: [
-          ...state.keys,
-          action.project.id
-        ]
+        categories: currentCategories,
+      };
+    }
+    case 'REMOVE_PROJECT_CATEGORY':
+
+      return {
+        ...state,
+        categories: state.categories.filter(c => c.id !== action.categoryId),
       };
     case 'TOGGLE_PROJECT_DRAWER':
       return {

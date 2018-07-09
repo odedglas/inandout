@@ -5,7 +5,6 @@ import userService from '@service/user';
 
 const fetchUserSuccess = (dispatch, { authUser, user, projectsKeys}) => {
   dispatch({type: 'SET_USER', user});
-  dispatch({type: 'SET_PROJECTS_KEYS', projectsKeys});
   dispatch({type: 'AUTHENTICATION_SUCCESS', authUser});
 };
 
@@ -25,7 +24,7 @@ export function createAuthenticationListener(location) {
 
           fetchUserSuccess(
             dispatch,
-            {authUser, user:res.user, projectsKeys: res.projectsKeys}
+            {authUser, user:res.user}
           );
         });
       }
@@ -49,7 +48,7 @@ export function loginWithPassword(email, password, onSuccess, onError) {
 
         fetchUserSuccess(
           dispatch,
-          {authUser, user:res.user, projectsKeys: res.projectsKeys}
+          {authUser, user:res.user}
         );
 
         onSuccess();

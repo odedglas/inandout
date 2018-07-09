@@ -8,9 +8,9 @@ export default {
     return {
       user: {
         id: res.id,
-        ...res.user
+        ...res.user,
+        projects: getUserProjectsMeta(res.projects)
       },
-      projectsKeys: getUserProjectsMeta(res.projects),
     }
   }),
   createUser: (id, displayName, email) => {

@@ -106,6 +106,6 @@ class ProjectBreadCrumb extends React.Component {
 export default compose(
   withRouter,
   connect(state => ({
-    projects: state.project.projects,
+    projects: state.projects,
   }), {selectProject})
 )(ProjectBreadCrumb);

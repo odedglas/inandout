@@ -17,7 +17,7 @@ import CreationModal from './CreationModal';
 import DynamicIcon from '@common/DynamicIcon';
 
 import withValidation from '../hoc/withValidation';
-import { createProject } from "@action/project";
+import { createProject } from "@action/projects";
 import { PROJECT_TYPES, CURRENCIES } from '@const/';
 import util from '@util/';
 
