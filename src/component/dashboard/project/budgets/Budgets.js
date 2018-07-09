@@ -127,6 +127,7 @@ class Budgets extends Component {
   };
 
   render() {
+
     const {budgets} = this.props;
 
     return (

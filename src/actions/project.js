@@ -102,8 +102,3 @@ export function updateCachedProject() {
     dispatch({ type: 'UPDATE_PROJECT', project });
   }
 }
-
-const filterExcluded = (categories, excluded) =>  {
-  excluded = Array.isArray(excluded) ? excluded : (excluded ? [excluded] : []);
-  return categories.filter(c => excluded.indexOf(c.id) === -1);
-};

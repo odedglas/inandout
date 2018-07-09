@@ -29,7 +29,7 @@ export default {
       return {
         ...budget,
         categories: budgetCategories.map(cId => categoriesMap[cId]),
-        lastTransactions: budgetTransactions.splice(0, budgetTransactions.length > 4 ? 5 : budgetTransactions.length)
+        transactions: budgetTransactions
       }
     });
   }

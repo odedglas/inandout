@@ -84,36 +84,47 @@ class BudgetPanel extends Component {
      )
    };
 
-   budgetContent = () => (
-     <div>
-       <div className={'row flex mb-4'}>
-         <div className={'col-sm-12 mb-3'}>
-                <span className={'statistics-title'}>
-                  Statistics
-                </span>
-         </div>
-         <div className={'col-sm-7 divider row'}>
-           <div className={'col-sm-12'}>
-             <BudgetLineChart />
+   budgetContent = () => {
+
+     const {budget} =  this.props;
+
+     return (
+       <div>
+         <div className={'row flex mb-3'}>
+           <div className={'col-sm-12 mb-3'}>
+              <span className={'statistics-title'}>
+                Statistics
+              </span>
+           </div>
+           <div className={'col-sm-7 divider row'}>
+             <div className={'col-sm-12'}>
+               <BudgetLineChart  budget={budget}/>
+             </div>
+             <div className={'col-sm-12 mt-2 usage-chart-label'}>
+               Budget usage over time
+             </div>
+           </div>
+           <div className={'col-sm-5 row'}>
+             <div className={'col-sm-12 px-0'}>
+               <BudgetCargeoriesPieChart budget={budget} />
+             </div>
+             <div className={'col-sm-12 mt-2 usage-chart-label'}>
+               Expenses by category
+             </div>
            </div>
          </div>
-         <div className={'col-sm-5'}>
-           <BudgetCargeoriesPieChart />
-         </div>
-       </div>
 
-       <div className={'row flex mx-3 transactions pt-3'}>
-         <div className={'col-sm-12'}>
+         <div className={'row flex mx-3 transactions pt-3'}>
+           <div className={'col-sm-12'}>
               <span className={'transactions-title'}>
                 Latest Transactions
               </span>
-         </div>
-         <div className={'col-sm-12'}>
-           <TransactionsSummary />
+           </div>
+
          </div>
        </div>
-     </div>
-   );
+     );
+   };
 
   render() {
 
@@ -122,7 +133,9 @@ class BudgetPanel extends Component {
     const containerCls = `budget-panel mx-3 ${expanded ? 'expanded' : ''}`;
 
     return (
-      <ExpansionPanel className={containerCls} expanded={expanded}  onChange={this.handleExpandStateChange}>
+      <ExpansionPanel className={containerCls}
+                      expanded={expanded}
+                      onChange={this.handleExpandStateChange}>
 
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           {this.budgetSummary()}
