@@ -43,7 +43,7 @@ class BudgetPanel extends Component {
    budgetSummary = () => {
 
      const {budget} =  this.props;
-     const actualCls = budgetService.getBudgetStatusIndicator(budget);
+     const actualCls = budgetService.getBudgetStatusIndicator(budget).className;
 
      return (
        (
@@ -97,7 +97,7 @@ class BudgetPanel extends Component {
               </span>
            </div>
            <div className={'col-sm-7 divider row'}>
-             <div className={'col-sm-12'}>
+             <div className={'col-sm-12 budget-chart'}>
                <BudgetLineChart  budget={budget}/>
              </div>
              <div className={'col-sm-12 mt-2 usage-chart-label'}>
@@ -105,7 +105,7 @@ class BudgetPanel extends Component {
              </div>
            </div>
            <div className={'col-sm-5 row'}>
-             <div className={'col-sm-12 px-0'}>
+             <div className={'col-sm-12 px-0 budget-chart'}>
                <BudgetCargeoriesPieChart budget={budget} />
              </div>
              <div className={'col-sm-12 mt-2 usage-chart-label'}>

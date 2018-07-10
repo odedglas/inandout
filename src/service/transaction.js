@@ -31,10 +31,6 @@ export default {
     const customersMap = util.toIdsMap(customers);
     const categoriesMap = util.toIdsMap(categories);
 
-    transactions = transactions.sort(util.sortJsonFN([
-      {name: 'date', reverse: true}
-    ]));
-
     return transactions.map(transaction => {
 
       return {

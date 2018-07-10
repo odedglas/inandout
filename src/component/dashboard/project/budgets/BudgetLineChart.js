@@ -2,39 +2,12 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types'
 import {Line} from 'react-chartjs-2';
 import {BudgetType} from '@model/budget'
+import themeService from '@service/theme';
+import budgetService from '@service/budget';
+import util from '@util/'
 
-let lineColor = '#4682b4';
-const data = {
-  labels: [
-    '1/7',
-    '5/7',
-    '10/7',
-    '15/7',
-    '20/7',
-    '25/7',
-    '31/7'
-  ],
-  datasets: [
-    {
-      type: 'line',
-      data: [
-        10,
-        17,
-        23,
-        26,
-        55,
-        67
-      ],
-      fill: false,
-      borderColor: lineColor,
-      backgroundColor:lineColor,
-      pointBorderColor: lineColor,
-      pointBackgroundColor: lineColor,
-      pointHoverBackgroundColor: lineColor,
-      pointHoverBorderColor: lineColor,
-    }
-  ]
-};
+const lineColor = '#4682b4';
+const cumulativeColor = '#43A047';
 
 class BudgetLineChart extends Component {
 
@@ -49,48 +22,57 @@ class BudgetLineChart extends Component {
 
   componentWillReceiveProps(nextProps) {
 
-    const {budget} =  nextProps;
-    const transactions = budget.transactions;
+    const {budget} = nextProps;
+    const transactions = budget.transactions.sort(util.sortJsonFN([
+      {name: 'date'}
+    ]));
+
+    let cumulativeSet = [];
+    let cumulative = 0;
+    const transactionsDatesMap = transactions.reduce((total, transaction) => {
+      const current = total[transaction.date] || 0;
+      cumulative += transaction.amount + current;
+      cumulativeSet.push(cumulative);
+      total[transaction.date] = transaction.amount + current;
+      return total
+    }, {});
+
+    const dates = Object.keys(transactionsDatesMap);
+
+    const budgetIndicatorColor = budgetService.getBudgetStatusIndicator(
+      budget
+    ).color;
 
     const data = {
-      labels: [
-        '1/7',
-        '5/7',
-        '10/7',
-        '15/7',
-        '20/7',
-        '25/7',
-        '31/7'
-      ],
+      labels: dates,
       datasets: [
         {
-          type: 'line',
-          data: [
-            0,
-            150,
-            453,
-            555,
-            587,
-            675,
-          ],
+          data: dates.map(d => transactionsDatesMap[d]),
           fill: false,
-          label: 'Usage',
-          borderColor: lineColor,
-          backgroundColor:lineColor,
-          pointBorderColor: lineColor,
-          pointBackgroundColor: lineColor,
-          pointHoverBackgroundColor: lineColor,
-          pointHoverBorderColor: lineColor,
+          label: 'Daily Usage',
+          backgroundColor: themeService.withOpacity(lineColor, 0.8),
+          borderColor: themeService.withOpacity(lineColor, 0.7),
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          pointHoverBackgroundColor: themeService.withOpacity(lineColor, 1),
+          pointBackgroundColor: themeService.withOpacity(lineColor, 0.8),
         },
         {
-          type:'line',
+          label: 'Cumulative Usage',
+          backgroundColor: themeService.withOpacity(budgetIndicatorColor, 0.3),
+          borderColor: themeService.withOpacity(budgetIndicatorColor, 0.5),
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          pointHoverBackgroundColor: themeService.withOpacity(budgetIndicatorColor, 1),
+          pointBackgroundColor: themeService.withOpacity(budgetIndicatorColor, 0.8),
+          data: cumulativeSet
+        },
+        {
           label: 'Limit',
-          data:[
-            budget.limit,budget.limit,budget.limit,budget.limit,budget.limit,budget.limit
-          ],
+          data: dates.map(d => budget.limit),
           fill: false,
           borderColor: '#e53935',
-          backgroundColor:'#e53935',
+          backgroundColor: '#e53935',
           borderWidth: 1,
           pointBorderColor: 'transparent',
           pointBackgroundColor: 'transparent',
@@ -100,23 +82,26 @@ class BudgetLineChart extends Component {
       ]
     };
 
-    const options ={
+    const options = {
       responsive: true,
       maintainAspectRatio: false,
       legend: {
         display: false
       },
       tooltips: {
-        yAlign: 'bottom',
+        mode: 'index',
+        position: 'nearest',
+        bodySpacing: 8,
+        titleMarginBottom: 10,
         filter: function (tooltipItem) {
-          return tooltipItem.datasetIndex === 0;
+          return tooltipItem.datasetIndex < 2;
         }
       },
       scales: {
         yAxes: [
           {
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
             },
             gridLines: {
               display: false
@@ -133,7 +118,7 @@ class BudgetLineChart extends Component {
       },
     };
 
-    this.setState({ chartOptions: options, chartData: data})
+    this.setState({chartOptions: options, chartData: data})
   }
 
   render() {
@@ -142,7 +127,8 @@ class BudgetLineChart extends Component {
 
     return (
       <Line data={chartData}
-            height={70}
+            width={500}
+            height={150}
             options={chartOptions}/>
     );
   }

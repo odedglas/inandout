@@ -73,7 +73,6 @@ $breakpoints: (
   }
 }
 
-// -- Z-index's system --//
 @mixin withZIndex($type: content) {
   $matchZIndex: 0;
   @if $type == content {
@@ -97,4 +96,10 @@ $breakpoints: (
   }
 
   z-index: $matchZIndex !important;
+}
+
+:export {
+  successColor: #43A047;
+  errorColor: #e53935;
+  warningColor: #FFA000;
 }

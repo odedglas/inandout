@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types'
 import {Pie} from 'react-chartjs-2';
 import {BudgetType} from '@model/budget'
+import budgetService from '@service/budget';
 
 class BudgetLineChart extends Component {
 
@@ -10,7 +11,8 @@ class BudgetLineChart extends Component {
   };
 
   state = {
-    chartData: {}
+    chartData: {},
+    chartOptions: {}
   };
 
   componentWillReceiveProps(nextProps) {
@@ -24,26 +26,36 @@ class BudgetLineChart extends Component {
       data: budget.categories.map(c => {
 
         const categoryTransactions = transactions.filter(t => t.category.id === c.id);
-        return categoryTransactions.reduce((total, t) => {total += t.amount; return total}, 0);
+        return categoryTransactions.reduce((total, t) => {
+          total += t.amount; return total
+        }, 0);
       })
     }];
 
-    this.setState({chartData: {
-      labels,
-      datasets
-    }})
+    const options = {
+      responsive: true,
+      maintainAspectRatio: false,
+      tooltips: {
+        bodySpacing: 8,
+        titleMarginBottom: 10,
+        callbacks: {
+          afterLabel: function (tooltipItem, data) {
+            let categoryValue = data.datasets[0].data[tooltipItem.index];
+            return `${budgetService.getUsage(categoryValue, budget.actual)}% of Budget\'s actual`
+          }
+        }
+      },
+    };
+
+    this.setState({chartData: {labels,datasets}, chartOptions: options})
   }
 
   render() {
-    const {chartData} =  this.state;
+    const {chartData, chartOptions} =  this.state;
 
     return (
       <Pie data={chartData}
-            height={150}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-            }}/>
+            options={chartOptions}/>
     );
   }
 }
