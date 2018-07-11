@@ -20,12 +20,10 @@ class BudgetLineChart extends Component {
     chartOptions: {},
   };
 
-  componentWillReceiveProps(nextProps) {
+  componentDidMount() {
 
-    const {budget} = nextProps;
-    const transactions = budget.transactions.sort(util.sortJsonFN([
-      {name: 'date'}
-    ]));
+    const {budget} = this.props;
+    const transactions = budget.transactions;
 
     let cumulativeSet = [];
     let cumulative = 0;
@@ -127,7 +125,6 @@ class BudgetLineChart extends Component {
 
     return (
       <Line data={chartData}
-            width={500}
             height={150}
             options={chartOptions}/>
     );

@@ -1,0 +1,32 @@
+@import '../variables';
+
+.avatar {
+  height:40px;
+  width:40px;
+  font-size: 1rem;
+
+  .icon {
+    font-size: 1.6rem;
+  }
+
+  &.small {
+    height:30px;
+    width:30px;
+    font-size:0.825rem;
+
+    .icon {
+      font-size: 1.25rem;
+    }
+  }
+
+  &.medium {
+    height:35px;
+    width:35px;
+    font-size:0.925rem;
+
+    .icon {
+      font-size: 1.4rem;
+    }
+  }
+
+}

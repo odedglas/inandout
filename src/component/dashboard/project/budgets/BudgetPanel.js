@@ -14,7 +14,7 @@ import Avatar from '@material-ui/core/Avatar';
 import DynamicIcon from "@common/DynamicIcon";
 import TransactionsSummary from '../transactions/TransactionsSummaryTable';
 import BudgetLineChart from './BudgetLineChart';
-import BudgetCargeoriesPieChart from './BudgetCargeoriesPieChart';
+import BudgetCategoriesPieChart from './BudgetCategoriesPieChart';
 import {BudgetType} from '@model/budget'
 
 import budgetService from '@service/budget';
@@ -22,18 +22,19 @@ import budgetService from '@service/budget';
 class BudgetPanel extends Component {
 
   static propTypes = {
-    budget: BudgetType
-  };
-
-  state = {
-    expanded: false,
+    budget: BudgetType,
+    expanded: PropTypes.bool,
+    onExpandChange: PropTypes.func
   };
 
   handleExpandStateChange = () => {
 
-    this.setState((prevState, props) => ({
-      expanded: !prevState.expanded
-    }))
+    const expanded = !this.props.expanded;
+
+    this.props.onExpandChange(
+      expanded ? this.props.budget.id : undefined
+    );
+
   };
 
   handleViewTransactions = () => {
@@ -72,7 +73,7 @@ class BudgetPanel extends Component {
              {
                budget.categories.map(category => (
                  <div key={category.id} className={'category'}>
-                   <Avatar className={'avatar mx-1'} style={{'backgroundColor': category.color}}>
+                   <Avatar className={'avatar small mx-1'} style={{'backgroundColor': category.color}}>
                      <DynamicIcon className={'icon'} name={category.icon}/>
                    </Avatar>
                  </div>
@@ -93,6 +94,7 @@ class BudgetPanel extends Component {
          <div className={'row flex mb-3'}>
            <div className={'col-sm-12 mb-3'}>
               <span className={'statistics-title'}>
+                <DynamicIcon name={'chart'} className={'icon'}/>
                 Statistics
               </span>
            </div>
@@ -100,27 +102,30 @@ class BudgetPanel extends Component {
              <div className={'col-sm-12 budget-chart'}>
                <BudgetLineChart  budget={budget}/>
              </div>
-             <div className={'col-sm-12 mt-2 usage-chart-label'}>
+             <div className={'col-sm-12 mt-3 usage-chart-label'}>
                Budget usage over time
              </div>
            </div>
            <div className={'col-sm-5 row'}>
              <div className={'col-sm-12 px-0 budget-chart'}>
-               <BudgetCargeoriesPieChart budget={budget} />
+               <BudgetCategoriesPieChart budget={budget} />
              </div>
-             <div className={'col-sm-12 mt-2 usage-chart-label'}>
+             <div className={'col-sm-12 mt-3 usage-chart-label'}>
                Expenses by category
              </div>
            </div>
          </div>
 
-         <div className={'row flex mx-3 transactions pt-3'}>
+         <div className={'row flex transactions'}>
            <div className={'col-sm-12'}>
               <span className={'transactions-title'}>
-                Latest Transactions
+                 <DynamicIcon name={'history'} className={'icon'}/>
+                Latest Activity
               </span>
            </div>
-
+           <div className={'col-sm-12'}>
+              <TransactionsSummary transactions={budget.transactions}/>
+           </div>
          </div>
        </div>
      );
@@ -128,7 +133,7 @@ class BudgetPanel extends Component {
 
   render() {
 
-    const {expanded} =  this.state;
+    const {expanded} =  this.props;
 
     const containerCls = `budget-panel mx-3 ${expanded ? 'expanded' : ''}`;
 

@@ -115,7 +115,7 @@ class CreateProjectModal extends React.Component {
           onChange={(event) => handleChange(event.target.value, 'projectCurrency')}
         >
           {CURRENCIES.map(option => (
-            <MenuItem key={option.value} value={option.value}>
+            <MenuItem key={option.key} value={option.key}>
               {option.label}
             </MenuItem>
           ))}

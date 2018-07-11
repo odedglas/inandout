@@ -52,6 +52,13 @@ import CustomersIcon from '@material-ui/icons/Group';
 import CalendarIcon from '@material-ui/icons/DateRange';
 import NotificationsIcon  from '@material-ui/icons/Notifications';
 
+// -- Other -- //
+import ShowChart from '@material-ui/icons/ShowChart';
+import HistoryIcon from '@material-ui/icons/History';
+import OutcomeIcon from '@material-ui/icons/TrendingDown';
+import IncomeIcon from '@material-ui/icons/TrendingUp';
+
+
 const iconMap = {
   'home': HomeIcon,
   'smoke': SmokeIcon,
@@ -96,6 +103,10 @@ const iconMap = {
   'gas': GasIcon,
   'flight': FlightIcon,
   'delete': DeleteIcon,
+  'chart': ShowChart,
+  'history': HistoryIcon,
+  'outcome': OutcomeIcon,
+  'income': IncomeIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {

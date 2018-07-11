@@ -1,9 +1,24 @@
 @import '../variables';
 
-.transaction-table {
+.transactions-summary {
 
-  th, td{
-    padding: 0;
+  position:relative;
+
+  .table-head, .table-row{
+
+
+    th, td {
+      padding: .5rem 1rem;
+    }
+
+    .outcome-amount {
+      display:flex;
+
+      .icon {
+        color: $error-color;
+        font-size: 0.925rem;
+      }
+    }
   }
 }
 

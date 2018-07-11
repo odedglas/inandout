@@ -1,7 +1,7 @@
 @import '../variables';
 
 .budgets-container {
-  z-index: 1;
+
 }
 
 .budget-panel {
@@ -20,17 +20,6 @@
       color: $light-text;
     }
 
-    .categories {
-
-      .avatar {
-        height:30px;
-        width:30px;
-
-        .icon {
-          font-size: 1.25rem;
-        }
-      }
-    }
   }
 
   .budget-content {
@@ -40,13 +29,21 @@
       border-right: 1px solid $divider-color;
     }
 
-    .statistics-title {
-      padding-left: 15px;
+    .budget-chart {
+      height:170px !important;
     }
 
     .statistics-title,
     .transactions-title{
       font-size: 0.925rem;
+      display: flex;
+      align-items: center;
+      color: $text-color;
+
+      .icon {
+        margin: 0 .5rem;
+        color: $menu-icon-color;
+      }
     }
 
     .usage-chart-label {
@@ -63,9 +60,6 @@
       }
     }
 
-    .transactions {
-      border-top: 1px solid $divider-color;
-    }
   }
 
   .actions {

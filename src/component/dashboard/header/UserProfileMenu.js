@@ -91,7 +91,7 @@ class UserProfileMenu extends React.Component {
                   <MenuList role="menu">
                     <div className={'user-info'}>
                       <div className={'user-image'}>
-                        <Avatar className={'user-menu-avatar'} style={avatarBackground}> {user.initials} </Avatar>
+                        <Avatar className={'avatar medium'} style={avatarBackground}> {user.initials} </Avatar>
                       </div>
                       <div className={'details'}>
                         <h3> {user.displayName} </h3>

@@ -54,7 +54,9 @@ export default {
       return {
         ...budget,
         categories: budgetCategories.map(cId => categoriesMap[cId]),
-        transactions: budgetTransactions
+        transactions: budgetTransactions.sort(util.sortJsonFN([
+          {name: 'date'}
+        ]))
       }
     });
   }

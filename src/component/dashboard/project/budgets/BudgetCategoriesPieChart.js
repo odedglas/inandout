@@ -4,7 +4,7 @@ import {Pie} from 'react-chartjs-2';
 import {BudgetType} from '@model/budget'
 import budgetService from '@service/budget';
 
-class BudgetLineChart extends Component {
+class BudgetCategoriesPieChart extends Component {
 
   static propTypes = {
     budget: BudgetType
@@ -15,9 +15,9 @@ class BudgetLineChart extends Component {
     chartOptions: {}
   };
 
-  componentWillReceiveProps(nextProps) {
+  componentDidMount() {
 
-    const {budget} =  nextProps;
+    const {budget} =  this.props;
     const transactions = budget.transactions;
 
     const labels = budget.categories.map(c => c.name);
@@ -40,8 +40,10 @@ class BudgetLineChart extends Component {
         titleMarginBottom: 10,
         callbacks: {
           afterLabel: function (tooltipItem, data) {
-            let categoryValue = data.datasets[0].data[tooltipItem.index];
-            return `${budgetService.getUsage(categoryValue, budget.actual)}% of Budget\'s actual`
+            const categoryValue = data.datasets[0].data[tooltipItem.index];
+            const isSingle = data.datasets[0].data.length === 1;
+
+            return !isSingle ? `${budgetService.getUsage(categoryValue, budget.actual)}% of Budget\'s actual` : ''
           }
         }
       },
@@ -55,9 +57,10 @@ class BudgetLineChart extends Component {
 
     return (
       <Pie data={chartData}
-            options={chartOptions}/>
+           height={120}
+           options={chartOptions}/>
     );
   }
 }
 
-export default BudgetLineChart;
+export default BudgetCategoriesPieChart;

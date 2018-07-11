@@ -16,19 +16,19 @@ export const ROUTER = {
 
 export const CURRENCIES = [
   {
-    value: 'USD',
+    key: 'USD',
     label: '$',
   },
   {
-    value: 'EUR',
+    key: 'EUR',
     label: '€',
   },
   {
-    value: 'NIS',
+    key: 'NIS',
     label: '₪',
   },
   {
-    value: 'JPY',
+    key: 'JPY',
     label: '¥',
   }
 ];

@@ -121,6 +121,15 @@ class Budgets extends Component {
     budgets: PropTypes.arrayOf(BudgetType)
   };
 
+  state = {
+    expanded: null,
+  };
+
+  handleExpandPanelChange = (budgetId) => {
+
+    this.setState({expanded: budgetId})
+  };
+
   showHideCreateBudge = (show) => {
 
 
@@ -129,6 +138,7 @@ class Budgets extends Component {
   render() {
 
     const {budgets} = this.props;
+    const {expanded} = this.state;
 
     return (
       <div className={'budgets-container'}>
@@ -139,11 +149,14 @@ class Budgets extends Component {
 
         <div className={'px-4 py-3'}>
         {
-          budgets.map(budget => <BudgetPanel key={budget.id} budget={budget}/>)
+          budgets.map(budget => <BudgetPanel key={budget.id}
+                                             onExpandChange={this.handleExpandPanelChange}
+                                             expanded={expanded === budget.id}
+                                             budget={budget}/>)
         }
         </div>
 
-        <Tooltip title={'Create Budget'} placement={'top'}>
+        <Tooltip title={'Create Budget'} placement={'top'} >
           <Zoom in={true} timeout={400}>
             <Button variant="fab"
                     color="secondary"
