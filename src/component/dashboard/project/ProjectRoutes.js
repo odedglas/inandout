@@ -3,10 +3,13 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
+/*
 import {asyncComponent} from 'react-async-component';
+*/
 
 import {ROUTER as routes} from '@const/';
 
+/*
 const ProjectHome = asyncComponent({
   resolve: () => import('./home/ProjectHome')
 });
@@ -34,6 +37,15 @@ const Todos = asyncComponent({
 const Transactions = asyncComponent({
   resolve: () => import('./transactions/Transactions')
 });
+*/
+
+import ProjectHome from './home/ProjectHome';
+import Budgets from './budgets/Budgets';
+import ProjectCalendar from './calendar/ProjectCalendar';
+import Categories from './categories/Categories';
+import Customers from './customers/Customers';
+import Todos from './todo/Todos';
+import Transactions from './transactions/Transactions';
 
 export function getProjectRoutes(location) {
 

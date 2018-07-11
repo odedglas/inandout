@@ -31,23 +31,28 @@ class CreateCategoryModal extends React.Component {
     validation: PropTypes.object.isRequired,
     createCategory: PropTypes.func.isRequired,
     editCategory: PropTypes.func.isRequired,
+    createCallback: PropTypes.func,
     project: PropTypes.object,
     category: PropTypes.object,
   };
 
   handleCategoryCreate = (model, close) => {
 
-    const {project, category, editCategory, createCategory} = this.props;
+    const {project, category, editCategory, createCategory, createCallback} = this.props;
     const {name, icon, color} = model;
 
-    const editMode = !util.isEmptyObject(category);
+    const editMode = category && !util.isEmptyObject(category);
     const method = editMode ? editCategory : createCategory;
 
     //Triggering Create / Edit
     method(
       project,
       {name, icon, color, id: editMode ? category.id : undefined},
-      () => close()
+      (category) => {
+
+        createCallback && createCallback(category);
+        close()
+      }
     );
 
   };
@@ -106,7 +111,6 @@ class CreateCategoryModal extends React.Component {
       category
     } = this.props;
 
-    debugger;
     const editMode = category && !util.isEmptyObject(category);
     const model = editMode ? Object.create(category) : {};
 

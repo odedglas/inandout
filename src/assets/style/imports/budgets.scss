@@ -87,6 +87,14 @@
 
   .actions {
     padding: 0.5rem;
+
+    .delete-budget {
+      transition: color .2s ease;
+
+      &:hover {
+        color:$error-color;
+      }
+    }
   }
 
   &.expanded {

@@ -58,6 +58,13 @@ class CategoriesSelect extends Component {
     })
   };
 
+  handleCreateCategory = category => {
+
+    const { selectedCategories, onChange } = this.props;
+
+    onChange([category.id, ...selectedCategories])
+  };
+
   render() {
 
     const {
@@ -83,7 +90,7 @@ class CategoriesSelect extends Component {
             const isOption = event.currentTarget.getAttribute('data-value') !== 'add-category';
 
             if(isOption) {
-              onChange(event);
+              onChange(event.target.value);
             }
             else {
               this.handleClose()
@@ -134,8 +141,10 @@ class CategoriesSelect extends Component {
 
         </Select>
         <FormHelperText>Transactions with selected categories will be listed under this budget.</FormHelperText>
+
         <CreateCategory open={showCreateCategoryModal}
                         project={selectedProject}
+                        createCallback={this.handleCreateCategory}
                         onClose={this.showHideCreateCategory}/>
       </FormControl>
     )

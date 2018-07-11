@@ -111,7 +111,7 @@ class CreateBudgetModal extends React.Component {
 
         <CategoriesSelect selectedCategories={model.categories}
                           error={validation.categories.isInvalid}
-                          onChange={(event) => handleChange(event.target.value, 'categories')}/>
+                          onChange={(val) => handleChange(val, 'categories')}/>
 
       </div>
     );
@@ -133,6 +133,7 @@ class CreateBudgetModal extends React.Component {
     const model = editMode ? Object.create(budget) : {};
 
     if(model.categories) {
+
       model.categories = model.categories.map(c => c.id);
     }
 

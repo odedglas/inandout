@@ -42,6 +42,7 @@ class AreYouSure extends Component {
       <div>
         <Dialog
           open={showConfirmModal}
+          disableRestoreFocus={true}
           onClose={this.handleClose}
           className={'are-you-sure'}
           aria-labelledby="alert-dialog-title"

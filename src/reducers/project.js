@@ -70,7 +70,7 @@ export default function (state = initialState, action) {
 
       return {
         ...state,
-        categories: state.budgets.filter(b => b.id !== action.budgetId),
+        budgets: state.budgets.filter(b => b.id !== action.budgetId),
       };
     case 'TOGGLE_PROJECT_DRAWER':
       return {

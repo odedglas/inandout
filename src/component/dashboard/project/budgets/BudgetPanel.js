@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
+import {connect} from 'react-redux';
 
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -12,10 +13,14 @@ import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 
 import DynamicIcon from "@common/DynamicIcon";
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import TransactionsSummary from '../transactions/TransactionsSummaryTable';
 import BudgetLineChart from './BudgetLineChart';
 import BudgetCategoriesPieChart from './BudgetCategoriesPieChart';
 import {BudgetType} from '@model/budget'
+import {deleteBudget} from "@action/project";
+import {showConfirmation} from "@action/dashboard";
 
 import budgetService from '@service/budget';
 
@@ -25,7 +30,9 @@ class BudgetPanel extends Component {
     budget: BudgetType,
     expanded: PropTypes.bool,
     editBudget: PropTypes.func.isRequired,
-    onExpandChange: PropTypes.func
+    onExpandChange: PropTypes.func,
+    deleteBudget: PropTypes.func.isRequired,
+    showConfirmation: PropTypes.func.isRequired,
   };
 
   handleExpandStateChange = () => {
@@ -41,6 +48,22 @@ class BudgetPanel extends Component {
   handleEditBudge = () => {
 
     this.props.editBudget(this.props.budget);
+  };
+
+  handleBudgetRemove = () => {
+
+    const {budget, deleteBudget, showConfirmation, selectedProject} = this.props;
+
+    showConfirmation({
+      title:'Remove This Budget ?',
+      body: 'Removing this budget will delete it permanently',
+      icon: 'delete',
+      onConfirm: () => {
+
+        deleteBudget(selectedProject, budget.id);
+      }
+    });
+
   };
 
    budgetSummary = () => {
@@ -167,6 +190,13 @@ class BudgetPanel extends Component {
         </ExpansionPanelDetails>
         <Divider />
         <ExpansionPanelActions className={'actions'}>
+          <Tooltip title={'Delete Budget'} placement={'right'}>
+            <IconButton className={'delete-budget mx-2'} onClick={this.handleBudgetRemove}>
+              <DynamicIcon name={'delete'}/>
+            </IconButton>
+          </Tooltip>
+          <div className={'flex'}>
+          </div>
           <Button size="small" onClick={this.handleExpandStateChange}>Close</Button>
           <Button size="small" color="primary" onClick={this.handleEditBudge}>
             Edit
@@ -178,4 +208,9 @@ class BudgetPanel extends Component {
   }
 }
 
-export default BudgetPanel;
+export default connect(state => ({
+  selectedProject: state.project.selectedProject
+}), {
+  deleteBudget,
+  showConfirmation
+})(BudgetPanel);

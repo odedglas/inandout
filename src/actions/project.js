@@ -38,9 +38,10 @@ export function createCategory(project, { name, icon, color }, onSuccess) {
     dispatch({type: 'APP_LOADING', loading: true});
 
     categoryService.createCategory(project.id, name, icon, color).then(category => {
-      onSuccess();
 
       dispatch({type: 'ADD_PROJECT_CATEGORY', category});
+      onSuccess(category);
+
       dispatch({type: 'APP_LOADING', loading: false})
     });
   }
@@ -54,9 +55,10 @@ export function editCategory(project, {id, name, icon, color }, onSuccess) {
 
     categoryService.editCategory(project.id, id, name, icon, color).then(category => {
 
-      onSuccess();
-
       dispatch({type: 'EDIT_PROJECT_CATEGORY', category});
+
+      onSuccess(category);
+
       dispatch({type: 'APP_LOADING', loading: false})
     })
   }
@@ -91,9 +93,10 @@ export function createBudget(project, { name, limit, period, categories }, onSuc
         projectState.transactions
       );
 
-      onSuccess();
-
       dispatch({type: 'ADD_PROJECT_BUDGET', budget});
+
+      onSuccess(budget);
+
       dispatch({type: 'APP_LOADING', loading: false})
     });
   }

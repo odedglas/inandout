@@ -73,7 +73,7 @@ class Budgets extends Component {
                <span className={'my-4 text'}>
                   There are no budgets yet...
                </span>
-                <Button size="small" color="primary">
+                <Button size="small" color="primary" onClick={() => this.showHideCreateBudge(true)}>
                   <DynamicIcon name={'add'}/>
                   Create Budget
                 </Button>

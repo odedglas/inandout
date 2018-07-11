@@ -17,7 +17,7 @@ class BudgetLineChart extends Component {
     chartOptions: {},
   };
 
-  componentDidMount() {
+  componentDidMount(nextProps) {
 
     const {budget} = this.props;
     const transactions = budget.transactions;
