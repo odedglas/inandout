@@ -2,6 +2,19 @@
 
 .budgets-container {
 
+  .empty-budgets {
+    min-height: 300px;
+    flex-direction: column;
+
+    .icon {
+      height: 150px;
+    }
+
+    .text {
+      font-size: $bigger-font;
+      color: $light-text;
+    }
+  }
 }
 
 .budget-panel {
@@ -35,7 +48,7 @@
 
     .statistics-title,
     .transactions-title{
-      font-size: 0.925rem;
+      font-size:$small-font;
       display: flex;
       align-items: center;
       color: $text-color;
@@ -47,7 +60,7 @@
     }
 
     .usage-chart-label {
-      font-size:0.9rem;
+      font-size: $smaller-font;
       color: $light-text;
       text-align:center;
     }
@@ -60,6 +73,16 @@
       }
     }
 
+    .empty-transactions {
+      display:flex;
+      align-items: center;
+      flex-direction: column;
+
+      .text {
+        font-size: $small-font;
+        color: $light-text;
+      }
+    }
   }
 
   .actions {

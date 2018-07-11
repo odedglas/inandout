@@ -13,7 +13,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import {TransactionType} from "@model/transaction";
 import util from "@util/";
-import date from "@util/date";
 import {CURRENCIES} from "@const/";
 
 class TransactionsSummaryTable extends Component {
@@ -67,12 +66,12 @@ class TransactionsSummaryTable extends Component {
                   <TableRow key={t.id} className={'table-row'}>
                     <TableCell>{t.date}</TableCell>
                     <TableCell>
-
+                      <Tooltip title={t.owner.displayName} placement={'right'}>
                         <Avatar className={'avatar small'}
                                 style={avatarBackground}>
                           {t.owner.initials}
                         </Avatar>
-
+                      </Tooltip>
                     </TableCell>
                     <TableCell style={{flex:3}}>
                       <span>
@@ -82,11 +81,13 @@ class TransactionsSummaryTable extends Component {
                     <TableCell>
                       <div className={'outcome-amount'}>
                         <span> {` ${projectCurrency} ${t.amount}`} </span>
-                        <DynamicIcon className={'icon mx-2'} name={'outcome'}/>
+                        <Tooltip title={'Outcome'} placement={'top'}>
+                          <DynamicIcon className={'icon mx-2'} name={'outcome'}/>
+                        </Tooltip>
                       </div>
                       </TableCell>
                     <TableCell>
-                      <Tooltip title={t.category.name} placement={'bottom-end'}>
+                      <Tooltip title={t.category.name} placement={'right'}>
                         <Avatar className={'avatar small'} style={{'backgroundColor': t.category.color}}>
                           <DynamicIcon className={'icon'} name={t.category.icon}/>
                         </Avatar>

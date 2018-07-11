@@ -22,9 +22,37 @@ const budgetIndicators = [
 
 export default {
 
-  createBudget(projectId, budget) {
+  createBudget(projectId, name, limit, period, categories) {
+
+    const budget = {
+      name,
+      limit,
+      period,
+      categories
+    };
 
     return firebaseService.createBudget(projectId, budget)
+  },
+
+  editBudget: (projectId, budgetId, name, limit, period, categories) => {
+
+    const budget = {
+      name,
+      limit,
+      period,
+      categories
+    };
+
+    const updatePath = budgetPath(projectId, budgetId);
+
+    return firebaseService.update(updatePath, budget).then(() => {
+      budget.id = budgetId;
+      return budget;
+    });
+  },
+  deleteBudget: (projectId, budgetId) => {
+    const path = budgetPath(projectId, budgetId);
+    return firebaseService.remove(path)
   },
 
   getUsage(actual, limit) {
@@ -61,3 +89,5 @@ export default {
     });
   }
 }
+
+const budgetPath = (projectId, budgetId) => `/projects/${projectId}/budgets/${budgetId}`;

@@ -54,9 +54,9 @@ class Categories extends Component {
         </div>
 
         <CreateCategory open={showCreateCategoryModal}
-                           category={editCategory}
-                           project={selectedProject}
-                           onClose={this.showHideCreateCategory}/>
+                        category={editCategory}
+                        project={selectedProject}
+                        onClose={this.showHideCreateCategory}/>
 
         <Tooltip title={'Create Category'} placement={'top'}>
           <Zoom in={true} timeout={400}>

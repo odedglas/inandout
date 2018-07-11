@@ -1,6 +1,7 @@
 import localStorageService from '@service/localstorage'
 import {LOCAL_STORAGE} from '@const/'
 import categoryService from '@service/category'
+import budgetService from '@service/budget'
 
 export function setPreSelectedProject(identifier) {
   return dispatch => dispatch({type: 'SET_PRE_SELECTED_PROJECT', identifier});
@@ -70,6 +71,52 @@ export function removeCategory(project, categoryId, exclude) {
     categoryService[exclude ? 'excludeCategory' : 'removeCategory'](project.id, categoryId).then(() => {
 
       dispatch({type: 'REMOVE_PROJECT_CATEGORY', categoryId});
+      dispatch({type: 'APP_LOADING', loading: false});
+    })
+  }
+}
+
+export function createBudget(project, { name, limit, period, categories }, onSuccess) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    budgetService.createBudget(project.id, name, limit, period, categories).then(budget => {
+
+      onSuccess();
+
+      dispatch({type: 'ADD_PROJECT_BUDGET', budget});
+      dispatch({type: 'APP_LOADING', loading: false})
+    });
+  }
+}
+
+export function editBudget(project, {id, name, limit, period, categories }, onSuccess) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    budgetService.editBudget(project.id, id, name, limit, period, categories).then(budget => {
+
+      onSuccess();
+
+      dispatch({type: 'EDIT_PROJECT_BUDGET', budget});
+      dispatch({type: 'APP_LOADING', loading: false})
+    })
+  }
+}
+
+export function deleteBudget(project, budgetId) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    budgetService.deleteBudget(project.id, budgetId).then(() => {
+
+      dispatch({type: 'DELETE_PROJECT_BUDGET', budgetId});
       dispatch({type: 'APP_LOADING', loading: false});
     })
   }

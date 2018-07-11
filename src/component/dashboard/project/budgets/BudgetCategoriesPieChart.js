@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types'
 import {Pie} from 'react-chartjs-2';
 import {BudgetType} from '@model/budget'
 import budgetService from '@service/budget';
@@ -43,7 +42,7 @@ class BudgetCategoriesPieChart extends Component {
             const categoryValue = data.datasets[0].data[tooltipItem.index];
             const isSingle = data.datasets[0].data.length === 1;
 
-            return !isSingle ? `${budgetService.getUsage(categoryValue, budget.actual)}% of Budget\'s actual` : ''
+            return !isSingle ? `${budgetService.getUsage(categoryValue, budget.actual)}% of Budget's actual` : ''
           }
         }
       },

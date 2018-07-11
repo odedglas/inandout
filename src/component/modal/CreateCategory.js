@@ -46,7 +46,7 @@ class CreateCategoryModal extends React.Component {
     //Triggering Create / Edit
     method(
       project,
-      {name, icon, color, id: category ? category.id : undefined},
+      {name, icon, color, id: editMode ? category.id : undefined},
       () => close()
     );
 

@@ -88,8 +88,9 @@ class BudgetPanel extends Component {
    budgetContent = () => {
 
      const {budget} =  this.props;
+     const hasTransactions = budget.transactions.length > 0;
 
-     return (
+     return hasTransactions ? (
        <div>
          <div className={'row flex mb-3'}>
            <div className={'col-sm-12 mb-3'}>
@@ -128,13 +129,27 @@ class BudgetPanel extends Component {
            </div>
          </div>
        </div>
-     );
+     ) : this.noTransactionsDisplay();
    };
+
+   noTransactionsDisplay = () => (
+     <div className={'row'}>
+       <div className={'col-sm-12 mt-2 empty-transactions'}>
+         <span className={'text'}>
+           There are no transactions listed under this budget's categories yet.
+         </span>
+         <Button size="small" color="primary" className={'mt-3'}>
+           <DynamicIcon name={'add'}/>
+           Create Transaction
+         </Button>
+       </div>
+     </div>
+   );
 
   render() {
 
-    const {expanded} =  this.props;
-
+    const {expanded, budget} =  this.props;
+    const hasTransactions = budget.transactions.length > 0;
     const containerCls = `budget-panel mx-3 ${expanded ? 'expanded' : ''}`;
 
     return (
@@ -152,9 +167,12 @@ class BudgetPanel extends Component {
         <Divider />
         <ExpansionPanelActions className={'actions'}>
           <Button size="small" onClick={this.handleExpandStateChange}>Close</Button>
-          <Button size="small" color="primary" onClick={this.handleViewTransactions}>
-            View Transactions
-          </Button>
+          {hasTransactions ?
+            <Button size="small" color="primary" onClick={this.handleViewTransactions}>
+              View Transactions
+            </Button>
+            : null
+          }
         </ExpansionPanelActions>
       </ExpansionPanel>
     );

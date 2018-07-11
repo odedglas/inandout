@@ -11,110 +11,11 @@ import BudgetPanel from './BudgetPanel';
 import PageTitle from "@common/PageTitle";
 
 import Breadcrumb from '../breadcrumbs/Breadcrumb';
+
+import CreateBudget from '@modal/CreateBudget'
 import {BudgetType} from '@model/budget'
-import transactionService from '@service/transaction';
-import budgetService from '@service/budget';
+import {editBudget} from "../../../../actions/project";
 
-const projectKey = '-LGOC58sci12TBNBgFIO';
-const budgets = [
-  {
-    name: 'Home expenses',
-    categories: [
-      'LGJxyxahJotZKdD0InN',
-      'LGJxyxahJotZKdD0InM'
-    ],
-    limit: 1200,
-    actual: 1000,
-    warningLimit: 440,
-  },
-  {
-    name: 'Car',
-    categories: [
-      'LGJxyxZP55gDmIqGsiI'
-    ],
-    limit: 450,
-    actual: 225,
-  }
-];
-/*
-budgets.forEach(b => {
-  budgetService.createBudget(projectKey, b)
-})
-*/
-let now = new Date();
-now = now.getTime();
-const transactions = [
-  {
-    income: true,
-    date: now,
-    amount: 1399,
-    description: 'Salary',
-    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
-  },
-  {
-    income: false,
-    date: now,
-    amount: 44,
-    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
-    category: '-LGJxyxZP55gDmIqGsiI'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
-  },
-  {
-    income: false,
-    date: now,
-    amount: 66,
-    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
-    category: '-LGJxyxZP55gDmIqGsiI'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
-  },
-  {
-    income: false,
-    date: now,
-    amount: 77,
-    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
-    category: '-LGJxyxZP55gDmIqGsiI'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
-  },
-  {
-    income: false,
-    date: now,
-    amount: 44,
-    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
-    category: '-LGJxyxZP55gDmIqGsiI'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
-  },
-  {
-    income: false,
-    date: now,
-    amount: 55,
-    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
-    category: '-LGJxyxahJotZKdD0InM'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
-  },
-  {
-    income: false,
-    date: now,
-    amount: 76,
-    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
-    category: '-LGJxyxahJotZKdD0InM'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
-  },
-  {
-    income: false,
-    date: now,
-    amount: 23,
-    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
-    category: '-LGJxyxahJotZKdD0InN'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
-  },
-  {
-    income: false,
-    date: now,
-    amount: 15,
-    owner: 'j2CmfNpmPcZyAXLL05YZHIhI9Lz1',
-    category: '-LGJxyxahJotZKdD0InN'  // -LGJxyxahJotZKdD0InL , -LGJxyxahJotZKdD0InM, -LGJxyxahJotZKdD0InN
-  },
-
-];
-/*transactions.forEach(t => {
-  transactionService.createTransaction(
-    projectKey,
-    t
-  );
-})*/
 class Budgets extends Component {
 
   static propTypes = {
@@ -123,6 +24,8 @@ class Budgets extends Component {
 
   state = {
     expanded: null,
+    showCreateBudgetModal: false,
+    budgetForEdit: {},
   };
 
   handleExpandPanelChange = (budgetId) => {
@@ -130,15 +33,21 @@ class Budgets extends Component {
     this.setState({expanded: budgetId})
   };
 
-  showHideCreateBudge = (show) => {
+  showHideCreateBudge = (show, budget) => {
 
+    this.setState({
+      showCreateBudgetModal: !!show,
+      budgetForEdit: budget || {}
+    })
 
   };
 
   render() {
 
-    const {budgets} = this.props;
-    const {expanded} = this.state;
+    const {budgets, selectedProject} = this.props;
+    const {expanded, budgetForEdit, showCreateBudgetModal} = this.state;
+
+    const hasBudgets = budgets.length > 0;
 
     return (
       <div className={'budgets-container'}>
@@ -156,6 +65,23 @@ class Budgets extends Component {
         }
         </div>
 
+        {
+          !hasBudgets ?
+            <div className={'row'}>
+              <div className={'col-sm-12 flex-center empty-budgets'}>
+                <img className={'icon'} src={require('@img/cactus.svg')} alt="no-budgets" />
+               <span className={'my-4 text'}>
+                  There are no budgets yet...
+               </span>
+                <Button size="small" color="primary">
+                  <DynamicIcon name={'add'}/>
+                  Create Budget
+                </Button>
+              </div>
+            </div>
+            : null
+        }
+
         <Tooltip title={'Create Budget'} placement={'top'} >
           <Zoom in={true} timeout={400}>
             <Button variant="fab"
@@ -168,6 +94,12 @@ class Budgets extends Component {
           </Zoom>
         </Tooltip>
 
+
+        <CreateBudget open={showCreateBudgetModal}
+                      budget={budgetForEdit}
+                      project={selectedProject}
+                      onClose={this.showHideCreateBudge}/>
+
       </div>
     );
   }
@@ -175,4 +107,5 @@ class Budgets extends Component {
 
 export default connect(state => ({
   budgets: state.project.budgets,
+  selectedProject: state.project.selectedProject,
 }), {})(Budgets);

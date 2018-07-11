@@ -1,13 +1,10 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types'
 import {Line} from 'react-chartjs-2';
 import {BudgetType} from '@model/budget'
 import themeService from '@service/theme';
 import budgetService from '@service/budget';
-import util from '@util/'
 
 const lineColor = '#4682b4';
-const cumulativeColor = '#43A047';
 
 class BudgetLineChart extends Component {
 

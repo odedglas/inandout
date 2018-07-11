@@ -58,7 +58,6 @@ import HistoryIcon from '@material-ui/icons/History';
 import OutcomeIcon from '@material-ui/icons/TrendingDown';
 import IncomeIcon from '@material-ui/icons/TrendingUp';
 
-
 const iconMap = {
   'home': HomeIcon,
   'smoke': SmokeIcon,

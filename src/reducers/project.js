@@ -52,6 +52,26 @@ export default function (state = initialState, action) {
         ...state,
         categories: state.categories.filter(c => c.id !== action.categoryId),
       };
+
+      case 'ADD_PROJECT_BUDGET' : {
+      return {
+        ...state,
+        budgets: [action.budget, ...state.budgets],
+      };
+    }
+    case 'EDIT_PROJECT_BUDGET' : {
+
+      return {
+        ...state,
+        budgets: util.updateById(state.budgets, action.budget),
+      };
+    }
+    case 'DELETE_PROJECT_BUDGET':
+
+      return {
+        ...state,
+        categories: state.budgets.filter(b => b.id !== action.budgetId),
+      };
     case 'TOGGLE_PROJECT_DRAWER':
       return {
         ...state,

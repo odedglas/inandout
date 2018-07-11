@@ -13,14 +13,14 @@
     align-items: center;
 
     .divider {
-      font-size: 0.9rem;
+      font-size: $smaller-font;
       color: $light-text
     }
 
     .breadcrumb {
       transition: box-shadow .2s cubic-bezier(0,.5,.265,2);
       border-radius: 5px;
-      font-size: 0.925rem;
+      font-size: $small-font;
       padding: 5px 10px!important;
 
       &:not(.active) {
