@@ -7,6 +7,8 @@ export default {
   },
   searchInConst(constant, key) {
 
+    if(!key) return;
+
     const constantKeys = Object.keys(constant);
     const matchedKey = constantKeys.filter(constKey => constant[constKey].key === key);
 

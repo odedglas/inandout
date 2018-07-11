@@ -7,7 +7,22 @@
 
   .icon {
     font-size: 1.6rem;
+
+    &.white {
+      color:white;
+    }
   }
+
+  &.smaller {
+    height:28px;
+    width:28px;
+    font-size:0.825rem;
+
+    .icon {
+      font-size: 1rem;
+    }
+  }
+
 
   &.small {
     height:30px;

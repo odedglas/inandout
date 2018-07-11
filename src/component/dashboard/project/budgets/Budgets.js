@@ -14,7 +14,6 @@ import Breadcrumb from '../breadcrumbs/Breadcrumb';
 
 import CreateBudget from '@modal/CreateBudget'
 import {BudgetType} from '@model/budget'
-import {editBudget} from "../../../../actions/project";
 
 class Budgets extends Component {
 
@@ -60,6 +59,7 @@ class Budgets extends Component {
         {
           budgets.map(budget => <BudgetPanel key={budget.id}
                                              onExpandChange={this.handleExpandPanelChange}
+                                             editBudget={(budget) => this.showHideCreateBudge(true, budget) }
                                              expanded={expanded === budget.id}
                                              budget={budget}/>)
         }

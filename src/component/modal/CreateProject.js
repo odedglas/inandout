@@ -108,7 +108,7 @@ class CreateProjectModal extends React.Component {
         <TextField
           select
           fullWidth
-          error={validation.projectName.isInvalid}
+          error={validation.projectCurrency.isInvalid}
           placeholder={'Please select your currency'}
           label="Project Currency"
           value={model.projectCurrency}

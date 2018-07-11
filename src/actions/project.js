@@ -78,11 +78,18 @@ export function removeCategory(project, categoryId, exclude) {
 
 export function createBudget(project, { name, limit, period, categories }, onSuccess) {
 
-  return dispatch => {
+  return (dispatch, getState) => {
 
     dispatch({type: 'APP_LOADING', loading: true});
 
     budgetService.createBudget(project.id, name, limit, period, categories).then(budget => {
+
+      let projectState = getState().project;
+      budget = budgetService.fillBudget(
+        budget,
+        projectState.categories,
+        projectState.transactions
+      );
 
       onSuccess();
 
@@ -94,11 +101,18 @@ export function createBudget(project, { name, limit, period, categories }, onSuc
 
 export function editBudget(project, {id, name, limit, period, categories }, onSuccess) {
 
-  return dispatch => {
+  return (dispatch, getState) => {
 
     dispatch({type: 'APP_LOADING', loading: true});
 
     budgetService.editBudget(project.id, id, name, limit, period, categories).then(budget => {
+
+      let projectState = getState().project;
+      budget = budgetService.fillBudget(
+        budget,
+        projectState.categories,
+        projectState.transactions
+      );
 
       onSuccess();
 

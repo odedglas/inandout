@@ -56,7 +56,7 @@ export default function (state = initialState, action) {
       case 'ADD_PROJECT_BUDGET' : {
       return {
         ...state,
-        budgets: [action.budget, ...state.budgets],
+        budgets: [...state.budgets, action.budget],
       };
     }
     case 'EDIT_PROJECT_BUDGET' : {

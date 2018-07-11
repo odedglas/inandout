@@ -73,3 +73,21 @@ export const TRANSACTIONS = {
     MONTHLY: 'monthly',
   }
 };
+
+export const BUDGETS_PERIOD = [
+  {
+    key: 'WEEKLY',
+    label: 'Weekly',
+    statisticsResolution: 'daily',
+  },
+  {
+    key: 'MONTHLY',
+    label: 'Monthly',
+    statisticsResolution: 'daily',
+  },
+  {
+    key: 'YEARLY',
+    label: 'Yearly',
+    statisticsResolution: 'monthly',
+  },
+];

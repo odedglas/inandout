@@ -7,12 +7,16 @@ import {
 } from 'react-router-dom';
 
 import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
 
+import InputAdornment from '@material-ui/core/InputAdornment';
 import withValidation from '../hoc/withValidation';
 import {createBudget, editBudget} from "@action/project";
 import CreationModal from './CreationModal';
 
 import util from '@util/';
+import {BUDGETS_PERIOD, CURRENCIES} from '@const/';
+import CategoriesSelect from '@common/CategoriesSelect';
 
 class CreateBudgetModal extends React.Component {
 
@@ -47,24 +51,71 @@ class CreateBudgetModal extends React.Component {
 
   };
 
-  modalContent = (model, validation, handleChange) => (
-    <div>
-      <div className={'form-control'}>
-        <TextField
-          autoFocus
-          value={model.name}
-          error={validation.name.isInvalid}
-          placeholder={'My budget'}
-          onChange={(event) => handleChange(event.target.value, 'name')}
-          margin="dense"
-          id="budget-name"
-          label="Budget Name"
-          title={validation.name.message}
-          fullWidth
-        />
+  modalContent = (model, validation, handleChange) => {
+
+    const {selectedProject} = this.props;
+    const currency = util.searchInConst(CURRENCIES, selectedProject.currency);
+
+    return (
+      <div>
+        <div className={'form-control'}>
+          <TextField
+            autoFocus
+            value={model.name}
+            error={validation.name.isInvalid}
+            placeholder={'My budget'}
+            onChange={(event) => handleChange(event.target.value, 'name')}
+            margin="dense"
+            id="budget-name"
+            label="Budget Name"
+            title={validation.name.message}
+            fullWidth
+          />
+        </div>
+
+        <div className={'form-control'}>
+          <TextField
+            select
+            fullWidth
+            error={validation.period.isInvalid}
+            placeholder={'Please set budget period'}
+            label="Budget Period"
+            helperText="Budget's period will be used to set budget start and end dates."
+            value={model.period}
+            onChange={(event) => handleChange(event.target.value, 'period')}
+          >
+            {BUDGETS_PERIOD.map(option => (
+              <MenuItem key={option.key} value={option.key}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        </div>
+
+        <div className={'form-control'}>
+          <TextField
+            value={model.limit}
+            error={validation.limit.isInvalid}
+            placeholder={'Budget Limit'}
+            onChange={(event) => handleChange(event.target.value, 'limit')}
+            margin="dense"
+            id="limit"
+            label="Limit"
+            title={validation.limit.message}
+            fullWidth
+            InputProps={{
+              startAdornment: <InputAdornment position="start">{currency}</InputAdornment>,
+            }}
+          />
+        </div>
+
+        <CategoriesSelect selectedCategories={model.categories}
+                          error={validation.categories.isInvalid}
+                          onChange={(event) => handleChange(event.target.value, 'categories')}/>
+
       </div>
-    </div>
-  );
+    );
+  };
 
   render() {
 
@@ -81,6 +132,10 @@ class CreateBudgetModal extends React.Component {
     const editMode = !util.isEmptyObject(budget);
     const model = editMode ? Object.create(budget) : {};
 
+    if(model.categories) {
+      model.categories = model.categories.map(c => c.id);
+    }
+
     return (
       <CreationModal open={open}
                      onClose={onClose}
@@ -91,8 +146,8 @@ class CreateBudgetModal extends React.Component {
                      getInitialState={() => ({
                        name: '',
                        categories: [],
-                       limit: undefined,
-                       period: undefined,
+                       limit: '',
+                       period: 'MONTHLY',
                        editMode: false,
                      })}
                      renderContent={this.modalContent}
@@ -113,6 +168,26 @@ export default compose(
       method: (v, f, state, validator, args) => !validator.isEmpty(v),
       message: 'Please provide a budget name.'
     },
+    {
+      field: 'period',
+      method: (v, f, state, validator, args) => !validator.isEmpty(v),
+      message: 'Please provide a budget period.'
+    },
+    {
+      field: 'limit',
+      method: (v, f, state, validator, args) => {
+        v = ''+v;
+        return !validator.isEmpty(v) && validator.isNumeric(v) && v > 0
+      },
+      message: 'Please provide a budget limit, Must be over 0.'
+    },
+    {
+      field: 'categories',
+      method: (v, f, state, validator, args) => v.length > 0 && v.every(value => !validator.isEmpty(value)),
+      message: 'Please Select budget categories'
+    },
   ]),
-  connect(null, {createBudget, editBudget})
+  connect(state => ({
+    selectedProject: state.project.selectedProject
+  }), {createBudget, editBudget})
 )(CreateBudgetModal);

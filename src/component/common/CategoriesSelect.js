@@ -1,0 +1,149 @@
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+
+import MenuItem from '@material-ui/core/MenuItem';
+import Input from '@material-ui/core/Input';
+import Button from '@material-ui/core/Button';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Chip from '@material-ui/core/Chip';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Avatar from '@material-ui/core/Avatar';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import CreateCategory from '@modal/CreateCategory'
+import DynamicIcon from "@common/DynamicIcon";
+
+import {CategoryType} from "@model/category";
+
+const MenuProps = {
+  PaperProps: {
+    style: {
+      transform: 'translate3d(0, 0, 0)',
+      maxHeight: 300,
+      width: 250,
+    },
+  },
+};
+
+class CategoriesSelect extends Component {
+
+  static propTypes = {
+    selectedCategories: PropTypes.array,
+    onChange: PropTypes.func.isRequired,
+    error: PropTypes.bool,
+    categories: PropTypes.arrayOf(CategoryType),
+    selectedProject: PropTypes.object,
+  };
+
+  state = {
+    open: false,
+    showCreateCategoryModal: false,
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
+  handleOpen = () => {
+    this.setState({ open: true });
+  };
+
+  showHideCreateCategory = (show) => {
+
+    this.setState({
+      showCreateCategoryModal: !!show
+    })
+  };
+
+  render() {
+
+    const {
+      selectedCategories,
+      categories,
+      selectedProject,
+      onChange,
+      error
+    } = this.props;
+
+    const { showCreateCategoryModal } = this.state;
+
+    return (
+      <FormControl className={'form-control mselect'} error={error}>
+        <InputLabel htmlFor="select-multiple-categories">Categories</InputLabel>
+        <Select
+          multiple
+          open={this.state.open}
+          onClose={this.handleClose}
+          onOpen={this.handleOpen}
+          value={selectedCategories}
+          onChange={(event) => {
+            const isOption = event.currentTarget.getAttribute('data-value') !== 'add-category';
+
+            if(isOption) {
+              onChange(event);
+            }
+            else {
+              this.handleClose()
+            }
+          }}
+          input={<Input className={'w-100'} id="select-multiple-categories" />}
+          renderValue={selected => (
+            <div style={{'whiteSpace': 'initial'}}>
+              {selected.map(value => {
+
+                const category = categories.find(c => c.id === value);
+
+                return (
+                  <Chip key={category.id}
+                        className={'ml-2 mt-2'}
+                        avatar={
+                          <Avatar className={'avatar smaller'} style={{'backgroundColor': category.color}}>
+                            <DynamicIcon className={'icon white'} name={category.icon}/>
+                          </Avatar>
+                        }
+                        label={category.name} />
+                )
+              })}
+            </div>
+          )}
+          MenuProps={MenuProps}
+        >
+          {categories.map(category => (
+            <MenuItem
+              key={category.id}
+              value={category.id}>
+              <ListItemIcon className={'menu-icon'}>
+                <Avatar className={'avatar small'} style={{'backgroundColor': category.color}}>
+                  <DynamicIcon className={'icon white'} name={category.icon}/>
+                </Avatar>
+              </ListItemIcon>
+              <ListItemText className={'menu-text'}
+                            primary={category.name}/>
+            </MenuItem>
+          ))}
+
+          <div key={'add-category'} value={'add-category'} className={'flex'}>
+            <Button size="small" color="primary" style={{'flex':1}} onClick={() => this.showHideCreateCategory(true)}>
+              <DynamicIcon name={'add'} />
+              Add new Category
+            </Button>
+          </div>
+
+        </Select>
+        <FormHelperText>Transactions with selected categories will be listed under this budget.</FormHelperText>
+        <CreateCategory open={showCreateCategoryModal}
+                        project={selectedProject}
+                        onClose={this.showHideCreateCategory}/>
+      </FormControl>
+    )
+  }
+}
+
+export default connect(state => ({
+  categories: state.project.categories,
+  selectedProject: state.project.selectedProject
+}), {})(CategoriesSelect);
+

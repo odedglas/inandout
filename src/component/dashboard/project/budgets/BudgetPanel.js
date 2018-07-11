@@ -24,6 +24,7 @@ class BudgetPanel extends Component {
   static propTypes = {
     budget: BudgetType,
     expanded: PropTypes.bool,
+    editBudget: PropTypes.func.isRequired,
     onExpandChange: PropTypes.func
   };
 
@@ -37,8 +38,9 @@ class BudgetPanel extends Component {
 
   };
 
-  handleViewTransactions = () => {
-    console.log("View transactions for budget -> " + this.props.budget.name);
+  handleEditBudge = () => {
+
+    this.props.editBudget(this.props.budget);
   };
 
    budgetSummary = () => {
@@ -148,8 +150,7 @@ class BudgetPanel extends Component {
 
   render() {
 
-    const {expanded, budget} =  this.props;
-    const hasTransactions = budget.transactions.length > 0;
+    const {expanded} =  this.props;
     const containerCls = `budget-panel mx-3 ${expanded ? 'expanded' : ''}`;
 
     return (
@@ -167,12 +168,10 @@ class BudgetPanel extends Component {
         <Divider />
         <ExpansionPanelActions className={'actions'}>
           <Button size="small" onClick={this.handleExpandStateChange}>Close</Button>
-          {hasTransactions ?
-            <Button size="small" color="primary" onClick={this.handleViewTransactions}>
-              View Transactions
-            </Button>
-            : null
-          }
+          <Button size="small" color="primary" onClick={this.handleEditBudge}>
+            Edit
+          </Button>
+
         </ExpansionPanelActions>
       </ExpansionPanel>
     );

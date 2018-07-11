@@ -11,12 +11,12 @@ const budgetIndicators = [
   {
     className: 'warning-indicator',
     color: variables.warningColor,
-    condition: (usage) => usage > 75 && usage <= 79
+    condition: (usage) => usage > 75 && usage <= 90
   },
   {
     className: 'overage-indicator',
     color: variables.errorColor,
-    condition: (usage) => usage > 95
+    condition: (usage) => usage > 90
   },
 ];
 
@@ -26,7 +26,7 @@ export default {
 
     const budget = {
       name,
-      limit,
+      limit: +limit,
       period,
       categories
     };
@@ -38,7 +38,7 @@ export default {
 
     const budget = {
       name,
-      limit,
+      limit: +limit,
       period,
       categories
     };
@@ -72,21 +72,31 @@ export default {
 
   mergeBudgets(budgets, categories, transactions) {
 
-    const categoriesMap = util.toIdsMap(categories);
-
     return budgets.map(budget => {
 
-      const budgetCategories = budget.categories;
-      const budgetTransactions = transactions.filter(t => budgetCategories.indexOf(t.category.id) !== -1);
-
-      return {
-        ...budget,
-        categories: budgetCategories.map(cId => categoriesMap[cId]),
-        transactions: budgetTransactions.sort(util.sortJsonFN([
-          {name: 'date'}
-        ]))
-      }
+      return this.fillBudget(budget, categories, transactions)
     });
+  },
+
+  fillBudget (budget, categories, transactions){
+
+    const categoriesMap = util.toIdsMap(categories);
+    const budgetCategories = budget.categories;
+    const budgetTransactions = transactions.filter(t => budgetCategories.indexOf(t.category.id) !== -1);
+
+    const actual = budgetTransactions.reduce((total, t) => {
+      total += t.amount;
+      return total;
+    },0);
+
+    return {
+      ...budget,
+      actual,
+      categories: budgetCategories.map(cId => categoriesMap[cId]),
+      transactions: budgetTransactions.sort(util.sortJsonFN([
+        {name: 'date'}
+      ]))
+    }
   }
 }
 

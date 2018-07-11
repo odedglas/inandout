@@ -75,7 +75,7 @@ export default {
         customers,
         members: members.map(m => usersMap[m.id]),
         transactions: projectTransactions,
-        budgets: budgetSerivce.mergeBudgets(budgets, categories, projectTransactions),
+        budgets: budgetSerivce.mergeBudgets(budgets, projectCategories, projectTransactions),
         categories: projectCategories
       }
     })

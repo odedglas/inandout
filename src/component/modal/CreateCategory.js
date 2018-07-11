@@ -106,7 +106,8 @@ class CreateCategoryModal extends React.Component {
       category
     } = this.props;
 
-    const editMode = !util.isEmptyObject(category);
+    debugger;
+    const editMode = category && !util.isEmptyObject(category);
     const model = editMode ? Object.create(category) : {};
 
     return (
