@@ -78,16 +78,19 @@ export const BUDGETS_PERIOD = [
   {
     key: 'WEEKLY',
     label: 'Weekly',
-    statisticsResolution: 'daily',
+    period:'week',
+    statisticsPeriod: 'daily',
   },
   {
     key: 'MONTHLY',
     label: 'Monthly',
-    statisticsResolution: 'daily',
+    period:'month',
+    statisticsPeriod: 'daily',
   },
   {
     key: 'YEARLY',
     label: 'Yearly',
-    statisticsResolution: 'monthly',
+    period:'year',
+    statisticsPeriod: 'monthly',
   },
 ];

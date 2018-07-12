@@ -1,6 +1,7 @@
 import firebaseService from './firebase';
 import variables from '../assets/style/_variables.scss';
 import util from '@util/'
+import date from '@util/date'
 
 const budgetIndicators = [
   {
@@ -88,6 +89,9 @@ export default {
       total += t.amount;
       return total;
     },0);
+
+    const test = date.getBudgetRange(budget.period)
+    console.log(`Budget time range details : Period ${budget.period} / Start ${new Date(test.startTime)} / End ${new Date(test.endTime)} / Statistics Period ${test.statisticsPeriod}`)
 
     return {
       ...budget,
