@@ -5,7 +5,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {BudgetType} from '@model/budget'
+
 import BudgetLineChart from '../dashboard/project/budgets/BudgetLineChart';
 import BudgetCategoriesPieChart from '../dashboard/project/budgets/BudgetCategoriesPieChart';
 import DynamicIcon from '@common/DynamicIcon';

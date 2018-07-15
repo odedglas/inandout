@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
-
+import TransactionsTableView from './TransactionsTableView';
 import Breadcrumb from '../breadcrumbs/Breadcrumb';
 
 class Transactions extends Component {
@@ -14,10 +14,10 @@ class Transactions extends Component {
     const { selectedProject } = this.props;
 
     return (
-      <div className={'welcome-container'}>
+      <div className={'transactions-container'}>
         <Breadcrumb item={{id:'transactionsCrumb' ,value:'Transactions', path:'/dashboard'}}/>
 
-        I R Transactions for { selectedProject.name }
+        <TransactionsTableView />
       </div>
     );
   }

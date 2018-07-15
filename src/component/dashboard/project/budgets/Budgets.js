@@ -37,10 +37,9 @@ class Budgets extends Component {
 
   showHideCreateBudge = (show, budget) => {
 
-
     if(show) {
       this.setState({
-        showCreateBudgetModal: !!show,
+        showCreateBudgetModal: true,
         budgetForEdit: budget || {}
       })
     }

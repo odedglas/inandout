@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
+import {
+  withRouter,
+} from 'react-router-dom';
 import {connect} from 'react-redux';
+import {compose} from 'recompose';
 
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -66,6 +70,10 @@ class BudgetPanel extends Component {
 
   };
 
+  gotoTransactions = () => {
+
+  };
+
    budgetSummary = (budgetIndicator) => {
 
      const {budget} =  this.props;
@@ -117,13 +125,7 @@ class BudgetPanel extends Component {
      return (
        <div>
          <div className={'row flex overview mb-3'}>
-           <div className={'col-sm-12'}>
-            <span className={'overview-title mb-3'}>
-               <DynamicIcon name={'overview'} className={'icon'}/>
-               Overview
-            </span>
-           </div>
-           <div className={'col-sm-12 row'}>
+           <div className={'col-sm-12 row mb-3'}>
              <div className={'col-sm-12 px-4'}>
                <BudgetOverview budget={budget} visible={expanded} indicator={budgetIndicator} />
              </div>
@@ -197,10 +199,16 @@ class BudgetPanel extends Component {
             Close
           </Button>
           {
-            hasTransactions ? <Button size="small" color="primary" onClick={() => showBudgetStatistics(budget)}>
-              <DynamicIcon className={'icon'}  name={'chart'}/>
-              Statistics
-            </Button> : null
+            hasTransactions ? <div>
+              <Button size="small" color="primary" >
+                <DynamicIcon className={'icon'}  name={'transactions'}/>
+                Transactions
+              </Button>
+              <Button size="small" color="primary" onClick={() => showBudgetStatistics(budget)}>
+                <DynamicIcon className={'icon'}  name={'chart'}/>
+                Statistics
+              </Button>
+            </div> : null
           }
           <Button size="small" color="primary" onClick={this.handleEditBudge}>
             <DynamicIcon className={'icon'}  name={'edit'}/>
@@ -213,9 +221,12 @@ class BudgetPanel extends Component {
   }
 }
 
-export default connect(state => ({
-  selectedProject: state.project.selectedProject
-}), {
-  deleteBudget,
-  showConfirmation
-})(BudgetPanel);
+export default compose(
+  withRouter,
+  connect(state => ({
+    selectedProject: state.project.selectedProject
+  }), {
+    deleteBudget,
+    showConfirmation
+  })
+)(BudgetPanel);

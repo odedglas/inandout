@@ -41,19 +41,28 @@ class CreationModal extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
 
-    if(props.editMode && !state.editInitialized) {
+    if(props.open) {
+      if(props.editMode && !state.editInitialized) {
 
-      return {
-        model: props.model,
-        editInitialized: true,
+        return {
+          model: props.model,
+          editInitialized: true,
+        }
+      }
+
+      if(!props.editMode && state.didClose) {
+
+        return {
+          model: props.getInitialState(),
+          didClose: false,
+          editInitialized: false,
+        }
       }
     }
-
-    if(!props.editMode && state.didClose && props.open) {
+    else {
 
       return {
-        model: props.getInitialState(),
-        didClose: false,
+        editInitialized: false,
       }
     }
 
