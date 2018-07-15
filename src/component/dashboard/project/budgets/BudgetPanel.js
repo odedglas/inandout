@@ -16,8 +16,7 @@ import DynamicIcon from "@common/DynamicIcon";
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import TransactionsSummary from '../transactions/TransactionsSummaryTable';
-import BudgetLineChart from './BudgetLineChart';
-import BudgetCategoriesPieChart from './BudgetCategoriesPieChart';
+import BudgetOverview from './BudgetOverview';
 import {BudgetType} from '@model/budget'
 import {deleteBudget} from "@action/project";
 import {showConfirmation} from "@action/dashboard";
@@ -33,6 +32,7 @@ class BudgetPanel extends Component {
     onExpandChange: PropTypes.func,
     deleteBudget: PropTypes.func.isRequired,
     showConfirmation: PropTypes.func.isRequired,
+    showBudgetStatistics: PropTypes.func.isRequired,
   };
 
   handleExpandStateChange = () => {
@@ -66,10 +66,9 @@ class BudgetPanel extends Component {
 
   };
 
-   budgetSummary = () => {
+   budgetSummary = (budgetIndicator) => {
 
      const {budget} =  this.props;
-     const actualCls = budgetService.getBudgetStatusIndicator(budget).className;
 
      return (
        (
@@ -82,7 +81,7 @@ class BudgetPanel extends Component {
                               <span className={'usage'}>
                 Budget Usage:
               </span>
-               <span className={'mx-2 ' + actualCls}>
+               <span className={'mx-2 ' + budgetIndicator.className}>
                 {budget.actual}
               </span>
                <span className={'separator'}>
@@ -110,51 +109,45 @@ class BudgetPanel extends Component {
      )
    };
 
-   budgetContent = () => {
+   budgetContent = (budgetIndicator) => {
 
-     const {budget} =  this.props;
+     const {budget, expanded} =  this.props;
      const hasTransactions = budget.transactions.length > 0;
 
-     return hasTransactions ? (
+     return (
        <div>
-         <div className={'row flex mb-3'}>
-           <div className={'col-sm-12 mb-3'}>
-              <span className={'statistics-title'}>
-                <DynamicIcon name={'chart'} className={'icon'}/>
-                Statistics
-              </span>
+         <div className={'row flex overview mb-3'}>
+           <div className={'col-sm-12'}>
+            <span className={'overview-title mb-3'}>
+               <DynamicIcon name={'overview'} className={'icon'}/>
+               Overview
+            </span>
            </div>
-           <div className={'col-sm-7 divider row'}>
-             <div className={'col-sm-12 budget-chart'}>
-               <BudgetLineChart  budget={budget}/>
-             </div>
-             <div className={'col-sm-12 mt-3 usage-chart-label'}>
-               Budget usage over time
-             </div>
-           </div>
-           <div className={'col-sm-5 row'}>
-             <div className={'col-sm-12 px-0 budget-chart'}>
-               <BudgetCategoriesPieChart budget={budget} />
-             </div>
-             <div className={'col-sm-12 mt-3 usage-chart-label'}>
-               Expenses by category
+           <div className={'col-sm-12 row'}>
+             <div className={'col-sm-12 px-4'}>
+               <BudgetOverview budget={budget} visible={expanded} indicator={budgetIndicator} />
              </div>
            </div>
          </div>
-
-         <div className={'row flex transactions'}>
-           <div className={'col-sm-12'}>
+         {
+           hasTransactions ? (
+             <div>
+               <div className={'row flex transactions'}>
+                 <div className={'col-sm-12'}>
               <span className={'transactions-title'}>
                  <DynamicIcon name={'history'} className={'icon'}/>
                 Latest Activity
               </span>
-           </div>
-           <div className={'col-sm-12'}>
-              <TransactionsSummary transactions={budget.transactions}/>
-           </div>
-         </div>
+                 </div>
+                 <div className={'col-sm-12'}>
+                   <TransactionsSummary transactions={budget.transactions}/>
+                 </div>
+               </div>
+             </div>
+           ) : this.noTransactionsDisplay()
+         }
        </div>
-     ) : this.noTransactionsDisplay();
+     )
    };
 
    noTransactionsDisplay = () => (
@@ -173,8 +166,10 @@ class BudgetPanel extends Component {
 
   render() {
 
-    const {expanded} =  this.props;
+    const {expanded, budget, showBudgetStatistics} =  this.props;
     const containerCls = `budget-panel mx-3 ${expanded ? 'expanded' : ''}`;
+    const budgetIndicator = budgetService.getBudgetStatusIndicator(budget);
+    const hasTransactions = budget.transactions.length > 0;
 
     return (
       <ExpansionPanel className={containerCls}
@@ -182,11 +177,11 @@ class BudgetPanel extends Component {
                       onChange={this.handleExpandStateChange}>
 
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          {this.budgetSummary()}
+          {this.budgetSummary(budgetIndicator)}
         </ExpansionPanelSummary>
 
         <ExpansionPanelDetails className={'budget-content'}>
-          {this.budgetContent()}
+          {this.budgetContent(budgetIndicator)}
         </ExpansionPanelDetails>
         <Divider />
         <ExpansionPanelActions className={'actions'}>
@@ -197,8 +192,18 @@ class BudgetPanel extends Component {
           </Tooltip>
           <div className={'flex'}>
           </div>
-          <Button size="small" onClick={this.handleExpandStateChange}>Close</Button>
+          <Button size="small" onClick={this.handleExpandStateChange}>
+            <DynamicIcon className={'icon'} color="secondary" name={'close'}/>
+            Close
+          </Button>
+          {
+            hasTransactions ? <Button size="small" color="primary" onClick={() => showBudgetStatistics(budget)}>
+              <DynamicIcon className={'icon'}  name={'chart'}/>
+              Statistics
+            </Button> : null
+          }
           <Button size="small" color="primary" onClick={this.handleEditBudge}>
+            <DynamicIcon className={'icon'}  name={'edit'}/>
             Edit
           </Button>
 

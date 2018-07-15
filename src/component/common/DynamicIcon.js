@@ -43,6 +43,9 @@ import FlightIcon from '@material-ui/icons/LocalAirport';
 
 // -- Actions -- //
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import CancelIcon from '@material-ui/icons/Cancel';
+import CloseIcon from '@material-ui/icons/Close';
 
 // -- Drawer -- //
 import TodosIcon from '@material-ui/icons/CheckBox';
@@ -57,6 +60,7 @@ import ShowChart from '@material-ui/icons/ShowChart';
 import HistoryIcon from '@material-ui/icons/History';
 import OutcomeIcon from '@material-ui/icons/TrendingDown';
 import IncomeIcon from '@material-ui/icons/TrendingUp';
+import OverviewIcon from '@material-ui/icons/PanoramaFishEye';
 
 const iconMap = {
   'home': HomeIcon,
@@ -102,10 +106,14 @@ const iconMap = {
   'gas': GasIcon,
   'flight': FlightIcon,
   'delete': DeleteIcon,
+  'edit': EditIcon,
+  'cancel': CancelIcon,
   'chart': ShowChart,
   'history': HistoryIcon,
   'outcome': OutcomeIcon,
   'income': IncomeIcon,
+  'overview': OverviewIcon,
+  'close': CloseIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {

@@ -29,7 +29,7 @@
       transition: font-size .2s ease;
     }
 
-    .usage, .separator{
+    .usage, .separator {
       color: $light-text;
     }
 
@@ -42,16 +42,12 @@
       border-right: 1px solid $divider-color;
     }
 
-    .budget-chart {
-      height:170px !important;
-    }
-
-    .statistics-title,
-    .transactions-title{
-      font-size:$small-font;
+    .overview-title,
+    .transactions-title {
+      font-size: $small-font;
       display: flex;
       align-items: center;
-      color: $text-color;
+      color: $menu-text-color;
 
       .icon {
         margin: 0 .5rem;
@@ -59,28 +55,58 @@
       }
     }
 
-    .usage-chart-label {
-      font-size: $smaller-font;
-      color: $light-text;
-      text-align:center;
-    }
-
-    .budge-usage-progress {
-      height:100px;
-
-      .CircularProgressbar {
-        height: 100%;
-      }
-    }
-
     .empty-transactions {
-      display:flex;
+      display: flex;
       align-items: center;
       flex-direction: column;
 
       .text {
         font-size: $small-font;
         color: $light-text;
+      }
+    }
+
+    .budget-overview-wrapper {
+
+      .label-date,
+      .label-limit {
+        font-size: $smallest-font;
+        color: $light-text;
+      }
+
+      .body {
+        display: flex;
+        position: relative;
+        height: 40px;
+        border: 1px solid $divider-color;
+        align-items: center;
+        background-color: #eee;
+
+        .actual {
+          transition:width .25s ease;
+          transition-delay: .1s;
+          height:21px;
+        }
+
+        .text {
+          color: white;
+          padding: 0 1rem;
+          position: absolute;
+          left: 20px;
+          font-weight: bold;
+          font-size: $smallest-font;
+        }
+
+        .expected {
+          position: absolute;
+          width: 2px;
+          height: 100%;
+          background-color: #424242;
+
+          &.transparent {
+            opacity:0.6;
+          }
+        }
       }
     }
   }
@@ -92,15 +118,20 @@
       transition: color .2s ease;
 
       &:hover {
-        color:$error-color;
+        color: $error-color;
       }
+    }
+
+    .icon {
+      margin: 0 0.25rem;
+      font-size: $big-font;
     }
   }
 
   &.expanded {
 
     .budget-name {
-      font-size: 1rem ;
+      font-size: 1rem;
     }
   }
 

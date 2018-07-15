@@ -19,18 +19,13 @@ export default {
   getBudgetRange (period)  {
 
     let d = moment();
-    let startTime, endTime, statisticsPeriod;
 
     const budgetPeriod = budgetPeriodMap[period];
 
-    endTime = d.endOf(budgetPeriod.period).toDate();
-    startTime = d.startOf(budgetPeriod.period).toDate();
-    statisticsPeriod = budgetPeriod.statisticsPeriod;
-
     return {
-      startTime:startTime.getTime(),
-      endTime:endTime.getTime(),
-      statisticsPeriod
+      startDate:d.startOf(budgetPeriod.period).toDate(),
+      endDate:d.endOf(budgetPeriod.period).toDate(),
+      statisticsPeriod: budgetPeriod.statisticsPeriod
     }
   }
 }

@@ -43,7 +43,7 @@ class TransactionsSummaryTable extends Component {
     const { latestTransactions, projectCurrency } = this.state;
 
     return (
-      <div className={'row col-sm-12'}>
+      <div className={'row col-sm- px-0'}>
         <div className={'col-sm-12'}>
           <Table className={'transactions-summary'}>
             <TableHead>

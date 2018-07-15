@@ -16,7 +16,7 @@ class BudgetCategoriesPieChart extends Component {
 
   componentDidMount() {
 
-    const {budget} =  this.props;
+    const {budget} = this.props;
     const transactions = budget.transactions;
 
     const labels = budget.categories.map(c => c.name);

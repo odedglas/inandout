@@ -17,10 +17,10 @@ class BudgetLineChart extends Component {
     chartOptions: {},
   };
 
-  componentDidMount(nextProps) {
+  componentDidMount() {
 
     const {budget} = this.props;
-    const transactions = budget.transactions;
+    const transactions = budget.transactions.reverse();
 
     let cumulativeSet = [];
     let cumulative = 0;
@@ -90,6 +90,12 @@ class BudgetLineChart extends Component {
         titleMarginBottom: 10,
         filter: function (tooltipItem) {
           return tooltipItem.datasetIndex < 2;
+        },
+        callbacks: {
+          afterBody: function (tooltipItem, data) {
+
+            return `Budget Limit: ${budget.limit}`
+          },
         }
       },
       scales: {

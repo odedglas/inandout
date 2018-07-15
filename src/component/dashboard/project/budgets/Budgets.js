@@ -13,6 +13,7 @@ import PageTitle from "@common/PageTitle";
 import Breadcrumb from '../breadcrumbs/Breadcrumb';
 
 import CreateBudget from '@modal/CreateBudget'
+import BudgetStatistics from '@modal/BudgetStatistics'
 import {BudgetType} from '@model/budget'
 
 class Budgets extends Component {
@@ -24,7 +25,9 @@ class Budgets extends Component {
   state = {
     expanded: null,
     showCreateBudgetModal: false,
+    showBudgetStatisticsModal:false,
     budgetForEdit: {},
+    budgetForStatistics: {},
   };
 
   handleExpandPanelChange = (budgetId) => {
@@ -34,17 +37,38 @@ class Budgets extends Component {
 
   showHideCreateBudge = (show, budget) => {
 
-    this.setState({
-      showCreateBudgetModal: !!show,
-      budgetForEdit: budget || {}
-    })
 
+    if(show) {
+      this.setState({
+        showCreateBudgetModal: !!show,
+        budgetForEdit: budget || {}
+      })
+    }
+    else {
+
+      this.setState({showCreateBudgetModal: false});
+    }
+
+  };
+
+  showHideBudgetStatistics = (show, budget) => {
+
+    if(show) {
+      this.setState({
+        showBudgetStatisticsModal: true,
+        budgetForStatistics: budget || {}
+      });
+    }
+    else {
+
+      this.setState({showBudgetStatisticsModal: false});
+    }
   };
 
   render() {
 
     const {budgets, selectedProject} = this.props;
-    const {expanded, budgetForEdit, showCreateBudgetModal} = this.state;
+    const {expanded, budgetForEdit, budgetForStatistics, showCreateBudgetModal, showBudgetStatisticsModal} = this.state;
 
     const hasBudgets = budgets.length > 0;
 
@@ -60,6 +84,7 @@ class Budgets extends Component {
           budgets.map(budget => <BudgetPanel key={budget.id}
                                              onExpandChange={this.handleExpandPanelChange}
                                              editBudget={(budget) => this.showHideCreateBudge(true, budget) }
+                                             showBudgetStatistics={(budget) => this.showHideBudgetStatistics(true, budget)}
                                              expanded={expanded === budget.id}
                                              budget={budget}/>)
         }
@@ -99,6 +124,10 @@ class Budgets extends Component {
                       budget={budgetForEdit}
                       project={selectedProject}
                       onClose={this.showHideCreateBudge}/>
+
+        <BudgetStatistics onClose={() => this.showHideBudgetStatistics(false)}
+                          budget={budgetForStatistics}
+                          open={showBudgetStatisticsModal}/>
 
       </div>
     );

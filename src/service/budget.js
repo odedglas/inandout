@@ -7,17 +7,21 @@ const budgetIndicators = [
   {
     className: 'success-indicator',
     color: variables.successColor,
-    condition: (usage) => usage <= 75
+    //Negative value ( E.g actual is lower then expected OR until 10 percent deviation )
+    condition: (actualVsExpectedDeviation) => actualVsExpectedDeviation <= 10,
+    message: 'Great work! your expenses remain in the expected zone.'
   },
   {
     className: 'warning-indicator',
     color: variables.warningColor,
-    condition: (usage) => usage > 75 && usage <= 90
+    condition: (actualVsExpectedDeviation) => actualVsExpectedDeviation > 10 && actualVsExpectedDeviation <= 30,
+    message: 'Budget expenses are expected to be lower at this point.'
   },
   {
     className: 'overage-indicator',
     color: variables.errorColor,
-    condition: (usage) => usage > 90
+    condition: (actualVsExpectedDeviation) => actualVsExpectedDeviation > 30,
+    message: 'Budget expenses are higher by 30% than expected, Budget will likely breach it\'s limit'
   },
 ];
 
@@ -62,12 +66,21 @@ export default {
 
   getBudgetStatusIndicator(budget) {
 
-    const budgetUsage = this.getUsage(budget.actual, budget.limit);
+    const budgetTimeSlot = date.dayDiff(budget.startDate, budget.endDate);
+    const currentTimeUsage = date.dayDiff(budget.startDate, new Date());
 
-    let indicator = budgetIndicators.filter(bi => bi.condition(budgetUsage))[0];
+    const expected = (currentTimeUsage/ budgetTimeSlot) * budget.limit;
+    const expectedActualUsage = this.getUsage(expected, budget.limit);
+    const budgetActualUsage = this.getUsage(budget.actual, budget.limit);
+
+    const actualVsExpectedDeviation = ((budget.actual - expected) * 100 / budget.limit).toFixed(2);
+
+    let indicator = budgetIndicators.find(bi => bi.condition(actualVsExpectedDeviation));
     return {
       ...indicator,
-      usage: `${budgetUsage} %`
+      expected: Math.round(expected),
+      expectedUsage: `${expectedActualUsage} %`,
+      usage: `${budgetActualUsage} %`
     }
   },
 
@@ -90,11 +103,11 @@ export default {
       return total;
     },0);
 
-    const test = date.getBudgetRange(budget.period)
-    console.log(`Budget time range details : Period ${budget.period} / Start ${new Date(test.startTime)} / End ${new Date(test.endTime)} / Statistics Period ${test.statisticsPeriod}`)
+    const budgetCurrentRange = date.getBudgetRange(budget.period);
 
     return {
       ...budget,
+      ...budgetCurrentRange,
       actual,
       categories: budgetCategories.map(cId => categoriesMap[cId]),
       transactions: budgetTransactions.sort(util.sortJsonFN([
