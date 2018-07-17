@@ -1,13 +1,13 @@
 import firebaseService from './firebase';
 import util from '@util/'
-import date from '@util/date'
+import dateUtil from '@util/date'
 import {TRANSACTIONS_DATE_KEY_FORMAT} from '@const/'
 
 export default {
 
   transactionsDateKey(date) {
 
-    return date.format(date, TRANSACTIONS_DATE_KEY_FORMAT);
+    return dateUtil.format(date, TRANSACTIONS_DATE_KEY_FORMAT);
   },
 
   createTransaction (projectId, transaction) {
@@ -19,7 +19,7 @@ export default {
 
   fetchMonthlyTransactions (projectKeys) {
 
-    const monthlyKey = date.format(new Date(), TRANSACTIONS_DATE_KEY_FORMAT);
+    const monthlyKey = dateUtil.format(new Date(), TRANSACTIONS_DATE_KEY_FORMAT);
 
     return firebaseService.fetchByKeys('/transactions', projectKeys.map(pk => `${pk}/${monthlyKey}`), true).then(res => {
 
@@ -31,16 +31,23 @@ export default {
       }, {});
     })
   },
-  mergeTransactions (transactions, customers, categories, usersMap) {
+
+  fetchTransactions (projectKey, monthKey) {
+
+    return firebaseService.fetchArray(`/transactions/${projectKey}/${monthKey}`);
+  },
+
+  mergeTransactions (transactions, customers, categories, users) {
 
     const customersMap = util.toIdsMap(customers);
     const categoriesMap = util.toIdsMap(categories);
+    const usersMap = util.toIdsMap(users);
 
     return transactions.map(transaction => {
 
       return {
         ...transaction,
-        date: date.format(transaction.date),
+        date: dateUtil.format(transaction.date),
         category: transaction.category ? categoriesMap[transaction.category] :  'UNCATEGORIZED',
         customer: transaction.customer ? customersMap[transaction.customer] : undefined,
         owner: usersMap[transaction.owner]

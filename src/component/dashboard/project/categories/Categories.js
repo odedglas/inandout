@@ -44,7 +44,7 @@ class Categories extends Component {
 
         <PageTitle text={'Categories'} icon={'categories'}/>
 
-        <div className={'row px-4'}>
+        <div className={'row px-2'}>
           {categories.map(
             category => <CategoryCard key={category.id}
                                       project={selectedProject}

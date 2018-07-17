@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,16 +10,19 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import Avatar from '@material-ui/core/Avatar';
 import DynamicIcon from '@common/DynamicIcon';
+import { CSSTransition } from 'react-transition-group';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import {TransactionType} from "@model/transaction";
 
 import util from "@util/"
+import {loadTransactions} from "@action/project"
 import transactionService from '@service/transaction';
 import dateUtil from '@util/date';
 
@@ -91,18 +95,16 @@ class TableHeader extends Component {
   }
 }
 
-let TransactionsToolbar = ({ date, onSelectedDateChange }) => {
+let TransactionsToolbar = ({ date, onSelectedDateChange, setSelectedForToday }) => {
   return (
-    <Toolbar className={'transaction-toolbar col-sm-12'}>
-      <div className={'title'}>
-        <Typography variant="title" id="tableTitle">
-          Transactions -
-        </Typography>
-      </div>
+    <Toolbar className={'transaction-toolbar col-sm-12 px-0'}>
+
       <div className={'months-navigator mx-2'}>
-        <span className={'selected-month'}>
-          {dateUtil.format(date, 'MMM YYYY')}
-        </span>
+        <Button size="small"
+                variant={'outlined'}
+                color="secondary" onClick={setSelectedForToday}>
+          Today
+        </Button>
         <Tooltip title="Previous Month" enterDelay={300}>
           <IconButton className={'icon-button ml-2'}
                       aria-label="Previous Month"
@@ -119,9 +121,13 @@ let TransactionsToolbar = ({ date, onSelectedDateChange }) => {
             <DynamicIcon name={'right'}/>
           </IconButton>
         </Tooltip>
+
+        <span className={'selected-month mx-3'}>
+          {dateUtil.format(date, 'MMM YYYY')}
+        </span>
       </div>
       <div className={'spacer'}/>
-      <div className={'action'}>
+      <div className={'action mx-2'}>
         <Tooltip title="Filter List">
           <IconButton aria-label="Filter List">
             <FilterListIcon/>
@@ -136,6 +142,7 @@ class TransactionsTableView extends Component {
 
   static propTypes = {
     transactions: PropTypes.arrayOf(TransactionType),
+    loadTransactions: PropTypes.func.isRequired,
     projectCurrency: PropTypes.string,
   };
 
@@ -146,10 +153,14 @@ class TransactionsTableView extends Component {
     data: [],
     page: 0,
     rowsPerPage: 5,
+    loading: false,
+    isEmpty: false,
   };
 
   componentDidMount() {
-    this.setState({data: this.props.transactions});
+
+    const transactions = this.props.transactions;
+    this.setState({data: transactions, isEmpty: transactions.length === 0});
   }
 
   handleRequestSort = (event, orderBy) => {
@@ -174,18 +185,50 @@ class TransactionsTableView extends Component {
 
     const currentDate = this.state.selectedDate;
 
-    this.setState({
-      selectedDate: dateUtil[prev ? 'prev' : 'next'](currentDate, 'month', 1)
-    })
+    let newSelected = dateUtil[prev ? 'prev' : 'next'](currentDate, 'month', 1);
+
+    this.handleTransactionsLoad(newSelected);
+  };
+
+  setSelectedForToday = () => {
+    this.handleTransactionsLoad(new Date());
+  };
+
+  handleTransactionsLoad = (date) => {
+
+    this.setState({loading: true});
+
+    this.props.loadTransactions(date, (transactions) => {
+
+      this.setState({
+        selectedDate: date,
+        data: transactions,
+        loading:false,
+        isEmpty: transactions.length === 0
+      })
+    });
   };
 
   render() {
-    const {data, order, orderBy, rowsPerPage, page, selectedDate} = this.state;
+    const {data, order, orderBy, rowsPerPage, page, selectedDate, loading, isEmpty} = this.state;
     const {projectCurrency} = this.props;
 
     return (
-      <Paper className={'mt-3 row'}>
-        <TransactionsToolbar date={selectedDate} onSelectedDateChange={this.handleSelectedDateChange}/>
+      <Paper className={'mt-3 row'} style={{position:'relative'}}>
+
+          <CSSTransition
+            in={loading}
+            timeout={300}
+            classNames="fade"
+            unmountOnExit
+          >
+            <div className="flex-center grid-loading" >
+             <CircularProgress size={50}/>
+            </div>
+          </CSSTransition>
+        <TransactionsToolbar date={selectedDate}
+                             setSelectedForToday={this.setSelectedForToday}
+                             onSelectedDateChange={this.handleSelectedDateChange}/>
         <div className={'table-view-wrapper col-sm-12 px-0'}>
           <Table aria-labelledby="tableTitle">
             <TableHeader
@@ -211,13 +254,13 @@ class TransactionsTableView extends Component {
                       <TableCell className={'action-cell'}>
                        <div className={'flex just-c'}>
                          <Tooltip title="Delete" enterDelay={300}>
-                           <IconButton className={'action'}
+                           <IconButton className={'action delete'}
                                        onClick={() => {}}>
                              <DynamicIcon name={'delete'}/>
                            </IconButton>
                          </Tooltip>
                          <Tooltip title="Edit" enterDelay={300}>
-                           <IconButton className={'action ml-2'}
+                           <IconButton className={'action edit'}
                                        onClick={() => {}}>
                              <DynamicIcon name={'edit'}/>
                            </IconButton>
@@ -266,12 +309,25 @@ class TransactionsTableView extends Component {
                     </TableRow>
                   );
                 })}
+
+              {
+                isEmpty ? <TableRow key={'empty-row'} className={'empty-row'}>
+                  <TableCell colSpan="9">
+                    <img src={require('@img/no-results.png')} alt={'no-results'} />
+                    <div>
+                      No transactions was found for the selected period.
+                      <br/>
+                      Try choosing different one...
+                    </div>
+                  </TableCell>
+                </TableRow> : null
+              }
             </TableBody>
           </Table>
         </div>
         <div className={'col-sm-12 px-0 row footer'}>
           <Tooltip title="Add Transaction" placement={'left'}>
-            <IconButton className={'mx-3 my-1 add-transaction'} aria-label="Add Transaction">
+            <IconButton className={'mx-2 my-1 add-transaction'} aria-label="Add Transaction">
               <DynamicIcon name={'add'}/>
             </IconButton>
           </Tooltip>
@@ -296,4 +352,8 @@ class TransactionsTableView extends Component {
   }
 }
 
-export default TransactionsTableView;
+export default connect(state => ({
+  selectedProject: state.project.selectedProject
+}), {
+  loadTransactions
+})(TransactionsTableView);

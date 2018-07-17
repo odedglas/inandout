@@ -17,12 +17,12 @@ export default {
 
   next: (date, unit, amount) => {
 
-    return moment(date).startOf(unit).add(amount, unit);
+    return moment(date).startOf(unit).add(amount, unit).toDate();
   },
 
   prev: (date, unit, amount) => {
 
-    return moment(date).startOf(unit).subtract(amount, unit);
+    return moment(date).startOf(unit).subtract(amount, unit).toDate();
   },
 
   getBudgetRange (period)  {

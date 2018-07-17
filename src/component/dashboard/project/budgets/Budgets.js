@@ -78,7 +78,7 @@ class Budgets extends Component {
 
         <Breadcrumb item={{id: 'budgetsCrumb', value: 'Budgets', path: '/dashboard'}}/>
 
-        <div className={'px-4 py-3'}>
+        <div className={'px-2 py-3'}>
         {
           budgets.map(budget => <BudgetPanel key={budget.id}
                                              onExpandChange={this.handleExpandPanelChange}

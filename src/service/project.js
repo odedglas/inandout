@@ -67,7 +67,7 @@ export default {
       const customers = project.customers || [];
       const members = project.members || [];
       const budgets = project.budgets || [];
-      const projectTransactions = transactionService.mergeTransactions(transactions[project.id], customers, categories, usersMap);
+      const projectTransactions = transactionService.mergeTransactions(transactions[project.id], customers, categories, users);
       const projectCategories = project.categories.reverse().concat(categories);
 
       return {

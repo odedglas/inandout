@@ -40,3 +40,11 @@
   opacity: 0.01;
   transition: all 300ms ease-out;
 }
+
+.grid-loading {
+  height:100%;
+  width:100%;
+  position:absolute;
+  @include withZIndex('loadingMask');
+  background-color: rgba(255, 255, 255, 0.5);
+}

@@ -55,6 +55,8 @@
 
   .table-view-wrapper {
     overflow-x: auto;
+    min-height:400px;
+
     &::-webkit-scrollbar {
       -webkit-appearance: none;
       background-color: $background-color;
@@ -84,18 +86,30 @@
 
       .action-cell {
         padding:0;
-        width:60px;
+        width:80px;
 
         .action {
-          height: 24px;
-          width:24px;
+          height: 32px;
+          width:32px;
+          color: $light-text;
+          margin-left: 0.25rem;
+
+          &.delete {
+            &:hover {
+              color: $error-color;
+            }
+          }
+
+          &.edit {
+            &:hover {
+              color: $active-text-color;
+            }
+          }
 
           svg {
-            color: $light-text;
-            font-size: $normal-font;
+            font-size: $big-font;
           }
         }
-
       }
 
       .avatar-cell, .avatar-header{
@@ -111,6 +125,23 @@
 
         &.outcome {
           color: $error-color;
+        }
+      }
+
+      .empty-row {
+
+        height: 340px;
+
+        td {
+          border: none;
+          width:100%;
+          text-align: center;
+          font-size: $big-font;
+          color: $light-text;
+        }
+
+        img {
+          height:265px;
         }
       }
     }

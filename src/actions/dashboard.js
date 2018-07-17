@@ -31,9 +31,11 @@ export function init() {
     util.promiseAllObjectProperties(resolved).then(res => {
 
       const {projects, transactions, defaultCategories, users} = res;
+
       const mergedProjectsResult = projectService.mergeProjectResults(projects, transactions, defaultCategories, users);
 
       dispatch({type: 'SET_PROJECTS', projects: mergedProjectsResult});
+      dispatch({type: 'SET_USERS', users});
       dispatch({type: 'SET_MONTHLY_TRANSACTIONS', transactions});
       dispatch({type: 'SET_DEFAULTS_CATEGORIES', defaultCategories});
 

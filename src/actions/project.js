@@ -2,6 +2,7 @@ import localStorageService from '@service/localstorage'
 import {LOCAL_STORAGE} from '@const/'
 import categoryService from '@service/category'
 import budgetService from '@service/budget'
+import transactionService from '@service/transaction'
 
 export function setPreSelectedProject(identifier) {
   return dispatch => dispatch({type: 'SET_PRE_SELECTED_PROJECT', identifier});
@@ -145,6 +146,24 @@ export function toggleProjectDrawer(open) {
     localStorageService.set(LOCAL_STORAGE.PROJECT_DRAWER_OPEN, open);
     dispatch({ type: 'TOGGLE_PROJECT_DRAWER', open });
   }
+}
+
+export function loadTransactions(date, onSuccess) {
+
+ return (dispatch, getState) => {
+
+   const monthKey = transactionService.transactionsDateKey(date);
+
+   let projectState = getState().project;
+   let users = getState().dashboard.users;
+   const projectKey = projectState.selectedProject.id;
+
+   transactionService.fetchTransactions(projectKey, monthKey).then(transactions => {
+
+     const merged = transactionService.mergeTransactions(transactions, projectState.customers, projectState.categories, users);
+     onSuccess(merged);
+   });
+ }
 }
 
 export function updateCachedProject() {
