@@ -7,7 +7,7 @@ export const TransactionType = PropTypes.shape({
   type: PropTypes.oneOf(['income', 'outcome']),
   income: PropTypes.bool.isRequired,
   owner: PropTypes.object,
-  category: CategoryType,
+  category: PropTypes.oneOfType([CategoryType, PropTypes.string]),
   customer: PropTypes.object,
   date: PropTypes.string.isRequired,
   amount: PropTypes.number.isRequired,

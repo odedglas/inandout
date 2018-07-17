@@ -22,6 +22,7 @@ export function init() {
     //Should fetch transactions
     resolved.transactions = transactionService.fetchMonthlyTransactions(projectKeys);
 
+    //App users
     resolved.users = userService.fetchUsers();
 
     //Default categories

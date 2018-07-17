@@ -24,5 +24,103 @@
 
 .transactions-container {
 
+  .transaction-toolbar {
+
+    .months-navigator {
+      display:flex;
+      align-items:center;
+
+      .selected-month {
+        font-size: 20px;
+        font-weight: 400;
+        opacity: .54;
+        white-space: nowrap;
+        line-height: 23px;
+      }
+
+      .icon-button {
+        width: 32px;
+        height: 32px;
+
+        svg {
+          font-size: $big-font;
+        }
+      }
+    }
+    .spacer {
+      flex: 1;
+    }
+
+  }
+
+  .table-view-wrapper {
+    overflow-x: auto;
+    &::-webkit-scrollbar {
+      -webkit-appearance: none;
+      background-color: $background-color;
+      height: 7px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background-color: rgba(0, 0, 0, .5);
+      -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+    }
+
+    table {
+      table-layout: fixed;
+
+      @include mq('tablet-wide', 'max') {
+        width:200%;
+      }
+
+      th, td {
+        padding: 0.5rem 1.5rem;
+
+        &.small-cell {
+          width:80px;
+        }
+      }
+
+      .action-cell {
+        padding:0;
+        width:60px;
+
+        .action {
+          height: 24px;
+          width:24px;
+
+          svg {
+            color: $light-text;
+            font-size: $normal-font;
+          }
+        }
+
+      }
+
+      .avatar-cell, .avatar-header{
+        text-align:center;
+      }
+
+      .icon {
+        font-size: $big-font;
+
+        &.income {
+          color: $success-color;
+        }
+
+        &.outcome {
+          color: $error-color;
+        }
+      }
+    }
+  }
+
+  .footer {
+
+    .add-transaction {
+      color: $active-text-color;
+    }
+  }
 }
 

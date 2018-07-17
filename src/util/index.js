@@ -7,7 +7,7 @@ export default {
   },
   searchInConst(constant, key) {
 
-    if(!key) return;
+    if (!key) return;
 
     const constantKeys = Object.keys(constant);
     const matchedKey = constantKeys.filter(constKey => constant[constKey].key === key);
@@ -40,9 +40,9 @@ export default {
     return text;
 
   },
-  sortJsonFN (props) {
+  sortJsonFN(props) {
 
-    return function (a, b) {
+    return (a, b) => {
 
       for (let i = 0; i < props.length; i++) {
         const prop = props[i];
@@ -50,8 +50,13 @@ export default {
         const reverse = prop.reverse;
 
         //Getting as path ( if was sent x.y.z.o )
-        const aProp = a[name];
-        const bProp = b[name];
+        const aProp = this.getDeepJsonProperty(a,name);
+        const bProp = this.getDeepJsonProperty(b,name);
+
+        if(aProp === undefined && bProp !== undefined)
+          return 1;
+        if(bProp === undefined && aProp !== undefined)
+          return -1;
 
         if (aProp < bProp)
           return reverse ? 1 : -1;
@@ -62,9 +67,24 @@ export default {
     };
 
   },
-  promiseAllObjectProperties (object) {
 
-    if(!this.isObject(object)) {}
+  getDeepJsonProperty(json, path) {
+
+    //Cloning the original json ( in order to break the reference )
+    let obj = Object.create(json);
+    path = path.split('.');
+
+    for (let i = 0; i < path.length; i++) {
+
+      obj = obj[path[i]];
+    }
+    return obj;
+  },
+
+  promiseAllObjectProperties(object) {
+
+    if (!this.isObject(object)) {
+    }
 
     const keys = Object.keys(object);
     const promises = keys.map(key => object[key]);
@@ -76,7 +96,7 @@ export default {
       }, {});
     });
   },
-  updateById (array, item) {
+  updateById(array, item) {
 
     const _array = [...array];
     const index = array.findIndex(i => i.id === item.id);
@@ -89,13 +109,13 @@ export default {
     return array ? array.reduce((map, item) => {
       map[item.id] = item;
       return map;
-    },{}) : {};
+    }, {}) : {};
   }
 }
 
 // *** Overrides *** //
 // eslint-disable-next-line
-String.prototype.replaceAll = function(search, replacement) {
+String.prototype.replaceAll = function (search, replacement) {
   const target = this;
   return target.replace(new RegExp(search, 'g'), replacement);
 };

@@ -12,8 +12,6 @@ import DynamicIcon from '@common/DynamicIcon';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import {TransactionType} from "@model/transaction";
-import util from "@util/";
-import {CURRENCIES} from "@const/";
 
 class TransactionsSummaryTable extends Component {
 
@@ -23,24 +21,22 @@ class TransactionsSummaryTable extends Component {
   };
 
   state = {
-    latestTransactions: [],
-    projectCurrency: undefined
+    latestTransactions: []
   };
 
   componentDidMount() {
 
-    const { transactions, selectedProject} = this.props;
-    const currency = util.searchInConst(CURRENCIES,selectedProject.currency);
+    const { transactions } = this.props;
 
     this.setState({
-      latestTransactions: transactions.reverse().slice(0, transactions.length > 4 ? 5 : transactions.length),
-      projectCurrency: currency
+      latestTransactions: transactions.reverse().slice(0, transactions.length > 4 ? 5 : transactions.length)
     })
   }
 
   render() {
 
-    const { latestTransactions, projectCurrency } = this.state;
+    const { latestTransactions } = this.state;
+    const { selectedProject } = this.props;
 
     return (
       <div className={'row col-sm- px-0'}>
@@ -50,8 +46,8 @@ class TransactionsSummaryTable extends Component {
               <TableRow className={'table-head'}>
                 <TableCell>Date</TableCell>
                 <TableCell>Owner</TableCell>
-                <TableCell style={{flex:3}}>Description</TableCell>
-                <TableCell>Amount</TableCell>
+                <TableCell >Description</TableCell>
+                <TableCell>Amount ({selectedProject.currency})</TableCell>
                 <TableCell>Category</TableCell>
               </TableRow>
             </TableHead>
@@ -73,14 +69,12 @@ class TransactionsSummaryTable extends Component {
                         </Avatar>
                       </Tooltip>
                     </TableCell>
-                    <TableCell style={{flex:3}}>
-                      <span>
+                    <TableCell>
                         {t.description || ' -- '}
-                      </span>
                     </TableCell>
                     <TableCell>
                       <div className={'outcome-amount'}>
-                        <span> {` ${projectCurrency} ${t.amount}`} </span>
+                        <span> {t.amount} </span>
                         <Tooltip title={'Outcome'} placement={'top'}>
                           <DynamicIcon className={'icon mx-2'} name={'outcome'}/>
                         </Tooltip>

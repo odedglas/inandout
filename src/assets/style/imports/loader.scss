@@ -7,6 +7,7 @@ $yin-yang2: $theme-light-grey;
   position: relative;
   width: 100px;
   height:50px;
+  box-sizing: initial;
   background-color:$yin-yang2;
   border: 1px solid $yin-yang1;
   border-width: 2px 2px 52px 2px;

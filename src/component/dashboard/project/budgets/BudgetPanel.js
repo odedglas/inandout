@@ -25,6 +25,8 @@ import {BudgetType} from '@model/budget'
 import {deleteBudget} from "@action/project";
 import {showConfirmation} from "@action/dashboard";
 
+import navgationUtil from '@util/navigation';
+
 import budgetService from '@service/budget';
 
 class BudgetPanel extends Component {
@@ -72,6 +74,10 @@ class BudgetPanel extends Component {
 
   gotoTransactions = () => {
 
+    //TODO Add Budget categories filter when supported.
+    this.props.history.push(
+      navgationUtil.projectLink(this.props.selectedProject, 'transactions')
+    )
   };
 
    budgetSummary = (budgetIndicator) => {
@@ -200,7 +206,7 @@ class BudgetPanel extends Component {
           </Button>
           {
             hasTransactions ? <div>
-              <Button size="small" color="primary" >
+              <Button size="small" color="primary" onClick={this.gotoTransactions}>
                 <DynamicIcon className={'icon'}  name={'transactions'}/>
                 Transactions
               </Button>

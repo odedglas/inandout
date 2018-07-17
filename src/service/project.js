@@ -3,6 +3,7 @@ import budgetSerivce from './budget';
 import transactionService from './transaction';
 
 import util from '@util/'
+import {CURRENCIES} from "@const/";
 
 export default {
 
@@ -72,6 +73,7 @@ export default {
       return {
         ...project,
         owner: usersMap[project.owner],
+        currency: util.searchInConst(CURRENCIES,project.currency),
         customers,
         members: members.map(m => usersMap[m.id]),
         transactions: projectTransactions,

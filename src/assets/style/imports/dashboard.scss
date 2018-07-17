@@ -5,10 +5,8 @@
   background-color: $background-color;
 
   .dashboard-body {
-
     display: flex;
     flex-grow:1;
-    box-sizing: border-box;
 
     &.landing {
       background-image: url('~@img/dashboard-header.jpg');
@@ -18,7 +16,7 @@
       overflow-y: auto;
       overflow-x:hidden;
       flex: 1;
-      height: calc(100% - #{$header-outer-height});
+      height: calc(100% - #{$header-height});
 
       &::-webkit-scrollbar {
         -webkit-appearance: none;

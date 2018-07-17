@@ -54,7 +54,6 @@ class CreateBudgetModal extends React.Component {
   modalContent = (model, validation, handleChange) => {
 
     const {selectedProject} = this.props;
-    const currency = util.searchInConst(CURRENCIES, selectedProject.currency);
 
     return (
       <div>
@@ -104,7 +103,7 @@ class CreateBudgetModal extends React.Component {
             title={validation.limit.message}
             fullWidth
             InputProps={{
-              startAdornment: <InputAdornment position="start">{currency}</InputAdornment>,
+              startAdornment: <InputAdornment position="start">{selectedProject.currency}</InputAdornment>,
             }}
           />
         </div>

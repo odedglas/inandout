@@ -5,9 +5,14 @@ import {TRANSACTIONS_DATE_KEY_FORMAT} from '@const/'
 
 export default {
 
+  transactionsDateKey(date) {
+
+    return date.format(date, TRANSACTIONS_DATE_KEY_FORMAT);
+  },
+
   createTransaction (projectId, transaction) {
 
-    const dateKey = date.format(transaction.date, TRANSACTIONS_DATE_KEY_FORMAT);
+    const dateKey = this.transactionsDateKey(transaction.date);
 
     return firebaseService.createTransaction(projectId, dateKey, transaction)
   },
@@ -36,7 +41,7 @@ export default {
       return {
         ...transaction,
         date: date.format(transaction.date),
-        category: transaction.category ? categoriesMap[transaction.category] : 'UNCATEGORIZED',
+        category: transaction.category ? categoriesMap[transaction.category] :  'UNCATEGORIZED',
         customer: transaction.customer ? customersMap[transaction.customer] : undefined,
         owner: usersMap[transaction.owner]
       }

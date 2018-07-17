@@ -1,6 +1,5 @@
 import moment from 'moment'
 import {BUDGETS_PERIOD} from '@const/'
-import util from '@util/'
 const baseFormat = 'DD/MM/YY';
 
 const budgetPeriodMap = BUDGETS_PERIOD.reduce((map, bp) => {
@@ -15,6 +14,16 @@ export default {
   fromNow: (date) => moment(date).fromNow(),
 
   dayDiff: (startDate, endDate) => moment(endDate).diff(moment(startDate), 'days'),
+
+  next: (date, unit, amount) => {
+
+    return moment(date).startOf(unit).add(amount, unit);
+  },
+
+  prev: (date, unit, amount) => {
+
+    return moment(date).startOf(unit).subtract(amount, unit);
+  },
 
   getBudgetRange (period)  {
 
