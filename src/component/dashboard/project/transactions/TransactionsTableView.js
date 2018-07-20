@@ -19,11 +19,11 @@ import Avatar from '@material-ui/core/Avatar';
 import DynamicIcon from '@common/DynamicIcon';
 import { CSSTransition } from 'react-transition-group';
 import CircularProgress from '@material-ui/core/CircularProgress';
+
 import {TransactionType} from "@model/transaction";
 
 import util from "@util/"
-import {loadTransactions} from "@action/project"
-import transactionService from '@service/transaction';
+import {loadTransactions} from "@action/project";
 import dateUtil from '@util/date';
 
 function getSorting(order, orderBy) {
@@ -56,8 +56,8 @@ class TableHeader extends Component {
       {id: 'actions', sortable:false, additionalCls: 'action-cell'},
       {id: 'date', label: 'Date'},
       {id: 'owner', label: 'Owner', avatar: true, orderByProp: 'owner.displayName'},
-      {id: 'description', label: 'Description'},
-      {id: 'amount', numeric: true, label: `Amount (${projectCurrency})`},
+      {id: 'description', label: 'Description', colspan:2},
+      {id: 'amount', numeric: true, label: `Amount (${projectCurrency})` },
       {id: 'type', label: 'Type', additionalCls: 'small-cell', orderByProp: 'income'},
       {id: 'payments', label: 'Payments'},
       {id: 'customer', label: 'Customer', avatar: true,},
@@ -72,6 +72,7 @@ class TableHeader extends Component {
               <TableCell
                 key={column.id}
                 numeric={column.numeric}
+                colSpan={column.colspan ? column.colspan : 1}
                 className={`${column.additionalCls ? column.additionalCls : ''} ${column.avatar ? 'avatar-header' :
                   ''}`}
                 sortDirection={orderBy.id === column.id ? order : false}
@@ -210,7 +211,7 @@ class TransactionsTableView extends Component {
   };
 
   render() {
-    const {data, order, orderBy, rowsPerPage, page, selectedDate, loading, isEmpty} = this.state;
+    const {data, order, orderBy, rowsPerPage, page, selectedDate, loading, isEmpty,} = this.state;
     const {projectCurrency} = this.props;
 
     return (
@@ -279,7 +280,7 @@ class TransactionsTableView extends Component {
                           {transaction.owner.displayName}
                         </div>
                       </TableCell>
-                      <TableCell>
+                      <TableCell colSpan="2">
                        <span>
                           {transaction.description || ' -- '}
                         </span>

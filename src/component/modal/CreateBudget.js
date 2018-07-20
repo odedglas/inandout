@@ -15,7 +15,7 @@ import {createBudget, editBudget} from "@action/project";
 import CreationModal from './CreationModal';
 
 import util from '@util/';
-import {BUDGETS_PERIOD, CURRENCIES} from '@const/';
+import {BUDGETS_PERIOD} from '@const/';
 import CategoriesSelect from '@common/CategoriesSelect';
 
 class CreateBudgetModal extends React.Component {
