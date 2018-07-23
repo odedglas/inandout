@@ -1,5 +1,5 @@
 import firebaseService from './firebase';
-import variables from '../assets/style/_variables.scss';
+import variables from '@scss/_variables.scss';
 import util from '@util/'
 import date from '@util/date'
 
@@ -55,6 +55,7 @@ export default {
       return budget;
     });
   },
+
   deleteBudget: (projectId, budgetId) => {
     const path = budgetPath(projectId, budgetId);
     return firebaseService.remove(path)
@@ -96,7 +97,7 @@ export default {
 
     const categoriesMap = util.toIdsMap(categories);
     const budgetCategories = budget.categories;
-    const budgetTransactions = transactions.filter(t => budgetCategories.indexOf(t.category.id) !== -1);
+    const budgetTransactions = transactions.filter(t => t.category && budgetCategories.indexOf(t.category.id) !== -1);
 
     const actual = budgetTransactions.reduce((total, t) => {
       total += t.amount;

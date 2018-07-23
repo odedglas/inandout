@@ -117,7 +117,7 @@ class CreateCategoryModal extends React.Component {
     return (
       <CreationModal open={open}
                      onClose={onClose}
-                     title={'Create Category'}
+                     title={ editMode ? 'Edit Category' : 'Create Category'}
                      context={'Add new custom category to your project'}
                      editMode={editMode}
                      model={model}

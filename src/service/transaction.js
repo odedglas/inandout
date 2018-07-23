@@ -1,7 +1,12 @@
 import firebaseService from './firebase';
 import util from '@util/'
 import dateUtil from '@util/date'
-import {TRANSACTIONS_DATE_KEY_FORMAT} from '@const/'
+import {TRANSACTIONS_DATE_KEY_FORMAT, TRANSACTIONS_TYPE} from '@const/'
+
+const transactionTypes = TRANSACTIONS_TYPE.reduce((map, item) => {
+  map[item.key] = item.key;
+  return map
+},{});
 
 export default {
 
@@ -10,11 +15,37 @@ export default {
     return dateUtil.format(date, TRANSACTIONS_DATE_KEY_FORMAT);
   },
 
-  createTransaction (projectId, transaction) {
+  getTransactionType: (transaction) => transaction.income ? transactionTypes.INCOME : transactionTypes.OUTCOME ,
+
+  createTransaction (projectId, type, owner, description, category, customer, date, amount, payments) {
+
+    const transaction = transformTransaction(type, owner, description, category, customer, date, amount, payments);
 
     const dateKey = this.transactionsDateKey(transaction.date);
 
     return firebaseService.createTransaction(projectId, dateKey, transaction)
+  },
+
+  updateTransaction (projectId, id, type, owner, description, category, customer, date, amount, payments) {
+
+    const transaction = transformTransaction(type, owner, description, category, customer, date, amount, payments);
+
+    const dateKey = this.transactionsDateKey(transaction.date);
+    const updatePath = transactionPath(projectId, dateKey, id);
+
+    return firebaseService.update(updatePath, transaction).then(() => {
+      transaction.id = id;
+      return transaction;
+    });
+  },
+
+  deleteTransaction (projectId, transaction) {
+
+    const transactionKey = this.transactionsDateKey(transaction.date);
+
+    const path = transactionPath(projectId, transactionKey, transaction.id);
+
+    return firebaseService.remove(path).then(() => transaction);
   },
 
   fetchMonthlyTransactions (projectKeys) {
@@ -47,8 +78,9 @@ export default {
 
       return {
         ...transaction,
-        date: dateUtil.format(transaction.date),
-        category: transaction.category ? categoriesMap[transaction.category] :  'UNCATEGORIZED',
+        formattedDate: dateUtil.format(transaction.date),
+        type: this.getTransactionType(transaction),
+        category: transaction.category ? categoriesMap[transaction.category] :  undefined,
         customer: transaction.customer ? customersMap[transaction.customer] : undefined,
         owner: usersMap[transaction.owner]
       }
@@ -56,3 +88,22 @@ export default {
     });
   },
 }
+
+const transactionPath = (projectId, monthKey, transactionId) => `/transactions/${projectId}/${monthKey}/${transactionId}`;
+
+const transformTransaction = (type, owner, description, category, customer, date, amount, payments) => {
+
+  const transaction = {
+    income: type === transactionTypes.INCOME,
+    owner: owner.id,
+    date,
+    amount: +amount,
+  };
+
+  if(description) transaction.description = description;
+  if(category) transaction.category = category;
+  if(customer) transaction.customer = customer;
+  if(payments) transaction.payments = payments;
+
+  return transaction;
+};

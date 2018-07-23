@@ -19,7 +19,7 @@ export default {
   },
   isObject(o) {
 
-    return o !== null && typeof o === 'object';
+    return !this.isUndefined(o) && typeof o === 'object';
   },
   isEmptyObject(o) {
 
@@ -76,6 +76,7 @@ export default {
 
     for (let i = 0; i < path.length; i++) {
 
+      if(!this.isObject(obj)) return undefined;
       obj = obj[path[i]];
     }
     return obj;

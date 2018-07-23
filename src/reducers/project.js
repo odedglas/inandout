@@ -33,6 +33,7 @@ export default function (state = initialState, action) {
         budgets: action.budgets || [],
       }
     }
+
     case 'ADD_PROJECT_CATEGORY' : {
       return {
         ...state,
@@ -53,7 +54,7 @@ export default function (state = initialState, action) {
         categories: state.categories.filter(c => c.id !== action.categoryId),
       };
 
-      case 'ADD_PROJECT_BUDGET' : {
+    case 'ADD_PROJECT_BUDGET' : {
       return {
         ...state,
         budgets: [...state.budgets, action.budget],
@@ -72,6 +73,27 @@ export default function (state = initialState, action) {
         ...state,
         budgets: state.budgets.filter(b => b.id !== action.budgetId),
       };
+
+    case 'ADD_PROJECT_TRANSACTION' : {
+      return {
+        ...state,
+        transactions: [...state.transactions, action.transaction],
+      };
+    }
+    case 'EDIT_PROJECT_TRANSACTION' : {
+
+      return {
+        ...state,
+        transactions: util.updateById(state.transactions, action.transaction),
+      };
+    }
+    case 'DELETE_PROJECT_TRANSACTION':
+
+      return {
+        ...state,
+        transactions: state.transactions.filter(t => t.id !== action.id),
+      };
+
     case 'TOGGLE_PROJECT_DRAWER':
       return {
         ...state,

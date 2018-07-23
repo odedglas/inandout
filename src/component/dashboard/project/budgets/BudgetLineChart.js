@@ -28,7 +28,7 @@ class BudgetLineChart extends Component {
       const current = total[transaction.date] || 0;
       cumulative += transaction.amount + current;
       cumulativeSet.push(cumulative);
-      total[transaction.date] = transaction.amount + current;
+      total[transaction.formattedDate] = transaction.amount + current;
       return total
     }, {});
 

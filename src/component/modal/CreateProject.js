@@ -170,7 +170,7 @@ class CreateProjectModal extends React.Component {
     return (
       <CreationModal open={open}
                      onClose={onClose}
-                     title={'Create New Project'}
+                     title={ editMode ? 'Edit Project' : 'Create Project'}
                      context={' To create a new project, Fill up it\'s name and choose your template.'}
                      editMode={editMode}
                      model={model}

@@ -10,12 +10,11 @@ import {TransactionType} from "@model/transaction";
 class Transactions extends Component {
 
   static propTypes = {
-    transactions: PropTypes.arrayOf(TransactionType),
-    selectedProject: PropTypes.object,
+    transactions: PropTypes.arrayOf(TransactionType)
   };
 
   render() {
-    const { transactions, selectedProject } = this.props;
+    const { transactions } = this.props;
 
     return (
       <div className={'transactions-container'}>
@@ -23,8 +22,7 @@ class Transactions extends Component {
         <PageTitle text={'Transactions'} icon={'transactions'}/>
 
         <div className={'px-4'}>
-          <TransactionsTableView transactions={transactions}
-                                 projectCurrency={selectedProject.currency}/>
+          <TransactionsTableView transactions={transactions}/>
         </div>
       </div>
     );
@@ -33,5 +31,4 @@ class Transactions extends Component {
 
 export default connect(state => ({
   transactions: state.project.transactions,
-  selectedProject: state.project.selectedProject,
 }), {})(Transactions);

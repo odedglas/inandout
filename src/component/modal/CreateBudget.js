@@ -110,6 +110,8 @@ class CreateBudgetModal extends React.Component {
 
         <CategoriesSelect selectedCategories={model.categories}
                           error={validation.categories.isInvalid}
+                          multi={true}
+                          helperText={'Transactions with selected categories will be listed under this budget.'}
                           onChange={(val) => handleChange(val, 'categories')}/>
 
       </div>
@@ -139,7 +141,7 @@ class CreateBudgetModal extends React.Component {
     return (
       <CreationModal open={open}
                      onClose={onClose}
-                     title={'Create Budget'}
+                     title={ editMode ? 'Edit Budget' : 'Create Budget'}
                      context={'Add new budget to your project and manage your expenses'}
                      editMode={editMode}
                      model={model}

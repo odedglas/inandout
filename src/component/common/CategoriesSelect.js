@@ -31,11 +31,16 @@ const MenuProps = {
 class CategoriesSelect extends Component {
 
   static propTypes = {
-    selectedCategories: PropTypes.array,
+    selectedCategories: PropTypes.oneOfType([
+      PropTypes.array,
+      PropTypes.string
+    ]),
     onChange: PropTypes.func.isRequired,
     error: PropTypes.bool,
     categories: PropTypes.arrayOf(CategoryType),
     selectedProject: PropTypes.object,
+    multi: PropTypes.bool.isRequired,
+    helperText: PropTypes.string,
   };
 
   state = {
@@ -44,11 +49,11 @@ class CategoriesSelect extends Component {
   };
 
   handleClose = () => {
-    this.setState({ open: false });
+    this.setState({open: false});
   };
 
   handleOpen = () => {
-    this.setState({ open: true });
+    this.setState({open: true});
   };
 
   showHideCreateCategory = (show) => {
@@ -60,9 +65,12 @@ class CategoriesSelect extends Component {
 
   handleCreateCategory = category => {
 
-    const { selectedCategories, onChange } = this.props;
+    const {selectedCategories, onChange} = this.props;
 
-    onChange([category.id, ...selectedCategories])
+    onChange([
+      category.id,
+      ...selectedCategories
+    ])
   };
 
   render() {
@@ -72,16 +80,18 @@ class CategoriesSelect extends Component {
       categories,
       selectedProject,
       onChange,
-      error
+      error,
+      multi,
+      helperText,
     } = this.props;
 
-    const { showCreateCategoryModal } = this.state;
+    const {showCreateCategoryModal} = this.state;
 
     return (
       <FormControl className={'form-control mselect'} error={error}>
-        <InputLabel htmlFor="select-multiple-categories">Categories</InputLabel>
+        <InputLabel htmlFor="select-multiple-categories">{multi ? 'Categories' : 'Category'}</InputLabel>
         <Select
-          multiple
+          multiple={multi}
           open={this.state.open}
           onClose={this.handleClose}
           onOpen={this.handleOpen}
@@ -89,17 +99,18 @@ class CategoriesSelect extends Component {
           onChange={(event) => {
             const isOption = event.currentTarget.getAttribute('data-value') !== 'add-category';
 
-            if(isOption) {
+            if (isOption) {
               onChange(event.target.value);
             }
             else {
               this.handleClose()
             }
           }}
-          input={<Input className={'w-100'} id="select-multiple-categories" />}
+          input={<Input className={'w-100'} id="select-multiple-categories"/>}
           renderValue={selected => (
             <div style={{'whiteSpace': 'initial'}}>
-              {selected.map(value => {
+              {
+                (Array.isArray(selected) ? selected : [selected]).map(value => {
 
                 const category = categories.find(c => c.id === value);
 
@@ -111,7 +122,7 @@ class CategoriesSelect extends Component {
                             <DynamicIcon className={'icon white'} name={category.icon}/>
                           </Avatar>
                         }
-                        label={category.name} />
+                        label={category.name}/>
                 )
               })}
             </div>
@@ -133,14 +144,15 @@ class CategoriesSelect extends Component {
           ))}
 
           <div key={'add-category'} value={'add-category'} className={'flex'}>
-            <Button size="small" color="primary" style={{'flex':1}} onClick={() => this.showHideCreateCategory(true)}>
-              <DynamicIcon name={'add'} />
+            <Button size="small" color="primary" style={{'flex': 1}} onClick={() => this.showHideCreateCategory(true)}>
+              <DynamicIcon name={'add'}/>
               Add new Category
             </Button>
           </div>
 
         </Select>
-        <FormHelperText>Transactions with selected categories will be listed under this budget.</FormHelperText>
+
+        { helperText ? <FormHelperText> { helperText }</FormHelperText> : null}
 
         <CreateCategory open={showCreateCategoryModal}
                         project={selectedProject}

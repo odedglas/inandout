@@ -96,6 +96,7 @@ module.exports = {
       '@common':  path.resolve('src/component/common/'),
       '@modal':  path.resolve('src/component/modal/'),
       '@model':  path.resolve('src/model/'),
+      '@scss':  path.resolve('src/assets/style/'),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).

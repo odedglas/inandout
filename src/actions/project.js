@@ -140,6 +140,94 @@ export function deleteBudget(project, budgetId) {
   }
 }
 
+export function createTransaction(project, { type, owner, description, category, customer, date, amount, payments }, onSuccess) {
+
+  return (dispatch, getState) => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    transactionService.createTransaction(
+      project.id,
+      type,
+      owner,
+      description,
+      category,
+      customer,
+      date,
+      amount,
+      payments
+    ).then(transaction => {
+
+      let projectState = getState().project;
+      let users = getState().dashboard.users;
+
+      transaction = transactionService.mergeTransactions(
+        [transaction],
+        projectState.customers,
+        projectState.categories,
+        users
+      )[0];
+
+      dispatch({type: 'ADD_PROJECT_TRANSACTION', transaction});
+
+      onSuccess(transaction);
+
+      dispatch({type: 'APP_LOADING', loading: false})
+    });
+  }
+}
+
+export function editTransaction(project, {id, type, owner, description, category, customer, date, amount, payments}, onSuccess) {
+
+  return (dispatch, getState) => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    transactionService.updateTransaction(
+      project.id,
+      id,
+      type,
+      owner,
+      description,
+      category,
+      customer,
+      date,
+      amount,
+      payments
+    ).then(transaction => {
+
+      let projectState = getState().project;
+      let users = getState().dashboard.users;
+
+      transaction = transactionService.mergeTransactions(
+        [transaction],
+        projectState.customers,
+        projectState.categories,
+        users
+      )[0];
+
+      onSuccess();
+
+      dispatch({type: 'EDIT_PROJECT_TRANSACTION', transaction});
+      dispatch({type: 'APP_LOADING', loading: false})
+    })
+  }
+}
+
+export function deleteTransaction(project, transaction) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    transactionService.deleteTransaction(project.id, transaction).then(() => {
+
+      dispatch({type: 'DELETE_PROJECT_TRANSACTION', id:transaction.id});
+      dispatch({type: 'APP_LOADING', loading: false});
+    })
+  }
+}
+
 export function toggleProjectDrawer(open) {
   return dispatch => {
     //Saving to local storage

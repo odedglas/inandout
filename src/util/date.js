@@ -13,6 +13,8 @@ export default {
 
   fromNow: (date) => moment(date).fromNow(),
 
+  sameMonth: (d1, d2) => moment(d1).format("MMYY") === moment(d2).format("MMYY"),
+
   dayDiff: (startDate, endDate) => moment(endDate).diff(moment(startDate), 'days'),
 
   next: (date, unit, amount) => {

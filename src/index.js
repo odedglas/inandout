@@ -7,6 +7,9 @@ import './assets/style/imports.scss';
 import App from './component/App';
 import store from './store';
 import registerServiceWorker from './registerServiceWorker';
+import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import MomentUtils from 'material-ui-pickers/utils/moment-utils';
+
 require('./service/firebase');
 
 const theme = createMuiTheme(
@@ -16,7 +19,9 @@ const theme = createMuiTheme(
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <Provider store={store}>
-      <App />
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        <App />
+      </MuiPickersUtilsProvider>
     </Provider>
   </MuiThemeProvider>,
   document.getElementById('root'));

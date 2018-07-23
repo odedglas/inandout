@@ -60,7 +60,7 @@ class TransactionsSummaryTable extends Component {
 
                 return (
                   <TableRow key={t.id} className={'table-row'}>
-                    <TableCell>{t.date}</TableCell>
+                    <TableCell>{t.formattedDate}</TableCell>
                     <TableCell>
                       <Tooltip title={t.owner.displayName} placement={'right'}>
                         <Avatar className={'avatar small'}
@@ -70,7 +70,7 @@ class TransactionsSummaryTable extends Component {
                       </Tooltip>
                     </TableCell>
                     <TableCell>
-                        {t.description || ' -- '}
+                        {t.description }
                     </TableCell>
                     <TableCell>
                       <div className={'outcome-amount'}>
@@ -81,11 +81,12 @@ class TransactionsSummaryTable extends Component {
                       </div>
                       </TableCell>
                     <TableCell>
-                      <Tooltip title={t.category.name} placement={'right'}>
+                      {t.category ? <Tooltip title={t.category.name} placement={'right'}>
                         <Avatar className={'avatar small'} style={{'backgroundColor': t.category.color}}>
                           <DynamicIcon className={'icon'} name={t.category.icon}/>
                         </Avatar>
-                      </Tooltip>
+                      </Tooltip> : null
+                      }
                     </TableCell>
                   </TableRow>
                 );

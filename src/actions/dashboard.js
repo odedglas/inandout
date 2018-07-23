@@ -36,7 +36,6 @@ export function init() {
 
       dispatch({type: 'SET_PROJECTS', projects: mergedProjectsResult});
       dispatch({type: 'SET_USERS', users});
-      dispatch({type: 'SET_MONTHLY_TRANSACTIONS', transactions});
       dispatch({type: 'SET_DEFAULTS_CATEGORIES', defaultCategories});
 
       const selectedProject = preSelectedIdentifier ? mergedProjectsResult.find(p => p.identifier === preSelectedIdentifier) : null;

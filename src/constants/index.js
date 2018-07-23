@@ -94,3 +94,14 @@ export const BUDGETS_PERIOD = [
     statisticsPeriod: 'monthly',
   },
 ];
+
+export const TRANSACTIONS_TYPE = [
+  {
+    key: 'INCOME',
+    label:'Income'
+  },
+  {
+    key: 'OUTCOME',
+    label: 'Outcome'
+  }
+];

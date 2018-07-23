@@ -1,5 +1,10 @@
 import validator from 'validator';
 
+validator.positiveNumber = (v, validator) => {
+  v += '';
+  return !validator.isEmpty(v) && validator.isNumeric(v) && v > 0
+};
+
 const validateRule = (rule, state, results) => {
   const field = rule.field;
 
