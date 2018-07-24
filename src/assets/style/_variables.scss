@@ -109,6 +109,18 @@ $breakpoints: (
   z-index: $matchZIndex !important;
 }
 
+
+@mixin mask() {
+  position:absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
 :export {
   successColor: #43A047;
   errorColor: #e53935;

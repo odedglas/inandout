@@ -30,13 +30,13 @@ export default {
       return category;
     });
   },
-  removeCategory: (projectId, categoryId) => {
-    const path = categoryPath(projectId, categoryId);
-    return firebaseService.remove(path)
-  },
   excludeCategory: (projectId, categoryId) => {
 
     return firebaseService.excludeCategory(projectId, categoryId);
+  },
+  includeCategory: (projectId, categoryId) => {
+
+    return firebaseService.includeCategory(projectId, categoryId);
   }
 }
 

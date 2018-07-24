@@ -46,7 +46,15 @@ class CategoriesSelect extends Component {
   state = {
     open: false,
     showCreateCategoryModal: false,
+    data:[]
   };
+
+  static getDerivedStateFromProps(props, state) {
+
+    return {
+      data: props.categories.filter(c => !c.excluded)
+    }
+  }
 
   handleClose = () => {
     this.setState({open: false});
@@ -77,7 +85,6 @@ class CategoriesSelect extends Component {
 
     const {
       selectedCategories,
-      categories,
       selectedProject,
       onChange,
       error,
@@ -85,7 +92,7 @@ class CategoriesSelect extends Component {
       helperText,
     } = this.props;
 
-    const {showCreateCategoryModal} = this.state;
+    const {showCreateCategoryModal, data} = this.state;
 
     return (
       <FormControl className={'form-control mselect'} error={error}>
@@ -112,7 +119,7 @@ class CategoriesSelect extends Component {
               {
                 (Array.isArray(selected) ? selected : [selected]).map(value => {
 
-                const category = categories.find(c => c.id === value);
+                const category = data.find(c => c.id === value);
 
                 return (
                   <Chip key={category.id}
@@ -129,7 +136,7 @@ class CategoriesSelect extends Component {
           )}
           MenuProps={MenuProps}
         >
-          {categories.map(category => (
+          {data.map(category => (
             <MenuItem
               key={category.id}
               value={category.id}>

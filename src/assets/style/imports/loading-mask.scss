@@ -6,15 +6,8 @@
 
 .loading-mask {
   overflow: hidden;
-  position:absolute;
   background-color: rgba(0, 0, 0, .25);
-  display:flex;
-  justify-content: center; /*centers items on the line (the x-axis by default)*/
-  align-items: center;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  @include mask();
   @include withZIndex('loadingMask');
 
   &.active {

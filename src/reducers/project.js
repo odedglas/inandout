@@ -8,6 +8,7 @@ const initialState = {
   preSelectedProject: undefined,
   selectedProject: {},
   categories:[],
+  excludedCategories:[],
   budgets: [],
   transactions: [],
   customers: [],
@@ -23,12 +24,16 @@ export default function (state = initialState, action) {
       };
 
     case 'SET_SELECTED_PROJECT': {
+
+      const categories = mapExcludedCategories(action.categories, action.excludedCategories)
+
       return {
         ...state,
         selectedProject: action.project,
         preSelectedProject: undefined,
-        categories: action.categories,
+        categories: categories,
         transactions: action.transactions,
+        excludedCategories: action.excludedCategories,
         customers: action.customers || [],
         budgets: action.budgets || [],
       }
@@ -47,13 +52,34 @@ export default function (state = initialState, action) {
         categories: util.updateById(state.categories, action.category),
       };
     }
-    case 'REMOVE_PROJECT_CATEGORY':
+    case 'INCLUDE_CATEGORY_PROJECT_CATEGORY': {
+
+      const newExcluded = state.excludedCategories.filter( c => c !== action.category.id);
+      const categories = mapExcludedCategories(util.updateById(state.categories, {
+        ...action.category,
+        excluded: false
+      }), newExcluded);
 
       return {
         ...state,
-        categories: state.categories.filter(c => c.id !== action.categoryId),
+        excludedCategories: newExcluded,
+        categories: categories
       };
+    }
 
+    case 'EXCLUDE_PROJECT_CATEGORY': {
+
+      state.excludedCategories.push(action.category.id)
+      const categories = mapExcludedCategories(util.updateById(state.categories, {
+        ...action.category,
+        excluded: true
+      }), state.excludedCategories);
+
+      return {
+        ...state,
+        categories: categories
+      };
+    }
     case 'ADD_PROJECT_BUDGET' : {
       return {
         ...state,
@@ -103,3 +129,19 @@ export default function (state = initialState, action) {
       return state;
   }
 }
+
+
+const mapExcludedCategories = (categories, excluded) => {
+
+  return categories.map(c => {
+
+    const shouldExclude = excluded.indexOf(c.id) !== -1;
+
+    return {
+      ...c,
+      excluded: shouldExclude
+    }
+  }).sort(util.sortJsonFN([
+    {name: 'excluded'}, {name: 'isCustom', reverse: true}, {name: 'name'}
+  ]))
+};

@@ -116,6 +116,17 @@ export default {
 
     return database.ref(`/projects/${projectId}/excludedCategories`).push(categoryId);
   },
+
+  includeCategory(projectId, categoryId) {
+
+    return database.ref(`/projects/${projectId}/excludedCategories`).orderByValue().equalTo(categoryId).once('value').then(snapshot => {
+
+      const matched = snapshot.val();
+      const key = Object.keys(matched)[0];
+
+      return database.ref(`/projects/${projectId}/excludedCategories/${key}`).remove();
+    })
+  },
   createTransaction(projectId, dateKey, transaction) {
 
     return database.ref(`/transactions/${projectId}/${dateKey}`).push(transaction).then(res => {

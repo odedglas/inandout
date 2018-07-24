@@ -59,15 +59,10 @@ export default {
 
     return projects.map(project => {
 
-      const categories = filterExcluded(
-        defaultCategories,
-        project.excludedCategories
-      );
-
       const customers = project.customers || [];
       const members = project.members || [];
       const budgets = project.budgets || [];
-      const projectCategories = project.categories.reverse().concat(categories);
+      const projectCategories = project.categories.reverse().concat(defaultCategories);
       const projectTransactions = transactionService.mergeTransactions(transactions[project.id], customers, projectCategories, users);
 
       return {
@@ -91,7 +86,3 @@ const toArray = (object) => object ? Object.keys(object).map(key => {
     ...object[key]
   }
 }) : [];
-const filterExcluded = (categories, excluded) => {
-  excluded = Array.isArray(excluded) ? excluded : (excluded ? [excluded] : []);
-  return categories.filter(c => excluded.indexOf(c.id) === -1);
-};

@@ -26,6 +26,7 @@ export function selectProject(project) {
       customers: project.customers,
       budgets: project.budgets,
       categories: project.categories,
+      excludedCategories: project.excludedCategories,
       transactions: project.transactions,
       members: project.members,
     });
@@ -65,15 +66,29 @@ export function editCategory(project, {id, name, icon, color }, onSuccess) {
   }
 }
 
-export function removeCategory(project, categoryId, exclude) {
+export function excludeCategory(project, category) {
 
   return dispatch => {
 
     dispatch({type: 'APP_LOADING', loading: true});
 
-    categoryService[exclude ? 'excludeCategory' : 'removeCategory'](project.id, categoryId).then(() => {
+    categoryService.excludeCategory(project.id, category.id).then(() => {
 
-      dispatch({type: 'REMOVE_PROJECT_CATEGORY', categoryId});
+      dispatch({type: 'EXCLUDE_PROJECT_CATEGORY', category});
+      dispatch({type: 'APP_LOADING', loading: false});
+    })
+  }
+}
+
+export function includeCategory(project, category) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    categoryService.includeCategory(project.id, category.id).then(() => {
+
+      dispatch({type: 'INCLUDE_CATEGORY_PROJECT_CATEGORY', category});
       dispatch({type: 'APP_LOADING', loading: false});
     })
   }

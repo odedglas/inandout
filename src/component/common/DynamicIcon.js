@@ -63,6 +63,7 @@ import IncomeIcon from '@material-ui/icons/TrendingUp';
 import OverviewIcon from '@material-ui/icons/PanoramaFishEye';
 import LeftChevIcon from '@material-ui/icons/ChevronLeft';
 import RightChevIcon from '@material-ui/icons/ChevronRight';
+import DisabledIcon from '@material-ui/icons/NotInterested';
 
 const iconMap = {
   'home': HomeIcon,
@@ -118,6 +119,7 @@ const iconMap = {
   'close': CloseIcon,
   'left': LeftChevIcon,
   'right': RightChevIcon,
+  'disable': DisabledIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {

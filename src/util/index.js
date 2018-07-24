@@ -67,7 +67,6 @@ export default {
     };
 
   },
-
   getDeepJsonProperty(json, path) {
 
     //Cloning the original json ( in order to break the reference )
@@ -81,7 +80,6 @@ export default {
     }
     return obj;
   },
-
   promiseAllObjectProperties(object) {
 
     if (!this.isObject(object)) {

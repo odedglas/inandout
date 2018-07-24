@@ -9,7 +9,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import DynamicIcon from "@common/DynamicIcon";
 import {CategoryType} from '@model/category'
-import {removeCategory} from "@action/project";
+import {excludeCategory, includeCategory} from "@action/project";
 import {showConfirmation} from "@action/dashboard";
 
 class CategoryCard extends Component {
@@ -17,7 +17,8 @@ class CategoryCard extends Component {
   static propTypes = {
     category: CategoryType,
     editCategory: PropTypes.func.isRequired,
-    removeCategory: PropTypes.func.isRequired,
+    excludeCategory: PropTypes.func.isRequired,
+    includeCategory: PropTypes.func.isRequired,
     showConfirmation: PropTypes.func.isRequired,
     project: PropTypes.object,
   };
@@ -42,22 +43,31 @@ class CategoryCard extends Component {
     editCategory(category);
   };
 
-  handleCategoryRemove = () => {
+  handleCategoryExclude = () => {
 
-    const {category, removeCategory, showConfirmation, project} = this.props;
+    const {category, excludeCategory, showConfirmation, project} = this.props;
 
     this.handleMenuClose();
 
     showConfirmation({
-      title:'Remove This Category ?',
-      body: 'Removing this category will cause all it\'s related transactions / budgets to become un-categorized and loose context.',
+      title:'Exclude This Category ?',
+      body: 'Excluding this category will prevent it being added for new Transactions/Budgets.',
       icon: 'delete',
       onConfirm: () => {
 
-        removeCategory(project, category.id, !category.isCustom);
+        excludeCategory(project, category);
       }
     });
 
+  };
+
+  handleCategoryInclude = () => {
+
+    this.handleMenuClose();
+
+    const {category, includeCategory, project} = this.props;
+
+    includeCategory(project, category);
   };
 
   render() {
@@ -65,10 +75,19 @@ class CategoryCard extends Component {
     const {category} = this.props;
     const { anchorEl } = this.state;
 
-    const canEdit = category.isCustom;
+    const excluded = category.excluded;
+    const canEdit = category.isCustom && !excluded;
 
     return (
-      <div className={'category col-sm-12 col-md-3'} key={category.id}>
+      <div className={`category col-sm-12 col-md-3 ${excluded ? 'excluded' : ''}`} key={category.id}>
+        {
+          excluded ? <div className={'excluded-mask'}>
+            <div className={'content col-flex flex-center'}>
+              <DynamicIcon className={'icon'} name={'disable'}/>
+              <span className={'text'}> Excluded </span>
+            </div>
+          </div> : null
+        }
         <div className={'menu-holder w-100'}>
           <IconButton className={'category-menu-trigger'}
                       aria-label="More"
@@ -90,10 +109,14 @@ class CategoryCard extends Component {
               </MenuItem> : null
             }
 
-            <MenuItem key={'category-delete'} onClick={this.handleCategoryRemove}>
-              Remove
-            </MenuItem>
-
+            {
+              !excluded ? <MenuItem key={'category-delete'} onClick={this.handleCategoryExclude}>
+                  Exclude
+                </MenuItem> :
+                <MenuItem key={'category-include'} onClick={this.handleCategoryInclude}>
+                  Include
+                </MenuItem>
+            }
           </Menu>
         </div>
         <div>
@@ -110,6 +133,7 @@ class CategoryCard extends Component {
 }
 
 export default connect(null, {
-  removeCategory,
+  excludeCategory,
+  includeCategory,
   showConfirmation
 })(CategoryCard);
