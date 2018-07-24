@@ -15,6 +15,11 @@ export default {
 
   sameMonth: (d1, d2) => moment(d1).format("MMYY") === moment(d2).format("MMYY"),
 
+  between: (range, d) => {
+    const date = moment(d);
+    return date.isAfter(range.startDate) && date.isBefore(range.endDate)
+  },
+
   dayDiff: (startDate, endDate) => moment(endDate).diff(moment(startDate), 'days'),
 
   next: (date, unit, amount) => {

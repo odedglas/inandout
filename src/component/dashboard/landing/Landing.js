@@ -13,14 +13,13 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { selectProject } from "@action/project";
-import {ProjectType} from "@model/project";
 import DynamicIcon from "../../common/DynamicIcon";
 
 class Landing extends React.Component {
 
 
   static propTypes = {
-    projects: PropTypes.arrayOf(ProjectType),
+    projects: PropTypes.arrayOf(PropTypes.object),
     loading: PropTypes.bool.isRequired,
     selectProject: PropTypes.func.isRequired,
   };

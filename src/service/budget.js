@@ -1,4 +1,5 @@
 import firebaseService from './firebase';
+import transactionService from './transaction';
 import variables from '@scss/_variables.scss';
 import util from '@util/'
 import date from '@util/date'
@@ -85,26 +86,42 @@ export default {
     }
   },
 
-  mergeBudgets(budgets, categories, transactions) {
+  mergeBudgets(budgets, categories, transactions, customers, users) {
+
+    const categoriesMap = util.toIdsMap(categories);
+    const usersMap = util.toIdsMap(users);
+    const customersMap = util.toIdsMap(customers);
 
     return budgets.map(budget => {
 
-      return this.fillBudget(budget, categories, transactions)
+      return this.fillBudget(budget, categoriesMap, transactions, customersMap, usersMap)
     });
   },
 
-  fillBudget (budget, categories, transactions){
+  fillBudget (budget, categoriesMap, transactions, customersMap, usersMap){
 
-    const categoriesMap = util.toIdsMap(categories);
+    transactions = transactions.map(t => transactionService.fillTransaction(
+      t,
+      customersMap,
+      categoriesMap,
+      usersMap
+    ));
+
     const budgetCategories = budget.categories;
-    const budgetTransactions = transactions.filter(t => t.category && budgetCategories.indexOf(t.category.id) !== -1);
+
+    const budgetCurrentRange = date.getBudgetRange(budget.period);
+    const budgetTransactions = transactions.filter(t => {
+
+      const categoryMatch = t.category && budgetCategories.indexOf(t.category.id) !== -1;
+      const dateMatch = date.between(budgetCurrentRange, t.date);
+
+      return dateMatch && categoryMatch;
+    });
 
     const actual = budgetTransactions.reduce((total, t) => {
       total += t.amount;
       return total;
     },0);
-
-    const budgetCurrentRange = date.getBudgetRange(budget.period);
 
     return {
       ...budget,

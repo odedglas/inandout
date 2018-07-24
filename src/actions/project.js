@@ -96,18 +96,11 @@ export function includeCategory(project, category) {
 
 export function createBudget(project, { name, limit, period, categories }, onSuccess) {
 
-  return (dispatch, getState) => {
+  return dispatch => {
 
     dispatch({type: 'APP_LOADING', loading: true});
 
     budgetService.createBudget(project.id, name, limit, period, categories).then(budget => {
-
-      let projectState = getState().project;
-      budget = budgetService.fillBudget(
-        budget,
-        projectState.categories,
-        projectState.transactions
-      );
 
       dispatch({type: 'ADD_PROJECT_BUDGET', budget});
 
@@ -120,18 +113,11 @@ export function createBudget(project, { name, limit, period, categories }, onSuc
 
 export function editBudget(project, {id, name, limit, period, categories }, onSuccess) {
 
-  return (dispatch, getState) => {
+  return dispatch => {
 
     dispatch({type: 'APP_LOADING', loading: true});
 
     budgetService.editBudget(project.id, id, name, limit, period, categories).then(budget => {
-
-      let projectState = getState().project;
-      budget = budgetService.fillBudget(
-        budget,
-        projectState.categories,
-        projectState.transactions
-      );
 
       onSuccess();
 
@@ -155,92 +141,19 @@ export function deleteBudget(project, budgetId) {
   }
 }
 
-export function createTransaction(project, { type, owner, description, category, customer, date, amount, payments }, onSuccess) {
+export function createTransaction(transaction) {
 
-  return (dispatch, getState) => {
-
-    dispatch({type: 'APP_LOADING', loading: true});
-
-    transactionService.createTransaction(
-      project.id,
-      type,
-      owner,
-      description,
-      category,
-      customer,
-      date,
-      amount,
-      payments
-    ).then(transaction => {
-
-      let projectState = getState().project;
-      let users = getState().dashboard.users;
-
-      transaction = transactionService.mergeTransactions(
-        [transaction],
-        projectState.customers,
-        projectState.categories,
-        users
-      )[0];
-
-      dispatch({type: 'ADD_PROJECT_TRANSACTION', transaction});
-
-      onSuccess(transaction);
-
-      dispatch({type: 'APP_LOADING', loading: false})
-    });
-  }
+  return dispatch => dispatch({type: 'ADD_PROJECT_TRANSACTION', transaction});
 }
 
-export function editTransaction(project, {id, type, owner, description, category, customer, date, amount, payments}, onSuccess) {
+export function updateTransaction(transaction) {
 
-  return (dispatch, getState) => {
-
-    dispatch({type: 'APP_LOADING', loading: true});
-
-    transactionService.updateTransaction(
-      project.id,
-      id,
-      type,
-      owner,
-      description,
-      category,
-      customer,
-      date,
-      amount,
-      payments
-    ).then(transaction => {
-
-      let projectState = getState().project;
-      let users = getState().dashboard.users;
-
-      transaction = transactionService.mergeTransactions(
-        [transaction],
-        projectState.customers,
-        projectState.categories,
-        users
-      )[0];
-
-      onSuccess();
-
-      dispatch({type: 'EDIT_PROJECT_TRANSACTION', transaction});
-      dispatch({type: 'APP_LOADING', loading: false})
-    })
-  }
+  return dispatch => dispatch({type: 'EDIT_PROJECT_TRANSACTION', transaction});
 }
 
-export function deleteTransaction(project, transaction) {
+export function deleteTransaction(transaction) {
 
-  return dispatch => {
-
-    dispatch({type: 'APP_LOADING', loading: true});
-
-    transactionService.deleteTransaction(project.id, transaction).then(() => {
-
-      dispatch({type: 'DELETE_PROJECT_TRANSACTION', id:transaction.id});
-      dispatch({type: 'APP_LOADING', loading: false});
-    })
-  }
+  return dispatch => dispatch({type: 'DELETE_PROJECT_TRANSACTION', id:transaction.id});
 }
 
 export function toggleProjectDrawer(open) {

@@ -1,7 +1,4 @@
 import firebaseService from './firebase';
-import budgetSerivce from './budget';
-import transactionService from './transaction';
-
 import util from '@util/'
 import {CURRENCIES} from "@const/";
 
@@ -53,9 +50,7 @@ export default {
     })
 
   },
-  mergeProjectResults: (projects, transactions, defaultCategories, users) => {
-
-    const usersMap = util.toIdsMap(users);
+  mergeProjectResults: (projects, transactions, defaultCategories) => {
 
     return projects.map(project => {
 
@@ -63,16 +58,15 @@ export default {
       const members = project.members || [];
       const budgets = project.budgets || [];
       const projectCategories = project.categories.reverse().concat(defaultCategories);
-      const projectTransactions = transactionService.mergeTransactions(transactions[project.id], customers, projectCategories, users);
+      const projectTransactions = transactions[project.id];
 
       return {
         ...project,
-        owner: usersMap[project.owner],
         currency: util.searchInConst(CURRENCIES,project.currency),
         customers,
-        members: members.map(m => usersMap[m.id]),
+        members,
+        budgets,
         transactions: projectTransactions,
-        budgets: budgetSerivce.mergeBudgets(budgets, projectCategories, projectTransactions),
         categories: projectCategories
       }
     })

@@ -13,12 +13,11 @@ import DynamicIcon from '@common/DynamicIcon';
 
 import themeService from '@service/theme'
 import { PROJECT_TYPES } from '@const/'
-import {ProjectType} from "@model/project";
 
 class ProjectCard extends Component {
 
   static propTypes = {
-    project: ProjectType,
+    project: PropTypes.object,
     onProjectClick: PropTypes.func.isRequired,
     showAnimation: PropTypes.bool,
   };

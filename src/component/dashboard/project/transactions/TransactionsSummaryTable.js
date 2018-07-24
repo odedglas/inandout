@@ -20,24 +20,10 @@ class TransactionsSummaryTable extends Component {
     selectedProject: PropTypes.object,
   };
 
-  state = {
-    latestTransactions: []
-  };
-
-  componentDidMount() {
-
-    const { transactions } = this.props;
-
-    this.setState({
-      latestTransactions: transactions.reverse().slice(0, transactions.length > 4 ? 5 : transactions.length)
-    })
-  }
-
   render() {
 
-    const { latestTransactions } = this.state;
-    const { selectedProject } = this.props;
-
+    const { selectedProject, transactions } = this.props;
+    const latestTransactions = transactions.reverse().slice(0, transactions.length > 4 ? 5 : transactions.length)
     return (
       <div className={'row col-sm- px-0'}>
         <div className={'col-sm-12'}>

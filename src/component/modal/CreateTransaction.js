@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 
 import TextField from '@material-ui/core/TextField';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -48,8 +49,7 @@ class CreateTransactionModal extends React.Component {
         category,
         description,
         customer,
-        //TODO - Rmoeve this when implementing dateitme picker
-        date: date ? date : (new Date()).getTime(),
+        date: date,
         amount,
         payments,
         id: editMode ? transaction.id : undefined
@@ -126,7 +126,7 @@ class CreateTransactionModal extends React.Component {
           />
         </div>
 
-        <div className={'form-control'}>
+        <div className={'form-control'} style={{flexDirection:'column'}}>
 
           <TextField
             label="Payments"
@@ -138,7 +138,7 @@ class CreateTransactionModal extends React.Component {
             fullWidth
             margin="dense"
           />
-
+          <FormHelperText> Number of monthly payments </FormHelperText>
         </div>
 
         <div className={'form-control'}>

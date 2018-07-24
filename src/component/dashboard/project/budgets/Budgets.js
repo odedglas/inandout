@@ -14,12 +14,17 @@ import Breadcrumb from '../breadcrumbs/Breadcrumb';
 
 import CreateBudget from '@modal/CreateBudget'
 import BudgetStatistics from '@modal/BudgetStatistics'
-import {BudgetType} from '@model/budget'
+import {CategoryType} from "@model/category";
+import budgetService from '@service/budget';
 
 class Budgets extends Component {
 
   static propTypes = {
-    budgets: PropTypes.arrayOf(BudgetType)
+    budgets: PropTypes.arrayOf(PropTypes.object),
+    transactions: PropTypes.arrayOf(PropTypes.object),
+    categories: PropTypes.arrayOf(CategoryType),
+    users: PropTypes.arrayOf(PropTypes.object),
+    customers: PropTypes.arrayOf(PropTypes.object),
   };
 
   state = {
@@ -28,11 +33,35 @@ class Budgets extends Component {
     showBudgetStatisticsModal:false,
     budgetForEdit: {},
     budgetForStatistics: {},
+    filledBudgets: [],
+    expandStateChange: false,
   };
+
+  static getDerivedStateFromProps(props, state) {
+
+    if(!state.expandStateChange) {
+
+      const {budgets, transactions, categories, customers, users} = props;
+
+      return {
+        filledBudgets: budgetService.mergeBudgets(
+          budgets,
+          categories,
+          transactions,
+          customers,
+          users
+        )
+      }
+    }
+
+    return {
+      expandStateChange: false
+    }
+  }
 
   handleExpandPanelChange = (budgetId) => {
 
-    this.setState({expanded: budgetId})
+    this.setState({expanded: budgetId, expandStateChange: budgetId !== this.state.expanded})
   };
 
   showHideCreateBudge = (show, budget) => {
@@ -66,10 +95,10 @@ class Budgets extends Component {
 
   render() {
 
-    const {budgets, selectedProject} = this.props;
-    const {expanded, budgetForEdit, budgetForStatistics, showCreateBudgetModal, showBudgetStatisticsModal} = this.state;
+    const {selectedProject} = this.props;
+    const {expanded, filledBudgets, budgetForEdit, budgetForStatistics, showCreateBudgetModal, showBudgetStatisticsModal} = this.state;
 
-    const hasBudgets = budgets.length > 0;
+    const hasBudgets = filledBudgets.length > 0;
 
     return (
       <div className={'budgets-container'}>
@@ -80,7 +109,7 @@ class Budgets extends Component {
 
         <div className={'px-2 py-3'}>
         {
-          budgets.map(budget => <BudgetPanel key={budget.id}
+          filledBudgets.map(budget => <BudgetPanel key={budget.id}
                                              onExpandChange={this.handleExpandPanelChange}
                                              editBudget={(budget) => this.showHideCreateBudge(true, budget) }
                                              showBudgetStatistics={(budget) => this.showHideBudgetStatistics(true, budget)}
@@ -135,5 +164,9 @@ class Budgets extends Component {
 
 export default connect(state => ({
   budgets: state.project.budgets,
+  transactions: state.project.transactions,
+  categories: state.project.categories,
+  customers: state.project.customers,
+  users: state.dashboard.users,
   selectedProject: state.project.selectedProject,
 }), {})(Budgets);

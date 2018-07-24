@@ -194,7 +194,7 @@ class BudgetPanel extends Component {
         <Divider />
         <ExpansionPanelActions className={'actions'}>
           <Tooltip title={'Delete Budget'} placement={'right'}>
-            <IconButton className={'delete-budget mx-2'} onClick={this.handleBudgetRemove}>
+            <IconButton className={'delete-budget mx-2'} style={{height:'30px'}} onClick={this.handleBudgetRemove}>
               <DynamicIcon name={'delete'}/>
             </IconButton>
           </Tooltip>

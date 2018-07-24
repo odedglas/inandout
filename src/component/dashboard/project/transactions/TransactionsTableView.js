@@ -24,7 +24,8 @@ import {TransactionType} from "@model/transaction";
 
 import util from "@util/"
 import {loadTransactions} from "@action/project";
-import {createTransaction, editTransaction, deleteTransaction} from "@action/project";
+import {setLoading} from "@action/loading";
+import {createTransaction, updateTransaction, deleteTransaction} from "@action/project";
 import {showConfirmation} from "@action/dashboard";
 import dateUtil from '@util/date';
 import transactionService from '@service/transaction';
@@ -147,10 +148,12 @@ class TransactionsTableView extends Component {
   static propTypes = {
     transactions: PropTypes.arrayOf(TransactionType),
     loadTransactions: PropTypes.func.isRequired,
-    createTransaction: PropTypes.func.isRequired,
-    editTransaction: PropTypes.func.isRequired,
-    deleteTransaction: PropTypes.func.isRequired,
+    setLoading: PropTypes.func.isRequired,
     showConfirmation: PropTypes.func.isRequired,
+    createTransaction: PropTypes.func.isRequired,
+    updateTransaction: PropTypes.func.isRequired,
+    deleteTransaction: PropTypes.func.isRequired,
+    fillTransaction: PropTypes.func.isRequired,
     selectedProject: PropTypes.object,
     projectCurrency: PropTypes.string,
   };
@@ -166,39 +169,30 @@ class TransactionsTableView extends Component {
     isEmpty: false,
     showCreateTransactionModal: false,
     transactionForEdit: {},
-    transactionActionMap:{},
+    transactionActionMap: {},
   };
 
   componentDidMount() {
 
-    const { createTransaction, editTransaction, deleteTransaction } = this.props;
+    const {transactions, createTransaction, updateTransaction, deleteTransaction} = this.props;
 
     this.setState({
       transactionActionMap: {
         'add': createTransaction,
-        'edit': editTransaction,
+        'edit': updateTransaction,
         'remove': deleteTransaction,
-      }
+      },
+      data: transactions,
+      isEmpty: transactions.length === 0
     })
   }
 
-  static getDerivedStateFromProps(props, state) {
+  componentDidUpdate(prevProps) {
 
-    const propsTransactions = props.transactions;
-    const localTransactions = state.data;
-
-    const isSelectedIsCurrentMonth = dateUtil.sameMonth(new Date(), state.selectedDate);
-
-    /* Transaction will be derived as following :
-      If Selected date is at current month -> e.g app state redux level, We take it from props
-      Else when time navigated next/prev-> from the local component state.
-    */
-    const transactions = isSelectedIsCurrentMonth ? propsTransactions : localTransactions;
-
-    return {
-      data: transactions,
-      isEmpty: transactions.length === 0
-    };
+    let transactions = this.props.transactions;
+    if (transactions.length !== prevProps.transactions.length) {
+      this.setState({data: transactions})
+    }
   }
 
   handleRequestSort = (event, orderBy) => {
@@ -270,40 +264,109 @@ class TransactionsTableView extends Component {
       title: 'Delete Transaction ?',
       body: '',
       icon: 'delete',
-      onConfirm: () => {
-        this.handleTransactionCrud(transaction, 'delete');
-      }
+      onConfirm: () => this.handleTransactionCrud(transaction, 'delete')
     });
   };
 
   handleTransactionCrud = (transaction, action, cb) => {
 
-    const {selectedProject} = this.props;
+    const {selectedProject, fillTransaction, setLoading} = this.props;
+    const { selectedDate } = this.state;
+    let serviceAction, dataManipulation, args;
 
-    if (dateUtil.sameMonth(new Date(), transaction.date)) {
+    //Casing action in order to prepare operation params
+    switch (action) {
 
-      //Redux action
-      this.state.transactionActionMap[action](selectedProject, transaction, cb);
-    }
-    else {
-
-      //Service action + Local state update
-      const shouldLocalUpdate = dateUtil.sameMonth(this.state.selectedDate, transaction.date);
-
-      if(shouldLocalUpdate) {
-        const persistedTransaction = transactionService[action](selectedProject.id, transaction);
-        const isDeleted = action === 'delete';
-
-        this.setState((prevState) => {
-          const transactions = prevState.data;
-          return {
-            data: isDeleted ? transactions.filter(t => t.id !== persistedTransaction.id) :
-              transactions.map(t => t.id === persistedTransaction.id ? persistedTransaction : t)
-          }
-        });
+      case 'add': {
+        serviceAction = 'createTransaction';
+        args = [
+          'type',
+          'owner',
+          'description',
+          'category',
+          'customer',
+          'date',
+          'amount',
+          'payments'
+        ];
+        dataManipulation = (data, transaction) => {
+          data.push(fillTransaction(transaction));
+          return data;
+        };
+        break;
       }
-      cb && cb();
+      case 'edit': {
+        serviceAction = 'updateTransaction';
+        args = [
+          'id',
+          'type',
+          'owner',
+          'description',
+          'category',
+          'customer',
+          'date',
+          'amount',
+          'payments'
+        ];
+        dataManipulation = (data, transaction) => {
+
+          if (!dateUtil.sameMonth(selectedDate, transaction.date)) {
+
+            //Transaction no longer on current month, Discarding
+            return data.filter(t => t.id !== transaction.id);
+          }
+
+          //Else, Editing current record
+          return util.updateById(data, fillTransaction(transaction));
+        };
+        break;
+      }
+      case 'delete': {
+        serviceAction = 'deleteTransaction';
+        args = [
+          'id',
+          'date',
+        ];
+        dataManipulation = (data, transaction) => data.filter(t => t.id !== transaction.id);
+        break;
+      }
+      default :{
+        break;
+      }
     }
+
+    //Starting operation with Backend service action by collected args
+    setLoading(true);
+    transactionService[serviceAction](selectedProject.id, ...args.map(key => transaction[key])).then(persisted => {
+
+      if(!dateUtil.sameMonth(persisted.date, selectedDate)){
+        //Meaning we should remove old month entry
+        transactionService.deleteTransaction(selectedProject.id, persisted.id, selectedDate)
+      }
+
+      const currentTransactions = this.state.data;
+
+      //Setting local component state
+      this.setState({data: dataManipulation(
+        currentTransactions,
+        persisted
+      )});
+
+
+      //Checking if should sync with Redux state
+      let now = new Date();
+      const existing = transaction = currentTransactions.find(t => t.id === transaction.id);
+      const shouldEffectState = dateUtil.sameMonth(now, persisted.date) || dateUtil.sameMonth(now, existing.date);
+
+      if(shouldEffectState){
+        //Do Redux action
+        this.state.transactionActionMap[action](persisted);
+      }
+
+      //Finally, Triggering callback if sent
+      cb && cb();
+      setLoading(false);
+    })
 
   };
 
@@ -469,8 +532,9 @@ export default connect(state => ({
   selectedProject: state.project.selectedProject
 }), {
   loadTransactions,
-  editTransaction,
   createTransaction,
+  updateTransaction,
   deleteTransaction,
+  setLoading,
   showConfirmation
 })(TransactionsTableView);

@@ -32,7 +32,7 @@ export function init() {
 
       const {projects, transactions, defaultCategories, users} = res;
 
-      const mergedProjectsResult = projectService.mergeProjectResults(projects, transactions, defaultCategories, users);
+      const mergedProjectsResult = projectService.mergeProjectResults(projects, transactions, defaultCategories);
 
       dispatch({type: 'SET_PROJECTS', projects: mergedProjectsResult});
       dispatch({type: 'SET_USERS', users});

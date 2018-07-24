@@ -19,7 +19,7 @@ export default {
 
   createTransaction (projectId, type, owner, description, category, customer, date, amount, payments) {
 
-    const transaction = transformTransaction(type, owner, description, category, customer, date, amount, payments);
+    const transaction = transformTransaction(type, owner, description, category, customer, date || new Date(), amount, payments);
 
     const dateKey = this.transactionsDateKey(transaction.date);
 
@@ -39,13 +39,16 @@ export default {
     });
   },
 
-  deleteTransaction (projectId, transaction) {
+  deleteTransaction (projectId, id, date) {
 
-    const transactionKey = this.transactionsDateKey(transaction.date);
+    const transactionKey = this.transactionsDateKey(date);
 
-    const path = transactionPath(projectId, transactionKey, transaction.id);
+    const path = transactionPath(projectId, transactionKey, id);
 
-    return firebaseService.remove(path).then(() => transaction);
+    return firebaseService.remove(path).then(() => ({
+      id,
+      date
+    }));
   },
 
   fetchMonthlyTransactions (projectKeys) {
@@ -76,17 +79,28 @@ export default {
 
     return transactions.map(transaction => {
 
-      return {
-        ...transaction,
-        formattedDate: dateUtil.format(transaction.date),
-        type: this.getTransactionType(transaction),
-        category: transaction.category ? categoriesMap[transaction.category] :  undefined,
-        customer: transaction.customer ? customersMap[transaction.customer] : undefined,
-        owner: usersMap[transaction.owner]
-      }
+      return this.fillTransaction(
+        transaction,
+        customersMap,
+        categoriesMap,
+        usersMap
+      )
 
     });
   },
+
+  fillTransaction (transaction, customersMap, categoriesMap, usersMap)  {
+
+    return {
+      ...transaction,
+      formattedDate: dateUtil.format(transaction.date),
+      type: this.getTransactionType(transaction),
+      category: transaction.category ? categoriesMap[transaction.category] :  undefined,
+      customer: transaction.customer ? customersMap[transaction.customer] : undefined,
+      owner: usersMap[transaction.owner]
+    }
+
+  }
 }
 
 const transactionPath = (projectId, monthKey, transactionId) => `/transactions/${projectId}/${monthKey}/${transactionId}`;
