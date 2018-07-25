@@ -123,7 +123,7 @@ class CreationModal extends React.Component {
               {context}
             </DialogContentText>
 
-            {renderContent(model, validation, this.handleChange)}
+            {renderContent(model, validation, this.handleChange, editMode)}
 
           </DialogContent>
           <DialogActions className={'modal-actions'}>

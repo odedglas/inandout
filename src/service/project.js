@@ -3,7 +3,6 @@ import util from '@util/'
 import {CURRENCIES} from "@const/";
 
 export default {
-
   fetchUserProjects: (projectKeys) => firebaseService.fetchByKeys('/projects', projectKeys).then(projects => {
 
     return projects.map(p => {

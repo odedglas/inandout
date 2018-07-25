@@ -36,7 +36,7 @@ class CreateTransactionModal extends React.Component {
 
   handleTransactionCreate = (model, close) => {
 
-    const { transaction, transactionCrudHandler, currentUser} = this.props;
+    const {transaction, transactionCrudHandler, currentUser} = this.props;
     const {type, owner, description, category, customer, date, amount, payments} = model;
 
     const editMode = !util.isEmptyObject(transaction);
@@ -52,6 +52,7 @@ class CreateTransactionModal extends React.Component {
         date: date,
         amount,
         payments,
+        paymentIndex: transaction.paymentIndex,
         id: editMode ? transaction.id : undefined
       },
       editMode ? 'edit' : 'add',
@@ -60,30 +61,37 @@ class CreateTransactionModal extends React.Component {
 
   };
 
-  modalContent = (model, validation, handleChange) => {
+  modalContent = (model, validation, handleChange, editMode) => {
 
     const {selectedProject} = this.props;
 
     const isIncome = model.type === 'INCOME';
+    const paymentsEditMode = !!model.payments && editMode;
+
+    const amount = paymentsEditMode ? Math.round(model.amount * model.payments) : model.amount;
+
     return (
       <div>
-        <div className={'form-control'}>
-          <TextField
-            select
-            autoFocus
-            fullWidth
-            placeholder={'Please set transaction type'}
-            label="Transaction Type"
-            value={model.type}
-            onChange={(event) => handleChange(event.target.value, 'type')}
-          >
-            {TRANSACTIONS_TYPE.map(option => (
-              <MenuItem key={option.key} value={option.key}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-        </div>
+        {
+          !editMode ? <div className={'form-control'}>
+              <TextField
+                select
+                autoFocus
+                fullWidth
+                placeholder={'Please set transaction type'}
+                label="Transaction Type"
+                value={model.type}
+                onChange={(event) => handleChange(event.target.value, 'type')}
+              >
+                {TRANSACTIONS_TYPE.map(option => (
+                  <MenuItem key={option.key} value={option.key}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div> :
+            null
+        }
 
         {
           !isIncome ? <CategoriesSelect selectedCategories={model.category}
@@ -92,12 +100,16 @@ class CreateTransactionModal extends React.Component {
                                         onChange={(val) => handleChange(val, 'category')}/> : null
         }
 
-        <div className={'form-control'}>
+        <div className={'form-control'} style={{flexDirection: 'column'}}>
           <TextField
-            value={model.amount}
+            value={amount}
             error={validation.amount.isInvalid}
             placeholder={"Amount"}
-            onChange={(event) => handleChange(event.target.value, 'amount')}
+            onChange={(event) => {
+              const value = event.target.value;
+              const calcValue = paymentsEditMode ? value / model.payments : value;
+              handleChange(calcValue, 'amount')
+            }}
             margin="dense"
             id="amount"
             label={`Amount (${selectedProject.currency})`}
@@ -114,11 +126,17 @@ class CreateTransactionModal extends React.Component {
               </InputAdornment>,
             }}
           />
+          {
+            paymentsEditMode ? <FormHelperText>
+              This transaction is {model.paymentIndex + 1} of {model.payments} Payments of {model.amount.toFixed(2)}{selectedProject.currency}
+            </FormHelperText> : null
+          }
         </div>
 
         <div className={'form-control'}>
           <DatePicker
             value={model.date || new Date()}
+            disabled={paymentsEditMode}
             className={'flex mt-3'}
             onChange={(date) => {
               handleChange(date.toDate().getTime(), 'date')
@@ -126,20 +144,20 @@ class CreateTransactionModal extends React.Component {
           />
         </div>
 
-        <div className={'form-control'} style={{flexDirection:'column'}}>
-
-          <TextField
-            label="Payments"
-            value={model.payments}
-            title={validation.payments.message}
-            error={validation.payments.isInvalid}
-            placeholder={"Payments"}
-            onChange={(event) => handleChange(event.target.value, 'payments')}
-            fullWidth
-            margin="dense"
-          />
-          <FormHelperText> Number of monthly payments </FormHelperText>
-        </div>
+        {!editMode && !isIncome ?
+          <div className={'form-control'} style={{flexDirection: 'column'}}>
+            <TextField
+              label="Payments"
+              value={model.payments}
+              title={validation.payments.message}
+              error={validation.payments.isInvalid}
+              placeholder={"Payments"}
+              onChange={(event) => handleChange(event.target.value, 'payments')}
+              fullWidth
+              margin="dense"
+            />
+            <FormHelperText> Number of monthly payments </FormHelperText></div> : null
+        }
 
         <div className={'form-control'}>
 
@@ -176,7 +194,7 @@ class CreateTransactionModal extends React.Component {
     const editMode = !util.isEmptyObject(transaction);
     let model = {};
 
-    if(editMode) {
+    if (editMode) {
 
       model = {
         ...transaction,
@@ -188,7 +206,7 @@ class CreateTransactionModal extends React.Component {
     return (
       <CreationModal open={open}
                      onClose={onClose}
-                     title={ editMode ? 'Edit Transaction' : 'Create Transaction'}
+                     title={editMode ? 'Edit Transaction' : 'Create Transaction'}
                      editMode={editMode}
                      model={model}
                      getInitialState={() => ({
@@ -230,7 +248,10 @@ export default compose(
     },
     {
       field: 'payments',
-      method: (v, f, state, validator, args) => validator.isEmpty(v) || validator.positiveNumber(v, validator),
+      method: (v, f, state, validator, args) => {
+        v += '';
+        return validator.isEmpty(v) || validator.positiveNumber(v, validator);
+      },
       message: 'Please enter valid payments number (greater than 0)'
     },
   ]),

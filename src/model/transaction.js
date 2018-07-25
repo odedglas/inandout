@@ -10,5 +10,6 @@ export const TransactionType = PropTypes.shape({
   customer: PropTypes.object,
   date: PropTypes.oneOfType([PropTypes.number.isRequired, PropTypes.string.isRequired]),
   amount: PropTypes.number.isRequired,
-  payments: PropTypes.string,
+  payments: PropTypes.number,
+  paymentIndex: PropTypes.number,
 });

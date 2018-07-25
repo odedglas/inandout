@@ -25,7 +25,6 @@ import {TransactionType} from "@model/transaction";
 import util from "@util/"
 import {loadTransactions} from "@action/project";
 import {setLoading} from "@action/loading";
-import {createTransaction, updateTransaction, deleteTransaction} from "@action/project";
 import {showConfirmation} from "@action/dashboard";
 import dateUtil from '@util/date';
 import transactionService from '@service/transaction';
@@ -106,6 +105,7 @@ let TransactionsToolbar = ({date, onSelectedDateChange, setSelectedForToday}) =>
 
       <div className={'months-navigator mx-2'}>
         <Button size="small"
+                disabled={dateUtil.sameMonth(new Date(), date)}
                 variant={'outlined'}
                 color="secondary" onClick={setSelectedForToday}>
           Today
@@ -150,9 +150,6 @@ class TransactionsTableView extends Component {
     loadTransactions: PropTypes.func.isRequired,
     setLoading: PropTypes.func.isRequired,
     showConfirmation: PropTypes.func.isRequired,
-    createTransaction: PropTypes.func.isRequired,
-    updateTransaction: PropTypes.func.isRequired,
-    deleteTransaction: PropTypes.func.isRequired,
     fillTransaction: PropTypes.func.isRequired,
     selectedProject: PropTypes.object,
     projectCurrency: PropTypes.string,
@@ -174,25 +171,12 @@ class TransactionsTableView extends Component {
 
   componentDidMount() {
 
-    const {transactions, createTransaction, updateTransaction, deleteTransaction} = this.props;
+    const {transactions} = this.props;
 
     this.setState({
-      transactionActionMap: {
-        'add': createTransaction,
-        'edit': updateTransaction,
-        'remove': deleteTransaction,
-      },
       data: transactions,
       isEmpty: transactions.length === 0
     })
-  }
-
-  componentDidUpdate(prevProps) {
-
-    let transactions = this.props.transactions;
-    if (transactions.length !== prevProps.transactions.length) {
-      this.setState({data: transactions})
-    }
   }
 
   handleRequestSort = (event, orderBy) => {
@@ -270,7 +254,7 @@ class TransactionsTableView extends Component {
 
   handleTransactionCrud = (transaction, action, cb) => {
 
-    const {selectedProject, fillTransaction, setLoading} = this.props;
+    const { selectedProject, fillTransaction, setLoading } = this.props;
     const { selectedDate } = this.state;
     let serviceAction, dataManipulation, args;
 
@@ -287,7 +271,7 @@ class TransactionsTableView extends Component {
           'customer',
           'date',
           'amount',
-          'payments'
+          'payments',
         ];
         dataManipulation = (data, transaction) => {
           data.push(fillTransaction(transaction));
@@ -306,7 +290,8 @@ class TransactionsTableView extends Component {
           'customer',
           'date',
           'amount',
-          'payments'
+          'payments',
+          'paymentIndex',
         ];
         dataManipulation = (data, transaction) => {
 
@@ -326,6 +311,8 @@ class TransactionsTableView extends Component {
         args = [
           'id',
           'date',
+          'payments',
+          'paymentIndex',
         ];
         dataManipulation = (data, transaction) => data.filter(t => t.id !== transaction.id);
         break;
@@ -351,17 +338,6 @@ class TransactionsTableView extends Component {
         currentTransactions,
         persisted
       )});
-
-
-      //Checking if should sync with Redux state
-      let now = new Date();
-      const existing = transaction = currentTransactions.find(t => t.id === transaction.id);
-      const shouldEffectState = dateUtil.sameMonth(now, persisted.date) || dateUtil.sameMonth(now, existing.date);
-
-      if(shouldEffectState){
-        //Do Redux action
-        this.state.transactionActionMap[action](persisted);
-      }
 
       //Finally, Triggering callback if sent
       cb && cb();
@@ -457,7 +433,7 @@ class TransactionsTableView extends Component {
                           />
                         </Tooltip>
                       </TableCell>
-                      <TableCell>{transaction.payment ? transaction.payment : 'None'}</TableCell>
+                      <TableCell>{transaction.payments ? `${transaction.paymentIndex + 1} out of ${transaction.payments}` : 'None'}</TableCell>
                       <TableCell>{transaction.customer && transaction.customer.displayName}</TableCell>
                       <TableCell className={'text-center'}>
                         {
@@ -532,9 +508,6 @@ export default connect(state => ({
   selectedProject: state.project.selectedProject
 }), {
   loadTransactions,
-  createTransaction,
-  updateTransaction,
-  deleteTransaction,
   setLoading,
   showConfirmation
 })(TransactionsTableView);

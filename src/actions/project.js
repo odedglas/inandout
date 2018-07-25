@@ -4,6 +4,10 @@ import categoryService from '@service/category'
 import budgetService from '@service/budget'
 import transactionService from '@service/transaction'
 
+import util from '@util/';
+
+const projectSyncListener = {};
+
 export function setPreSelectedProject(identifier) {
   return dispatch => dispatch({type: 'SET_PRE_SELECTED_PROJECT', identifier});
 }
@@ -30,6 +34,36 @@ export function selectProject(project) {
       transactions: project.transactions,
       members: project.members,
     });
+  }
+}
+
+export function createProjectSyncListener (projectId, date) {
+
+  return dispatch => {
+
+    const keys = Object.keys(projectSyncListener);
+
+    //Removing existing listener if exists
+    if(!util.isEmptyObject(projectSyncListener)) {
+
+      keys.forEach(k => projectSyncListener[k].ref.off('value', projectSyncListener[k].listener))
+    }
+
+    //Creating new project sync listener
+    //Transactions sync
+    projectSyncListener.transactions = transactionService.createTransactionSyncListener(
+      projectId,
+      date,
+      (transactions) => dispatch({ type: 'SYNC_TRANSACTIONS', transactions })
+    );
+
+    //Attaching
+    const newKeys = Object.keys(projectSyncListener);
+    newKeys.forEach(k => {
+
+      const projectListener = projectSyncListener[k];
+      projectListener.listener = projectListener.ref.on('value', (snap) => projectListener.callback(snap))
+    })
   }
 }
 
@@ -141,19 +175,8 @@ export function deleteBudget(project, budgetId) {
   }
 }
 
-export function createTransaction(transaction) {
-
-  return dispatch => dispatch({type: 'ADD_PROJECT_TRANSACTION', transaction});
-}
-
-export function updateTransaction(transaction) {
-
-  return dispatch => dispatch({type: 'EDIT_PROJECT_TRANSACTION', transaction});
-}
-
-export function deleteTransaction(transaction) {
-
-  return dispatch => dispatch({type: 'DELETE_PROJECT_TRANSACTION', id:transaction.id});
+export function syncTransactions(transactions) {
+  return dispatch => dispatch({ type: 'SYNC_TRANSACTIONS', transactions });
 }
 
 export function toggleProjectDrawer(open) {

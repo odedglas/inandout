@@ -100,26 +100,13 @@ export default function (state = initialState, action) {
         budgets: state.budgets.filter(b => b.id !== action.budgetId),
       };
 
-    case 'ADD_PROJECT_TRANSACTION' : {
+    case 'SYNC_TRANSACTIONS' : {
+
       return {
         ...state,
-        transactions: [...state.transactions, action.transaction],
+        transactions: action.transactions,
       };
     }
-    case 'EDIT_PROJECT_TRANSACTION' : {
-
-      return {
-        ...state,
-        transactions: util.updateById(state.transactions, action.transaction),
-      };
-    }
-    case 'DELETE_PROJECT_TRANSACTION':
-
-      return {
-        ...state,
-        transactions: state.transactions.filter(t => t.id !== action.id),
-      };
-
     case 'TOGGLE_PROJECT_DRAWER':
       return {
         ...state,
