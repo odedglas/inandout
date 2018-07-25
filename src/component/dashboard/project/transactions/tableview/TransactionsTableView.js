@@ -17,6 +17,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import CreateTransaction from '@modal/CreateTransaction'
 import TransactionTableViewHeader from './TransactionTableViewHeader';
 import TransactionsTableViewToolbar from './TransactionsTableViewToolbar';
+import TransactionFilter from '@modal/TransactionFilter';
 import {TransactionType} from "@model/transaction";
 
 import util from "@util/"
@@ -57,6 +58,8 @@ class TransactionsTableView extends Component {
     showCreateTransactionModal: false,
     transactionForEdit: {},
     transactionActionMap: {},
+    filter: [{type:'category', icon:'family', label:'Family'}],
+    showFilter: false
   };
 
   componentDidMount() {
@@ -99,6 +102,12 @@ class TransactionsTableView extends Component {
   setSelectedForToday = () => {
     this.handleTransactionsLoad(new Date());
   };
+
+  handleFilterChange = (filter) => {
+
+  };
+
+  showHideFilter = (show) => this.setState({showFilter: !!show});
 
   handleTransactionsLoad = (date) => {
 
@@ -144,8 +153,8 @@ class TransactionsTableView extends Component {
 
   handleTransactionCrud = (transaction, action, cb) => {
 
-    const { selectedProject, fillTransaction, setLoading } = this.props;
-    const { selectedDate } = this.state;
+    const {selectedProject, fillTransaction, setLoading} = this.props;
+    const {selectedDate} = this.state;
     let serviceAction, dataManipulation, args;
 
     //Casing action in order to prepare operation params
@@ -207,7 +216,7 @@ class TransactionsTableView extends Component {
         dataManipulation = (data, transaction) => data.filter(t => t.id !== transaction.id);
         break;
       }
-      default :{
+      default : {
         break;
       }
     }
@@ -216,7 +225,7 @@ class TransactionsTableView extends Component {
     setLoading(true);
     transactionService[serviceAction](selectedProject.id, ...args.map(key => transaction[key])).then(persisted => {
 
-      if(!dateUtil.sameMonth(persisted.date, selectedDate)){
+      if (!dateUtil.sameMonth(persisted.date, selectedDate)) {
         //Meaning we should remove old month entry
         transactionService.deleteTransaction(selectedProject.id, persisted.id, selectedDate)
       }
@@ -224,10 +233,12 @@ class TransactionsTableView extends Component {
       const currentTransactions = this.state.data;
 
       //Setting local component state
-      this.setState({data: dataManipulation(
-        currentTransactions,
-        persisted
-      )});
+      this.setState({
+        data: dataManipulation(
+          currentTransactions,
+          persisted
+        )
+      });
 
       //Finally, Triggering callback if sent
       cb && cb();
@@ -237,7 +248,21 @@ class TransactionsTableView extends Component {
   };
 
   render() {
-    const {data, order, orderBy, rowsPerPage, page, selectedDate, loading, isEmpty, showCreateTransactionModal, transactionForEdit} = this.state;
+    const {
+      data,
+      order,
+      orderBy,
+      rowsPerPage,
+      page,
+      selectedDate,
+      loading,
+      isEmpty,
+      showCreateTransactionModal,
+      transactionForEdit,
+      filter,
+      showFilter
+    } = this.state;
+
     const {selectedProject} = this.props;
 
     return (
@@ -254,8 +279,11 @@ class TransactionsTableView extends Component {
           </div>
         </CSSTransition>
         <TransactionsTableViewToolbar date={selectedDate}
-                             setSelectedForToday={this.setSelectedForToday}
-                             onSelectedDateChange={this.handleSelectedDateChange}/>
+                                      filter={filter}
+                                      showFilter={this.showHideFilter}
+                                      setSelectedForToday={this.setSelectedForToday}
+                                      handleFilterChange={this.handleFilterChange}
+                                      onSelectedDateChange={this.handleSelectedDateChange}/>
         <div className={'table-view-wrapper col-sm-12 px-0'}>
           <Table aria-labelledby="tableTitle">
             <TransactionTableViewHeader
@@ -323,7 +351,8 @@ class TransactionsTableView extends Component {
                           />
                         </Tooltip>
                       </TableCell>
-                      <TableCell>{transaction.payments ? `${transaction.paymentIndex + 1} out of ${transaction.payments}` : 'None'}</TableCell>
+                      <TableCell>{transaction.payments ?
+                        `${transaction.paymentIndex + 1} out of ${transaction.payments}` : 'None'}</TableCell>
                       <TableCell>{transaction.customer && transaction.customer.displayName}</TableCell>
                       <TableCell className={'text-center'}>
                         {
@@ -389,6 +418,10 @@ class TransactionsTableView extends Component {
                            transaction={transactionForEdit}
                            transactionCrudHandler={this.handleTransactionCrud}
                            onClose={this.showHideCreateTransaction}/>
+
+        <TransactionFilter open={showFilter}
+                           filter={filter}
+                           hideFilter={this.showHideFilter} />
       </Paper>
     );
   }
