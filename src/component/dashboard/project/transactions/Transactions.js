@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
-import TransactionsTableView from './TransactionsTableView';
+import TransactionsTableView from './tableview/TransactionsTableView';
 import Breadcrumb from '../breadcrumbs/Breadcrumb';
 
 import PageTitle from "@common/PageTitle";

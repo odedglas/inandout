@@ -16,7 +16,7 @@ import ProjectBreadcrumb from './breadcrumbs/ProjectBreadcrumb';
 import {setPreSelectedProject, updateCachedProject, createProjectSyncListener} from "@action/project";
 import util from '@util/';
 import {getProjectRoutes} from './ProjectRoutes';
-import transactionService from '@service/transaction';
+
 const today = new Date();
 class Project extends React.Component {
 

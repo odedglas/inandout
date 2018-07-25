@@ -5,21 +5,18 @@ import {connect} from 'react-redux';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import Avatar from '@material-ui/core/Avatar';
 import DynamicIcon from '@common/DynamicIcon';
 import {CSSTransition} from 'react-transition-group';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CreateTransaction from '@modal/CreateTransaction'
+import TransactionTableViewHeader from './TransactionTableViewHeader';
+import TransactionsTableViewToolbar from './TransactionsTableViewToolbar';
 import {TransactionType} from "@model/transaction";
 
 import util from "@util/"
@@ -29,118 +26,11 @@ import {showConfirmation} from "@action/dashboard";
 import dateUtil from '@util/date';
 import transactionService from '@service/transaction';
 
-function getSorting(order, orderBy) {
+const getSorting = (order, orderBy) => {
 
   const sortProps = [{name: orderBy.prop, reverse: order === 'desc'}];
 
   return util.sortJsonFN(sortProps)
-}
-
-class TableHeader extends Component {
-
-  static propTypes = {
-    onRequestSort: PropTypes.func.isRequired,
-    order: PropTypes.string.isRequired,
-    projectCurrency: PropTypes.string,
-    orderBy: PropTypes.object.isRequired,
-  };
-
-  createSortHandler = column => event => {
-    this.props.onRequestSort(event, {
-      id: column.id,
-      prop: column.orderByProp ? column.orderByProp : column.id
-    });
-  };
-
-  render() {
-    const {order, orderBy, projectCurrency} = this.props;
-
-    const columnData = [
-      {id: 'actions', sortable: false, additionalCls: 'action-cell'},
-      {id: 'date', label: 'Date'},
-      {id: 'owner', label: 'Owner', avatar: true, orderByProp: 'owner.displayName'},
-      {id: 'description', label: 'Description', colspan: 2, additionalCls: 'px-3',},
-      {id: 'amount', numeric: true, label: `Amount (${projectCurrency})`},
-      {id: 'type', label: 'Type', additionalCls: 'small-cell', orderByProp: 'income'},
-      {id: 'payments', label: 'Payments'},
-      {id: 'customer', label: 'Customer', avatar: true,},
-      {id: 'category', label: 'Category', avatar: true, orderByProp: 'category.name'},
-    ];
-
-    return (
-      <TableHead>
-        <TableRow>
-          {columnData.map(column => {
-            return (
-              <TableCell
-                key={column.id}
-                numeric={column.numeric}
-                colSpan={column.colspan ? column.colspan : 1}
-                className={`${column.additionalCls ? column.additionalCls : ''} ${column.avatar ? 'avatar-header' :
-                  ''}`}
-                sortDirection={orderBy.id === column.id ? order : false}
-              >
-                {
-                  column.sortable !== false ? <TableSortLabel
-                    active={orderBy.id === column.id}
-                    direction={order}
-                    onClick={this.createSortHandler(column)}
-                  >
-                    {column.label}
-                  </TableSortLabel> : <div> {column.label} </div>
-                }
-
-              </TableCell>
-            );
-          }, this)}
-        </TableRow>
-      </TableHead>
-    );
-  }
-}
-
-let TransactionsToolbar = ({date, onSelectedDateChange, setSelectedForToday}) => {
-  return (
-    <Toolbar className={'transaction-toolbar col-sm-12 px-0'}>
-
-      <div className={'months-navigator mx-2'}>
-        <Button size="small"
-                disabled={dateUtil.sameMonth(new Date(), date)}
-                variant={'outlined'}
-                color="secondary" onClick={setSelectedForToday}>
-          Today
-        </Button>
-        <Tooltip title="Previous Month" enterDelay={300}>
-          <IconButton className={'icon-button ml-2'}
-                      aria-label="Previous Month"
-                      size={'small'}
-                      onClick={() => onSelectedDateChange(true)}>
-            <DynamicIcon name={'left'}/>
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Next Month" enterDelay={300}>
-          <IconButton className={'icon-button'}
-                      onClick={() => onSelectedDateChange(false)}
-                      aria-label="Next Month"
-                      size={'small'}>
-            <DynamicIcon name={'right'}/>
-          </IconButton>
-        </Tooltip>
-
-        <span className={'selected-month mx-3'}>
-          {dateUtil.format(date, 'MMM YYYY')}
-        </span>
-      </div>
-      <div className={'spacer'}/>
-      <div className={'action mx-2'}>
-        <Tooltip title="Filter List">
-          <IconButton aria-label="Filter List">
-            <FilterListIcon/>
-          </IconButton>
-        </Tooltip>
-      </div>
-    </Toolbar>
-  );
 };
 
 class TransactionsTableView extends Component {
@@ -363,12 +253,12 @@ class TransactionsTableView extends Component {
             <CircularProgress size={50}/>
           </div>
         </CSSTransition>
-        <TransactionsToolbar date={selectedDate}
+        <TransactionsTableViewToolbar date={selectedDate}
                              setSelectedForToday={this.setSelectedForToday}
                              onSelectedDateChange={this.handleSelectedDateChange}/>
         <div className={'table-view-wrapper col-sm-12 px-0'}>
           <Table aria-labelledby="tableTitle">
-            <TableHeader
+            <TransactionTableViewHeader
               order={order}
               projectCurrency={selectedProject.currency}
               orderBy={orderBy}
