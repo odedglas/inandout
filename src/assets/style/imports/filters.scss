@@ -1,0 +1,22 @@
+@import '../variables';
+
+.filter {
+
+  .modal-content {
+    padding:0.5rem ;
+  }
+
+  .add-filter, .remove-filter {
+    float:right;
+    padding: 0;
+  }
+
+  .add-filter {
+    color: $logo-color;
+  }
+
+  .remove-filter {
+    color: $error-color;
+  }
+
+}

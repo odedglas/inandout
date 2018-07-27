@@ -95,10 +95,10 @@ export default {
       }, {});
     });
   },
-  updateById(array, item) {
+  updateById(array, item, key = 'id') {
 
     const _array = [...array];
-    const index = array.findIndex(i => i.id === item.id);
+    const index = array.findIndex(i => i[key] === item[key]);
 
     _array.splice(index, 1, item);
     return _array;

@@ -8,7 +8,7 @@ import DynamicIcon from '@common/DynamicIcon';
 
 import dateUtil from '@util/date';
 
-export default ({date, filter, onSelectedDateChange, setSelectedForToday, showFilter, handleFilterChange}) => {
+export default ({date, filter, onSelectedDateChange, setSelectedForToday, showFilter}) => {
   return (
     <Toolbar className={'transaction-toolbar col-sm-12 px-0'}>
 

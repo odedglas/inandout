@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {compose} from 'recompose';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -17,8 +18,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import CreateTransaction from '@modal/CreateTransaction'
 import TransactionTableViewHeader from './TransactionTableViewHeader';
 import TransactionsTableViewToolbar from './TransactionsTableViewToolbar';
-import TransactionFilter from '@modal/TransactionFilter';
+import TransactionFilter from '../filter/TransactionFilter';
 import {TransactionType} from "@model/transaction";
+import withFilter from '@hoc/withFilter';
 
 import util from "@util/"
 import {loadTransactions} from "@action/project";
@@ -44,6 +46,9 @@ class TransactionsTableView extends Component {
     fillTransaction: PropTypes.func.isRequired,
     selectedProject: PropTypes.object,
     projectCurrency: PropTypes.string,
+    filter: PropTypes.arrayOf(PropTypes.object).isRequired,
+    doFilter: PropTypes.func.isRequired ,
+    handleFilterChange: PropTypes.func.isRequired,
   };
 
   state = {
@@ -58,7 +63,6 @@ class TransactionsTableView extends Component {
     showCreateTransactionModal: false,
     transactionForEdit: {},
     transactionActionMap: {},
-    filter: [{type:'category', icon:'family', label:'Family'}],
     showFilter: false
   };
 
@@ -101,10 +105,6 @@ class TransactionsTableView extends Component {
 
   setSelectedForToday = () => {
     this.handleTransactionsLoad(new Date());
-  };
-
-  handleFilterChange = (filter) => {
-
   };
 
   showHideFilter = (show) => this.setState({showFilter: !!show});
@@ -259,11 +259,12 @@ class TransactionsTableView extends Component {
       isEmpty,
       showCreateTransactionModal,
       transactionForEdit,
-      filter,
       showFilter
     } = this.state;
 
-    const {selectedProject} = this.props;
+    const {selectedProject, filter, handleFilterChange, doFilter} = this.props;
+
+    const filteredData = data.filter(doFilter);
 
     return (
       <Paper className={'mt-3 row'} style={{position: 'relative'}}>
@@ -282,7 +283,6 @@ class TransactionsTableView extends Component {
                                       filter={filter}
                                       showFilter={this.showHideFilter}
                                       setSelectedForToday={this.setSelectedForToday}
-                                      handleFilterChange={this.handleFilterChange}
                                       onSelectedDateChange={this.handleSelectedDateChange}/>
         <div className={'table-view-wrapper col-sm-12 px-0'}>
           <Table aria-labelledby="tableTitle">
@@ -293,7 +293,7 @@ class TransactionsTableView extends Component {
               onRequestSort={this.handleRequestSort}
             />
             <TableBody>
-              {data
+              {filteredData
                 .sort(getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(transaction => {
@@ -400,7 +400,7 @@ class TransactionsTableView extends Component {
           <div className={'flex'}></div>
           <TablePagination
             component="div"
-            count={data.length}
+            count={filteredData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             backIconButtonProps={{
@@ -421,16 +421,56 @@ class TransactionsTableView extends Component {
 
         <TransactionFilter open={showFilter}
                            filter={filter}
+                           handleFilterChange={handleFilterChange}
                            hideFilter={this.showHideFilter} />
       </Paper>
     );
   }
 }
 
-export default connect(state => ({
-  selectedProject: state.project.selectedProject
-}), {
-  loadTransactions,
-  setLoading,
-  showConfirmation
-})(TransactionsTableView);
+export default compose(
+  withFilter([
+    {
+      type:'string',
+      label:'Description',
+      id: 'description',
+    },
+    {
+      type:'number',
+      label:'Amount',
+      id: 'amount',
+    },
+    {
+      type:'select',
+      label:'Owner',
+      id: 'owner',
+    },
+    {
+      type:'select',
+      label:'Category',
+      id: 'category',
+    },
+    {
+      type:'select',
+      label:'Type',
+      id: 'type',
+    },
+    {
+      type:'select',
+      label:'Customer',
+      id: 'customer',
+    },
+    {
+      type:'date',
+      label:'Date',
+      id: 'date',
+    },
+  ]),
+  connect(state => ({
+    selectedProject: state.project.selectedProject
+  }), {
+    loadTransactions,
+    setLoading,
+    showConfirmation
+  })
+)(TransactionsTableView);

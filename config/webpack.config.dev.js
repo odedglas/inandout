@@ -95,6 +95,7 @@ module.exports = {
       '@action':  path.resolve('src/actions/'),
       '@common':  path.resolve('src/component/common/'),
       '@modal':  path.resolve('src/component/modal/'),
+      '@hoc':  path.resolve('src/component/hoc/'),
       '@model':  path.resolve('src/model/'),
       '@scss':  path.resolve('src/assets/style/'),
     },

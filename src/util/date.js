@@ -32,6 +32,10 @@ export default {
     return moment(date).subtract(amount, unit).toDate();
   },
 
+  isAfter: (d1, d2) => moment(d1).isAfter(d2),
+
+  isBefore: (d1, d2) => moment(d1).isBefore(d2),
+
   getBudgetRange (period)  {
 
     let d = moment();

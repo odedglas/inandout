@@ -1,17 +1,17 @@
 export const ROUTER = {
-  LOGIN          : '/login',
-  SIGN_UP        : '/signup',
+  LOGIN: '/login',
+  SIGN_UP: '/signup',
   FORGOT_PASSWORD: '/forgot-pw',
-  DASHBOARD      : '/dashboard',
-  PROJECT        : '/dashboard/project/:identifier',
-  BUDGETS        : '/dashboard/project/:identifier/budgets',
-  CATEGORIES        : '/dashboard/project/:identifier/categories',
-  TRANSACTIONS        : '/dashboard/project/:identifier/transactions',
-  CUSTOMERS        : '/dashboard/project/:identifier/customers',
-  PROJECT_CALENDAR        : '/dashboard/project/:identifier/calendar',
-  TODOS        : '/dashboard/project/:identifier/todos',
-  WELCOME        : '/welcome',
-  HOME           : '/'
+  DASHBOARD: '/dashboard',
+  PROJECT: '/dashboard/project/:identifier',
+  BUDGETS: '/dashboard/project/:identifier/budgets',
+  CATEGORIES: '/dashboard/project/:identifier/categories',
+  TRANSACTIONS: '/dashboard/project/:identifier/transactions',
+  CUSTOMERS: '/dashboard/project/:identifier/customers',
+  PROJECT_CALENDAR: '/dashboard/project/:identifier/calendar',
+  TODOS: '/dashboard/project/:identifier/todos',
+  WELCOME: '/welcome',
+  HOME: '/'
 };
 
 export const CURRENCIES = [
@@ -78,19 +78,19 @@ export const BUDGETS_PERIOD = [
   {
     key: 'WEEKLY',
     label: 'Weekly',
-    period:'week',
+    period: 'week',
     statisticsPeriod: 'daily',
   },
   {
     key: 'MONTHLY',
     label: 'Monthly',
-    period:'month',
+    period: 'month',
     statisticsPeriod: 'daily',
   },
   {
     key: 'YEARLY',
     label: 'Yearly',
-    period:'year',
+    period: 'year',
     statisticsPeriod: 'monthly',
   },
 ];
@@ -98,7 +98,7 @@ export const BUDGETS_PERIOD = [
 export const TRANSACTIONS_TYPE = [
   {
     key: 'INCOME',
-    label:'Income'
+    label: 'Income'
   },
   {
     key: 'OUTCOME',

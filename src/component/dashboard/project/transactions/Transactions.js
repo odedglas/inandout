@@ -48,7 +48,8 @@ class Transactions extends Component {
         <PageTitle text={'Transactions'} icon={'transactions'}/>
 
         <div className={'px-4'}>
-          <TransactionsTableView transactions={filledTransactions} fillTransaction={this.handleTransactionFill}/>
+          <TransactionsTableView transactions={filledTransactions}
+                                 fillTransaction={this.handleTransactionFill}/>
         </div>
       </div>
     );
