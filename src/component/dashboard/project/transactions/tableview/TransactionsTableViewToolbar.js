@@ -5,10 +5,13 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import DynamicIcon from '@common/DynamicIcon';
-
+import util from '@util/';
 import dateUtil from '@util/date';
 
 export default ({date, filter, onSelectedDateChange, setSelectedForToday, showFilter}) => {
+
+  const hasFilter = filter.some(f => !util.isEmptyObject(f.value));
+
   return (
     <Toolbar className={'transaction-toolbar col-sm-12 px-0'}>
 
@@ -41,9 +44,9 @@ export default ({date, filter, onSelectedDateChange, setSelectedForToday, showFi
         </span>
       </div>
       <div className={'spacer'}/>
-      <div className={'action mx-2'}>
+      <div className={'filter-wrapper mx-2'}>
         <Tooltip title="Filter List">
-          <IconButton aria-label="Filter List" onClick={showFilter}>
+          <IconButton aria-label="Filter List" className={`filter ${hasFilter ? 'active' : ''}`} onClick={showFilter} >
             <FilterListIcon/>
           </IconButton>
         </Tooltip>

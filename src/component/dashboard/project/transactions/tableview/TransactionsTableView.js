@@ -259,13 +259,12 @@ class TransactionsTableView extends Component {
       isEmpty,
       showCreateTransactionModal,
       transactionForEdit,
-      showFilter
+      showFilter,
     } = this.state;
 
     const {selectedProject, filter, handleFilterChange, doFilter} = this.props;
 
     const filteredData = data.filter(doFilter);
-
     return (
       <Paper className={'mt-3 row'} style={{position: 'relative'}}>
 
@@ -444,6 +443,7 @@ export default compose(
       type:'select',
       label:'Owner',
       id: 'owner',
+      getFieldValue: (data) => data.owner.id
     },
     {
       type:'select',

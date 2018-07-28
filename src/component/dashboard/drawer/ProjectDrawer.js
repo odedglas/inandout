@@ -80,7 +80,6 @@ class ProjectDrawer extends Component {
         {this.drawerItem('categories',  <DynamicIcon name={'categories'}/>, 'Categories')}
         {this.drawerItem('customers',  <DynamicIcon name={'customers'}/>, 'Customers')}
         {this.drawerItem('calendar',  <DynamicIcon name={'calendar'}/>, 'Calendar')}
-        {this.drawerItem('todos',  <DynamicIcon name={'todo'}/>, 'Todo\'s')}
       </Drawer>
     );
   }

@@ -147,4 +147,14 @@ export default {
       }
     })
   },
+  createCustomer(projectId, customer) {
+
+    return database.ref(`/projects/${projectId}/customers`).push(customer).then(res => {
+
+      return {
+        ...customer,
+        id: res.key
+      }
+    })
+  },
 }

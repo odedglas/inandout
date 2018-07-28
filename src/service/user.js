@@ -1,5 +1,6 @@
 import firebaseService from './firebase';
 import themeService from './theme';
+import util from '@util/';
 
 export default {
 
@@ -15,7 +16,7 @@ export default {
   }),
   createUser: (id, displayName, email) => {
 
-    const initials = displayName ? getInitials(displayName) : email.substring(0,1);
+    const initials = displayName ? util.getInitials(displayName) : email.substring(0,1);
 
     const user = {
       displayName,
@@ -45,8 +46,6 @@ export default {
     });
   },
 }
-
-const getInitials = str =>str.split(" ").map((n)=>n[0]).slice(0,2).join("");
 
 const getUserProjectsMeta = projects => {
 

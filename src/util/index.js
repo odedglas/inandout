@@ -112,6 +112,9 @@ export default {
       map[item.id] = item;
       return map;
     }, {}) : {};
+  },
+  getInitials(str) {
+    return str.split(" ").map((n)=>n[0]).slice(0,2).join("");
   }
 }
 

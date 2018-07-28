@@ -9,7 +9,6 @@ export const ROUTER = {
   TRANSACTIONS: '/dashboard/project/:identifier/transactions',
   CUSTOMERS: '/dashboard/project/:identifier/customers',
   PROJECT_CALENDAR: '/dashboard/project/:identifier/calendar',
-  TODOS: '/dashboard/project/:identifier/todos',
   WELCOME: '/welcome',
   HOME: '/'
 };

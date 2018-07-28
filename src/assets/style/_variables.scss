@@ -121,6 +121,28 @@ $breakpoints: (
   justify-content: center;
 }
 
+@mixin withScrollbar ($bgColor: $background-color) {
+
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+    height: 7px;
+    width:7px;
+
+    @if $bgColor == white {
+      background-color: white;
+    }
+    @else {
+      background-color: $background-color;
+    }
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+  }
+}
+
 :export {
   successColor: #43A047;
   errorColor: #e53935;

@@ -5,7 +5,7 @@ const FILTER_TYPES = {
     operators: [
       {
         key: 'gt',
-        mmark: '>',
+        mark: '>',
         label: 'Greater than',
         operator: (v1, v2) => v1 > v2
       },

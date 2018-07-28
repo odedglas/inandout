@@ -64,6 +64,9 @@ import OverviewIcon from '@material-ui/icons/PanoramaFishEye';
 import LeftChevIcon from '@material-ui/icons/ChevronLeft';
 import RightChevIcon from '@material-ui/icons/ChevronRight';
 import DisabledIcon from '@material-ui/icons/NotInterested';
+import StatEmptyIcon from '@material-ui/icons/StarBorder';
+import StarIcon from '@material-ui/icons/Star';
+import SearchIcon from '@material-ui/icons/Search';
 
 const iconMap = {
   'home': HomeIcon,
@@ -120,6 +123,9 @@ const iconMap = {
   'left': LeftChevIcon,
   'right': RightChevIcon,
   'disable': DisabledIcon,
+  'star-empty': StatEmptyIcon,
+  'start': StarIcon,
+  'search': SearchIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {

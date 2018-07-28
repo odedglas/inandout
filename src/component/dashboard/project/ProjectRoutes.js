@@ -44,7 +44,6 @@ import Budgets from './budgets/Budgets';
 import ProjectCalendar from './calendar/ProjectCalendar';
 import Categories from './categories/Categories';
 import Customers from './customers/Customers';
-import Todos from './todo/Todos';
 import Transactions from './transactions/Transactions';
 
 export function getProjectRoutes(location) {
@@ -69,9 +68,6 @@ export function getProjectRoutes(location) {
 
       <Route exact path={routes.PROJECT_CALENDAR}
              component={ProjectCalendar}/>
-
-      <Route exact path={routes.TODOS}
-             component={Todos}/>
 
     </Switch>
 
