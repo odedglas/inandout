@@ -217,6 +217,7 @@ export function updateCachedProject() {
       customers: projectState.customers,
       budgets: projectState.budgets,
       categories: projectState.categories,
+      excludedCategories: projectState.excludedCategories,
       transactions: projectState.transactions,
       members: projectState.members,
     };

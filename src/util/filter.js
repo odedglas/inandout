@@ -56,17 +56,17 @@ const FILTER_TYPES = {
       {
         key: 'contains',
         label: 'Contains',
-        operator: (v1, v2) => v1 && v1.includes(v2)
+        operator: (v1, v2) => v1 && v1.toLowerCase().includes(v2.toLowerCase())
       },
       {
         key: 'sw',
         label: 'Starts with',
-        operator: (v1, v2) => v1 && v1.startsWith(v2)
+        operator: (v1, v2) => v1 && v1.toLowerCase().startsWith(v2.toLowerCase())
       },
       {
         key: 'ew',
         label: 'Ends with',
-        operator: (v1, v2) => v1 && v1.endsWith(v2)
+        operator: (v1, v2) => v1 && v1.toLowerCase().endsWith(v2.toLowerCase())
       },
     ]
   },
@@ -89,12 +89,26 @@ const FILTER_TYPES = {
       {
         key: 'in',
         label: 'In',
-        operator: (v1, v2) => v1.indexOf(v2) !== -1
+        operator: (v1, v2) => v1 && v2.indexOf(v1) !== -1
       },
       {
         key: 'nin',
         label: 'Not in',
-        operator: (v1, v2) => v1.indexOf(v2) === -1
+        operator: (v1, v2) => v2.indexOf(v1) === -1
+      },
+    ]
+  },
+  'singleSelect': {
+    operators: [
+      {
+        key: 'is',
+        label: 'Is',
+        operator: (v1, v2) => v1 === v2
+      },
+      {
+        key: 'not',
+        label: 'Not',
+        operator: (v1, v2) => v1 !== v2
       },
     ]
   }

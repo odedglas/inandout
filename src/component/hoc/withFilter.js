@@ -40,7 +40,13 @@ const withFilter = (filterDefinition) => (Component) => {
         const filterValueEntry = filter.value;
         const operatorWrapper = filter.operators.find(o => o.key === filterValueEntry.operator);
 
-        return operatorWrapper.operator(data[filter.id], filterValueEntry.value);
+        //The get Field value access method
+        const getDataFieldValue = (data) => {
+          if(filter.getFieldValue) return filter.getFieldValue(data);
+          return data[filter.id];
+        };
+
+        return operatorWrapper.operator(getDataFieldValue(data), filterValueEntry.value);
       });
 
       this.setState({filter, filterFN});

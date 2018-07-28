@@ -13,12 +13,18 @@ const withValidation = (validatorConfig) => (Component) => {
         validator: validator,
         validation: validator.valid()
       }
+
+      this.validationComponentRef = React.createRef();
     }
 
-    validate = (state, field) => {
+    validate = (state, field, silent = false) => {
 
+      const wasValid = this.isValid();
       const validationResult = validationService.validate(this.state.validator, state, field);
-      this.setState({validation: validationResult});
+
+      if(!silent && !(wasValid && validationResult.isValid)) {
+        this.setState({validation: validationResult});
+      }
 
       return validationResult;
     };
@@ -46,6 +52,7 @@ const withValidation = (validatorConfig) => (Component) => {
       }
 
     };
+
     render() {
 
       const { validation } = this.state;
@@ -53,6 +60,7 @@ const withValidation = (validatorConfig) => (Component) => {
       return (
         <Component {...this.props}
                    isValid={this.isValid}
+                   ref={this.validationComponentRef}
                    validate={this.validate}
                    validation={validation}
                    clearValidation={this.clearValidation}

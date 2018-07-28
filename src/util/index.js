@@ -98,7 +98,10 @@ export default {
   updateById(array, item, key = 'id') {
 
     const _array = [...array];
-    const index = array.findIndex(i => i[key] === item[key]);
+
+    const getValue = (i) => typeof key === 'function' ? key(i) : i[key];
+
+    const index = array.findIndex(i => getValue(i) === getValue(item));
 
     _array.splice(index, 1, item);
     return _array;

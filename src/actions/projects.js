@@ -3,7 +3,7 @@ import {selectProject} from "./project";
 
 export function createProject({projectName, projectType, projectDescription, projectCurrency}, onSuccess) {
 
-  return dispatch => {
+  return (dispatch, getState) => {
 
     dispatch({type: 'APP_LOADING', loading: true});
 
@@ -14,11 +14,14 @@ export function createProject({projectName, projectType, projectDescription, pro
       projectCurrency
     ).then((project) => {
 
-      onSuccess(project);
+      const defaultCategories = getState().categories.defaults;
+      const filledProject = projectService.fillProject(project, {}, defaultCategories);
 
-      dispatch({type: 'ADD_PROJECT', project});
-      dispatch(selectProject(project));
+      dispatch({type: 'ADD_PROJECT', project: filledProject});
+      dispatch(selectProject(filledProject));
       dispatch({type: 'APP_LOADING', loading: false});
+
+      onSuccess(filledProject);
     })
   }
 }

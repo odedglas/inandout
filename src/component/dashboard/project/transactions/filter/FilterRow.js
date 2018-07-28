@@ -7,6 +7,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import DynamicIcon from "../../../../common/DynamicIcon";
 import DatePicker from 'material-ui-pickers/DatePicker';
 import util from '@util/'
+import {TRANSACTIONS_TYPE} from '@const/';
+import Avatar from '@material-ui/core/Avatar';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import AvatarSelect from '@common/AvatarSelect';
 
 const initialState = {
   filterId: '',
@@ -17,7 +22,11 @@ const initialState = {
 class FilterRow extends Component {
 
   static propTypes = {
+    categories: PropTypes.array,
+    customers: PropTypes.array,
+    members: PropTypes.array,
     filter: PropTypes.array,
+    filterValues: PropTypes.array,
     filterRow: PropTypes.object,
     addFilterRow: PropTypes.func,
     editFilterRow: PropTypes.func,
@@ -50,19 +59,19 @@ class FilterRow extends Component {
     if (field === 'filterId') {
       //Cleaning current operator
       update.operator = '';
+      update.value = '';
     }
 
     this.props.onValidationChange({...this.state}, update, field);
     this.setState(update);
-
   };
 
-  isRowValid = () => {
+  isRowValid = (silent) => {
 
     const {validate} = this.props;
     const validationModel = {...this.state};
 
-    const validationResult = validate(validationModel);
+    const validationResult = validate(validationModel, undefined, silent);
     return validationResult.isValid
   };
 
@@ -86,6 +95,8 @@ class FilterRow extends Component {
 
   getValueControl = (selectedFilter, value, validation) => {
 
+    const {categories , customers, members} = this.props;
+
     const type = selectedFilter ? selectedFilter.type : '';
 
     switch (type) {
@@ -93,22 +104,146 @@ class FilterRow extends Component {
       case 'date' : {
         return (
           <DatePicker
-            value={value || new Date()}
+            value={value || null}
+            autoOk
             error={validation.value.isInvalid}
             title={validation.value.message}
             label="Value"
-            style={{maxWidth:'100%'}}
+            style={{maxWidth: '100%'}}
             onChange={(date) => {
               this.handleFieldChange('value', date.toDate().getTime())
             }}
           />
         );
       }
+      case 'singleSelect' : {
+
+        const filterId = selectedFilter.id;
+
+        if (filterId === 'type') return (
+          <TextField
+            select
+            fullWidth
+            label="Value"
+            error={validation.value.isInvalid}
+            title={validation.value.message}
+            value={value}
+            onChange={(e) => this.handleFieldChange('value', e.target.value)}
+          >
+            {TRANSACTIONS_TYPE.map(option => (
+              <MenuItem key={option.key} value={option.key}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        );
+
+        return null;
+      }
+
+      case 'select' : {
+
+        const filterId = selectedFilter.id;
+
+        if (filterId === 'category') return (
+
+          <AvatarSelect selected={value || []}
+                        label="Value"
+                        error={validation.value.isInvalid}
+                        multi={true}
+                        rawData={categories}
+                        filterData={(c) => !c.excluded}
+                        renderAvatar={(item) => (
+                          <Avatar className={'avatar smallest mr-1'}
+                                  key={item.id}
+                                  style={{'backgroundColor': item.color}}>
+                            <DynamicIcon className={'icon white'} name={item.icon}/>
+                          </Avatar>
+                        )}
+                        renderListItem={(item) => (
+                          <MenuItem
+                            key={item.id}
+                            value={item.id}>
+                            <ListItemIcon className={'menu-icon'}>
+                              <Avatar className={'avatar small'} style={{'backgroundColor': item.color}}>
+                                <DynamicIcon className={'icon white'} name={item.icon}/>
+                              </Avatar>
+                            </ListItemIcon>
+                            <ListItemText className={'menu-text'}
+                                          primary={item.name}/>
+                          </MenuItem>
+                        )}
+                        onChange={(val) => this.handleFieldChange('value', val)}/>
+        );
+
+        else if (filterId === 'customer') return (
+
+          <AvatarSelect selected={value || []}
+                        label="Value"
+                        error={validation.value.isInvalid}
+                        multi={true}
+                        rawData={customers}
+                        renderAvatar={(item) => (
+                          <Avatar className={'avatar smallest mr-1'}
+                                  key={item.id}
+                                  style={{'backgroundColor': item.color}}>
+                            <DynamicIcon className={'icon white'} name={item.icon}/>
+                          </Avatar>
+                        )}
+                        renderListItem={(item) => (
+                          <MenuItem
+                            key={item.id}
+                            value={item.id}>
+                            <ListItemIcon className={'menu-icon'}>
+                              <Avatar className={'avatar small'} style={{'backgroundColor': item.color}}>
+                                <DynamicIcon className={'icon white'} name={item.icon}/>
+                              </Avatar>
+                            </ListItemIcon>
+                            <ListItemText className={'menu-text'}
+                                          primary={item.name}/>
+                          </MenuItem>
+                        )}
+                        onChange={(val) => this.handleFieldChange('value', val)}/>
+        );
+
+        else if (filterId === 'owner') return (
+
+          <AvatarSelect selected={value || []}
+                        label="Value"
+                        error={validation.value.isInvalid}
+                        multi={true}
+                        rawData={members}
+                        renderAvatar={(item) => (
+                          <Avatar className={'avatar smallest mr-1'}
+                                  key={item.id}
+                                  style={{'backgroundColor': item.avatarColor}}>
+                            {item.initials}
+                          </Avatar>
+                        )}
+                        renderListItem={(item) => (
+                          <MenuItem
+                            key={item.id}
+                            value={item.id}>
+                            <ListItemIcon className={'menu-icon'}>
+                              <Avatar className={'avatar small'} style={{'backgroundColor': item.avatarColor}}>
+                                {item.initials}
+                              </Avatar>
+                            </ListItemIcon>
+                            <ListItemText className={'menu-text'}
+                                          primary={item.displayName}/>
+                          </MenuItem>
+                        )}
+                        onChange={(val) => this.handleFieldChange('value', val)}/>
+        );
+
+        return null;
+      }
       default: {
 
         return (
           <TextField
             value={value}
+            type={type === 'number' ? 'number' : 'text'}
             fullWidth
             onChange={(e) => this.handleFieldChange('value', e.target.value)}
             error={validation.value.isInvalid}
@@ -122,11 +257,13 @@ class FilterRow extends Component {
 
   render() {
 
-    const {filter, filterRow, validation} = this.props;
+    const {filter, filterValues, filterRow, validation} = this.props;
     const {filterId, operator, value} = this.state;
 
     const isNewRow = !filterRow || util.isEmptyObject(filterRow);
     const selectedFilter = filter.find(f => f.id === filterId);
+
+    const excludedFilters = filterValues ? filterValues.map(fv => fv.filterId) : [];
 
     return (
       <div className={'row'}>
@@ -143,13 +280,13 @@ class FilterRow extends Component {
               fullWidth
               label={isNewRow ? 'Choose filter' : 'Filed'}
               disabled={!isNewRow}
-              inputProps={{className:'capitalize'}}
+              inputProps={{className: 'capitalize'}}
               error={validation.filterId.isInvalid}
               title={validation.filterId.message}
               onChange={(e) => this.handleFieldChange('filterId', e.target.value)}
               value={filterId}
             >
-              {filter.map(f => (
+              {filter.filter(f => excludedFilters.indexOf(f.id) === -1).map(f => (
                 <MenuItem key={f.id} value={f.id}>
                   {f.label}
                 </MenuItem>
@@ -183,10 +320,10 @@ class FilterRow extends Component {
                 )) : <MenuItem key={'empty-item'} value={''}/>}
             </TextField>
           </div>
-          <div className={'col-sm-3'}>
-            { this.getValueControl(selectedFilter, value, validation)}
+          <div className={'col-sm-4'}>
+            {this.getValueControl(selectedFilter, value, validation)}
           </div>
-          <div className={'col-sm-2 px-0'}>
+          <div className={'col-sm-1 px-0'}>
             {isNewRow ?
               <IconButton className={'add-filter'} onClick={this.onFilterAdd}>
                 <DynamicIcon name={'add'}/>
@@ -217,7 +354,7 @@ export default withValidation([
   },
   {
     field: 'value',
-    method: (v, f, state, validator, args) => !validator.isEmpty(''+v),
+    method: (v, f, state, validator, args) => !validator.isEmpty('' + v),
     message: 'Please peak filter value'
   },
 ])(FilterRow)

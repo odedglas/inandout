@@ -13,6 +13,16 @@
     }
   }
 
+  &.smallest {
+    height:22px;
+    width:22px;
+    font-size: 0.8rem;
+
+    .icon {
+      font-size: 0.8rem;
+    }
+  }
+
   &.smaller {
     height:28px;
     width:28px;

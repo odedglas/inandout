@@ -7,6 +7,7 @@ const projectDrawerLocalStorageKey = LOCAL_STORAGE.PROJECT_DRAWER_OPEN;
 const initialState = {
   preSelectedProject: undefined,
   selectedProject: {},
+  members:[],
   categories:[],
   excludedCategories:[],
   budgets: [],
@@ -34,8 +35,9 @@ export default function (state = initialState, action) {
         categories: categories,
         transactions: action.transactions,
         excludedCategories: action.excludedCategories,
-        customers: action.customers || [],
-        budgets: action.budgets || [],
+        customers: action.customers,
+        budgets: action.budgets,
+        members: action.members,
       }
     }
 

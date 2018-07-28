@@ -449,9 +449,10 @@ export default compose(
       type:'select',
       label:'Category',
       id: 'category',
+      getFieldValue: (data) => data.category ? data.category.id : null
     },
     {
-      type:'select',
+      type:'singleSelect',
       label:'Type',
       id: 'type',
     },

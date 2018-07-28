@@ -3,33 +3,26 @@ import util from '@util/'
 import {CURRENCIES} from "@const/";
 
 export default {
-  fetchUserProjects: (projectKeys) => firebaseService.fetchByKeys('/projects', projectKeys).then(projects => {
+  fetchUserProjects(projectKeys) {
 
-    return projects.map(p => {
+    return firebaseService.fetchByKeys('/projects', projectKeys);
+  },
+  fetchProject(identifier) {
+    firebaseService.fetch(`/projectsIdentifier/${identifier}`).then(res => {
+      return firebaseService.fetch(`/projects/${res.value}`);
+    })
+  },
+  createProject(name, type, description, currency) {
 
-      p.categories = toArray(p.categories);
-      p.budgets = toArray(p.budgets);
-
-      const excludedCategories = p.excludedCategories || [];
-      p.excludedCategories = Object.keys(excludedCategories).map(key => {
-        return excludedCategories[key]
-      });
-
-      return p;
-    });
-
-  }),
-  fetchProject: identifier => firebaseService.fetch(`/projectsIdentifier/${identifier}`).then(res => {
-    return firebaseService.fetch(`/projects/${res.value}`);
-  }),
-  createProject: (name, type, description, currency) => {
+    const ownerId = firebaseService.user.id;
 
     const project = {
       name,
       type,
       description,
       currency,
-      owner: firebaseService.user.id,
+      members: [ownerId],
+      owner: ownerId,
     };
 
     let unique = normalizeProjectName(name);
@@ -49,28 +42,43 @@ export default {
     })
 
   },
-  mergeProjectResults: (projects, transactions, defaultCategories) => {
+  mergeProjectResults(projects, transactions, defaultCategories) {
 
-    return projects.map(project => {
+    return projects.map(project => this.fillProject(project, transactions, defaultCategories))
+  },
 
-      const customers = project.customers || [];
-      const members = project.members || [];
-      const budgets = project.budgets || [];
-      const projectCategories = project.categories.reverse().concat(defaultCategories);
-      const projectTransactions = transactions[project.id];
+  fillProject(project, transactionsMap, defaultCategories) {
 
-      return {
-        ...project,
-        currency: util.searchInConst(CURRENCIES,project.currency),
-        customers,
-        members,
-        budgets,
-        transactions: projectTransactions,
-        categories: projectCategories
-      }
-    })
+    let _project = transformToViewProject(project);
+
+    const projectCategories = _project.categories.reverse().concat(defaultCategories);
+    const projectTransactions = transactionsMap[_project.id] || [];
+
+    return {
+      ..._project,
+      currency: util.searchInConst(CURRENCIES, _project.currency),
+      transactions: projectTransactions,
+      categories: projectCategories
+    }
   }
 }
+
+const transformToViewProject = (firebaseProject) => {
+
+  let p = {...firebaseProject};
+
+  p.categories = toArray(p.categories);
+  p.budgets = toArray(p.budgets);
+  p.customers = p.customers || [];
+  p.members = p.members || [];
+
+  const excludedCategories = p.excludedCategories || [];
+  p.excludedCategories = Object.keys(excludedCategories).map(key => {
+    return excludedCategories[key]
+  });
+
+  return p
+};
 const normalizeProjectName = name => name.toLowerCase().replaceAll(" ", "-");
 const generateProjectIdentifier = name => `${normalizeProjectName(name)}-${util.randomAlphaNumeric(4)}`;
 const toArray = (object) => object ? Object.keys(object).map(key => {
