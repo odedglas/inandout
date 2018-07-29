@@ -53,7 +53,7 @@ export default {
 
     const updatePath = customersPath(projectId, customerId);
 
-    return firebaseService.update(updatePath, customer).then((d) => {
+    return firebaseService.update(updatePath, customer).then(() => {
 
       customer.id = customerId;
       return customer;
