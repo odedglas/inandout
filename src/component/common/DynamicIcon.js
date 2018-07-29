@@ -124,7 +124,7 @@ const iconMap = {
   'right': RightChevIcon,
   'disable': DisabledIcon,
   'star-empty': StatEmptyIcon,
-  'start': StarIcon,
+  'star': StarIcon,
   'search': SearchIcon,
 };
 

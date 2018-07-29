@@ -3,6 +3,7 @@ import {LOCAL_STORAGE} from '@const/'
 import categoryService from '@service/category'
 import budgetService from '@service/budget'
 import transactionService from '@service/transaction'
+import customerService from '@service/customer'
 
 import util from '@util/';
 
@@ -178,6 +179,81 @@ export function deleteBudget(project, budgetId) {
 export function syncTransactions(transactions) {
   return dispatch => dispatch({ type: 'SYNC_TRANSACTIONS', transactions });
 }
+
+export function createCustomer(project, { name, contactName, phone, email, address, logo }, onSuccess) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    customerService.createCustomer(
+      project.id,
+      name,
+      contactName,
+      phone,
+      email,
+      address,
+      logo
+    ).then(customer => {
+
+      dispatch({type: 'ADD_PROJECT_CUSTOMER', customer});
+      onSuccess(customer);
+
+      dispatch({type: 'APP_LOADING', loading: false})
+    });
+  }
+}
+
+export function editCustomer(project, { id, name, contactName, phone, email, address, logo }, onSuccess) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    customerService.editCustomer(
+      project.id,
+      id,
+      name,
+      contactName,
+      phone,
+      email,
+      address,
+      logo
+    ).then(customer => {
+
+      dispatch({type: 'EDIT_PROJECT_CUSTOMER', customer});
+      onSuccess(customer);
+
+      dispatch({type: 'APP_LOADING', loading: false})
+    });
+  }
+}
+
+export function setStarred(project, { id, star}) {
+
+  return dispatch => {
+
+    customerService.setStarred(project.id, id, star).then(customer => {
+
+      dispatch({type: 'EDIT_PROJECT_CUSTOMER', customer});
+    });
+  }
+}
+
+export function deleteCustomer(project, customerId) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    customerService.removeCustomer(project.id, customerId).then(() => {
+
+      dispatch({type: 'DELETE_PROJECT_CUSTOMER', customerId});
+      dispatch({type: 'APP_LOADING', loading: false});
+    })
+  }
+}
+
 
 export function toggleProjectDrawer(open) {
   return dispatch => {

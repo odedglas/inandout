@@ -72,7 +72,7 @@ export default {
     return Promise.all(promises);
   },
   update(path, item) {
-    return database.ref(path).set({
+    return database.ref(path).update({
       ...item
     })
   },

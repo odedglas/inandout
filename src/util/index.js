@@ -103,7 +103,8 @@ export default {
 
     const index = array.findIndex(i => getValue(i) === getValue(item));
 
-    _array.splice(index, 1, item);
+    const update = {..._array[index], ...item};
+    _array.splice(index, 1, update);
     return _array;
   },
   toIdsMap(array) {

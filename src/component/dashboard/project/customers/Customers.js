@@ -9,13 +9,16 @@ import Breadcrumb from '../breadcrumbs/Breadcrumb';
 import DynamicIcon from "@common/DynamicIcon";
 import PageTitle from "@common/PageTitle";
 import CustomersList from './CustomersList';
-
+import CreateCustomer from '@modal/CreateCustomer'
+import {createCustomer} from "@action/project";
 import {CustomerType} from "@model/customer";
 
 class Customers extends Component {
 
   static propTypes = {
-    customers: PropTypes.arrayOf(CustomerType)
+    selectedProject: PropTypes.object,
+    customers: PropTypes.arrayOf(CustomerType),
+    createCustomer: PropTypes.func.isRequired
   };
 
   state = {
@@ -26,14 +29,15 @@ class Customers extends Component {
   showHideCreateCustomerModal = (show, customer) => {
 
     this.setState({
-      showCreateCategoryModal: !!show,
-      editCategory: customer || {}
+      showCreateCustomerModal: !!show,
+      editCustomer: customer || {}
     })
   };
 
   render() {
 
-    const { customers } = this.props;
+    const {selectedProject, customers} = this.props;
+    const {showCreateCustomerModal, editCustomer} = this.state;
 
     return (
       <div className={'customers-container'}>
@@ -57,11 +61,17 @@ class Customers extends Component {
             </Button>
           </Zoom>
         </Tooltip>
+
+        <CreateCustomer open={showCreateCustomerModal}
+                        customer={editCustomer}
+                        project={selectedProject}
+                        onClose={this.showHideCreateCustomerModal}/>
       </div>
     );
   }
 }
 
 export default connect(state => ({
+  selectedProject: state.project.selectedProject,
   customers: state.project.customers,
-}), {})(Customers);
+}), {createCustomer})(Customers);

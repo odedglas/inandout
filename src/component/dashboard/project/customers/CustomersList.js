@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
+import {connect} from 'react-redux';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -9,28 +10,76 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {CustomerType} from "@model/customer";
+import {setStarred, deleteCustomer} from "@action/project";
+import {showConfirmation} from "@action/dashboard";
+import util from '@util/';
 
 class CustomersList extends Component {
 
   static propTypes = {
+    selectedProject: PropTypes.object,
     customers: PropTypes.arrayOf(CustomerType),
-    showHideCreateCustomerModal: PropTypes.func.isRequired
+    showHideCreateCustomerModal: PropTypes.func.isRequired,
+    showConfirmation: PropTypes.func.isRequired,
+    deleteCustomer: PropTypes.func.isRequired,
+    setStarred: PropTypes.func.isRequired
   };
 
   state = {
     anchorEl: null,
+    anchorCustomer: null,
     search: '',
   };
 
-  handleMenuClick = event => {
-    this.setState({ anchorEl: event.currentTarget });
+  handleMenuClick = (event, customer) => {
+    this.setState({ anchorEl: event.currentTarget, anchorCustomer: customer });
   };
 
   handleMenuClose = () => {
-    this.setState({ anchorEl: null });
+    this.setState({ anchorEl: null, anchorCustomer: null });
   };
 
   handleSearchChange = (val) => this.setState({search: val});
+
+  handleDelete = () => {
+
+    const {showConfirmation, deleteCustomer} = this.props;
+    const {anchorCustomer} = this.state;
+
+    showConfirmation({
+      title:'Delete This Customer ?',
+      body: 'Deleting this customer will remove it from all it\'s related transactions',
+      icon: 'delete',
+      onConfirm: () => {
+
+        deleteCustomer(this.props.selectedProject, anchorCustomer.id);
+      }
+    });
+
+    this.handleMenuClose();
+  };
+
+  handleCustomerStar = (customer) => {
+
+    const {setStarred, selectedProject} = this.props;
+
+    setStarred(
+      selectedProject,
+      {
+        id: customer.id,
+        star: !customer.star
+      }
+    )
+  };
+
+  handleEdit = () => {
+
+    const {showHideCreateCustomerModal} = this.props;
+    const {anchorCustomer} = this.state;
+
+    showHideCreateCustomerModal(true, anchorCustomer);
+    this.handleMenuClose();
+  };
 
   render() {
 
@@ -40,9 +89,9 @@ class CustomersList extends Component {
     const hasCustomers = customers.length > 0;
     const hasSearch = search !== '';
 
-    const _customers = hasSearch ? customers.filter(c => {
+    const _customers = (hasSearch ? customers.filter(c => {
       return c.name.includes(search) || c.contactName.includes(search) || c.email.includes(search);
-    }) : customers;
+    }) : customers).sort(util.sortJsonFN([{name: 'star', reverse: true}, {name: 'created'}]));
 
     const hasNoSearchResults = hasSearch && _customers.length === 0;
 
@@ -53,6 +102,7 @@ class CustomersList extends Component {
             <DynamicIcon className={'icon'} name={'search'}/>
             <input className={`search-control ${hasSearch ? 'active' : ''}`}
                    placeholder="Search customer"
+                   disabled={!hasCustomers}
                    type={'text'}
                    value={search}
                    onChange={e => this.handleSearchChange(e.target.value)}/>
@@ -64,8 +114,9 @@ class CustomersList extends Component {
                 {_customers.map(customer => (
                   <div className={'customer-row col-sm-12'} key={customer.id}>
 
-                    <IconButton className={`icon px-1 ${customer.star ? 'active' : ''}`}>
-                      <DynamicIcon name={customer.star ? 'start' : 'star-empty'}/>
+                    <IconButton onClick={() => this.handleCustomerStar(customer)}
+                                className={`icon px-1 ${customer.star ? 'active' : ''}`}>
+                      <DynamicIcon name={customer.star ? 'star' : 'star-empty'}/>
                     </IconButton>
 
                     <div className={'logo mx-3'}>
@@ -90,7 +141,7 @@ class CustomersList extends Component {
                                   aria-label="More"
                                   aria-owns={anchorEl ? 'customer-menu' : null}
                                   aria-haspopup="true"
-                                  onClick={this.handleMenuClick}
+                                  onClick={e => this.handleMenuClick(e, customer)}
                       >
                         <MoreVertIcon />
                       </IconButton>
@@ -128,12 +179,11 @@ class CustomersList extends Component {
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={this.handleMenuClose}>
-
-          <MenuItem>
-            Delete
-          </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={this.handleEdit}>
             Edit
+          </MenuItem>
+          <MenuItem onClick={this.handleDelete}>
+            Delete
           </MenuItem>
         </Menu>
 
@@ -142,4 +192,10 @@ class CustomersList extends Component {
   }
 }
 
-export default CustomersList;
+export default connect(state => ({
+  selectedProject: state.project.selectedProject,
+}), {
+  deleteCustomer,
+  setStarred,
+  showConfirmation
+})(CustomersList);

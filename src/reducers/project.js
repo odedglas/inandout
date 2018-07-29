@@ -109,6 +109,24 @@ export default function (state = initialState, action) {
         transactions: action.transactions,
       };
     }
+    case 'ADD_PROJECT_CUSTOMER' : {
+      return {
+        ...state,
+        customers: [...state.customers, action.customer],
+      };
+    }
+    case 'EDIT_PROJECT_CUSTOMER' : {
+      return {
+        ...state,
+        customers: util.updateById(state.customers, action.customer),
+      };
+    }
+    case 'DELETE_PROJECT_CUSTOMER' : {
+      return {
+        ...state,
+        customers: state.customers.filter(c => c.id !== action.customerId),
+      };
+    }
     case 'TOGGLE_PROJECT_DRAWER':
       return {
         ...state,

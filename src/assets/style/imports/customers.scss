@@ -26,6 +26,7 @@ $customers-border: #e9ecef;
       }
 
       .search-control {
+        background-color: white;
         border-radius: 0;
         height: 46px;
         padding: 10px 18px 10px 40px;
@@ -37,6 +38,10 @@ $customers-border: #e9ecef;
         width: 100%;
         font-size: 14px;
         line-height: 1.5;
+
+        &:disabled {
+          cursor: not-allowed;
+        }
 
         &.active,
         &:focus {
