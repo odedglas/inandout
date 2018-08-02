@@ -18,7 +18,6 @@ import Avatar from '@material-ui/core/Avatar';
 
 import DynamicIcon from "@common/DynamicIcon";
 import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 import TransactionsSummary from '../transactions/TransactionsSummaryTable';
 import BudgetOverview from './BudgetOverview';
 import {BudgetType} from '@model/budget'
@@ -193,11 +192,9 @@ class BudgetPanel extends Component {
         </ExpansionPanelDetails>
         <Divider />
         <ExpansionPanelActions className={'actions'}>
-          <Tooltip title={'Delete Budget'} placement={'right'}>
-            <IconButton className={'delete-budget mx-2'} style={{height:'30px'}} onClick={this.handleBudgetRemove}>
-              <DynamicIcon name={'delete'}/>
-            </IconButton>
-          </Tooltip>
+          <IconButton className={'delete-budget mx-2'} onClick={this.handleBudgetRemove}>
+            <DynamicIcon name={'delete'}/>
+          </IconButton>
           <div className={'flex'}>
           </div>
           <Button size="small" onClick={this.handleExpandStateChange}>

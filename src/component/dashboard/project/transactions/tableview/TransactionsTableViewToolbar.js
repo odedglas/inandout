@@ -17,8 +17,6 @@ export default ({date, filter, onSelectedDateChange, setSelectedForToday, showFi
 
       <div className={'months-navigator mx-2'}>
         <Button size="small"
-                disabled={dateUtil.sameMonth(new Date(), date)}
-                variant={'outlined'}
                 color="secondary" onClick={setSelectedForToday}>
           Today
         </Button>

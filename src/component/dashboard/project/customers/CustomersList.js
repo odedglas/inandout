@@ -147,7 +147,8 @@ class CustomersList extends Component {
                       </IconButton>
                     </div>
 
-                  </div>))}
+                  </div>
+                ))}
 
                 {
                   hasNoSearchResults ?

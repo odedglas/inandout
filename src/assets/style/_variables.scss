@@ -1,4 +1,3 @@
-
 // -- Colors -- //
 $theme-primary: #376a7f;
 $theme-secondary: #2E4156;
@@ -8,14 +7,14 @@ $logo-color: #4682b4;
 $active-text-color: $logo-color;
 
 $light-header: #fafafa;
-$light-text: rgba(0,0,0,0.54);
+$light-text: rgba(0, 0, 0, 0.54);
 $text-color: rgba(0, 0, 0, 0.87);
 $menu-text-color: #424242;
 $menu-icon-color: #757575;
 $icon-offwhite: rgba(255, 255, 255, 0.8);
 $icon-hover-shadow: 0 0 5px rgba(0, 0, 0, 0.65);
 
-$page-title-color: rgba(0,0,0, 0.54);
+$page-title-color: rgba(0, 0, 0, 0.54);
 
 $background-color: #f8f9fa;
 $link-color: #6d8db1;
@@ -23,7 +22,7 @@ $link-color: #6d8db1;
 $divider-color: rgba(0, 0, 0, 0.12);
 
 $success-color: #43A047;
-$error-color:  #e53935;
+$error-color: #e53935;
 $warning-color: #FFA000;
 
 // -- Drawer -- //
@@ -36,14 +35,14 @@ $header-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 
 // -- Sizes -- //
-$header-height:60px;
-$breadcrumbs-height:50px;
+$header-height: 60px;
+$breadcrumbs-height: 50px;
 
 // -- Grid -- //
-$size-sm:640px;
-$size-md:1024px;
-$size-lg:1248px;
-$size-xl:1440px;
+$size-sm: 640px;
+$size-md: 1024px;
+$size-lg: 1248px;
+$size-xl: 1440px;
 
 // -- Fonts -- //
 $bigger-font: 1.5rem;
@@ -54,13 +53,13 @@ $smaller-font: 0.9rem;
 $smallest-font: 0.825rem;
 
 $breakpoints: (
-        "phone":        400px,
-        "phone-wide":   480px,
-        "phablet":      560px,
+        "phone": 400px,
+        "phone-wide": 480px,
+        "phablet": 560px,
         "tablet-small": 640px,
-        "tablet":       768px,
-        "tablet-wide":  1024px,
-        "desktop":      1248px,
+        "tablet": 768px,
+        "tablet-wide": 1024px,
+        "desktop": 1248px,
         "desktop-wide": 1440px
 );
 
@@ -80,7 +79,7 @@ $breakpoints: (
   color: $icon-offwhite;
 
   &:hover {
-    color:white;
+    color: white;
   }
 }
 
@@ -96,6 +95,18 @@ $breakpoints: (
     $matchZIndex: 3
   }
 
+  @if $type == innerMask {
+    $matchZIndex: 7
+  }
+
+  @if $type == popover {
+    $matchZIndex: 8
+  }
+
+  @if $type == header {
+    $matchZIndex: 10
+  }
+
   @if $type == menu {
     $matchZIndex: 98
   }
@@ -109,9 +120,8 @@ $breakpoints: (
   z-index: $matchZIndex !important;
 }
 
-
 @mixin mask() {
-  position:absolute;
+  position: absolute;
   top: 0;
   left: 0;
   height: 100%;
@@ -121,17 +131,16 @@ $breakpoints: (
   justify-content: center;
 }
 
-@mixin withScrollbar ($bgColor: $background-color) {
+@mixin withScrollbar($bgColor: $background-color) {
 
   &::-webkit-scrollbar {
     -webkit-appearance: none;
     height: 7px;
-    width:7px;
+    width: 7px;
 
     @if $bgColor == white {
       background-color: white;
-    }
-    @else {
+    } @else {
       background-color: $background-color;
     }
   }

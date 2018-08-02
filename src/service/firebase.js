@@ -102,15 +102,10 @@ export default {
         }
       });
   },
+
   createCategory(projectId, category) {
 
-    return database.ref(`/projects/${projectId}/categories`).push(category).then(res => {
-
-      return {
-        ...category,
-        id: res.key
-      }
-    })
+    return createProjectEntity(projectId, 'categories', category);
   },
   excludeCategory(projectId, categoryId) {
 
@@ -129,6 +124,7 @@ export default {
   },
   createTransaction(projectId, dateKey, transaction) {
 
+
     return database.ref(`/transactions/${projectId}/${dateKey}`).push(transaction).then(res => {
 
       return {
@@ -139,22 +135,27 @@ export default {
   },
   createBudget(projectId, budget) {
 
-    return database.ref(`/projects/${projectId}/budgets`).push(budget).then(res => {
-
-      return {
-        ...budget,
-        id: res.key
-      }
-    })
+    return createProjectEntity(projectId, 'budgets', budget);
   },
   createCustomer(projectId, customer) {
 
-    return database.ref(`/projects/${projectId}/customers`).push(customer).then(res => {
+    return createProjectEntity(projectId, 'customers', customer);
+  },
+  createEvent(projectId, event) {
 
-      return {
-        ...customer,
-        id: res.key
-      }
-    })
+    return createProjectEntity(projectId, 'events', event);
   },
 }
+
+
+//Generic creation for project sub entities.
+const createProjectEntity = (projectId, entityName, entity) => {
+
+  database.ref(`/projects/${projectId}/${entityName}`).push(entity).then(res => {
+
+    return {
+      ...entity,
+      id: res.key
+    }
+  })
+};

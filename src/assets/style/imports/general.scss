@@ -80,7 +80,7 @@ a {
   }
 }
 
-div[role="tooltip"] {
+div[role="tooltip"]  > div{
   font-size: .85rem;
   padding: 0.5rem;
   white-space: pre-line;

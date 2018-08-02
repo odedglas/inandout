@@ -1,11 +1,22 @@
 @import '../variables';
 
+.calendar-popper {
+  @include withZIndex(popover);
+}
+
 .calendar-container {
+
+  .calendar-mask {
+    @include mask();
+    @include withZIndex(innerMask);
+    background-color: rgba(255, 255, 255, 0.5)
+  }
 
   .calendar {
     min-height: calc(100vh - 300px);
 
     .rbc-toolbar {
+      padding: 5px 0;
 
       .rbc-toolbar-label {
         width: 100%;
@@ -17,15 +28,21 @@
 
       .rbc-btn-group {
 
+        &:not(:first-child) {
+
+          button {
+            color: #9E9E9E;
+          }
+        }
+
         button {
-          color: #9E9E9E;
           font-size: $small-font;
           display: inline-block;
           vertical-align: middle;
           box-shadow: none;
           background: none;
           border: 0;
-          padding: 0;
+          padding: 0.5rem;
           margin: 0;
           margin-right: 20px !important;
           border-radius: 0;
@@ -35,6 +52,10 @@
           cursor: pointer;
           text-transform: capitalize;
           transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.08);
+          }
 
           &.rbc-active {
             background-image: none;
@@ -76,7 +97,7 @@
         display: block;
         overflow: hidden;
         text-overflow: ellipsis;
-        background-color: rgba(255,255,255,0.3);
+        background-color: rgba(255, 255, 255, 0.3);
         z-index: 4;
         font-weight: 500;
         font-size: 11px;
@@ -92,26 +113,34 @@
     .rbc-month-row {
 
       .rbc-row-bg {
-        cursor:pointer;
+        cursor: pointer;
 
         .rbc-day-bg + .rbc-day-bg {
           border-left: 0 solid #EEEEEE;
           border-right: 0 solid #EEEEEE;
+          transition: box-shadow 0.25s ease;
+
+          &.popper-focus {
+            border: 1px solid #EEEEEE;
+            box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+            z-index: 3;
+          }
         }
 
         .rbc-today,
-        .rbc-selected-cell{
+        .rbc-selected-cell {
           background-color: white;
         }
+
       }
 
       .rbc-date-cell {
         padding: 10px 5px;
         text-align: center;
-        cursor:pointer;
+        cursor: pointer;
 
         a {
-          color:  $theme-primary;
+          color: $theme-primary;
 
           &:hover {
             text-decoration: underline;
@@ -138,5 +167,28 @@
       }
     }
   }
+}
+
+.rbc-addons-dnd .rbc-row-content {
+  pointer-events: none;
+}
+
+.rbc-addons-dnd .rbc-row-content .rbc-show-more,
+.rbc-addons-dnd .rbc-row-content .rbc-event:not(.rbc-addons-dnd-dragging) {
+  pointer-events: all;
+}
+
+.rbc-addons-dnd .rbc-addons-dnd-over {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.rbc-addons-dnd .rbc-event {
+  transition: opacity 150ms;
+  pointer-events: all;
+}
+
+.rbc-addons-dnd.rbc-addons-dnd-is-dragging .rbc-event {
+  pointer-events: none;
+  opacity: .50;
 }
 

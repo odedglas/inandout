@@ -9,7 +9,7 @@
   margin:0;
   padding:0;
   position: relative;
-  @include withZIndex();
+  @include withZIndex(header);
   transition: box-shadow 0.15s ease;
 
   &.with-sade {
@@ -36,75 +36,67 @@
     @include offwhiteIcon()
   }
 
-  .user-menu-popper {
-    pointer-events: none;
-
-    &.open {
-      pointer-events: auto;
-    }
-  }
-
-  .user-menu-holder {
-    transform-origin: right top !important;
-    margin-top:.5rem;
-    margin-right:.5rem;
-    width:250px;
-
-    ul {
-      padding-top:0;
-    }
-
-    .user-info {
-      display: flex;
-      flex-direction: row;
-      padding: 15px 20px;
-      background-color: $light-header;
-      outline: none;
-      align-items: center;
-
-      .details {
-        width: 100%;
-        padding-left: 20px;
-        flex-direction: column;
-
-        h3 {
-          font-size: 18px;
-          color: $menu-text-color;
-          font-weight: 500;
-        }
-
-        span {
-          font-size:14px;
-          color: $light-text;
-        }
-      }
-    }
-
-    .user-menu-avatar {
-      height:35px;
-      width:35px;
-      font-size:0.9rem;
-    }
-
-    .menu-item {
-      padding-left: 1.5rem;
-
-      .menu-text > span {
-        color: $menu-text-color;
-        font-size: 14px;
-        line-height: 1.1;
-      }
-
-      .menu-icon {
-        font-size: 22px;
-        color: $menu-icon-color;
-      }
-    }
-
-  }
-
   &.transparent {
     background-color: transparent;
+  }
+
+}
+
+.user-menu-holder {
+  transform-origin: right top !important;
+  margin-top:.5rem;
+  margin-right:.5rem;
+  width:250px;
+
+  ul {
+    padding-top:0;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: row;
+    padding: 15px 20px;
+    background-color: $light-header;
+    outline: none;
+    align-items: center;
+
+    .details {
+      width: 100%;
+      padding-left: 20px;
+      flex-direction: column;
+
+      h3 {
+        font-size: 18px;
+        color: $menu-text-color;
+        font-weight: 500;
+      }
+
+      span {
+        font-size:14px;
+        color: $light-text;
+      }
+    }
+  }
+
+  .user-menu-avatar {
+    height:35px;
+    width:35px;
+    font-size:0.9rem;
+  }
+
+  .menu-item {
+    padding-left: 1.5rem;
+
+    .menu-text > span {
+      color: $menu-text-color;
+      font-size: 14px;
+      line-height: 1.1;
+    }
+
+    .menu-icon {
+      font-size: 22px;
+      color: $menu-icon-color;
+    }
   }
 
 }

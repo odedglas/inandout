@@ -42,7 +42,7 @@ class Header extends React.Component {
         </div>
         <div className={'flex'}> </div>
         <div>
-          <Tooltip title={'Notifications'} className={'tooltip'}>
+          <Tooltip title={'Notifications'}>
             <IconButton className={'notifications-button'} onClick={this.toggleNotificationsDrawer}>
               <DynamicIcon name={'notification'}/>
             </IconButton>
