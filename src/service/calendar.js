@@ -1,13 +1,11 @@
 import firebaseService from './firebase';
-import util from '@util/';
-import themeService from '@service/theme';
 
 export default {
 
-  createEvent: (projectId, title, type, description, date, color, customer, location, repeat) => {
+  createEvent: (projectId, title, type, description, date, color, customer, location) => {
 
     const now = new Date();
-    const event = {
+    const event = cleanEmptyEntries({
       title,
       type,
       description,
@@ -15,23 +13,23 @@ export default {
       customer,
       color,
       location,
-      repeat,
       created: now.getTime(),
-    };
+    });
 
     return firebaseService.createEvent(projectId, event)
 
   },
-  editEvent: (projectId, eventId, title, description, date ,color, customer, location, repeat) => {
+  editEvent: (projectId, eventId, title, description, date , color, customer, location) => {
 
-    const event = {
+    const event = cleanEmptyEntries({
       title,
       description,
+      date,
       customer,
       color,
       location,
-      repeat
-    };
+      completed: false
+    });
 
     const updatePath = eventsPath(projectId, eventId);
 
@@ -40,12 +38,27 @@ export default {
       return event;
     });
   },
-
   removeEvent: (projectId, eventId) => {
 
     const path = eventsPath(projectId, eventId);
     return firebaseService.remove(path);
-  }
+  },
+
+  transformToCalendarEvents: events => events.map(event => ({
+    ...event,
+    start: new Date(event.date),
+    end: new Date(event.date)
+  }))
 }
 
 const eventsPath = (projectId, eventId) => `/projects/${projectId}/events/${eventId}`;
+
+const cleanEmptyEntries = (obj) => {
+  const keys = Object.keys(obj);
+
+  keys.forEach(key => {
+    !obj[key] && delete obj[key]
+  });
+
+  return obj;
+};

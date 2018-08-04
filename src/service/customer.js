@@ -20,7 +20,7 @@ export default {
     if(logo) customer.logo = logo;
     else {
 
-      customer.initials = util.getInitials(name);
+      customer.initials = util.getInitials(name.toUpperCase());
       customer.avatarColor = themeService.getAvatarRandomColor(Math.random() > 0.5 ? 400 : 500);
     }
 

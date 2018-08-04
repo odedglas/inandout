@@ -70,6 +70,7 @@ const transformToViewProject = (firebaseProject) => {
   p.categories = toArray(p.categories);
   p.budgets = toArray(p.budgets);
   p.customers = toArray(p.customers);
+  p.events = toArray(p.events);
   p.members = p.members || [];
 
   const excludedCategories = p.excludedCategories || [];

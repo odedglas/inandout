@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {compose} from 'recompose';
+
 import Popper from '@material-ui/core/Popper';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
@@ -17,13 +20,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Chip from '@material-ui/core/Chip';
 import CustomersSelect from '@common/CustomersSelect';
 
+import {createEvent, editEvent, deleteEvent} from "@action/project";
 import {EVENT_TYPE} from '@const/'
 import util from '@util/';
 import themeService from '@service/theme';
 
+const today = new Date();
 const getEventsInitialState = () => ({
   type: 'EVENT',
-  date: new Date(),
+  date: today.setHours(12),
   title: '',
   description: '',
   color: themeService.getAvatarRandomColor('600'),
@@ -34,6 +39,7 @@ const getEventsInitialState = () => ({
 class EventsPopper extends Component {
 
   static propTypes = {
+    selectedProject: PropTypes.object.isRequired,
     open: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
     anchorEl: PropTypes.object,
@@ -43,23 +49,28 @@ class EventsPopper extends Component {
     clearValidation: PropTypes.func.isRequired,
     onValidationChange: PropTypes.func.isRequired,
     validation: PropTypes.object.isRequired,
+    createEvent: PropTypes.func.isRequired,
+    editEvent: PropTypes.func.isRequired,
+    deleteEvent: PropTypes.func.isRequired,
   };
 
   state = {
     data: getEventsInitialState(),
     popperPickerOpen: false,
     eventTypeMenuAnchor: null,
+    editMode: false,
   };
 
   componentDidUpdate(prevProps) {
 
     let open = this.props.open === true;
-    const hasEntity = !util.isEmptyObject(this.props.event);
+    const hasEntity = !util.isUndefined(this.props.event.id);
 
-    if (open && !prevProps.open && !hasEntity) {
+    if (open && !prevProps.open) {
 
+      const initialState = getEventsInitialState();
       this.setState({
-        data: getEventsInitialState(),
+        data: {...initialState, ...this.props.event},
         editMode: hasEntity
       })
     }
@@ -100,14 +111,25 @@ class EventsPopper extends Component {
 
   handleCreateOrEditEvent = () => {
 
-    const {validate} = this.props;
+    const {validate, selectedProject} = this.props;
+    const {editMode} = this.state;
     const model = this.state.data;
 
     const validationResult = validate(model);
     if (validationResult.isValid) {
 
-      this.props.onCreate(model, this.handlePopperClose);
+      const method = editMode ? 'editEvent' : 'createEvent';
+      this.props[method](selectedProject, model, this.handlePopperClose);
     }
+  };
+
+  handleEventDelete = () => {
+
+    this.handlePopperClose();
+    this.props.deleteEvent(
+      this.props.selectedProject,
+      this.props.event.id
+    )
   };
 
   getPopperContent = (isEventType) => {
@@ -200,13 +222,14 @@ class EventsPopper extends Component {
 
     const defaultPlacement = 'right-start';
 
-    if(!anchorEl) return defaultPlacement;
+    if (!anchorEl) return defaultPlacement;
 
     const body = document.body,
       html = document.documentElement;
 
-    const bodyHeight= Math.max( body.scrollHeight, body.offsetHeight,
-      html.clientHeight, html.scrollHeight, html.offsetHeight );
+    const bodyHeight = Math.max(body.scrollHeight, body.offsetHeight,
+      html.clientHeight, html.scrollHeight, html.offsetHeight
+    );
     const anchorTop = anchorEl ? anchorEl.getClientRects()[0].top : 0;
 
     return anchorTop > (bodyHeight / 2) ? 'right-end' : defaultPlacement
@@ -214,11 +237,10 @@ class EventsPopper extends Component {
 
   render() {
 
-    const {open, anchorEl, event} = this.props;
-    const {data} = this.state;
+    const {open, anchorEl} = this.props;
+    const {data, editMode} = this.state;
 
     const isEventType = data.type === 'EVENT';
-    const isCreation = util.isEmptyObject(event);
 
     return (
       <Popper open={open}
@@ -233,7 +255,7 @@ class EventsPopper extends Component {
                 <div className={'header flex'} style={{backgroundColor: data.color}}>
                   <div className={'title'}>
                     <DynamicIcon name={isEventType ? 'calendar' : 'task'} className={'mr-2'}/>
-                    {`${isCreation ? 'Create' : 'Edit'} ${isEventType ? 'Event' : 'Task'}`}
+                    {`${editMode ? 'Edit' : 'Create'} ${isEventType ? 'Event' : 'Task'}`}
                   </div>
                   <div style={{flex: 2}}></div>
                   <div className={'flex'}>
@@ -254,6 +276,12 @@ class EventsPopper extends Component {
                 </div>
                 {this.getPopperContent(data, isEventType)}
                 <div className={'footer'}>
+                  {
+                    editMode ? <IconButton onClick={this.handleEventDelete}>
+                      <DynamicIcon name={'delete'}/>
+                    </IconButton> : null
+                  }
+                  <div className={'flex'}></div>
                   <Button onClick={this.handlePopperClose}
                           size={'small'}
                           className={'mx-3'}
@@ -264,7 +292,7 @@ class EventsPopper extends Component {
                           color="primary"
                           size={'small'}
                           variant="contained">
-                    {isCreation ? 'Create' : 'Edit'}
+                    {editMode ? 'Edit' : 'Create'}
                   </Button>
                 </div>
               </Paper>
@@ -277,19 +305,24 @@ class EventsPopper extends Component {
   }
 }
 
-export default withValidation([
-  {
-    field: 'title',
-    method: (v, f, state, validator, args) => !validator.isEmpty(v),
-    message: 'Please fill the event title.'
-  },
-  {
-    field: 'date',
-    method: (v, f, state, validator, args) => !validator.isEmpty('' + v),
-    message: 'Please select event date.'
-  },
-  {
-    field: 'customer',
-    method: (v, f, state, validator, args) => true
-  },
-])(EventsPopper);
+export default compose(
+  withValidation([
+    {
+      field: 'title',
+      method: (v, f, state, validator, args) => !validator.isEmpty(v),
+      message: 'Please fill the event title.'
+    },
+    {
+      field: 'date',
+      method: (v, f, state, validator, args) => !validator.isEmpty('' + v),
+      message: 'Please select event date.'
+    },
+    {
+      field: 'customer',
+      method: (v, f, state, validator, args) => true
+    },
+  ]),
+  connect(state => ({
+    selectedProject: state.project.selectedProject
+  }), {createEvent, editEvent, deleteEvent})
+)(EventsPopper);

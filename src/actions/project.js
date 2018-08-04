@@ -4,6 +4,7 @@ import categoryService from '@service/category'
 import budgetService from '@service/budget'
 import transactionService from '@service/transaction'
 import customerService from '@service/customer'
+import calendarService from '@service/calendar'
 
 import util from '@util/';
 
@@ -31,6 +32,7 @@ export function selectProject(project) {
       customers: project.customers,
       budgets: project.budgets,
       categories: project.categories,
+      events: project.events,
       excludedCategories: project.excludedCategories,
       transactions: project.transactions,
       members: project.members,
@@ -254,6 +256,69 @@ export function deleteCustomer(project, customerId) {
   }
 }
 
+export function createEvent(project, { title, type, description, date, color, customer, location }, onSuccess) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    calendarService.createEvent(
+      project.id,
+      title,
+      type,
+      description,
+      date,
+      color,
+      customer,
+      location,
+    ).then(event => {
+
+      dispatch({type: 'ADD_PROJECT_EVENT', event});
+      onSuccess(event);
+
+      dispatch({type: 'APP_LOADING', loading: false})
+    });
+  }
+}
+
+export function editEvent(project, { id, title, description, date , color, customer, location }, onSuccess) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    calendarService.editEvent(
+      project.id,
+      id,
+      title,
+      description,
+      date,
+      color,
+      customer,
+      location
+    ).then(event => {
+
+      dispatch({type: 'EDIT_PROJECT_EVENT', event});
+      onSuccess(event);
+
+      dispatch({type: 'APP_LOADING', loading: false})
+    });
+  }
+}
+
+export function deleteEvent(project, eventId) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    customerService.removeCustomer(project.id, eventId).then(() => {
+
+      dispatch({type: 'DELETE_PROJECT_EVENT', eventId});
+      dispatch({type: 'APP_LOADING', loading: false});
+    })
+  }
+}
 
 export function toggleProjectDrawer(open) {
   return dispatch => {
@@ -293,6 +358,7 @@ export function updateCachedProject() {
       customers: projectState.customers,
       budgets: projectState.budgets,
       categories: projectState.categories,
+      events: projectState.events,
       excludedCategories: projectState.excludedCategories,
       transactions: projectState.transactions,
       members: projectState.members,

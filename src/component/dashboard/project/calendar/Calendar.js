@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {compose} from 'recompose';
+
 import HTML5Backend from 'react-dnd-html5-backend'
 import {DragDropContext} from 'react-dnd'
 import BigCalendar from 'react-big-calendar'
@@ -7,33 +11,28 @@ import dateUtils from '@util/date';
 import {CSSTransition} from 'react-transition-group';
 import EventsPopper from './EventsPopper';
 
+import calendarService from '@service/calendar';
+import DynamicIcon from "@common/DynamicIcon";
+
 const DragAndDropCalendar = withDragAndDrop(BigCalendar);
 
-const events = [
-  {
-    id: 14,
-    title: 'Today sss',
-    start: new Date(new Date()),
-    end: new Date(new Date()),
-  },
-  {
-    id: 15,
-    title: 'Today44 sss',
-    start: new Date(new Date()),
-    end: new Date(new Date()),
-  },
-  {
-    id: 16,
-    title: 'Today 666sss',
-    start: new Date(new Date()),
-    end: new Date(new Date()),
-  },
-];
+const Event = ({event}) => {
+  return (
+    <div className={'event-inner'}>
+      <DynamicIcon className={'icon'} name={event.type === 'EVENT' ? 'calendar' : 'task'}/>
+      <span className={'title'}>{event.title}</span>
+
+    </div>
+  );
+};
 
 class Calendar extends Component {
 
+  static propTypes = {
+    events: PropTypes.array
+  };
+
   state = {
-    events,
     anchorEl: null,
     open: false,
     event: {},
@@ -59,15 +58,14 @@ class Calendar extends Component {
 
     //Create Event from slot
     const newEvent = {
-      start: event.start,
-      end: event.end
+      date: event.start.setHours(12),
     };
 
     //Finding slot dom
-    const slotDom = document.querySelector(`.slot_${dateUtils.format(newEvent.start, 'DDMMYY')}`);
+    const slotDom = document.querySelector(`.slot_${dateUtils.format(newEvent.date, 'DDMMYY')}`);
 
     slotDom.classList.add('popper-focus');
-    this.handleClick(slotDom)
+    this.handleClick(slotDom, newEvent)
   };
 
   handleEventClick = event => {
@@ -77,11 +75,11 @@ class Calendar extends Component {
   };
 
   handleClick = (target, event) => {
-    debugger;
+
     this.setState({
       anchorEl: target,
       open: true,
-      event: event || {},
+      eventForEdit: event || {},
     });
   };
 
@@ -93,25 +91,22 @@ class Calendar extends Component {
     });
   };
 
-  eventStyleGetter = (event, start, end, isSelected) => {
-    console.log(event);
-    let backgroundColor = '#' + event.hexColor;
-    let style = {
-      backgroundColor: backgroundColor,
-      borderRadius: '0px',
-      opacity: 0.8,
-      color: 'black',
-      border: '0px',
-      display: 'block'
-    };
+  eventStyleGetter = (event) => {
+
     return {
-      style: style
+      backgroundColor: event.color,
+      borderRadius: '5px',
+      color: 'white',
+      display: 'block',
+      cursor: 'pointer',
+      padding: '5px'
     };
   };
 
   render() {
 
-    const {open, anchorEl, event} = this.state;
+    const {events} = this.props;
+    const {open, anchorEl, eventForEdit} = this.state;
 
     return (
       <div style={{position: 'relative'}}>
@@ -127,16 +122,19 @@ class Calendar extends Component {
           className={'calendar'}
           selectable
           popup
-          events={this.state.events}
+          events={calendarService.transformToCalendarEvents(events)}
           onEventDrop={this.moveEvent}
           resizable
-          views={{month: true, week: true, day: true}}
+          views={{month: true}}
           step={60}
           eventStyleGetter={this.eventStyleGetter}
           dayPropGetter={(d) => ({
             className: `slot_${dateUtils.format(d, 'DDMMYY')}`,
           })}
-          eventPropGetter={(e) => ({className: `event_${e.id}`})}
+          eventPropGetter={(e) => ({className: `event_${e.id}`, style: this.eventStyleGetter(e)})}
+          components={{
+            event: Event,
+          }}
           showMultiDayTimes
           onSelectSlot={this.handleSlotClick}
           onSelectEvent={this.handleEventClick}
@@ -147,10 +145,15 @@ class Calendar extends Component {
         <EventsPopper open={open}
                       anchorEl={anchorEl}
                       handleClose={this.handleClose}
-                      event={event} />
+                      event={eventForEdit}/>
       </div>
     )
   }
 }
 
-export default DragDropContext(HTML5Backend)(Calendar);
+export default compose(
+  DragDropContext(HTML5Backend),
+  connect(state => ({
+    events: state.project.events
+  }), {})
+)(Calendar);

@@ -193,6 +193,30 @@
         }
       }
     }
+
+    .rbc-overlay{
+      @include withZIndex(popover)
+    }
+
+    .rbc-event {
+
+      .event-inner {
+        display: flex;
+        align-items: center;
+
+        .icon {
+          margin-right: 0.5rem;
+          font-size: $normal-font;
+        }
+
+        .title {
+          display: block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
   }
 }
 

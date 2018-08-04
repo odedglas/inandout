@@ -64,8 +64,7 @@ class CustomersSelect extends Component {
   };
 
   handleCustomerCreate = customer => {
-    debugger;
-    this.props.onChange(customer);
+    this.props.onChange(customer.id);
   };
 
   render() {
@@ -103,6 +102,7 @@ class CustomersSelect extends Component {
           input={<Input className={'w-100'}/>}
           renderValue={selected => {
             const customer = customers.find(c => c.id === selected);
+
             return (
               <div style={{'whiteSpace': 'initial'}}>
                 {

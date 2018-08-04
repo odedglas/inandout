@@ -95,7 +95,7 @@ class CreationModal extends React.Component {
     const model = this.state.model;
 
     const validationResult = validate(model);
-    debugger;
+
     if (validationResult.isValid) {
 
       this.props.onCreate(model, this.handleClose);
@@ -118,7 +118,9 @@ class CreationModal extends React.Component {
           className={'modal'}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle className={'modal-title'}>{title}</DialogTitle>
+          <DialogTitle className={'modal-title'}>
+            <span>{title}</span>
+          </DialogTitle>
           <DialogContent className={'modal-content'}>
             <DialogContentText>
               {context}

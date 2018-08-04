@@ -151,7 +151,7 @@ export default {
 //Generic creation for project sub entities.
 const createProjectEntity = (projectId, entityName, entity) => {
 
-  database.ref(`/projects/${projectId}/${entityName}`).push(entity).then(res => {
+  return database.ref(`/projects/${projectId}/${entityName}`).push(entity).then(res => {
 
     return {
       ...entity,

@@ -91,7 +91,7 @@ class CustomersList extends Component {
 
     const _customers = (hasSearch ? customers.filter(c => {
       return c.name.includes(search) || c.contactName.includes(search) || c.email.includes(search);
-    }) : customers).sort(util.sortJsonFN([{name: 'star', reverse: true}, {name: 'created'}]));
+    }) : customers).sort(util.sortJsonFN([{name: 'star', reverse: true}, {name: 'created', reverse: true}]));
 
     const hasNoSearchResults = hasSearch && _customers.length === 0;
 

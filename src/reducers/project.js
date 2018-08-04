@@ -13,6 +13,7 @@ const initialState = {
   budgets: [],
   transactions: [],
   customers: [],
+  events: [],
   drawerOpen: localStorageService.get(projectDrawerLocalStorageKey),
 };
 
@@ -37,6 +38,7 @@ export default function (state = initialState, action) {
         excludedCategories: action.excludedCategories,
         customers: action.customers,
         budgets: action.budgets,
+        events: action.events,
         members: action.members,
       }
     }
@@ -125,6 +127,24 @@ export default function (state = initialState, action) {
       return {
         ...state,
         customers: state.customers.filter(c => c.id !== action.customerId),
+      };
+    }
+    case 'ADD_PROJECT_EVENT' : {
+      return {
+        ...state,
+        events: [...state.events, action.event],
+      };
+    }
+    case 'EDIT_PROJECT_EVENT' : {
+      return {
+        ...state,
+        events: util.updateById(state.events, action.event),
+      };
+    }
+    case 'DELETE_PROJECT_EVENT' : {
+      return {
+        ...state,
+        events: state.events.filter(c => c.id !== action.eventId),
       };
     }
     case 'TOGGLE_PROJECT_DRAWER':

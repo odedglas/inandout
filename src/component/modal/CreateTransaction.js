@@ -102,6 +102,7 @@ class CreateTransactionModal extends React.Component {
                                         onChange={(val) => handleChange(val, 'category')}/>
             :
             <CustomersSelect customer={model.customer}
+                             showCreateNewCustomer={true}
                              onChange={(val) => handleChange(val, 'customer')}/>
         }
 
@@ -206,6 +207,7 @@ class CreateTransactionModal extends React.Component {
         ...transaction,
         payments: transaction.payments ? transaction.payments : '',
         category: transaction.category ? transaction.category.id : '',
+        customer: transaction.customer ? transaction.customer.id : '',
       }
     }
 
