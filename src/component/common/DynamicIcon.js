@@ -67,6 +67,7 @@ import DisabledIcon from '@material-ui/icons/NotInterested';
 import StatEmptyIcon from '@material-ui/icons/StarBorder';
 import StarIcon from '@material-ui/icons/Star';
 import SearchIcon from '@material-ui/icons/Search';
+import PaletteIcon from '@material-ui/icons/Palette';
 
 const iconMap = {
   'home': HomeIcon,
@@ -91,7 +92,7 @@ const iconMap = {
   'categories': CategoriesIcon,
   'budgets': BudgetsIcon,
   'transactions': TransactionsIcon,
-  'todo': TodosIcon,
+  'task': TodosIcon,
   'customers': CustomersIcon,
   'calendar': CalendarIcon,
   'notification': NotificationsIcon,
@@ -126,6 +127,7 @@ const iconMap = {
   'star-empty': StatEmptyIcon,
   'star': StarIcon,
   'search': SearchIcon,
+  'palette': PaletteIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {

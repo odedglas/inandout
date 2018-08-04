@@ -2,6 +2,34 @@
 
 .calendar-popper {
   @include withZIndex(popover);
+  min-width:450px;
+
+  .header{
+    align-items: center;
+    padding: .25rem .75rem;
+    font-size: 1.25rem;
+    color: white;
+    transition: background-color 0.2s ease;
+
+    .title {
+      display:flex;
+      align-items:center;
+    }
+  }
+
+  .content {
+    padding: 1rem;
+
+    .form-control {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .footer {
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 
 .calendar-container {
@@ -118,11 +146,10 @@
         .rbc-day-bg + .rbc-day-bg {
           border-left: 0 solid #EEEEEE;
           border-right: 0 solid #EEEEEE;
-          transition: box-shadow 0.25s ease;
+          transition: border 0.25s ease;
 
           &.popper-focus {
-            border: 1px solid #EEEEEE;
-            box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+            border: 1px solid $light-text;
             z-index: 3;
           }
         }

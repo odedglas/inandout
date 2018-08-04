@@ -104,3 +104,16 @@ export const TRANSACTIONS_TYPE = [
     label: 'Outcome'
   }
 ];
+
+export const EVENT_TYPE = [
+  {
+    key: 'EVENT',
+    label: 'Event',
+    icon: 'calendar'
+  },
+  {
+    key: 'TASK',
+    label: 'Task',
+    icon: 'task'
+  }
+];

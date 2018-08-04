@@ -3,13 +3,9 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import {DragDropContext} from 'react-dnd'
 import BigCalendar from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Popper from '@material-ui/core/Popper';
-import Fade from '@material-ui/core/Fade';
-import Paper from '@material-ui/core/Paper';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import dateUtils from '@util/date';
+import {CSSTransition} from 'react-transition-group';
+import EventsPopper from './EventsPopper';
 
 const DragAndDropCalendar = withDragAndDrop(BigCalendar);
 
@@ -40,6 +36,7 @@ class Calendar extends Component {
     events,
     anchorEl: null,
     open: false,
+    event: {},
   };
 
   moveEvent = ({event, start, end}) => {
@@ -76,18 +73,18 @@ class Calendar extends Component {
   handleEventClick = event => {
 
     const eventDom = document.querySelector(`.event_${event.id}`);
-    this.handleClick(eventDom)
+    this.handleClick(eventDom, event)
   };
 
-  handleClick = target => {
+  handleClick = (target, event) => {
     this.setState({
       anchorEl: target,
       open: true,
+      event: event || {},
     });
   };
 
-  handleClose = () => {
-
+  handleClose = (e) => {
     this.state.anchorEl.classList.remove('popper-focus');
     this.setState({
       anchorEl: null,
@@ -113,13 +110,18 @@ class Calendar extends Component {
 
   render() {
 
-    const {open, anchorEl} = this.state;
+    const {open, anchorEl, event} = this.state;
 
     return (
       <div style={{position: 'relative'}}>
-        {
-          open ? <div className={'calendar-mask'}></div> : null
-        }
+        <CSSTransition
+          in={open}
+          timeout={350}
+          classNames="fade"
+          unmountOnExit
+        >
+          <div className={'calendar-mask'}></div>
+        </CSSTransition>
         <DragAndDropCalendar
           className={'calendar'}
           selectable
@@ -132,7 +134,6 @@ class Calendar extends Component {
           eventStyleGetter={this.eventStyleGetter}
           dayPropGetter={(d) => ({
             className: `slot_${dateUtils.format(d, 'DDMMYY')}`,
-            ariaDescribedBy: 'calendar-popper'
           })}
           eventPropGetter={(e) => ({className: `event_${e.id}`})}
           showMultiDayTimes
@@ -142,23 +143,10 @@ class Calendar extends Component {
           defaultDate={new Date()}
         />
 
-        <Popper open={open}
-                className={'calendar-popper'}
-                anchorEl={anchorEl}
-                id={'calendar-popper'}
-                placement={'right-end'} transition>
-          {({TransitionProps}) => (
-            <ClickAwayListener onClickAway={this.handleClose}>
-              <Fade {...TransitionProps} timeout={350}>
-
-                <Paper>
-                  <Typography>The content of the Popper.</Typography>
-                </Paper>
-
-              </Fade>
-            </ClickAwayListener>
-          )}
-        </Popper>
+        <EventsPopper open={open}
+                      anchorEl={anchorEl}
+                      handleClose={this.handleClose}
+                      event={event} />
       </div>
     )
   }

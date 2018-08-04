@@ -14,6 +14,8 @@ export class PopoverPicker extends Component {
     itemClick: PropTypes.func,
     target: PropTypes.func.isRequired,
     content: PropTypes.func.isRequired,
+    beforeShow: PropTypes.func,
+    beforeHide: PropTypes.func
   };
 
   handleItemClick = val => {
@@ -22,10 +24,14 @@ export class PopoverPicker extends Component {
   };
 
   handleClose = () => {
+    this.props.beforeHide && this.props.beforeHide();
     this.setState({targetRef: undefined});
   };
 
-  handleShow = target => this.setState({targetRef: target});
+  handleShow = target => {
+    this.props.beforeShow && this.props.beforeShow();
+    this.setState({targetRef: target});
+  };
 
   render() {
 

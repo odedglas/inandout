@@ -13,6 +13,8 @@ export class ColorPicker extends Component {
   static propTypes = {
     selectedColor: PropTypes.string,
     onChange: PropTypes.func,
+    beforeShow: PropTypes.func,
+    beforeHide: PropTypes.func
   };
 
   handleColorClick = color => {
@@ -21,18 +23,24 @@ export class ColorPicker extends Component {
 
   render() {
 
-    const {selectedColor} = this.props;
+    const {selectedColor, beforeHide, beforeShow} = this.props;
     const {colors} = this.state;
 
     return (
       <PopoverPicker
         itemClick={this.handleColorClick}
         selectedValue={selectedColor}
-        target={(selectedColor) => (
-          <span className={'value color-picker-target'}
-                style={{backgroundColor: selectedColor, color: selectedColor}}>
+        beforeShow={beforeShow}
+        beforeHide={beforeHide}
+        target={(selectedColor) => {
+
+          return (
+            this.props.children ? this.props.children :
+              <span className={'value color-picker-target'}
+                    style={{backgroundColor: selectedColor, color: selectedColor}}>
             </span>
-        )}
+          )
+        }}
         content={(selectedColor, itemClick) => (
           <div className={'color-picker popover-picker'}>
             {
