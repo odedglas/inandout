@@ -41,7 +41,7 @@ class Calendar extends Component {
   state = {
     anchorEl: null,
     open: false,
-    event: {},
+    eventForEdit: {},
   };
 
   componentDidMount () {
@@ -60,7 +60,7 @@ class Calendar extends Component {
 
     this.props.editEvent(
       this.props.selectedProject,
-      {id: event.id, date: start.getTime()},
+      {...event, date: start.getTime()},
       () => {}
     );
 
