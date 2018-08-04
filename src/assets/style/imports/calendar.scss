@@ -26,7 +26,7 @@
   }
 
   .footer {
-    padding: 1rem;
+    padding: .25rem;
     display: flex;
     justify-content: flex-end;
   }
@@ -214,6 +214,10 @@
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+
+          &.completed {
+            text-decoration: line-through;
+          }
         }
       }
     }

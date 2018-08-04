@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
+import {
+  withRouter
+} from 'react-router-dom';
 
 import HTML5Backend from 'react-dnd-html5-backend'
 import {DragDropContext} from 'react-dnd'
@@ -10,7 +13,7 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import dateUtils from '@util/date';
 import {CSSTransition} from 'react-transition-group';
 import EventsPopper from './EventsPopper';
-
+import {editEvent} from "@action/project";
 import calendarService from '@service/calendar';
 import DynamicIcon from "@common/DynamicIcon";
 
@@ -19,8 +22,9 @@ const DragAndDropCalendar = withDragAndDrop(BigCalendar);
 const Event = ({event}) => {
   return (
     <div className={'event-inner'}>
-      <DynamicIcon className={'icon'} name={event.type === 'EVENT' ? 'calendar' : 'task'}/>
-      <span className={'title'}>{event.title}</span>
+      <DynamicIcon className={'icon'}
+                   name={event.type === 'EVENT' ? 'calendar' : 'task'}/>
+      <span className={`title ${event.completed ? 'completed' : ''}`}>{event.title}</span>
 
     </div>
   );
@@ -29,7 +33,9 @@ const Event = ({event}) => {
 class Calendar extends Component {
 
   static propTypes = {
-    events: PropTypes.array
+    events: PropTypes.array,
+    selectedProject: PropTypes.object,
+    editEvent: PropTypes.func.isRequired,
   };
 
   state = {
@@ -38,19 +44,25 @@ class Calendar extends Component {
     event: {},
   };
 
-  moveEvent = ({event, start, end}) => {
-    const {events} = this.state;
+  componentDidMount () {
 
-    const idx = events.indexOf(event);
+    const {location, events} = this.props;
+    const selectedEventId = location.state && location.state.selectedEventId;
 
-    const updatedEvent = {...event, start, end};
+    if(selectedEventId) {
 
-    const nextEvents = [...events];
-    nextEvents.splice(idx, 1, updatedEvent);
+      const event = events.find(e => e.id === selectedEventId);
+      event && setTimeout(() => this.handleEventClick(event), 100);
+    }
+  }
 
-    this.setState({
-      events: nextEvents,
-    })
+  moveEvent = ({event, start}) => {
+
+    this.props.editEvent(
+      this.props.selectedProject,
+      {id: event.id, date: start.getTime()},
+      () => {}
+    );
 
   };
 
@@ -152,8 +164,10 @@ class Calendar extends Component {
 }
 
 export default compose(
+  withRouter,
   DragDropContext(HTML5Backend),
   connect(state => ({
-    events: state.project.events
-  }), {})
+    events: state.project.events,
+    selectedProject: state.project.selectedProject,
+  }), {editEvent})
 )(Calendar);

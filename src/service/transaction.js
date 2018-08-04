@@ -1,4 +1,5 @@
 import firebaseService from './firebase';
+import calendarService from './calendar';
 import util from '@util/'
 import dateUtil from '@util/date'
 import {TRANSACTIONS_DATE_KEY_FORMAT, TRANSACTIONS_TYPE} from '@const/'
@@ -38,9 +39,10 @@ export default {
 
   getTransactionType: (transaction) => transaction.income ? transactionTypes.INCOME : transactionTypes.OUTCOME ,
 
-  createTransaction (projectId, type, owner, description, category, customer, date, amount, payments) {
+  createTransaction (projectId, type, owner, description, category, customer, date, amount, payments, sourceEventId) {
 
     const transaction = transformTransaction(type, owner, description, category, customer, date || new Date(), amount, payments);
+    if(sourceEventId) transaction.sourceEventId = sourceEventId;
 
     const dateKey = this.transactionsDateKey(transaction.date);
 
@@ -103,7 +105,7 @@ export default {
     });
   },
 
-  deleteTransaction (projectId, id, date,payments, paymentIndex) {
+  deleteTransaction (projectId, id, date, payments, paymentIndex, sourceEventId) {
 
     const transactionKey = this.transactionsDateKey(date);
 
@@ -121,6 +123,10 @@ export default {
           const removePath = transactionPath(projectId, this.transactionsDateKey(dateWrapper.date), id);
           firebaseService.remove(removePath);
         });
+      }
+
+      if(sourceEventId) {
+        calendarService.detachEventTransaction(projectId, sourceEventId);
       }
 
       return {

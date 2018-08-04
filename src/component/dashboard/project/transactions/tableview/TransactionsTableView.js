@@ -154,8 +154,10 @@ class TransactionsTableView extends Component {
   handleTransactionCrud = (transaction, action, cb) => {
 
     const {selectedProject, fillTransaction, setLoading} = this.props;
-    const {selectedDate} = this.state;
+    const {selectedDate, transactionForEdit} = this.state;
     let serviceAction, dataManipulation, args;
+
+    const sourceEventId = transactionForEdit.sourceEventId;
 
     //Casing action in order to prepare operation params
     switch (action) {
@@ -223,7 +225,7 @@ class TransactionsTableView extends Component {
 
     //Starting operation with Backend service action by collected args
     setLoading(true);
-    transactionService[serviceAction](selectedProject.id, ...args.map(key => transaction[key])).then(persisted => {
+    transactionService[serviceAction](selectedProject.id, ...args.map(key => transaction[key]), sourceEventId).then(persisted => {
 
       if (!dateUtil.sameMonth(persisted.date, selectedDate)) {
         //Meaning we should remove old month entry
@@ -338,7 +340,7 @@ class TransactionsTableView extends Component {
                         </div>
                       </TableCell>
                       <TableCell colSpan="2">
-                       <span className={'px-3'}>
+                       <span className={'px-3 block'}>
                           {transaction.description}
                         </span>
                       </TableCell>
@@ -428,6 +430,7 @@ class TransactionsTableView extends Component {
 
         <CreateTransaction open={showCreateTransactionModal}
                            transaction={transactionForEdit}
+                           showEventLink={true}
                            transactionCrudHandler={this.handleTransactionCrud}
                            onClose={this.showHideCreateTransaction}/>
 

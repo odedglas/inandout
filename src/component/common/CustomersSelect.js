@@ -38,7 +38,8 @@ class CustomersSelect extends Component {
     helperText: PropTypes.string,
     onOpen: PropTypes.func,
     onClose: PropTypes.func,
-    showCreateNewCustomer: PropTypes.bool
+    showCreateNewCustomer: PropTypes.bool,
+    disabled: PropTypes.bool
   };
 
   state = {
@@ -77,6 +78,7 @@ class CustomersSelect extends Component {
       error,
       helperText,
       showCreateNewCustomer,
+      disabled
     } = this.props;
 
     const {showCreateCustomerModal} = this.state;
@@ -88,6 +90,7 @@ class CustomersSelect extends Component {
           open={this.state.open}
           onClose={this.handleClose}
           onOpen={this.handleOpen}
+          disabled={disabled}
           value={customer}
           onChange={(event) => {
             const isOption = event.currentTarget.getAttribute('data-value') !== 'add-customer';

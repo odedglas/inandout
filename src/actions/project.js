@@ -1,3 +1,4 @@
+import firebaseService from '@service/firebase'
 import localStorageService from '@service/localstorage'
 import {LOCAL_STORAGE} from '@const/'
 import categoryService from '@service/category'
@@ -281,7 +282,7 @@ export function createEvent(project, { title, type, description, date, color, cu
   }
 }
 
-export function editEvent(project, { id, title, description, date , color, customer, location }, onSuccess) {
+export function editEvent(project, { id, title, description, date , color, customer, location, transaction }, onSuccess) {
 
   return dispatch => {
 
@@ -295,7 +296,8 @@ export function editEvent(project, { id, title, description, date , color, custo
       date,
       color,
       customer,
-      location
+      location,
+      transaction
     ).then(event => {
 
       dispatch({type: 'EDIT_PROJECT_EVENT', event});
@@ -306,13 +308,42 @@ export function editEvent(project, { id, title, description, date , color, custo
   }
 }
 
+export function markEventComplete(project, eventId, completed) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    calendarService.completeEvent(project.id, eventId, completed).then(event => {
+
+      dispatch({type: 'EDIT_PROJECT_EVENT', event});
+      dispatch({type: 'APP_LOADING', loading: false});
+    })
+  }
+}
+
+export function attachEventTransaction(project, eventId, transaction, onSuccess) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    calendarService.attachEventTransaction(project.id, eventId, transaction).then(event => {
+
+      dispatch({type: 'EDIT_PROJECT_EVENT', event});
+      dispatch({type: 'APP_LOADING', loading: false});
+      onSuccess();
+    })
+  }
+}
+
 export function deleteEvent(project, eventId) {
 
   return dispatch => {
 
     dispatch({type: 'APP_LOADING', loading: true});
 
-    customerService.removeCustomer(project.id, eventId).then(() => {
+    calendarService.removeEvent(project.id, eventId).then(() => {
 
       dispatch({type: 'DELETE_PROJECT_EVENT', eventId});
       dispatch({type: 'APP_LOADING', loading: false});
@@ -344,6 +375,27 @@ export function loadTransactions(date, onSuccess) {
      onSuccess(merged);
    });
  }
+}
+
+export function fetchEventTransaction(event, onSuccess) {
+
+  return (dispatch, getState) => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    let projectState = getState().project;
+    const projectKey = projectState.selectedProject.id;
+
+    const transactionPath = calendarService.getEventTransactionPath(projectKey, event);
+    let users = getState().dashboard.users;
+
+    firebaseService.fetch(transactionPath).then(transaction => {
+
+      const merged = transactionService.mergeTransactions([transaction], projectState.customers, projectState.categories, users)[0];
+      onSuccess(merged);
+      dispatch({type: 'APP_LOADING', loading: false});
+    });
+  }
 }
 
 export function updateCachedProject() {

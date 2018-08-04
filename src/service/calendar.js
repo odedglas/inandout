@@ -1,8 +1,9 @@
 import firebaseService from './firebase';
+import transactionService from './transaction';
 
 export default {
 
-  createEvent: (projectId, title, type, description, date, color, customer, location) => {
+  createEvent(projectId, title, type, description, date, color, customer, location) {
 
     const now = new Date();
     const event = cleanEmptyEntries({
@@ -17,9 +18,8 @@ export default {
     });
 
     return firebaseService.createEvent(projectId, event)
-
   },
-  editEvent: (projectId, eventId, title, description, date , color, customer, location) => {
+  editEvent (projectId, eventId, title, description, date , color, customer, location, transaction) {
 
     const event = cleanEmptyEntries({
       title,
@@ -28,27 +28,99 @@ export default {
       customer,
       color,
       location,
+      transaction,
       completed: false
     });
 
     const updatePath = eventsPath(projectId, eventId);
 
     return firebaseService.update(updatePath, event).then(() => {
+
+      if(event.transaction) {
+
+        //Controlling transaction date
+        const transactionPath = this.getEventTransactionPath(projectId, event);
+
+        firebaseService.update(transactionPath, {
+          customer: event.customer,
+          date: event.date,
+          description: getEventTransactionDescription(event)
+        })
+      }
+
       event.id = eventId;
       return event;
     });
   },
-  removeEvent: (projectId, eventId) => {
+  completeEvent (projectId, eventId, completed) {
+
+    const event  = {completed};
+
+    const updatePath = eventsPath(projectId, eventId);
+    return firebaseService.update(updatePath, event).then(() => {
+      event.id = eventId;
+      return event;
+    });
+  },
+  attachEventTransaction (projectId, eventId, transaction) {
+
+    const transactionKey = `${transactionService.transactionsDateKey(transaction.date)}/${transaction.id}`;
+    const event  = {transaction: transactionKey, completed: true};
+
+    const updatePath = eventsPath(projectId, eventId);
+    return firebaseService.update(updatePath, event).then(() => {
+      event.id = eventId;
+      return event;
+    });
+  },
+  detachEventTransaction (projectId, eventId) {
+
+    const event  = {transaction: '', completed: false};
+
+    const updatePath = eventsPath(projectId, eventId);
+    return firebaseService.update(updatePath, event).then(() => {
+      event.id = eventId;
+      return event;
+    });
+  },
+  removeEvent (projectId, eventId) {
 
     const path = eventsPath(projectId, eventId);
-    return firebaseService.remove(path);
-  },
+    return firebaseService.fetch(path).then(event => {
 
-  transformToCalendarEvents: events => events.map(event => ({
-    ...event,
-    start: new Date(event.date),
-    end: new Date(event.date)
-  }))
+      firebaseService.remove(path);
+
+      if(event.transaction) {
+
+        //Releasing transaction
+        const transactionPath = this.getEventTransactionPath(projectId, event);
+        firebaseService.update(transactionPath, {sourceEventId: ''})
+      }
+    });
+  },
+  transformToCalendarEvents (events) {
+    return events.map(event => ({
+      ...event,
+      start: new Date(event.date),
+      end: new Date(event.date)
+    }))
+  } ,
+  transformEventToTransaction (event) {
+
+    const description = getEventTransactionDescription();
+
+    return {
+      type: 'INCOME',
+      date: event.date,
+      customer: event.customer,
+      description
+    }
+  },
+  getEventTransactionPath (projectId, event) {
+
+    const parts = event.transaction.split("/");
+    return `/transactions/${projectId}/${parts[0]}/${parts[1]}`;
+  }
 }
 
 const eventsPath = (projectId, eventId) => `/projects/${projectId}/events/${eventId}`;
@@ -62,3 +134,5 @@ const cleanEmptyEntries = (obj) => {
 
   return obj;
 };
+
+const getEventTransactionDescription = event => `${event.title} ${event.location ? `, At ${event.location}`: ''}`;

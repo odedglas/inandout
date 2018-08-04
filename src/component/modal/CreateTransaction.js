@@ -15,6 +15,7 @@ import withValidation from '../hoc/withValidation';
 import CreationModal from './CreationModal';
 
 import util from '@util/';
+import navigationUtil from '@util/navigation';
 import {TRANSACTIONS_TYPE} from '@const/';
 import CategoriesSelect from '@common/CategoriesSelect';
 import CustomersSelect from '@common/CustomersSelect';
@@ -33,6 +34,12 @@ class CreateTransactionModal extends React.Component {
     validation: PropTypes.object.isRequired,
     transactionCrudHandler: PropTypes.func.isRequired,
     transaction: PropTypes.object,
+    createInitialState: PropTypes.object,
+    showEventLink: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    createInitialState: {}
   };
 
   handleTransactionCreate = (model, close) => {
@@ -40,7 +47,7 @@ class CreateTransactionModal extends React.Component {
     const {transaction, transactionCrudHandler, currentUser} = this.props;
     const {type, owner, description, category, customer, date, amount, payments} = model;
 
-    const editMode = !util.isEmptyObject(transaction);
+    const editMode = !util.isUndefined(transaction.id);
 
     //Triggering Create / Edit
     transactionCrudHandler(
@@ -62,18 +69,37 @@ class CreateTransactionModal extends React.Component {
 
   };
 
+  gotoTransactionEvent = () => {
+
+    const {history, selectedProject, transaction, onClose} = this.props;
+
+    history.push({
+      pathname: navigationUtil.projectLink(selectedProject, 'calendar'),
+      state: {
+        selectedEventId: transaction.sourceEventId
+      }
+    });
+    onClose();
+  };
+
   modalContent = (model, validation, handleChange, editMode) => {
 
-    const {selectedProject} = this.props;
+    const {selectedProject, showEventLink} = this.props;
 
     const isIncome = model.type === 'INCOME';
     const paymentsEditMode = !!model.payments && editMode;
+    const hasEventSource = !util.isEmpty(this.props.transaction.sourceEventId);
 
     //Adjusting amount if it's edit mode and payment type transaction
     const amount = paymentsEditMode ? Math.round(model.amount * model.payments) : model.amount;
 
     return (
       <div>
+        {
+          hasEventSource && showEventLink ? <div className={'event-source-link mb-2'}>
+           * Please not that this transaction is controlled by calendar <span className={'link'}> <a onClick={this.gotoTransactionEvent}> Event </a> </span>
+          </div> : null
+        }
         {
           !editMode ? <div className={'form-control'}>
               <TextField
@@ -103,6 +129,7 @@ class CreateTransactionModal extends React.Component {
             :
             <CustomersSelect customer={model.customer}
                              showCreateNewCustomer={true}
+                             disabled={hasEventSource}
                              onChange={(val) => handleChange(val, 'customer')}/>
         }
 
@@ -110,7 +137,6 @@ class CreateTransactionModal extends React.Component {
           <TextField
             value={amount}
             error={validation.amount.isInvalid}
-            placeholder={"Amount"}
             onChange={(event) => {
               const value = event.target.value;
               const calcValue = paymentsEditMode ? value / model.payments : value;
@@ -134,16 +160,18 @@ class CreateTransactionModal extends React.Component {
           />
           {
             paymentsEditMode ? <FormHelperText>
-              This transaction is {model.paymentIndex + 1} of {model.payments} Payments of {model.amount.toFixed(
-              2)}{selectedProject.currency}
+              This transaction is {model.paymentIndex + 1} of {model.payments} Payments of {model.amount.toFixed(2)}{selectedProject.currency}
             </FormHelperText> : null
           }
         </div>
 
-        <div className={'form-control'}>
+        <div className={'form-control'} style={{flexDirection: 'column'}}>
           <DatePicker
-            value={model.date || new Date()}
-            disabled={paymentsEditMode}
+            value={model.date}
+            label={'Date'}
+            title={validation.date.message}
+            error={validation.date.isInvalid}
+            disabled={paymentsEditMode || hasEventSource}
             className={'flex mt-2'}
             onChange={(date) => {
               handleChange(date.toDate().getTime(), 'date')
@@ -172,6 +200,7 @@ class CreateTransactionModal extends React.Component {
             label="Description"
             value={model.description}
             error={validation.description.isInvalid}
+            disabled={hasEventSource}
             placeholder={"Description"}
             multiline
             rowsMax="4"
@@ -195,10 +224,11 @@ class CreateTransactionModal extends React.Component {
       validate,
       onClose,
       onValidationChange,
-      transaction
+      transaction,
+      createInitialState
     } = this.props;
 
-    const editMode = !util.isEmptyObject(transaction);
+    const editMode = !util.isUndefined(transaction.id);
     let model = {};
 
     if (editMode) {
@@ -218,14 +248,17 @@ class CreateTransactionModal extends React.Component {
                      editMode={editMode}
                      model={model}
                      getInitialState={() => ({
-                       type: 'OUTCOME',
-                       owner: '',
-                       category: '',
-                       customer: '',
-                       date: '',
-                       payments: '',
-                       amount: '',
-                       editMode: false,
+                       ...{
+                         type: 'OUTCOME',
+                         owner: '',
+                         category: '',
+                         customer: '',
+                         date: null,
+                         payments: '',
+                         amount: '',
+                         editMode: false,
+                       },
+                       ...createInitialState
                      })}
                      renderContent={this.modalContent}
                      onCreate={this.handleTransactionCreate}
@@ -244,6 +277,11 @@ export default compose(
       field: 'category',
       method: (v, f, state, validator, args) =>  state.type === 'INCOME' ? validator.isEmpty(v) : !validator.isEmpty(v),
       message: 'Please select transaction category'
+    },
+    {
+      field: 'date',
+      method: (v, f, state, validator, args) =>  v && validator.positiveNumber(v, validator),
+      message: 'Please select transaction date'
     },
     {
       field: 'amount',

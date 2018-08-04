@@ -19,11 +19,16 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Chip from '@material-ui/core/Chip';
 import CustomersSelect from '@common/CustomersSelect';
+import CreateTransaction from '@modal/CreateTransaction'
 
-import {createEvent, editEvent, deleteEvent} from "@action/project";
+import {createEvent, editEvent, deleteEvent, markEventComplete, attachEventTransaction, fetchEventTransaction} from "@action/project";
+import {setLoading} from "@action/loading";
 import {EVENT_TYPE} from '@const/'
 import util from '@util/';
+import dateUtil from '@util/date';
 import themeService from '@service/theme';
+import transactionService from '@service/transaction';
+import calendarService from '@service/calendar';
 
 const today = new Date();
 const getEventsInitialState = () => ({
@@ -52,6 +57,10 @@ class EventsPopper extends Component {
     createEvent: PropTypes.func.isRequired,
     editEvent: PropTypes.func.isRequired,
     deleteEvent: PropTypes.func.isRequired,
+    markEventComplete: PropTypes.func.isRequired,
+    attachEventTransaction: PropTypes.func.isRequired,
+    fetchEventTransaction: PropTypes.func.isRequired,
+    setLoading: PropTypes.func.isRequired,
   };
 
   state = {
@@ -59,6 +68,9 @@ class EventsPopper extends Component {
     popperPickerOpen: false,
     eventTypeMenuAnchor: null,
     editMode: false,
+    showTransactionModal: false,
+    transactionCreateState: {},
+    transactionForEdit: {},
   };
 
   componentDidUpdate(prevProps) {
@@ -98,9 +110,9 @@ class EventsPopper extends Component {
     this.onPopperPickerClose();
   };
 
-  handlePopperClose = () => {
+  handlePopperClose = (force) => {
 
-    if (!this.state.popperPickerOpen) {
+    if (force === true || !this.state.popperPickerOpen) {
       this.props.handleClose();
     }
   };
@@ -130,6 +142,100 @@ class EventsPopper extends Component {
       this.props.selectedProject,
       this.props.event.id
     )
+  };
+
+  markEventComplete = (completed) => {
+
+    this.handlePopperClose();
+    this.props.markEventComplete(
+      this.props.selectedProject,
+      this.props.event.id,
+      completed
+    )
+  };
+
+  handleTransactionModalShow = (fetchExisting) => {
+
+    const {data} = this.state;
+
+    if(!fetchExisting) {
+
+      this.setState({
+        showTransactionModal: true,
+        transactionCreateState: calendarService.transformEventToTransaction(
+          data
+        ),
+        popperPickerOpen: true,
+      })
+    }
+    else {
+
+      this.props.fetchEventTransaction(data, (transaction) => {
+        this.setState({
+          showTransactionModal: true,
+          transactionForEdit: transaction,
+          popperPickerOpen: true,
+        })
+      });
+
+    }
+  };
+
+  handleTransactionModalHide = () => this.setState({showTransactionModal: false, popperPickerOpen: false,});
+
+  handleTransactionCrud = (transaction, action, cb) => {
+
+    const {data} = this.state;
+    const {setLoading} = this.props;
+
+    const done = () => {
+      cb();
+      this.handlePopperClose();
+      this.props.setLoading(false);
+    };
+
+    setLoading(true);
+
+    if(action === 'add') {
+
+      transactionService.createTransaction(
+        this.props.selectedProject.id,
+        transaction.type,
+        transaction.owner,
+        transaction.description,
+        transaction.category,
+        transaction.customer,
+        transaction.date,
+        transaction.amount,
+        transaction.payments,
+        data.id
+      ).then(transaction => {
+
+        this.props.attachEventTransaction(
+          this.props.selectedProject,
+          data.id,
+          transaction,
+          done
+        );
+      })
+    }
+    else {
+
+      transactionService.updateTransaction(
+        this.props.selectedProject.id,
+        transaction.id,
+        transaction.type,
+        transaction.owner,
+        transaction.description,
+        transaction.category,
+        transaction.customer,
+        transaction.date,
+        transaction.amount,
+        transaction.payments,
+        transaction.paymentIndex
+      ).then(done)
+    }
+
   };
 
   getPopperContent = (isEventType) => {
@@ -217,6 +323,50 @@ class EventsPopper extends Component {
     )
   };
 
+  getPopperFooter = (isEventType) => {
+    const {editMode, data} = this.state;
+
+    const isCompleted = data.completed === true;
+    const canComplete = () => editMode && (!isEventType || dateUtil.isAfter(new Date(), data.date));
+
+    return (
+      <div className={'footer'}>
+        {
+          editMode ? <IconButton onClick={this.handleEventDelete}>
+            <DynamicIcon name={'delete'}/>
+          </IconButton> : null
+        }
+        <div className={'flex'}></div>
+        <Button onClick={this.handlePopperClose}
+                size={'small'}
+                color="primary">
+          Cancel
+        </Button>
+        <Button onClick={this.handleCreateOrEditEvent}
+                color="primary"
+                size={'small'}
+                className={'mx-2'}>
+          {editMode ? 'Edit' : 'Create'}
+        </Button>
+        {
+          canComplete() ? (
+            isEventType ?
+              <Button onClick={() => isCompleted ? this.handleTransactionModalShow(true) : this.handleTransactionModalShow(false)}
+                      color="primary"
+                      size={'small'}>
+                {isCompleted ? 'View Transaction' : 'To Transaction'}
+              </Button> :
+              <Button onClick={() => this.markEventComplete(!isCompleted)}
+                      color="primary"
+                      size={'small'}>
+                {isCompleted ? 'Un complete' : 'Complete'}
+              </Button>
+          ) : null
+        }
+      </div>
+    )
+  };
+
   calculatedPlacement = () => {
     const {anchorEl} = this.props;
 
@@ -238,7 +388,7 @@ class EventsPopper extends Component {
   render() {
 
     const {open, anchorEl} = this.props;
-    const {data, editMode} = this.state;
+    const {data, editMode, showTransactionModal, transactionCreateState, transactionForEdit} = this.state;
 
     const isEventType = data.type === 'EVENT';
 
@@ -274,27 +424,15 @@ class EventsPopper extends Component {
                     </IconButton>
                   </div>
                 </div>
-                {this.getPopperContent(data, isEventType)}
-                <div className={'footer'}>
-                  {
-                    editMode ? <IconButton onClick={this.handleEventDelete}>
-                      <DynamicIcon name={'delete'}/>
-                    </IconButton> : null
-                  }
-                  <div className={'flex'}></div>
-                  <Button onClick={this.handlePopperClose}
-                          size={'small'}
-                          className={'mx-3'}
-                          color="primary">
-                    Cancel
-                  </Button>
-                  <Button onClick={this.handleCreateOrEditEvent}
-                          color="primary"
-                          size={'small'}
-                          variant="contained">
-                    {editMode ? 'Edit' : 'Create'}
-                  </Button>
-                </div>
+                {this.getPopperContent(isEventType)}
+                {this.getPopperFooter(isEventType)}
+
+                <CreateTransaction open={showTransactionModal}
+                                   createInitialState={transactionCreateState}
+                                   transaction={transactionForEdit}
+                                   transactionCrudHandler={this.handleTransactionCrud}
+                                   onClose={this.handleTransactionModalHide}/>
+
               </Paper>
 
             </Grow>
@@ -324,5 +462,5 @@ export default compose(
   ]),
   connect(state => ({
     selectedProject: state.project.selectedProject
-  }), {createEvent, editEvent, deleteEvent})
+  }), {createEvent, editEvent, deleteEvent, markEventComplete, attachEventTransaction, fetchEventTransaction, setLoading})
 )(EventsPopper);

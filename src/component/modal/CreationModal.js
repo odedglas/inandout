@@ -32,7 +32,7 @@ class CreationModal extends React.Component {
     super(props);
 
     this.state = {
-      didClose:false,
+      didClose:true,
       editInitialized: false,
       model: props.getInitialState()
     };
@@ -43,7 +43,7 @@ class CreationModal extends React.Component {
 
     if(props.open) {
       if(props.editMode && !state.editInitialized) {
-
+        console.log("Init edit mode");
         return {
           model: props.model,
           editInitialized: true,
@@ -51,7 +51,7 @@ class CreationModal extends React.Component {
       }
 
       if(!props.editMode && state.didClose) {
-
+        console.log("Init Create mode.");
         return {
           model: props.getInitialState(),
           didClose: false,
@@ -60,12 +60,12 @@ class CreationModal extends React.Component {
       }
     }
     else {
-
+      console.log("Edit initialize -> False ");
       return {
         editInitialized: false,
       }
     }
-
+    console.log("Non action");
     return null;
   }
 

@@ -5,6 +5,9 @@ export default {
 
     return u === null || u === undefined;
   },
+  isEmpty(o) {
+    return this.isUndefined(o) || o === ''
+  },
   searchInConst(constant, key) {
 
     if (!key) return;
