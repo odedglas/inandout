@@ -23,6 +23,7 @@ import CreateTransaction from '@modal/CreateTransaction'
 
 import {createEvent, editEvent, deleteEvent, markEventComplete, attachEventTransaction, fetchEventTransaction} from "@action/project";
 import {setLoading} from "@action/loading";
+import {showConfirmation} from "@action/dashboard";
 import {EVENT_TYPE} from '@const/'
 import util from '@util/';
 import dateUtil from '@util/date';
@@ -61,6 +62,7 @@ class EventsPopper extends Component {
     attachEventTransaction: PropTypes.func.isRequired,
     fetchEventTransaction: PropTypes.func.isRequired,
     setLoading: PropTypes.func.isRequired,
+    showConfirmation: PropTypes.func.isRequired,
   };
 
   state = {
@@ -137,11 +139,24 @@ class EventsPopper extends Component {
 
   handleEventDelete = () => {
 
-    this.handlePopperClose();
-    this.props.deleteEvent(
-      this.props.selectedProject,
-      this.props.event.id
-    )
+    const { selectedProject, event, deleteEvent, showConfirmation } = this.props;
+
+    this.setState({popperPickerOpen: true});
+
+    showConfirmation({
+      title:'Delete This Event ?',
+      body: 'Deleting this Event will release it\'s controlled transaction if any',
+      icon: 'delete',
+      onConfirm: () => {
+
+        this.handlePopperClose(true);
+        deleteEvent(
+          selectedProject,
+          event.id
+        )
+      },
+      onClose: () => this.setState({popperPickerOpen: false})
+    });
   };
 
   markEventComplete = (completed) => {
@@ -462,5 +477,14 @@ export default compose(
   ]),
   connect(state => ({
     selectedProject: state.project.selectedProject
-  }), {createEvent, editEvent, deleteEvent, markEventComplete, attachEventTransaction, fetchEventTransaction, setLoading})
+  }), {
+    createEvent,
+    editEvent,
+    deleteEvent,
+    markEventComplete,
+    attachEventTransaction,
+    fetchEventTransaction,
+    setLoading,
+    showConfirmation
+  })
 )(EventsPopper);
