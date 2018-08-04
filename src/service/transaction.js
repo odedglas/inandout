@@ -43,7 +43,7 @@ export default {
     const transaction = transformTransaction(type, owner, description, category, customer, date || new Date(), amount, payments);
 
     const dateKey = this.transactionsDateKey(transaction.date);
-    debugger;
+
     return firebaseService.createTransaction(projectId, dateKey, transaction).then(t => {
 
       if(hasPayments(payments)) {

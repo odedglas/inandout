@@ -95,6 +95,7 @@ class CreationModal extends React.Component {
     const model = this.state.model;
 
     const validationResult = validate(model);
+    debugger;
     if (validationResult.isValid) {
 
       this.props.onCreate(model, this.handleClose);

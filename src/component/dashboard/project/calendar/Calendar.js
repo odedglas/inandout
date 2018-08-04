@@ -77,6 +77,7 @@ class Calendar extends Component {
   };
 
   handleClick = (target, event) => {
+    debugger;
     this.setState({
       anchorEl: target,
       open: true,
@@ -84,7 +85,7 @@ class Calendar extends Component {
     });
   };
 
-  handleClose = (e) => {
+  handleClose = () => {
     this.state.anchorEl.classList.remove('popper-focus');
     this.setState({
       anchorEl: null,

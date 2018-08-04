@@ -20,8 +20,8 @@
   .content {
     padding: 1rem;
 
-    .form-control {
-      margin-bottom: 0.5rem;
+    .form-control:not(:last-child) {
+      margin-bottom: 0.75rem;
     }
   }
 

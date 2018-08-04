@@ -17,6 +17,7 @@ import CreationModal from './CreationModal';
 import util from '@util/';
 import {TRANSACTIONS_TYPE} from '@const/';
 import CategoriesSelect from '@common/CategoriesSelect';
+import CustomersSelect from '@common/CustomersSelect';
 import DatePicker from 'material-ui-pickers/DatePicker';
 import variables from '@scss/_variables.scss';
 
@@ -98,7 +99,10 @@ class CreateTransactionModal extends React.Component {
           !isIncome ? <CategoriesSelect selectedCategories={model.category}
                                         error={validation.category.isInvalid}
                                         multi={false}
-                                        onChange={(val) => handleChange(val, 'category')}/> : null
+                                        onChange={(val) => handleChange(val, 'category')}/>
+            :
+            <CustomersSelect customer={model.customer}
+                             onChange={(val) => handleChange(val, 'customer')}/>
         }
 
         <div className={'form-control'} style={{flexDirection: 'column'}}>
@@ -129,7 +133,8 @@ class CreateTransactionModal extends React.Component {
           />
           {
             paymentsEditMode ? <FormHelperText>
-              This transaction is {model.paymentIndex + 1} of {model.payments} Payments of {model.amount.toFixed(2)}{selectedProject.currency}
+              This transaction is {model.paymentIndex + 1} of {model.payments} Payments of {model.amount.toFixed(
+              2)}{selectedProject.currency}
             </FormHelperText> : null
           }
         </div>
@@ -138,7 +143,7 @@ class CreateTransactionModal extends React.Component {
           <DatePicker
             value={model.date || new Date()}
             disabled={paymentsEditMode}
-            className={'flex mt-3'}
+            className={'flex mt-2'}
             onChange={(date) => {
               handleChange(date.toDate().getTime(), 'date')
             }}
@@ -235,7 +240,7 @@ export default compose(
   withValidation([
     {
       field: 'category',
-      method: (v, f, state, validator, args) => state.income ? validator.isEmpty(v) : !validator.isEmpty(v),
+      method: (v, f, state, validator, args) =>  state.type === 'INCOME' ? validator.isEmpty(v) : !validator.isEmpty(v),
       message: 'Please select transaction category'
     },
     {

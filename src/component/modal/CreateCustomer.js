@@ -23,13 +23,14 @@ class CreateCustomerModal extends React.Component {
     validation: PropTypes.object.isRequired,
     editCustomer: PropTypes.func.isRequired,
     createCustomer: PropTypes.func.isRequired,
+    confirmCallback: PropTypes.func,
     project: PropTypes.object,
     customer: PropTypes.object,
   };
 
   handleCustomerCreate = (model, close) => {
 
-    const {project, customer, editCustomer, createCustomer} = this.props;
+    const {project, customer, editCustomer, createCustomer, confirmCallback} = this.props;
     const {name, contactName, phone, email, address, logo} = model;
 
     const editMode = !util.isEmptyObject(customer);
@@ -39,7 +40,10 @@ class CreateCustomerModal extends React.Component {
     method(
       project,
       {name, contactName, phone, email, address, logo, id: editMode ? customer.id : undefined},
-      () => close()
+      (customer) => {
+        confirmCallback && confirmCallback(customer);
+        close();
+      }
     );
 
   };

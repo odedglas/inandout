@@ -19,6 +19,7 @@
 
     &:hover, &.selected {
       box-shadow: 0 0 5px currentColor;
+      transform: scale(1.25);
     }
   }
 }

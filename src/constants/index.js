@@ -61,18 +61,6 @@ export const LOCAL_STORAGE = {
 
 export const TRANSACTIONS_DATE_KEY_FORMAT = 'MMYY';
 
-export const TRANSACTIONS = {
-  TYPES: {
-    INCOME: 'income',
-    OUTCOME: 'outcome'
-  },
-  RECURRING: {
-    ONCE: 'once',
-    WEEKLY: 'weekly',
-    MONTHLY: 'monthly',
-  }
-};
-
 export const BUDGETS_PERIOD = [
   {
     key: 'WEEKLY',

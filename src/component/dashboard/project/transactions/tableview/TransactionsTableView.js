@@ -47,7 +47,7 @@ class TransactionsTableView extends Component {
     selectedProject: PropTypes.object,
     projectCurrency: PropTypes.string,
     filter: PropTypes.arrayOf(PropTypes.object).isRequired,
-    doFilter: PropTypes.func.isRequired ,
+    doFilter: PropTypes.func.isRequired,
     handleFilterChange: PropTypes.func.isRequired,
   };
 
@@ -352,7 +352,20 @@ class TransactionsTableView extends Component {
                       </TableCell>
                       <TableCell>{transaction.payments ?
                         `${transaction.paymentIndex + 1} out of ${transaction.payments}` : 'None'}</TableCell>
-                      <TableCell>{transaction.customer && transaction.customer.displayName}</TableCell>
+                      <TableCell className={'text-center'}>
+                        {
+                          transaction.customer ? <div>
+                            <Avatar className={'avatar small mb-2'}
+                                    style={{
+                                      'backgroundColor': transaction.customer.avatarColor,
+                                      margin: '0 auto'
+                                    }}>
+                              {transaction.customer.initials}
+                            </Avatar>
+                            <div>{transaction.customer.name}</div>
+                          </div> : null
+                        }
+                      </TableCell>
                       <TableCell className={'text-center'}>
                         {
                           transaction.category ? (
@@ -421,7 +434,7 @@ class TransactionsTableView extends Component {
         <TransactionFilter open={showFilter}
                            filter={filter}
                            handleFilterChange={handleFilterChange}
-                           hideFilter={this.showHideFilter} />
+                           hideFilter={this.showHideFilter}/>
       </Paper>
     );
   }
@@ -430,40 +443,40 @@ class TransactionsTableView extends Component {
 export default compose(
   withFilter([
     {
-      type:'string',
-      label:'Description',
+      type: 'string',
+      label: 'Description',
       id: 'description',
     },
     {
-      type:'number',
-      label:'Amount',
+      type: 'number',
+      label: 'Amount',
       id: 'amount',
     },
     {
-      type:'select',
-      label:'Owner',
+      type: 'select',
+      label: 'Owner',
       id: 'owner',
       getFieldValue: (data) => data.owner.id
     },
     {
-      type:'select',
-      label:'Category',
+      type: 'select',
+      label: 'Category',
       id: 'category',
       getFieldValue: (data) => data.category ? data.category.id : null
     },
     {
-      type:'singleSelect',
-      label:'Type',
+      type: 'singleSelect',
+      label: 'Type',
       id: 'type',
     },
     {
-      type:'select',
-      label:'Customer',
+      type: 'select',
+      label: 'Customer',
       id: 'customer',
     },
     {
-      type:'date',
-      label:'Date',
+      type: 'date',
+      label: 'Date',
       id: 'date',
     },
   ]),

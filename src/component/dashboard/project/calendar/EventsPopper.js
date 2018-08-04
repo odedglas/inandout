@@ -15,7 +15,7 @@ import {DateTimePicker} from 'material-ui-pickers';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Chip from '@material-ui/core/Chip';
-import Avatar from '@material-ui/core/Avatar';
+import CustomersSelect from '@common/CustomersSelect';
 
 import {EVENT_TYPE} from '@const/'
 import util from '@util/';
@@ -29,7 +29,6 @@ const getEventsInitialState = () => ({
   color: themeService.getAvatarRandomColor('600'),
   customer: '',
   location: '',
-  repeat: '',
 });
 
 class EventsPopper extends Component {
@@ -60,7 +59,8 @@ class EventsPopper extends Component {
     if (open && !prevProps.open && !hasEntity) {
 
       this.setState({
-        data: getEventsInitialState()
+        data: getEventsInitialState(),
+        editMode: hasEntity
       })
     }
   }
@@ -78,12 +78,12 @@ class EventsPopper extends Component {
   };
 
   handleEventMenuOpen = event => {
-    this.setState({ eventTypeMenuAnchor: event.currentTarget });
+    this.setState({eventTypeMenuAnchor: event.currentTarget});
     this.onPopperPickerOpen();
   };
 
   handleEventMenuClose = () => {
-    this.setState({ eventTypeMenuAnchor: null });
+    this.setState({eventTypeMenuAnchor: null});
     this.onPopperPickerClose();
   };
 
@@ -110,10 +110,10 @@ class EventsPopper extends Component {
     }
   };
 
-  getPopperContent = (data) => {
+  getPopperContent = (isEventType) => {
 
     const {validation} = this.props;
-    const {eventTypeMenuAnchor} = this.state;
+    const {data, eventTypeMenuAnchor, editMode} = this.state;
 
     const eventTypeLabel = util.searchInConst(EVENT_TYPE, data.type);
     return (
@@ -132,12 +132,17 @@ class EventsPopper extends Component {
           />
         </div>
 
-        <div className={'form-control'}>
-          <Chip aria-owns={eventTypeMenuAnchor ? 'event-type-menu' : null}
-                onClick={this.handleEventMenuOpen}
-                aria-haspopup="true"
-                label={eventTypeLabel}/>
-        </div>
+        {
+          !editMode ?
+            <div className={'form-control'}>
+              <Chip aria-owns={eventTypeMenuAnchor ? 'event-type-menu' : null}
+                    onClick={this.handleEventMenuOpen}
+                    aria-haspopup="true"
+                    label={eventTypeLabel}/>
+            </div>
+            :
+            null
+        }
 
         <Menu
           id="event-type-menu"
@@ -170,8 +175,41 @@ class EventsPopper extends Component {
           </div>
         </div>
 
+        <CustomersSelect customer={data.customer}
+                         onClose={this.onPopperPickerClose}
+                         onOpen={this.onPopperPickerOpen}
+                         onChange={(val) => this.handleChange(val, 'customer')}/>
+
+        {
+          isEventType ?
+            <TextField
+              value={data.location}
+              onChange={(event) => this.handleChange(event.target.value, 'location')}
+              margin="dense"
+              placeholder="Location"
+              fullWidth
+            /> : null
+        }
+
       </div>
     )
+  };
+
+  calculatedPlacement = () => {
+    const {anchorEl} = this.props;
+
+    const defaultPlacement = 'right-start';
+
+    if(!anchorEl) return defaultPlacement;
+
+    const body = document.body,
+      html = document.documentElement;
+
+    const bodyHeight= Math.max( body.scrollHeight, body.offsetHeight,
+      html.clientHeight, html.scrollHeight, html.offsetHeight );
+    const anchorTop = anchorEl ? anchorEl.getClientRects()[0].top : 0;
+
+    return anchorTop > (bodyHeight / 2) ? 'right-end' : defaultPlacement
   };
 
   render() {
@@ -186,7 +224,7 @@ class EventsPopper extends Component {
       <Popper open={open}
               className={'calendar-popper'}
               anchorEl={anchorEl}
-              placement={'right-end'} transition>
+              placement={this.calculatedPlacement()} transition>
         {({TransitionProps}) => (
           <ClickAwayListener onClickAway={this.handlePopperClose}>
             <Grow {...TransitionProps} timeout={350}>
@@ -247,7 +285,11 @@ export default withValidation([
   },
   {
     field: 'date',
-    method: (v, f, state, validator, args) => !validator.isEmpty(''+v),
+    method: (v, f, state, validator, args) => !validator.isEmpty('' + v),
     message: 'Please select event date.'
+  },
+  {
+    field: 'customer',
+    method: (v, f, state, validator, args) => true
   },
 ])(EventsPopper);
