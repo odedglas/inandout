@@ -69,6 +69,7 @@ import StarIcon from '@material-ui/icons/Star';
 import SearchIcon from '@material-ui/icons/Search';
 import PaletteIcon from '@material-ui/icons/Palette';
 import LocationIcon from '@material-ui/icons/LocationOn';
+import BackIcon from '@material-ui/icons/ArrowBack';
 
 const iconMap = {
   'home': HomeIcon,
@@ -130,6 +131,7 @@ const iconMap = {
   'search': SearchIcon,
   'palette': PaletteIcon,
   'location': LocationIcon,
+  'back': BackIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {

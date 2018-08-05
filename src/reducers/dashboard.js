@@ -2,6 +2,7 @@ const initialState = {
   actions: [],
   loading: false,
   showConfirmModal: false,
+  initialized: false,
   users: [],
   confirmPayload: {},
 };
@@ -28,6 +29,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         showConfirmModal: false,
+      };
+    case 'SET_DASHBOARD_INITIALIZED':
+      return {
+        ...state,
+        initialized: true,
       };
 
     default:

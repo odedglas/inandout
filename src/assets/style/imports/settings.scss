@@ -1,0 +1,31 @@
+@import '../variables';
+
+.settings-page {
+
+  .header {
+    padding: .5rem;
+    height: $breadcrumbs-height;
+    border-bottom: 1px solid $divider-color;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, .1);
+
+    .icon {
+      height:36px;
+      width:36px;
+
+      svg {
+        font-size: $big-font;
+      }
+    }
+
+    .title {
+      font-size: $medium-font;
+    }
+  }
+
+  .body {
+    padding: 2rem;
+  }
+}

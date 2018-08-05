@@ -50,7 +50,9 @@ export function init() {
         dispatch(selectProject(selectedProject));
       }
 
+      dispatch({type: 'SET_DASHBOARD_INITIALIZED'});
       dispatch({type: 'SET_DASHBOARD_LOADING', loading: false});
+
     });
   }
 }

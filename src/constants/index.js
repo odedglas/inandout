@@ -3,6 +3,7 @@ export const ROUTER = {
   SIGN_UP: '/signup',
   FORGOT_PASSWORD: '/forgot-pw',
   DASHBOARD: '/dashboard',
+  SETTINGS: '/dashboard/settings',
   PROJECT: '/dashboard/project/:identifier',
   BUDGETS: '/dashboard/project/:identifier/budgets',
   CATEGORIES: '/dashboard/project/:identifier/categories',

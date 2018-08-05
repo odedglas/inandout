@@ -12,7 +12,22 @@ import util from '@util/';
 const projectSyncListener = {};
 
 export function setPreSelectedProject(identifier) {
-  return dispatch => dispatch({type: 'SET_PRE_SELECTED_PROJECT', identifier});
+  return (dispatch, getState) => {
+
+    const isDashboardInitialized = getState().dashboard.initialized
+
+    //Waiting for dashboard to be initialized
+    if(!isDashboardInitialized) {
+
+      dispatch({type: 'SET_PRE_SELECTED_PROJECT', identifier})
+    }
+    else {
+
+      //Selecting existing project
+      const project = getState().projects.find(p => p.identifier === identifier);
+      dispatch(selectProject(project));
+    }
+  };
 }
 
 export function selectProject(project) {

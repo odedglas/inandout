@@ -14,6 +14,7 @@ import NotificationsDrawer from './drawer/NotificationsDrawer';
 import {ROUTER as routes} from '@const/';
 import Header from './header/Header';
 import Landing from './landing/Landing';
+import Settings from './settings/Settings';
 import Project from './project/Project';
 
 import ProjectDrawer from './drawer/ProjectDrawer';
@@ -29,7 +30,7 @@ class Dashboard extends Component {
   };
 
   componentDidMount() {
-
+    debugger;
     //Dashboard init
     this.props.init();
   }
@@ -46,6 +47,7 @@ class Dashboard extends Component {
     const {showNotificationsBar} = this.state;
 
     const isLanding = location.pathname === routes.DASHBOARD;
+    const isProjectRoute = location.pathname.startsWith('/dashboard/project');
 
     return (
       <div className={'dashboard-container'}>
@@ -54,11 +56,14 @@ class Dashboard extends Component {
                 toggleNotificationsDrawer={this.toggleNotificationsDrawer}/>
 
         <div className={'flex h-100'}>
-          {!isLanding ? <ProjectDrawer/> : null}
+          {isProjectRoute ? <ProjectDrawer/> : null}
           <div className={'dashboard-body ' + (isLanding ? 'landing' : '')}>
             <Switch>
               <Route exact path={routes.DASHBOARD}
                      component={Landing}/>
+
+              <Route exact path={routes.SETTINGS}
+                     component={Settings}/>
 
               <Route path={routes.PROJECT}
                      component={Project}/>

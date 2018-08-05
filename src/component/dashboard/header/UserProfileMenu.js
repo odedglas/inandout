@@ -18,6 +18,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import Divider from '@material-ui/core/Divider';
 
+import {ROUTER} from '@const/'
 import {signOut} from '@action/authentication';
 
 class UserProfileMenu extends React.Component {
@@ -39,6 +40,12 @@ class UserProfileMenu extends React.Component {
   handleMenuOpen = event => this.setState({open: true, anchorEl: event.currentTarget})
 
   handleClose = event => this.setState({open: false, anchorEl: null});
+
+  gotoSettings = () => {
+
+    this.handleClose();
+    this.props.history.push(ROUTER.SETTINGS);
+  };
 
   doSignOut = () => {
 
@@ -90,7 +97,7 @@ class UserProfileMenu extends React.Component {
               </div>
             </div>
             <Divider/>
-            <MenuItem className={'menu-item'} onClick={this.handleClose}>
+            <MenuItem className={'menu-item'} onClick={this.gotoSettings}>
               <ListItemIcon className={'menu-icon'}>
                 <SettingsIcon/>
               </ListItemIcon>

@@ -184,10 +184,10 @@ class FilterRow extends Component {
                         multi={true}
                         rawData={customers}
                         renderAvatar={(item) => (
-                          <Avatar className={'avatar smallest mr-1'}
+                          <Avatar className={'avatar smallest mr-1 white'}
                                   key={item.id}
-                                  style={{'backgroundColor': item.color}}>
-                            <DynamicIcon className={'icon white'} name={item.icon}/>
+                                  style={{'backgroundColor': item.avatarColor}}>
+                            {item.initials}
                           </Avatar>
                         )}
                         renderListItem={(item) => (
@@ -195,8 +195,8 @@ class FilterRow extends Component {
                             key={item.id}
                             value={item.id}>
                             <ListItemIcon className={'menu-icon'}>
-                              <Avatar className={'avatar small'} style={{'backgroundColor': item.color}}>
-                                <DynamicIcon className={'icon white'} name={item.icon}/>
+                              <Avatar className={'avatar small white'} style={{'backgroundColor': item.avatarColor}}>
+                                {item.initials}
                               </Avatar>
                             </ListItemIcon>
                             <ListItemText className={'menu-text'}
