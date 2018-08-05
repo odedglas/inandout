@@ -9,7 +9,6 @@ import {compose} from 'recompose';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 
-import { selectProject } from "@action/project";
 import DynamicIcon from "../../common/DynamicIcon";
 
 class Settings extends React.Component {

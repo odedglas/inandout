@@ -41,7 +41,7 @@ class Customers extends Component {
 
     return (
       <div className={'customers-container'}>
-        <Breadcrumb item={{id: 'customersBreadcrumb', value: 'Customers', path: '/dashboard'}}/>
+        <Breadcrumb item={{id: 'customersBreadcrumb', value: 'Customers'}}/>
 
         <PageTitle text={'Customers'} icon={'customers'}/>
 

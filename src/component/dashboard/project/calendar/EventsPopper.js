@@ -21,14 +21,22 @@ import Chip from '@material-ui/core/Chip';
 import CustomersSelect from '@common/CustomersSelect';
 import CreateTransaction from '@modal/CreateTransaction'
 
-import {createEvent, editEvent, deleteEvent, markEventComplete, attachEventTransaction, fetchEventTransaction} from "@action/project";
+import {
+  createEvent,
+  editEvent,
+  deleteEvent,
+  markEventComplete,
+  attachEventTransaction,
+  fetchEventTransaction,
+  createTransaction,
+  updateTransaction
+} from "@action/project";
 import {setLoading} from "@action/loading";
 import {showConfirmation} from "@action/dashboard";
 import {EVENT_TYPE} from '@const/'
 import util from '@util/';
 import dateUtil from '@util/date';
 import themeService from '@service/theme';
-import transactionService from '@service/transaction';
 import calendarService from '@service/calendar';
 
 const today = new Date();
@@ -63,6 +71,8 @@ class EventsPopper extends Component {
     fetchEventTransaction: PropTypes.func.isRequired,
     setLoading: PropTypes.func.isRequired,
     showConfirmation: PropTypes.func.isRequired,
+    createTransaction: PropTypes.func.isRequired,
+    updateTransaction: PropTypes.func.isRequired,
   };
 
   state = {
@@ -201,54 +211,39 @@ class EventsPopper extends Component {
   handleTransactionCrud = (transaction, action, cb) => {
 
     const {data} = this.state;
-    const {setLoading} = this.props;
+    const {updateTransaction, createTransaction} = this.props;
 
     const done = () => {
       cb();
       this.handlePopperClose();
-      this.props.setLoading(false);
     };
-
-    setLoading(true);
 
     if(action === 'add') {
 
-      transactionService.createTransaction(
-        this.props.selectedProject.id,
-        transaction.type,
-        transaction.owner,
-        transaction.description,
-        transaction.category,
-        transaction.customer,
-        transaction.date,
-        transaction.amount,
-        transaction.payments,
-        data.id
-      ).then(transaction => {
+      createTransaction(
+        this.props.selectedProject,
+        {
+          ...transaction,
+          sourceEventId: data.id
+        },
+        (transaction) => {
 
-        this.props.attachEventTransaction(
-          this.props.selectedProject,
-          data.id,
-          transaction,
-          done
-        );
-      })
+          this.props.attachEventTransaction(
+            this.props.selectedProject,
+            data.id,
+            transaction,
+            done
+          );
+        }
+      )
     }
     else {
 
-      transactionService.updateTransaction(
-        this.props.selectedProject.id,
-        transaction.id,
-        transaction.type,
-        transaction.owner,
-        transaction.description,
-        transaction.category,
-        transaction.customer,
-        transaction.date,
-        transaction.amount,
-        transaction.payments,
-        transaction.paymentIndex
-      ).then(done)
+      updateTransaction(
+        this.props.selectedProject,
+        transaction,
+        done
+      );
     }
 
   };
@@ -485,6 +480,8 @@ export default compose(
     attachEventTransaction,
     fetchEventTransaction,
     setLoading,
-    showConfirmation
+    showConfirmation,
+    createTransaction,
+    updateTransaction
   })
 )(EventsPopper);

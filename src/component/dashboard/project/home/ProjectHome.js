@@ -5,6 +5,9 @@ import {
 } from 'react-router-dom';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
+import Breadcrumb from '../breadcrumbs/Breadcrumb';
+
+import dateUtil from '@util/date';
 
 class ProjectHome extends React.Component {
 
@@ -15,9 +18,13 @@ class ProjectHome extends React.Component {
   render() {
 
     const {selectedProject} = this.props;
+    const today = new Date();
 
     return (
-      <div className={'row'}>
+      <div className={'project-home-wrapper'}>
+
+        <Breadcrumb item={{id:'projectHomeCrumb' ,value:dateUtil.format(today,'MMMM YYYY')}}/>
+
         <div className={'col-sm-4'}> 1</div>
         <div className={'col-sm-4'}>2</div>
         <div className={'col-sm-4'}> 3</div>

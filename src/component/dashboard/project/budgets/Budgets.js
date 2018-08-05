@@ -11,8 +11,9 @@ import BudgetPanel from './BudgetPanel';
 import PageTitle from "@common/PageTitle";
 
 import Breadcrumb from '../breadcrumbs/Breadcrumb';
-
+import {createTransaction} from "@action/project";
 import CreateBudget from '@modal/CreateBudget'
+import CreateTransaction from '@modal/CreateTransaction'
 import BudgetStatistics from '@modal/BudgetStatistics'
 import {CategoryType} from "@model/category";
 import budgetService from '@service/budget';
@@ -25,12 +26,15 @@ class Budgets extends Component {
     categories: PropTypes.arrayOf(CategoryType),
     users: PropTypes.arrayOf(PropTypes.object),
     customers: PropTypes.arrayOf(PropTypes.object),
+    createTransaction: PropTypes.func.isRequired,
   };
 
   state = {
     expanded: null,
     showCreateBudgetModal: false,
-    showBudgetStatisticsModal:false,
+    showBudgetStatisticsModal: false,
+    showTransactionModal: false,
+    transactionInitialState: {},
     budgetForEdit: {},
     budgetForStatistics: {},
     filledBudgets: [],
@@ -39,7 +43,7 @@ class Budgets extends Component {
 
   static getDerivedStateFromProps(props, state) {
 
-    if(!state.expandStateChange) {
+    if (!state.expandStateChange) {
 
       const {budgets, transactions, categories, customers, users} = props;
 
@@ -66,7 +70,7 @@ class Budgets extends Component {
 
   showHideCreateBudge = (show, budget) => {
 
-    if(show) {
+    if (show) {
       this.setState({
         showCreateBudgetModal: true,
         budgetForEdit: budget || {}
@@ -81,7 +85,7 @@ class Budgets extends Component {
 
   showHideBudgetStatistics = (show, budget) => {
 
-    if(show) {
+    if (show) {
       this.setState({
         showBudgetStatisticsModal: true,
         budgetForStatistics: budget || {}
@@ -93,10 +97,47 @@ class Budgets extends Component {
     }
   };
 
+  showHideCreateTransaction = (show, budget) => {
+
+    if(show) {
+      this.setState({
+        showTransactionModal: true,
+        transactionInitialState: {
+          date: new Date(),
+          category: budget.categories[0].id
+        }
+      })
+    }
+    else {
+      this.setState({showTransactionModal: false})
+    }
+  };
+
+  handleCreateTransaction = (transaction, action, cb) => {
+    debugger;
+    if (action === 'add') {
+
+      this.props.createTransaction(
+        this.props.selectedProject,
+        transaction,
+        cb
+      )
+    }
+  };
+
   render() {
 
     const {selectedProject} = this.props;
-    const {expanded, filledBudgets, budgetForEdit, budgetForStatistics, showCreateBudgetModal, showBudgetStatisticsModal} = this.state;
+    const {
+      expanded,
+      filledBudgets,
+      budgetForEdit,
+      budgetForStatistics,
+      showCreateBudgetModal,
+      showBudgetStatisticsModal,
+      showTransactionModal,
+      transactionInitialState
+    } = this.state;
 
     const hasBudgets = filledBudgets.length > 0;
 
@@ -105,25 +146,27 @@ class Budgets extends Component {
 
         <PageTitle text={'Budgets'} icon={'budgets'}/>
 
-        <Breadcrumb item={{id: 'budgetsCrumb', value: 'Budgets', path: '/dashboard'}}/>
+        <Breadcrumb item={{id: 'budgetsCrumb', value: 'Budgets'}}/>
 
         <div className={'px-2 py-3'}>
-        {
-          filledBudgets.map(budget => <BudgetPanel key={budget.id}
-                                             onExpandChange={this.handleExpandPanelChange}
-                                             editBudget={(budget) => this.showHideCreateBudge(true, budget) }
-                                             showBudgetStatistics={(budget) => this.showHideBudgetStatistics(true, budget)}
-                                             expanded={expanded === budget.id}
-                                             budget={budget}/>)
-        }
+          {
+            filledBudgets.map(budget => <BudgetPanel key={budget.id}
+                                                     onExpandChange={this.handleExpandPanelChange}
+                                                     editBudget={(budget) => this.showHideCreateBudge(true, budget)}
+                                                     showCreateTransaction={(budget) => this.showHideCreateTransaction(true, budget)}
+                                                     showBudgetStatistics={(budget) => this.showHideBudgetStatistics(
+                                                       true, budget)}
+                                                     expanded={expanded === budget.id}
+                                                     budget={budget}/>)
+          }
         </div>
 
         {
           !hasBudgets ?
             <div className={'row'}>
               <div className={'col-sm-12 flex-center empty-budgets'}>
-                <img className={'icon'} src={require('@img/cactus.svg')} alt="no-budgets" />
-               <span className={'my-4 text'}>
+                <img className={'icon'} src={require('@img/cactus.svg')} alt="no-budgets"/>
+                <span className={'my-4 text'}>
                   There are no budgets yet...
                </span>
                 <Button size="small" color="primary" onClick={() => this.showHideCreateBudge(true)}>
@@ -135,7 +178,7 @@ class Budgets extends Component {
             : null
         }
 
-        <Tooltip title={'Create Budget'} placement={'top'} >
+        <Tooltip title={'Create Budget'} placement={'top'}>
           <Zoom in={true} timeout={400}>
             <Button variant="fab"
                     color="secondary"
@@ -153,6 +196,12 @@ class Budgets extends Component {
                       project={selectedProject}
                       onClose={this.showHideCreateBudge}/>
 
+        <CreateTransaction open={showTransactionModal}
+                           transaction={{}}
+                           createInitialState={transactionInitialState}
+                           transactionCrudHandler={this.handleCreateTransaction}
+                           onClose={this.showHideCreateTransaction}/>
+
         <BudgetStatistics onClose={() => this.showHideBudgetStatistics(false)}
                           budget={budgetForStatistics}
                           open={showBudgetStatisticsModal}/>
@@ -169,4 +218,4 @@ export default connect(state => ({
   customers: state.project.customers,
   users: state.dashboard.users,
   selectedProject: state.project.selectedProject,
-}), {})(Budgets);
+}), {createTransaction})(Budgets);

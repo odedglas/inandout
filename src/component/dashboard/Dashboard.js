@@ -30,7 +30,7 @@ class Dashboard extends Component {
   };
 
   componentDidMount() {
-    debugger;
+
     //Dashboard init
     this.props.init();
   }

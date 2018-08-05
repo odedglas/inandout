@@ -44,7 +44,7 @@ class Transactions extends Component {
 
     return (
       <div className={'transactions-container'}>
-        <Breadcrumb item={{id:'transactionsCrumb' ,value:'Transactions', path:'/dashboard'}}/>
+        <Breadcrumb item={{id:'transactionsCrumb' ,value:'Transactions'}}/>
         <PageTitle text={'Transactions'} icon={'transactions'}/>
 
         <div className={'px-4'}>

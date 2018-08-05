@@ -20,7 +20,7 @@ class ProjectCalendar extends Component {
 
         <PageTitle text={'Calendar'} icon={'calendar'}/>
 
-        <Breadcrumb item={{id: 'calendarsCrumb', value: 'Calendar', path: '/dashboard'}}/>
+        <Breadcrumb item={{id: 'calendarsCrumb', value: 'Calendar'}}/>
 
         <Paper className={'mx-3 mt-3 p-3'}>
           <Calendar />
@@ -31,6 +31,4 @@ class ProjectCalendar extends Component {
   }
 }
 
-export default connect(state => ({
-  selectedProject: state.project.selectedProject,
-}), {})(ProjectCalendar);
+export default connect(null, {})(ProjectCalendar);

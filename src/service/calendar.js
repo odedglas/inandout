@@ -107,7 +107,7 @@ export default {
   } ,
   transformEventToTransaction (event) {
 
-    const description = getEventTransactionDescription();
+    const description = getEventTransactionDescription(event);
 
     return {
       type: 'INCOME',

@@ -194,9 +194,57 @@ export function deleteBudget(project, budgetId) {
   }
 }
 
-export function syncTransactions(transactions) {
-  return dispatch => dispatch({ type: 'SYNC_TRANSACTIONS', transactions });
+export function createTransaction(project, { type, owner, description, category, customer, date, amount, payments, sourceEventId }, onSuccess) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    transactionService.createTransaction(
+      project.id,
+      type,
+      owner,
+      description,
+      category,
+      customer,
+      date,
+      amount,
+      payments,
+      sourceEventId
+    ).then(transaction => {
+
+      onSuccess(transaction);
+      dispatch({type: 'APP_LOADING', loading: false})
+    });
+  }
 }
+
+export function updateTransaction(project, { id, type, owner, description, category, customer, date, amount, payments, paymentIndex }, onSuccess) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    transactionService.updateTransaction(
+      project.id,
+      id,
+      type,
+      owner,
+      description,
+      category,
+      customer,
+      date,
+      amount,
+      payments,
+      paymentIndex
+    ).then(transaction => {
+
+      onSuccess(transaction);
+      dispatch({type: 'APP_LOADING', loading: false})
+    });
+  }
+}
+
 
 export function createCustomer(project, { name, contactName, phone, email, address, logo }, onSuccess) {
 

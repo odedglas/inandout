@@ -38,6 +38,7 @@ class BudgetPanel extends Component {
     deleteBudget: PropTypes.func.isRequired,
     showConfirmation: PropTypes.func.isRequired,
     showBudgetStatistics: PropTypes.func.isRequired,
+    showCreateTransaction: PropTypes.func.isRequired,
   };
 
   handleExpandStateChange = () => {
@@ -157,19 +158,23 @@ class BudgetPanel extends Component {
      )
    };
 
-   noTransactionsDisplay = () => (
-     <div className={'row'}>
-       <div className={'col-sm-12 mt-2 empty-transactions'}>
+   noTransactionsDisplay = () => {
+     const {budget, showCreateTransaction} = this.props;
+
+     return (
+       <div className={'row'}>
+         <div className={'col-sm-12 mt-2 empty-transactions'}>
          <span className={'text'}>
            There are no transactions listed under this budget's categories yet.
          </span>
-         <Button size="small" color="primary" className={'mt-3'}>
-           <DynamicIcon name={'add'}/>
-           Create Transaction
-         </Button>
+           <Button size="small" color="primary" className={'mt-3'} onClick={() => showCreateTransaction(budget)}>
+             <DynamicIcon name={'add'}/>
+             Create Transaction
+           </Button>
+         </div>
        </div>
-     </div>
-   );
+     )
+   };
 
   render() {
 

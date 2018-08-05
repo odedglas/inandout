@@ -40,7 +40,7 @@ class Categories extends Component {
 
     return (
       <div className={'categories-container'}>
-        <Breadcrumb item={{id: 'categoriesCrumb', value: 'Categories', path: '/dashboard'}}/>
+        <Breadcrumb item={{id: 'categoriesCrumb', value: 'Categories'}}/>
 
         <PageTitle text={'Categories'} icon={'categories'}/>
 

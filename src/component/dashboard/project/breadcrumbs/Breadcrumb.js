@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 const BreadcrumbType = PropTypes.shape({
   id:PropTypes.string.isRequired,
   value: PropTypes.string,
-  path: PropTypes.string.isRequired,
+  path: PropTypes.string,
   render: PropTypes.func,
 });
 
