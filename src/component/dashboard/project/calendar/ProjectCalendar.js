@@ -8,12 +8,7 @@ import Calendar from './Calendar';
 
 class ProjectCalendar extends Component {
 
-  static propTypes = {
-    selectedProject: PropTypes.any
-  };
-
   render() {
-    const {selectedProject} = this.props;
 
     return (
       <div className={'calendar-container'}>

@@ -74,10 +74,18 @@ class BudgetPanel extends Component {
 
   gotoTransactions = () => {
 
-    //TODO Add Budget categories filter when supported.
-    this.props.history.push(
-      navgationUtil.projectLink(this.props.selectedProject, 'transactions')
-    )
+    const {history, budget} = this.props;
+
+    history.push({
+      pathname: navgationUtil.projectLink(this.props.selectedProject, 'transactions'),
+      state: {
+        initialFilter:[{
+          filterId:"category",
+          operator:"in",
+          value: budget.categories.map(c => c.id)
+        }]
+      }
+    })
   };
 
    budgetSummary = (budgetIndicator) => {

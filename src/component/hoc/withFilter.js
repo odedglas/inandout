@@ -1,5 +1,8 @@
 import React from 'react';
 import filterUtil from '@util/filter';
+import {
+  withRouter
+} from 'react-router-dom';
 
 const withFilter = (filterDefinition) => (Component) => {
 
@@ -9,14 +12,27 @@ const withFilter = (filterDefinition) => (Component) => {
       super(props);
 
       const filter = filterUtil.createFilter(filterDefinition);
+      const initialFilter = props.location.state && props.location.state.initialFilter;
 
-      this.state = {
-        filter,
-        filterFN: () => true
-      };
+      if(initialFilter) {
+
+        this.state = this.generateFilterState(initialFilter, filter);
+      }
+      else {
+        this.state = {
+          filter,
+          filterFN: () => true
+        };
+
+      }
     }
 
     handleFilterChange = (filterValues) => {
+
+      this.setState(this.generateFilterState(filterValues, this.state.filter));
+    };
+
+    generateFilterState = (filterValues, filter) => {
 
       const filterValuesMap = filterValues.reduce((map, value) => {
 
@@ -24,7 +40,7 @@ const withFilter = (filterDefinition) => (Component) => {
         return map;
       }, {});
 
-      const filter = this.state.filter.map(f => {
+      const _filter = filter.map(f => {
 
         const value = filterValuesMap[f.id] || {};
         return {
@@ -33,7 +49,7 @@ const withFilter = (filterDefinition) => (Component) => {
         }
       });
 
-      const activeFilters = filter.filter(f => filterValues.find(fv => fv.filterId === f.id));
+      const activeFilters = _filter.filter(f => filterValues.find(fv => fv.filterId === f.id));
 
       const filterFN = data => activeFilters.every(filter => {
 
@@ -49,7 +65,7 @@ const withFilter = (filterDefinition) => (Component) => {
         return operatorWrapper.operator(getDataFieldValue(data), filterValueEntry.value);
       });
 
-      this.setState({filter, filterFN});
+      return {filter: _filter, filterFN}
     };
 
     handleDoFilter = (data) => {
@@ -69,7 +85,7 @@ const withFilter = (filterDefinition) => (Component) => {
       );
     }
   }
-  return WithFilter;
+  return withRouter(WithFilter);
 };
 
 export default withFilter;
