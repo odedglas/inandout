@@ -71,6 +71,7 @@
   "scripts": {
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "deploy": "npm run build && firebase deploy",
     "test": "node scripts/test.js --env=jsdom"
   },
   "devDependencies": {

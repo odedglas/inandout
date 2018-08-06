@@ -12,6 +12,7 @@ if (!firebase.apps.length) {
 const auth = firebase.auth(), database = firebase.database();
 
 export default {
+  instance: firebase,
   auth,
   database,
   initUser(user) {

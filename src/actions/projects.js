@@ -1,7 +1,7 @@
 import projectService from '@service/project'
 import {selectProject} from "./project";
 
-export function createProject({projectName, projectType, projectDescription, projectCurrency}, onSuccess) {
+export function createProject({projectName, projectType, projectDescription, projectCurrency, balance}, onSuccess) {
 
   return (dispatch, getState) => {
 
@@ -11,7 +11,8 @@ export function createProject({projectName, projectType, projectDescription, pro
       projectName,
       projectType,
       projectDescription,
-      projectCurrency
+      projectCurrency,
+      balance
     ).then((project) => {
 
       const defaultCategories = getState().categories.defaults;

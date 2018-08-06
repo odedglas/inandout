@@ -185,6 +185,28 @@ export default {
       owner: usersMap[transaction.owner]
     }
 
+  },
+
+  getTransactionsBalance (transactions) {
+
+    let income = 0;
+    let outcome = 0;
+
+    transactions.forEach(transaction => {
+
+      if(transaction.income) {
+        income += transaction.amount;
+      }
+      else {
+        outcome += transaction.amount;
+      }
+    });
+
+    return {
+      income,
+      outcome,
+      balance: income - outcome
+    }
   }
 }
 

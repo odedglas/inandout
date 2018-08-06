@@ -245,7 +245,6 @@ export function updateTransaction(project, { id, type, owner, description, categ
   }
 }
 
-
 export function createCustomer(project, { name, contactName, phone, email, address, logo }, onSuccess) {
 
   return dispatch => {

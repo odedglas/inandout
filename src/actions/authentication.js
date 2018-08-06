@@ -3,7 +3,7 @@ import authService from '@service/auth';
 import userService from '@service/user';
 
 
-const fetchUserSuccess = (dispatch, { authUser, user, projectsKeys}) => {
+const fetchUserSuccess = (dispatch, { authUser, user}) => {
   dispatch({type: 'SET_USER', user});
   dispatch({type: 'AUTHENTICATION_SUCCESS', authUser});
 };
@@ -22,7 +22,7 @@ export function createAuthenticationListener(location) {
         //Auth went well, Fetching up user
         userService.fetchUser(authUser.uid).then( res => {
 
-          fetchUserSuccess(
+          res && fetchUserSuccess(
             dispatch,
             {authUser, user:res.user}
           );
@@ -52,9 +52,8 @@ export function loginWithPassword(email, password, onSuccess, onError) {
         );
 
         onSuccess();
-      }).finally(() => {
-          dispatch({type: 'APP_LOADING', loading: false})
-        });
+        dispatch({type: 'APP_LOADING', loading: false})
+      })
     }).catch(e => {
       console.log('Failed to login : ' + e);
       onError(e);
@@ -75,11 +74,52 @@ export function signUp(email, password, displayName, onSuccess, onError) {
       dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: res.authUser});
 
       onSuccess();
-
-    }).catch(onError)
-      .finally(() => {
       dispatch({type: 'APP_LOADING', loading: false})
-    });
+    }).catch(onError);
+  }
+}
+
+export function loginWithProvider(providerName) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    authService.loginWithProvider(providerName).then(authUser => {
+
+      //Trying to fetch existing user
+      userService.fetchUser(authUser.user.uid).then(user => {
+
+        if(!user) {
+
+          //First login via provider, Creating app user
+          debugger;
+          const _user = authUser.user;
+          return userService.createUser(
+            _user.uid,
+            _user.displayName,
+            _user.email,
+            _user.photoURL
+          ).then(createdUser => {
+
+            fetchUserSuccess(
+              dispatch,
+              {authUser, user:createdUser}
+            );
+
+            dispatch({type: 'APP_LOADING', loading: false})
+          })
+        }
+
+        //Existing user
+        fetchUserSuccess(
+          dispatch,
+          {authUser, user:user}
+        );
+        dispatch({type: 'APP_LOADING', loading: false})
+      })
+
+    })
   }
 }
 

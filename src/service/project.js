@@ -1,4 +1,6 @@
 import firebaseService from './firebase';
+import transactionService from './transaction';
+import budgetSerivce from './budget';
 import util from '@util/'
 import {CURRENCIES} from "@const/";
 
@@ -12,7 +14,7 @@ export default {
       return firebaseService.fetch(`/projects/${res.value}`);
     })
   },
-  createProject(name, type, description, currency) {
+  createProject(name, type, description, currency, balance) {
 
     const ownerId = firebaseService.user.id;
 
@@ -21,6 +23,7 @@ export default {
       type,
       description,
       currency,
+      balance,
       members: [ownerId],
       owner: ownerId,
     };
@@ -46,7 +49,6 @@ export default {
 
     return projects.map(project => this.fillProject(project, transactions, defaultCategories))
   },
-
   fillProject(project, transactionsMap, defaultCategories) {
 
     let _project = transformToViewProject(project);
@@ -59,6 +61,22 @@ export default {
       currency: util.searchInConst(CURRENCIES, _project.currency),
       transactions: projectTransactions,
       categories: projectCategories
+    }
+  },
+  calculateProjectIndicators(project, transactions, budgets) {
+
+    const monthlyBalance = transactionService.getTransactionsBalance(
+      transactions
+    );
+
+    const budgetsUsage = budgetSerivce.getBudgetsUsage(
+      budgets,
+      transactions
+    );
+
+    return {
+      monthlyBalance,
+      budgetsUsage
     }
   }
 }

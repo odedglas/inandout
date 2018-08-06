@@ -132,6 +132,43 @@ export default {
         {name: 'date'}
       ]))
     }
+  },
+
+  getBudgetsUsage(budgets, transactions) {
+
+    //Calculating expense by category
+    const categoriesExpenseMap = transactions.reduce((map, t) => {
+
+      if(!t.income) {
+        const existingEntry = map[t.category] || 0;
+        map[t.category] = existingEntry + t.amount;
+      }
+
+      return map;
+    }, {});
+
+    //Calculating budgets cumulative limit
+    let budgetsCategories = {};
+    const cumulativeLimit = budgets.reduce((cumulativeLimit, b) => {
+      cumulativeLimit += b.limit;
+
+      b.categories.forEach(c => budgetsCategories[c] = c);
+      return cumulativeLimit;
+    }, 0);
+
+    //Filtering categories by collected budget keys
+    const budgetsCategoryKeys = Object.keys(budgetsCategories);
+    const budgetsActual = budgetsCategoryKeys.reduce((total, key) => {
+
+      total += categoriesExpenseMap[key] || 0;
+      return total;
+    }, 0);
+
+
+    return {
+      limit: cumulativeLimit,
+      actual: budgetsActual
+    };
   }
 }
 

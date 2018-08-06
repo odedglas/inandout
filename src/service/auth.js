@@ -1,8 +1,9 @@
 import firebaseService from './firebase';
 import userService from './user';
+import {FIREBASE_LOGIN_PROVIDERS} from '@const/';
 
 const auth = firebaseService.auth;
-const loginWithProvider = provider => auth.signInWithPopup(provider);
+const authInstance = firebaseService.instance.auth;
 
 export default {
 
@@ -23,13 +24,27 @@ export default {
     });
   }),
 
-  loginWithGoogle  : () => loginWithProvider(new auth.GoogleAuthProvider()),
+  loginWithProvider: (providerName) => {
 
-  loginWithFacebook: () => loginWithProvider(new auth.FacebookAuthProvider()),
+    let provider;
 
-  loginWithTwitter : () => loginWithProvider(new auth.TwitterAuthProvider_Instance()),
+    switch (providerName) {
 
-  loginWithGithub  : () => loginWithProvider(new auth.GithubAuthProvider()),
+      case FIREBASE_LOGIN_PROVIDERS.GOOGLE:
+        provider = new authInstance.GoogleAuthProvider();
+        break;
+      case FIREBASE_LOGIN_PROVIDERS.TWITTER:
+        provider = new authInstance.TwitterAuthProvider();
+        break;
+      case FIREBASE_LOGIN_PROVIDERS.FACEBOOK:
+        provider = new authInstance.FacebookAuthProvider();
+        break;
+      default:
+    }
+
+    //Provider login
+    return auth.signInWithPopup(provider)
+  },
 
   signOut: () => auth.signOut(),
 

@@ -96,8 +96,14 @@ module.exports = {
       'react-native': 'react-native-web',
       '@service':  path.resolve('src/service'),
       '@img':  path.resolve('src/assets/images'),
-      '@util':  path.resolve('src/util'),
-      '@const':  path.resolve('src/constants')
+      '@util':  path.resolve('src/util/'),
+      '@const':  path.resolve('src/constants/'),
+      '@action':  path.resolve('src/actions/'),
+      '@common':  path.resolve('src/component/common/'),
+      '@modal':  path.resolve('src/component/modal/'),
+      '@hoc':  path.resolve('src/component/hoc/'),
+      '@model':  path.resolve('src/model/'),
+      '@scss':  path.resolve('src/assets/style/'),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).

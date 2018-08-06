@@ -70,6 +70,13 @@ import SearchIcon from '@material-ui/icons/Search';
 import PaletteIcon from '@material-ui/icons/Palette';
 import LocationIcon from '@material-ui/icons/LocationOn';
 import BackIcon from '@material-ui/icons/ArrowBack';
+import ActionMenuIcon from '@material-ui/icons/KeyboardArrowDown';
+
+// -- Social Media --//
+import GoogleIcon from '../icon/GoogleIcon';
+import TwitterIcon from '../icon/TwitterIcon';
+import FacebookIcon from '../icon/FacebookIcon';
+import GithubIcon from '../icon/GithubIcon';
 
 const iconMap = {
   'home': HomeIcon,
@@ -132,6 +139,11 @@ const iconMap = {
   'palette': PaletteIcon,
   'location': LocationIcon,
   'back': BackIcon,
+  'actionMenu': ActionMenuIcon,
+  'google': GoogleIcon,
+  'twitter': TwitterIcon,
+  'facebook': FacebookIcon,
+  'github': GithubIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {

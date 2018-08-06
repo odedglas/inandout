@@ -106,6 +106,19 @@ class CreateProjectModal extends React.Component {
 
       <div className={'form-control'}>
         <TextField
+          value={model.balance}
+          error={validation.balance.isInvalid}
+          onChange={(event) => handleChange(event.target.value, 'balance')}
+          margin="dense"
+          label={`Initial Balance`}
+          title={validation.balance.message}
+          fullWidth
+        />
+
+      </div>
+
+      <div className={'form-control'}>
+        <TextField
           select
           fullWidth
           error={validation.projectCurrency.isInvalid}
@@ -179,6 +192,7 @@ class CreateProjectModal extends React.Component {
                        projectName: '',
                        projectCurrency: '',
                        projectDescription: '',
+                       balance: '0',
                      })}
                      renderContent={this.modalContent}
                      onCreate={this.createProject}
@@ -207,6 +221,11 @@ export default compose(
       field    : 'projectType',
       method   : (v, f, state, validator, args) => !validator.isEmpty(v),
       message  : 'Please choose project type.'
+    },
+    {
+      field    : 'balance',
+      method   : (v, f, state, validator, args) => validator.isNumeric(v),
+      message  : 'Please choose a valid project balance ( Negative or positive .'
     },
     {
       field    : 'projectCurrency',

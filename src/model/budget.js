@@ -7,8 +7,8 @@ export const BudgetType = PropTypes.shape({
   name: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   limit: PropTypes.number.isRequired,
-  actual: PropTypes.number.isRequired,
+  actual: PropTypes.number,
   warningLimit: PropTypes.number,
-  categories: PropTypes.arrayOf(CategoryType),
+  categories: PropTypes.arrayOf(PropTypes.oneOfType([CategoryType, PropTypes.string])),
   lastTransactions: PropTypes.arrayOf(TransactionType)
 });

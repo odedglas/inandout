@@ -8,7 +8,7 @@ import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-
+import LoginWithMedia from '../login/LoginWtihMedia';
 import {signUp} from '../../actions/authentication';
 import {LoginLink} from '../login/Login';
 import {ROUTER as routes} from '../../constants';
@@ -164,10 +164,11 @@ class SignUpForm extends Component {
             </div>
             {error && <p>{error.message}</p>}
 
-            <div>
-              <LoginLink/>
-            </div>
           </form>
+          <LoginWithMedia/>
+          <div>
+            <LoginLink/>
+          </div>
         </div>
       </div>
     );

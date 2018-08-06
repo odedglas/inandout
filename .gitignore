@@ -5,6 +5,11 @@
 # dependencies
 /node_modules
 
+# firebase
+/firebase/public
+/firebase/functions/node_modules
+/firebase/functions/package-lock.json
+
 #config
 /src/config
 

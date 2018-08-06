@@ -34,14 +34,8 @@ export function init() {
 
       const mergedProjectsResult = projectService.mergeProjectResults(projects, transactions, defaultCategories);
 
-      const projectsUsersMap = mergedProjectsResult.reduce((map, project) => {
-        project.members.forEach(member => map[member] = member);
-        return map;
-      }, {});
-      const projectsUsers = users.filter(u => projectsUsersMap[u.id]);
-
       dispatch({type: 'SET_PROJECTS', projects: mergedProjectsResult});
-      dispatch({type: 'SET_USERS', users: projectsUsers});
+      dispatch({type: 'SET_USERS', users: users});
       dispatch({type: 'SET_DEFAULTS_CATEGORIES', defaultCategories});
 
       const selectedProject = preSelectedIdentifier ? mergedProjectsResult.find(p => p.identifier === preSelectedIdentifier) : null;

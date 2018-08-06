@@ -106,3 +106,10 @@ export const EVENT_TYPE = [
     icon: 'task'
   }
 ];
+
+export const FIREBASE_LOGIN_PROVIDERS = {
+
+  GOOGLE: 'google',
+  FACEBOOK: 'facebook',
+  TWITTER: 'twitter'
+};

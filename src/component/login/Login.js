@@ -9,8 +9,9 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {SignUpLink} from '../signup/SignUp'
-import SnackbarNotification from '../common/SnackbarNotification';
-import {ROUTER as routes} from '../../constants';
+import SnackbarNotification from '@common/SnackbarNotification';
+import LoginWithMedia from './LoginWtihMedia';
+import {ROUTER as routes} from '@const/';
 import {loginWithPassword} from '../../actions/authentication'
 import validationService from '@service/validation';
 
@@ -139,10 +140,11 @@ class LoginForm extends Component {
               </Button>
               <button ref={this.submitBtn} className={'hidden-submit-handler'} type="submit"></button>
             </div>
-            <div>
-              <SignUpLink/>
-            </div>
           </form>
+          <LoginWithMedia/>
+          <div>
+            <SignUpLink/>
+          </div>
         </div>
         <SnackbarNotification onClose={() => this.handleStateChange('error', undefined)}
                               anchor={{

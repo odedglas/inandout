@@ -390,7 +390,7 @@ class TransactionsTableView extends Component {
 
               {
                 isEmpty ? <TableRow key={'empty-row'} className={'empty-row'}>
-                  <TableCell colSpan="9">
+                  <TableCell colSpan="10">
                     <img src={require('@img/no-results.png')} alt={'no-results'}/>
                     <div>
                       No transactions was found for the selected period.

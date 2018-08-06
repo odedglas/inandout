@@ -70,7 +70,7 @@ class UserProfileMenu extends React.Component {
                 aria-haspopup="true"
                 onClick={this.handleMenuOpen}
                 style={avatarBackground}>
-          {user.initials}
+          {user.avatarImage ? <img className={'h-100'} alt={'user-profile'} src={user.avatarImage}/> : user.initials}
         </Avatar>
         <Popover
           open={open}
@@ -89,7 +89,9 @@ class UserProfileMenu extends React.Component {
           <MenuList className={'user-menu-holder'} role="menu">
             <div className={'user-info'}>
               <div className={'user-image'}>
-                <Avatar className={'avatar medium'} style={avatarBackground}> {user.initials} </Avatar>
+                <Avatar className={'avatar medium'} style={avatarBackground}>
+                  {user.avatarImage ? <img className={'h-100'} alt={'user-profile'}  src={user.avatarImage}/> : user.initials}
+                </Avatar>
               </div>
               <div className={'details'}>
                 <h3> {user.displayName} </h3>

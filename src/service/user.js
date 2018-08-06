@@ -6,15 +6,15 @@ export default {
 
   fetchUser: id => firebaseService.fetch(`/users/${id}`).then(res =>  {
 
-    return {
+    return res.user ? {
       user: {
         id: res.id,
         ...res.user,
         projects: getUserProjectsMeta(res.projects)
       },
-    }
+    } : undefined
   }),
-  createUser: (id, displayName, email) => {
+  createUser: (id, displayName, email, avatarImage) => {
 
     const initials = displayName ? util.getInitials(displayName) : email.substring(0,1);
 
@@ -22,10 +22,13 @@ export default {
       displayName,
       email,
       initials: initials.toUpperCase(),
-      avatarImage:'',
       avatarColor: themeService.getAvatarRandomColor(),
       projects: []
     };
+
+    if(avatarImage) {
+      user.avatarImage = avatarImage;
+    }
 
     return firebaseService.createUser(id, user).then(() => {
       user.id = id;
