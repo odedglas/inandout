@@ -15,6 +15,7 @@ import dateUtil from '@util/date';
 import {TransactionType} from "@model/transaction";
 import {BudgetType} from "@model/budget";
 
+import request from '@util/request';
 import firebaseService from '@service/firebase';
 
 class ProjectHome extends React.Component {
@@ -29,51 +30,12 @@ class ProjectHome extends React.Component {
 /*    this.setState({
       showActionMenu: show
     })*/
+debugger;
 
-    const actionCodeSettings = {
-      // URL you want to redirect back to. The domain (www.example.com) for this
-      // URL must be whitelisted in the Firebase Console.
-      url: 'https://inandout-91d34.firebaseapp.com/signup',
-      // This must be true.
-      handleCodeInApp: true
-    };
-
-
-    firebaseService.auth.sendSignInLinkToEmail("anonymouse.work.it@gmail.com", actionCodeSettings)
-      .then(function() {
-        // The link was successfully sent. Inform the user.
-        // Save the email locally so you don't need to ask the user for it again
-        // if they open the link on the same device.
-        debugger;
-      })
-      .catch(function(error) {
-        // Some error occurred, you can inspect the code: error.code
-        debugger;
-      });
-
-    if (firebaseService.auth.isSignInWithEmailLink(window.location.href)) {
-      // Additional state parameters can also be passed via URL.
-      // This can be used to continue the user's intended action before triggering
-      // the sign-in operation.
-      // Get the email if available. This should be available if the user completes
-      // the flow on the same device where they started it.
+    request.post('sendInviteMail',{email: 'anonymouse.work.it@gmail.com', title: 'Wassaps'}).then(res => {
       debugger;
-      firebaseService.auth.signInWithEmailLink("anonymouse.work.it@gmail.com", window.location.href)
-        .then(function(result) {
-          // Clear email from storage.
-          debugger;
-          window.localStorage.removeItem('emailForSignIn');
-          // You can access the new user via result.user
-          // Additional user info profile not available via:
-          // result.additionalUserInfo.profile == null
-          // You can check if the user is new or existing:
-          // result.additionalUserInfo.isNewUser
-        })
-        .catch(function(error) {
-          // Some error occurred, you can inspect the code: error.code
-          // Common errors could be invalid email and invalid or expired OTPs.
-        });
-    }
+    })
+
   };
 
   render() {

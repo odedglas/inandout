@@ -16,7 +16,7 @@ export default {
   },
   createProject(name, type, description, currency, balance) {
 
-    const ownerId = firebaseService.user.id;
+    const ownerId = firebaseService.user.uid;
 
     const project = {
       name,

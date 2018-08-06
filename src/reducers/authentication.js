@@ -1,3 +1,5 @@
+import firebaseServcie from '@service/firebase'
+
 const initialState = {
   authenticated: false,
   authenticating: true,
@@ -15,6 +17,7 @@ export default function (state = initialState, action) {
         authenticating: true,
       };
     case 'AUTHENTICATION_SUCCESS':
+      firebaseServcie.initUser(action.authUser);
       return {
         ...state,
         authenticated: true,

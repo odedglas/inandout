@@ -29,15 +29,15 @@ class LoginWithMedia extends Component {
           Or connect with:
         </div>
         <div className={'media-icons-holder'}>
-          <div className={'media-icon'} onClick={() => this.handleProviderLogin('google')}>
+          <div className={'media-icon'} onClick={() => this.handleProviderLogin(FIREBASE_LOGIN_PROVIDERS.GOOGLE)}>
             <DynamicIcon name={'google'}/>
           </div>
 
-          <div className={'media-icon'} onClick={() => this.handleProviderLogin('facebook')}>
+          <div className={'media-icon'} onClick={() => this.handleProviderLogin(FIREBASE_LOGIN_PROVIDERS.FACEBOOK)}>
             <DynamicIcon name={'facebook'}/>
           </div>
 
-          <div className={'media-icon'} onClick={() => this.handleProviderLogin('twitter')}>
+          <div className={'media-icon'} onClick={() => this.handleProviderLogin(FIREBASE_LOGIN_PROVIDERS.TWITTER)}>
             <DynamicIcon name={'twitter'}/>
           </div>
 
@@ -50,5 +50,4 @@ class LoginWithMedia extends Component {
 export default connect(
   null,
   {loginWithProvider}
-)
-(LoginWithMedia);
+)(LoginWithMedia);

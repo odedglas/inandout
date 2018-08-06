@@ -17,6 +17,7 @@ export default {
   database,
   initUser(user) {
     this.user = user;
+    user.getIdToken().then(token => this.token = token);
   },
   createUser(id, user) {
     return database.ref(`users/${id}`).set({
