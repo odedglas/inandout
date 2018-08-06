@@ -9,6 +9,12 @@ const cookieParser = require('cookie-parser')();
 const cors = require('cors')({origin: true});
 const extend = require('extend');
 
+//App info
+const APP_NAME = 'In&Out';
+const APP_URL = 'https://inandout-91d34.firebaseapp.com';
+const signUpURL = `${APP_URL}/signup`;
+
+//Mail credentials
 const gmailEmail = functions.config().gmail.email;
 const gmailPassword = functions.config().gmail.password;
 const mailTransport = nodemailer.createTransport({
@@ -19,7 +25,6 @@ const mailTransport = nodemailer.createTransport({
   },
 });
 
-const mailgun = require('mailgun-js')({apiKey: "15f66c57ff0f79641658b92b532f5f40-7efe8d73-a4a63df4", domain: "https://api.mailgun.net/v3/sandboxc01f9839f2f74ec2a3ed350ecfe95f7b.mailgun.org"})
 
 const app = express();
 
@@ -49,7 +54,7 @@ app.use(validateFirebaseIdToken);
 
 exports.app = functions.https.onRequest(app);
 
-const APP_NAME = 'In&Out'
+
 app.post('/sendInviteMail', (req, res) => {
 
   const email = req.body.email;
@@ -61,15 +66,20 @@ app.post('/sendInviteMail', (req, res) => {
   };
 
   // The user subscribed to the newsletter.
-  mailOptions.subject = `Welcome to ${APP_NAME}!`;
-  mailOptions.text = `Hey ! Welcome to ${APP_NAME}. I hope you will enjoy our service.`;
+  mailOptions.subject = `${APP_NAME} Project share request from to !`;
+  mailOptions.html = `
+      <div> Hello ! </div> 
+      <div> You have been invited to share a project : with </div>
+      <div> Please follow this link: <a href=${signUpURL}> In&Out</a> In order to sign up and start working on your projects!</div>`;
+
   return mailTransport.sendMail(mailOptions).then(() => {
 
-    res.send({ok: 200})
+    res.status(200).send({ok: 200});
     return console.log('New welcome email sent to:', email);
   }).catch(e => {
 
     console.log("Mail Error")
     console.log(e)
+    res.status(500).send({error: e});
   });
 });

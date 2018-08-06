@@ -35,7 +35,6 @@ export default {
       return user;
     });
   },
-
   fetchUsers: () => {
 
     return firebaseService.fetchArray('/users').then(result => {

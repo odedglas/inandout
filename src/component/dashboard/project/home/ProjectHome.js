@@ -14,6 +14,7 @@ import projectService from '@service/project';
 import dateUtil from '@util/date';
 import {TransactionType} from "@model/transaction";
 import {BudgetType} from "@model/budget";
+import {inviteProjectMember} from '@action/project';
 
 import request from '@util/request';
 import firebaseService from '@service/firebase';
@@ -23,19 +24,20 @@ class ProjectHome extends React.Component {
   static propTypes = {
     selectedProject: PropTypes.object,
     transactions: PropTypes.arrayOf(TransactionType),
-    budgets: PropTypes.arrayOf(BudgetType)
+    budgets: PropTypes.arrayOf(BudgetType),
+    inviteProjectMember: PropTypes.func.isRequired
   };
 
   showHideProjectActionMenu = show => {
 /*    this.setState({
       showActionMenu: show
     })*/
-debugger;
 
-    request.post('sendInviteMail',{email: 'anonymouse.work.it@gmail.com', title: 'Wassaps'}).then(res => {
-      debugger;
-    })
-
+    this.props.inviteProjectMember(
+      this.props.selectedProject,
+      undefined,
+      "anonymouse.work.it@gmail.com"
+    );
   };
 
   render() {
@@ -100,5 +102,5 @@ export default compose(
     selectedProject: state.project.selectedProject,
     transactions: state.project.transactions,
     budgets: state.project.budgets,
-  }), {})
+  }), {inviteProjectMember})
 )(ProjectHome);

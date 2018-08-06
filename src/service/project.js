@@ -2,6 +2,7 @@ import firebaseService from './firebase';
 import transactionService from './transaction';
 import budgetSerivce from './budget';
 import util from '@util/'
+import request from '@util/request';
 import {CURRENCIES} from "@const/";
 
 export default {
@@ -77,6 +78,22 @@ export default {
     return {
       monthlyBalance,
       budgetsUsage
+    }
+  },
+  sendMemberInvite(projectName, currentUser, existingUser, inviteEmail) {
+
+    //Creating notification for the invite user
+    debugger;
+    //Sending invite mail if user does not exists
+    if(!existingUser && inviteEmail){
+      return request.post('sendInviteMail',{
+        email: inviteEmail,
+        owner: currentUser.displayName,
+        project: projectName
+      }).then(res => {
+        debugger;
+        return res;
+      })
     }
   }
 }

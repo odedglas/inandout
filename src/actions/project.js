@@ -1,6 +1,7 @@
 import firebaseService from '@service/firebase'
 import localStorageService from '@service/localstorage'
 import {LOCAL_STORAGE} from '@const/'
+import projectService from '@service/project'
 import categoryService from '@service/category'
 import budgetService from '@service/budget'
 import transactionService from '@service/transaction'
@@ -479,5 +480,20 @@ export function updateCachedProject() {
     };
 
     dispatch({ type: 'UPDATE_PROJECT', project });
+  }
+}
+
+export function inviteProjectMember(project, user, inviteEmail) {
+
+  return (dispatch, getState) => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    const currentUser = getState().user;
+debugger;
+    projectService.sendMemberInvite(project.name, currentUser, user, inviteEmail).then(() => {
+
+      dispatch({type: 'APP_LOADING', loading: false});
+    })
   }
 }

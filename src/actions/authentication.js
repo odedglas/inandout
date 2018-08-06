@@ -85,21 +85,20 @@ export function loginWithProvider(providerName) {
 
     dispatch({type: 'APP_LOADING', loading: true});
 
-    authService.loginWithProvider(providerName).then(authUser => {
+    authService.loginWithProvider(providerName).then(res => {
 
+      const authUser = res.user;
       //Trying to fetch existing user
-      userService.fetchUser(authUser.user.uid).then(user => {
+      userService.fetchUser(authUser.uid).then(user => {
 
         if(!user) {
 
           //First login via provider, Creating app user
-          debugger;
-          const _user = authUser.user;
           return userService.createUser(
-            _user.uid,
-            _user.displayName,
-            _user.email,
-            _user.photoURL
+            authUser.uid,
+            authUser.displayName,
+            authUser.email,
+            authUser.photoURL
           ).then(createdUser => {
 
             fetchUserSuccess(
