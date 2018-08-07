@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import LoginWithMedia from '../login/LoginWtihMedia';
 import {signUp} from '../../actions/authentication';
 import {LoginLink} from '../login/Login';
+import SnackbarNotification from '@common/SnackbarNotification';
 import {ROUTER as routes} from '../../constants';
 
 const INITIAL_STATE = {
@@ -18,7 +19,8 @@ const INITIAL_STATE = {
   email   : '',
   passwordOne: '',
   passwordTwo: '',
-  error      : null,
+  error      : undefined,
+  errorMessage: '',
 };
 
 class SignUpForm extends Component {
@@ -56,7 +58,10 @@ class SignUpForm extends Component {
         passwordOne,
         displayName,
         () => history.push(routes.DASHBOARD),
-        (e) => this.handleStateChange('error', e)
+        (e) => {
+          this.handleStateChange('error', e);
+          this.handleStateChange('errorMessage', e.message)
+        }
       );
     }
   };
@@ -92,10 +97,10 @@ class SignUpForm extends Component {
       passwordOne,
       passwordTwo,
       error,
+      errorMessage
     } = this.state;
     const isValid = this.validate();
 
-    console.log(`In signup render`);
     return (
       <div className={'col-flex just-c h-100'}>
         <div className={'login-layout'}>
@@ -162,14 +167,22 @@ class SignUpForm extends Component {
                       className={'hidden-submit-handler'}
                       type="submit"> </button>
             </div>
-            {error && <p>{error.message}</p>}
-
           </form>
           <LoginWithMedia/>
           <div>
             <LoginLink/>
           </div>
         </div>
+        <SnackbarNotification onClose={() => this.handleStateChange('error', undefined)}
+                              anchor={{
+                                vertical  : 'top',
+                                horizontal: 'right',
+                              }}
+                              open={error !== undefined}
+                              duration={2500}
+                              variant="error"
+                              message={errorMessage}>
+        </SnackbarNotification>
       </div>
     );
   }

@@ -36,7 +36,6 @@ export function createAuthenticationListener(location) {
   }
 }
 
-
 export function loginWithPassword(email, password, onSuccess, onError) {
   return dispatch => {
 
@@ -76,7 +75,11 @@ export function signUp(email, password, displayName, onSuccess, onError) {
 
       onSuccess();
       dispatch({type: 'APP_LOADING', loading: false})
-    }).catch(onError);
+    }).catch(e => {
+      console.log('Failed to login : ' + e);
+      onError(e);
+      dispatch({type: 'APP_LOADING', loading: false})
+    });
   }
 }
 

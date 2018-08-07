@@ -81,12 +81,11 @@ export default {
       budgetsUsage
     }
   },
-  sendMemberInvite(projectIdentifier, projectName, currentUser, existingUser, inviteEmail) {
+  sendMemberInvite(project, currentUser, existingUser, inviteEmail) {
 
     //Creating notification for the invite user
     return notificationService.sendInviteNotification(
-      projectIdentifier,
-      projectName,
+      project,
       currentUser,
       inviteEmail
     ).then(notification => {
@@ -96,7 +95,7 @@ export default {
         return request.post('sendInviteMail',{
           email: inviteEmail,
           owner: currentUser.displayName,
-          project: projectName
+          project: project.name
         }).then(res => {
 
           return {

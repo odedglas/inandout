@@ -491,7 +491,7 @@ export function inviteProjectMember(project, user, inviteEmail) {
 
     const currentUser = getState().user;
 
-    projectService.sendMemberInvite(project.identifier, project.name, currentUser, user, inviteEmail).then(() => {
+    projectService.sendMemberInvite(project, currentUser, user, inviteEmail).then(() => {
 
       dispatch({type: 'APP_LOADING', loading: false});
     })
