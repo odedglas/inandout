@@ -21,6 +21,7 @@ import TransactionsTableViewToolbar from './TransactionsTableViewToolbar';
 import TransactionFilter from '../filter/TransactionFilter';
 import {TransactionType} from "@model/transaction";
 import withFilter from '@hoc/withFilter';
+import UserAvatar from '@common/UserAvatar';
 
 import util from "@util/"
 import {loadTransactions} from "@action/project";
@@ -331,10 +332,10 @@ class TransactionsTableView extends Component {
                         {transaction.formattedDate}
                       </TableCell>
                       <TableCell className={'text-center'}>
-                        <Avatar className={'avatar small mb-2'}
-                                style={{backgroundColor: transaction.owner.avatarColor, margin: '0 auto'}}>
-                          {transaction.owner.initials}
-                        </Avatar>
+                        <UserAvatar user={transaction.owner}
+                                    additionalClass={' mb-2'}
+                                    style={{ margin: '0 auto'}}
+                                    size={'small'} />
                         <div>
                           {transaction.owner.displayName}
                         </div>
@@ -357,13 +358,10 @@ class TransactionsTableView extends Component {
                       <TableCell className={'text-center'}>
                         {
                           transaction.customer ? <div>
-                            <Avatar className={'avatar small mb-2'}
-                                    style={{
-                                      'backgroundColor': transaction.customer.avatarColor,
-                                      margin: '0 auto'
-                                    }}>
-                              {transaction.customer.initials}
-                            </Avatar>
+                            <UserAvatar user={transaction.customer}
+                                        additionalClass={' mb-2'}
+                                        style={{ margin: '0 auto'}}
+                                        size={'small'} />
                             <div>{transaction.customer.name}</div>
                           </div> : null
                         }

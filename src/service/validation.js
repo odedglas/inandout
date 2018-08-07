@@ -75,6 +75,7 @@ class FormValidator {
 
 //TODO - Wrap Creation in json validation lifecycle
 export default {
+  isEmail: val => val && validator.isEmail(val),
   create: validations => new FormValidator(validations),
   validate: (formValidator, state, field) => !field ? formValidator.validate(state)
     : formValidator.validateSpecific(state, field),

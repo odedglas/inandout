@@ -26,9 +26,8 @@ export function handleNotificationAction(notification, action, user, router, clo
 
       case NOTIFICATION_ACTIONS.INVITE_JOIN: {
         handler = () => notificationService.acceptProjectInvite(
-          user.id,
-          notification.id,
-          user.email,
+          user,
+          notification,
           params.projectId,
           (project) => {
 
@@ -48,8 +47,17 @@ export function handleNotificationAction(notification, action, user, router, clo
 
       case NOTIFICATION_ACTIONS.INVITE_REJECT: {
         handler = () => notificationService.rejectProjectInvite(
+          user,
+          notification
+        );
+        break;
+      }
+
+      case NOTIFICATION_ACTIONS.CONFIRM: {
+        handler = () => notificationService.updateNotification(
           notification.id,
-          user.email
+          user.email,
+          {unread: false, completedAction: NOTIFICATION_ACTIONS.CONFIRM}
         );
         break;
       }

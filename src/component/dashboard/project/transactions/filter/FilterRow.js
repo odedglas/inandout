@@ -12,6 +12,8 @@ import Avatar from '@material-ui/core/Avatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AvatarSelect from '@common/AvatarSelect';
+//TODO - Implement this usage
+//import UserAvatar from '@common/UserAvatar';
 
 const initialState = {
   filterId: '',

@@ -12,7 +12,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import UserAvatar from '@common/UserAvatar';
 import {KEYBOARD_CODES} from "@const/";
 import notificationService from '@service/notification';
-
+import util from '@util/'
 import {createNotificationSyncListener, handleNotificationAction} from "@action/notification";
 
 class NotificationsDrawer extends Component {
@@ -74,7 +74,7 @@ class NotificationsDrawer extends Component {
     );
   };
 
-  notificationTypeRenderer = notification => {
+  notificationRender = notification => {
 
     const hasActions = notification.actions.length > 0;
     const isUnread = notification.unread;
@@ -91,7 +91,7 @@ class NotificationsDrawer extends Component {
           <UserAvatar user={notification.from} size={'small'}/>
           <div className={'px-3'}>
             <span className={'text mt-2'}>
-              {notification.text}
+              <span dangerouslySetInnerHTML={{ __html: notification.text }}/>
               <div className={'date'}> {notification.date}</div>
               </span>
           </div>
@@ -140,6 +140,11 @@ class NotificationsDrawer extends Component {
     const {filledNotifications} = this.state;
     const isEmpty = filledNotifications.length === 0;
 
+    const _notifications = filledNotifications.sort(util.sortJsonFN([
+      {name:'unread', reverse: true},
+      {name:'created', reverse: true},
+      ]));
+
     return (
       <Drawer anchor="right" open={open}
               disableRestoreFocus={true}
@@ -167,7 +172,7 @@ class NotificationsDrawer extends Component {
               !isEmpty ?
                 <div className={'notifications-wrapper py-2 px-3'}>
 
-                  {filledNotifications.map(notification => this.notificationTypeRenderer(notification))}
+                  {_notifications.map(notification => this.notificationRender(notification))}
 
                 </div>
                 : this.emptyDrawerView()

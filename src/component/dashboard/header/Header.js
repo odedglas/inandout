@@ -40,7 +40,7 @@ class Header extends React.Component {
     const newNotifications = notifications.filter(n => n.unread);
     const hasNewNotifications = newNotifications.length > 0;
     const notificationsBadge = hasNewNotifications ? newNotifications.length : '';
-    console.log(hasNewNotifications);
+
     return (
       <div className={containerCls}>
         <div className={'logo'} onClick={this.gotoHome}>

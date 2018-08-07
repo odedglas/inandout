@@ -483,7 +483,7 @@ export function updateCachedProject() {
   }
 }
 
-export function inviteProjectMember(project, user, inviteEmail) {
+export function inviteProjectMember(project, user, inviteEmail, callback) {
 
   return (dispatch, getState) => {
 
@@ -492,6 +492,8 @@ export function inviteProjectMember(project, user, inviteEmail) {
     const currentUser = getState().user;
 
     projectService.sendMemberInvite(project, currentUser, user, inviteEmail).then(() => {
+
+      callback();
 
       dispatch({type: 'APP_LOADING', loading: false});
     })

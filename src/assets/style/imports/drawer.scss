@@ -53,6 +53,7 @@
     .notifications-wrapper {
 
       .notification {
+        margin-bottom:1rem;
 
         &.unread {
           background-color: #E0F2F1;
@@ -63,6 +64,10 @@
 
           .text {
             font-size: $small-font;
+
+            b {
+              color: lighten($menu-text-color, 15%)
+            }
           }
 
           .date {

@@ -116,12 +116,14 @@ export const FIREBASE_LOGIN_PROVIDERS = {
 
 export const NOTIFICATION_TYPE = {
   INVITE: 'invite',
+  CONFIRMATION: 'confirm',
 };
 
 export const NOTIFICATION_ACTIONS = {
 
   INVITE_JOIN: 'join_invite',
-  INVITE_REJECT: 'reject_invite'
+  INVITE_REJECT: 'reject_invite',
+  CONFIRM: 'confirm',
 };
 
 export const KEYBOARD_CODES = {

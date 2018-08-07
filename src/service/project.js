@@ -108,6 +108,10 @@ export default {
       return notification;
     });
 
+  },
+  updateProject(project, update) {
+
+    return firebaseService.update(`/projects/${project.id}`, update);
   }
 }
 

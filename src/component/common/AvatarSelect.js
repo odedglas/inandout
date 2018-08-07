@@ -84,7 +84,7 @@ class AvatarSelect extends Component {
           renderValue={selected => (
             <div style={{'whiteSpace': 'initial', 'display': 'flex'}}>
               {
-                selected.map((value, i) => {
+                (multi ? selected : [selected]).map((value, i) => {
 
                 const valueWrapper = data.find(c => c.id === value);
                 return valueWrapper ? renderAvatar(valueWrapper) : null;

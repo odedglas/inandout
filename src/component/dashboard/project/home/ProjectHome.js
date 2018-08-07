@@ -5,42 +5,53 @@ import {
 } from 'react-router-dom';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
-import IconButton from '@material-ui/core/IconButton';
 import Breadcrumb from '../breadcrumbs/Breadcrumb';
 import Paper from '@material-ui/core/Paper';
-import DynamicIcon from '@common/DynamicIcon'
 
+import SnackbarNotification from '@common/SnackbarNotification';
+import HomeCreateDial from './HomeCreateDial';
 import projectService from '@service/project';
 import dateUtil from '@util/date';
 import {TransactionType} from "@model/transaction";
 import {BudgetType} from "@model/budget";
-import {inviteProjectMember} from '@action/project';
-
 
 class ProjectHome extends React.Component {
 
   static propTypes = {
     selectedProject: PropTypes.object,
     transactions: PropTypes.arrayOf(TransactionType),
-    budgets: PropTypes.arrayOf(BudgetType),
-    inviteProjectMember: PropTypes.func.isRequired
+    budgets: PropTypes.arrayOf(BudgetType)
+  };
+
+  state = {
+    showSuccessSnackbar: false,
+    snackbarMessage: '',
+    snackbarVariant: 'success',
   };
 
   showHideProjectActionMenu = show => {
-/*    this.setState({
-      showActionMenu: show
-    })*/
 
-    this.props.inviteProjectMember(
-      this.props.selectedProject,
-      undefined,
-      "anonymouse.work.it@gmail.com"
-    );
   };
+
+  hideSnackbar() {
+
+    this.setState({showSuccessSnackbar: false})
+  }
+
+  showSnackbar(text, variant = 'success') {
+
+    this.setState({
+      showSuccessSnackbar: true,
+      snackbarMessage: text,
+      snackbarVariant: variant
+    })
+  }
 
   render() {
 
     const {selectedProject, transactions, budgets} = this.props;
+    const {showSuccessSnackbar, snackbarMessage, snackbarVariant} = this.state;
+
     const today = new Date();
 
     const indicators = projectService.calculateProjectIndicators(
@@ -49,22 +60,10 @@ class ProjectHome extends React.Component {
       budgets
     );
 
-    console.log(indicators);
-
     return (
       <div className={'project-home-wrapper row'}>
 
-        <Breadcrumb item={{id:'projectHomeCrumb' ,value:dateUtil.format(today,'MMM YYYY')}}/>
-
-        <div className={'col-sm-12 px-0 row project-actions'}>
-
-          <div className={'col-sm-6'}> Date navigation </div>
-          <div className={'col-sm-6'}>
-            <IconButton className={'actions-menu'} onClick={this.showHideProjectActionMenu}>
-              <DynamicIcon name={'actionMenu'}/>
-            </IconButton>
-          </div>
-        </div>
+        <Breadcrumb item={{id: 'projectHomeCrumb', value: dateUtil.format(today, 'MMM YYYY')}}/>
 
         <div className={'col-sm-12 px-0 row'}>
 
@@ -88,7 +87,18 @@ class ProjectHome extends React.Component {
 
         </div>
 
-        I R Home! for { selectedProject.name }
+        <HomeCreateDial showNotification={(message, variant) => this.showSnackbar(message, variant)}/>
+
+        <SnackbarNotification onClose={() => this.hideSnackbar()}
+                              anchor={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                              }}
+                              open={showSuccessSnackbar}
+                              duration={2500}
+                              variant={snackbarVariant}
+                              message={snackbarMessage}>
+        </SnackbarNotification>
       </div>
     );
   }
@@ -100,5 +110,5 @@ export default compose(
     selectedProject: state.project.selectedProject,
     transactions: state.project.transactions,
     budgets: state.project.budgets,
-  }), {inviteProjectMember})
+  }), {})
 )(ProjectHome);

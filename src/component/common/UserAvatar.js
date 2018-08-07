@@ -6,7 +6,7 @@ const handleAvatarClick = (event, handler) => {
   handler && handler(event)
 };
 
-const UserAvatar = ({user, size, onClick, additionalClass, ...rest}) => {
+const UserAvatar = ({user, size, onClick, additionalClass, style, ...rest}) => {
 
   const avatarBackground = {
     'backgroundColor': user.avatarColor
@@ -15,7 +15,8 @@ const UserAvatar = ({user, size, onClick, additionalClass, ...rest}) => {
 
   return (
     <Avatar className={`avatar ${size} ${additionalClass ? additionalClass : ''}`}
-            style={avatarBackground}
+            key={user.id}
+            style={{...avatarBackground, ...(style || {})}}
             {...rest}
             onClick={(e) => handleAvatarClick(e, onClick)}>
       {

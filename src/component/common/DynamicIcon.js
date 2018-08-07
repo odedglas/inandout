@@ -71,6 +71,7 @@ import PaletteIcon from '@material-ui/icons/Palette';
 import LocationIcon from '@material-ui/icons/LocationOn';
 import BackIcon from '@material-ui/icons/ArrowBack';
 import ActionMenuIcon from '@material-ui/icons/KeyboardArrowDown';
+import ShareIcon from '@material-ui/icons/Share';
 
 // -- Social Media --//
 import GoogleIcon from '../icon/GoogleIcon';
@@ -144,6 +145,7 @@ const iconMap = {
   'twitter': TwitterIcon,
   'facebook': FacebookIcon,
   'github': GithubIcon,
+  'share': ShareIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {
