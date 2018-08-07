@@ -42,9 +42,10 @@ export function loginWithPassword(email, password, onSuccess, onError) {
 
     dispatch({type: 'APP_LOADING', loading: true});
 
-    authService.loginWithPassword(email, password).then(authUser => {
+    authService.loginWithPassword(email, password).then(res => {
 
-      userService.fetchUser(authUser.user.uid).then( res => {
+      const authUser = res.user;
+      userService.fetchUser(authUser.uid).then( res => {
 
         fetchUserSuccess(
           dispatch,
