@@ -79,7 +79,7 @@ export function signUp(email, password, displayName, onSuccess, onError) {
   }
 }
 
-export function loginWithProvider(providerName) {
+export function loginWithProvider(providerName, onSuccess) {
 
   return dispatch => {
 
@@ -106,6 +106,7 @@ export function loginWithProvider(providerName) {
               {authUser, user:createdUser}
             );
 
+            onSuccess && onSuccess(createdUser);
             dispatch({type: 'APP_LOADING', loading: false})
           })
         }

@@ -1,9 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {compose} from 'recompose';
+import {
+  withRouter
+} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import {FIREBASE_LOGIN_PROVIDERS} from '@const/';
 import {loginWithProvider} from '@action/authentication';
+import {ROUTER} from "@const/";
 
 import DynamicIcon from "../common/DynamicIcon";
 
@@ -16,7 +21,8 @@ class LoginWithMedia extends Component {
   handleProviderLogin = providerName => {
 
     this.props.loginWithProvider(
-      providerName
+      providerName,
+      () => this.props.history.push(ROUTER.DASHBOARD)
     );
   };
 
@@ -47,7 +53,10 @@ class LoginWithMedia extends Component {
   }
 }
 
-export default connect(
-  null,
-  {loginWithProvider}
+export default compose(
+  withRouter,
+  connect(
+    null,
+    {loginWithProvider}
+  )
 )(LoginWithMedia);

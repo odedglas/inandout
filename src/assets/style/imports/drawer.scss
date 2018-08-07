@@ -2,6 +2,7 @@
 
 .notifications-drawer {
   width: 380px;
+  outline: 0;
 
   .header {
     background-color: $theme-primary;
@@ -22,12 +23,13 @@
   }
 
   .content {
-    padding: 3rem 0;
+    padding: 1rem 0;
 
     .empty-notifications {
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 2rem 0;
 
       .icon {
         margin: 2rem;
@@ -44,6 +46,43 @@
         span {
           display: block;
           margin-top: 2rem;
+        }
+      }
+    }
+
+    .notifications-wrapper {
+
+      .notification {
+
+        &.unread {
+          background-color: #E0F2F1;
+        }
+
+        .notification-body{
+          align-items:center;
+
+          .text {
+            font-size: $small-font;
+          }
+
+          .date {
+            font-size: $smallest-font;
+            color: $light-text;
+          }
+        }
+
+        .notification-footer{
+          display: flex;
+          justify-content: flex-end;
+        }
+
+        .notification-result {
+          display: flex;
+
+          span {
+            color: $light-text;
+            font-weight: 600;
+          }
         }
       }
     }

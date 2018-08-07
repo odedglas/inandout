@@ -2,6 +2,7 @@ import projectService from '@service/project'
 import transactionService from '@service/transaction'
 import categoryService from '@service/category'
 import userService from '@service/user'
+import notificationService from '@service/notification';
 
 import {selectProject} from "./project";
 
@@ -12,7 +13,8 @@ export function init() {
 
     dispatch({type: 'SET_DASHBOARD_LOADING', loading: true});
 
-    const projectKeys = getState().user.projects;
+    const currentUser = getState().user;
+    const projectKeys = currentUser.projects;
     const preSelectedIdentifier = getState().project.preSelectedProject;
     let resolved = {};
 
@@ -28,14 +30,18 @@ export function init() {
     //Default categories
     resolved.defaultCategories = categoryService.fetchDefaults();
 
+    //Notifications
+    resolved.notifications = notificationService.fetchUserNotifications(currentUser);
+
     util.promiseAllObjectProperties(resolved).then(res => {
 
-      const {projects, transactions, defaultCategories, users} = res;
+      const {projects, transactions, defaultCategories, users, notifications} = res;
 
       const mergedProjectsResult = projectService.mergeProjectResults(projects, transactions, defaultCategories);
 
       dispatch({type: 'SET_PROJECTS', projects: mergedProjectsResult});
       dispatch({type: 'SET_USERS', users: users});
+      dispatch({type: 'SET_NOTIFICATIONS', notifications});
       dispatch({type: 'SET_DEFAULTS_CATEGORIES', defaultCategories});
 
       const selectedProject = preSelectedIdentifier ? mergedProjectsResult.find(p => p.identifier === preSelectedIdentifier) : null;

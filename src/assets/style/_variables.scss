@@ -153,6 +153,13 @@ $breakpoints: (
   }
 }
 
+@mixin textOverflow() {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 :export {
   successColor: #43A047;
   errorColor: #e53935;

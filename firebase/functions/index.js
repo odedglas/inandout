@@ -57,7 +57,7 @@ exports.app = functions.https.onRequest(app);
 
 app.post('/sendInviteMail', (req, res) => {
 
-  const email = req.body.email;
+  const {email, owner, project} = req.body;
 
   console.log("Sending Mail to :" + email);
   const mailOptions = {
@@ -69,7 +69,7 @@ app.post('/sendInviteMail', (req, res) => {
   mailOptions.subject = `${APP_NAME} Project share request from to !`;
   mailOptions.html = `
       <div> Hello ! </div> 
-      <div> You have been invited to share a project : with </div>
+      <div> You have been invited to share a project with ${owner}</div>
       <div> Please follow this link: <a href=${signUpURL}> In&Out</a> In order to sign up and start working on your projects!</div>`;
 
   return mailTransport.sendMail(mailOptions).then(() => {

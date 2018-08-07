@@ -16,8 +16,6 @@ import {TransactionType} from "@model/transaction";
 import {BudgetType} from "@model/budget";
 import {inviteProjectMember} from '@action/project';
 
-import request from '@util/request';
-import firebaseService from '@service/firebase';
 
 class ProjectHome extends React.Component {
 

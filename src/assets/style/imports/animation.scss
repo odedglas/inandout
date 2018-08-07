@@ -1,0 +1,14 @@
+@import '../variables';
+
+.hover-popout.with-action {
+  cursor: pointer;
+}
+.hover-popout:hover {
+  transform: scale(1.02);
+  box-shadow: 0 3px 10px 0 rgba(0,0,0,.2);
+  background: #e0e3e7;
+}
+
+.hover-popout {
+  transition: box-shadow .2s cubic-bezier(0,.5,.265,2),transform .2s cubic-bezier(0,.5,.265,2);
+}

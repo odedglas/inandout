@@ -113,3 +113,17 @@ export const FIREBASE_LOGIN_PROVIDERS = {
   FACEBOOK: 'facebook',
   TWITTER: 'twitter'
 };
+
+export const NOTIFICATION_TYPE = {
+  INVITE: 'invite',
+};
+
+export const NOTIFICATION_ACTIONS = {
+
+  INVITE_JOIN: 'join_invite',
+  INVITE_REJECT: 'reject_invite'
+};
+
+export const KEYBOARD_CODES = {
+  ESCAPE: 27
+}

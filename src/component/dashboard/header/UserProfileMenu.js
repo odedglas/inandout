@@ -6,7 +6,6 @@ import {
   withRouter,
 } from 'react-router-dom';
 
-import Avatar from '@material-ui/core/Avatar';
 import Popover from '@material-ui/core/Popover';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
@@ -17,6 +16,7 @@ import HelpIcon from '@material-ui/icons/Help';
 import SettingsIcon from '@material-ui/icons/Settings';
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import Divider from '@material-ui/core/Divider';
+import UserAvatar from '@common/UserAvatar';
 
 import {ROUTER} from '@const/'
 import {signOut} from '@action/authentication';
@@ -59,19 +59,13 @@ class UserProfileMenu extends React.Component {
     const {user} = this.props;
     const {open, anchorEl,} = this.state;
 
-    //TODO - Handle srcSet when supported
-    const avatarBackground = {
-      'backgroundColor': user.avatarColor
-    };
-
     return (
       <div>
-        <Avatar className={'avatar mx-3'}
-                aria-haspopup="true"
-                onClick={this.handleMenuOpen}
-                style={avatarBackground}>
-          {user.avatarImage ? <img className={'h-100'} alt={'user-profile'} src={user.avatarImage}/> : user.initials}
-        </Avatar>
+        <UserAvatar user={user}
+                    additionalClass={'mx-3'}
+                    aria-haspopup="true"
+                    onClick={this.handleMenuOpen}
+                    size={'large'} />
         <Popover
           open={open}
           anchorEl={anchorEl}
@@ -89,9 +83,7 @@ class UserProfileMenu extends React.Component {
           <MenuList className={'user-menu-holder'} role="menu">
             <div className={'user-info'}>
               <div className={'user-image'}>
-                <Avatar className={'avatar medium'} style={avatarBackground}>
-                  {user.avatarImage ? <img className={'h-100'} alt={'user-profile'}  src={user.avatarImage}/> : user.initials}
-                </Avatar>
+                <UserAvatar user={user} />
               </div>
               <div className={'details'}>
                 <h3> {user.displayName} </h3>

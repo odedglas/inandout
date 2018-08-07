@@ -17,7 +17,6 @@ export default {
   database,
   initUser(user) {
     this.user = user;
-    debugger;
     user.getIdToken().then(token => this.token = token);
   },
   createUser(id, user) {
@@ -105,7 +104,12 @@ export default {
         }
       });
   },
+  addUserProject(userId, projectId) {
 
+    return database.ref(`users/${userId}/projects`).push(
+      projectId
+    );
+  },
   createCategory(projectId, category) {
 
     return createProjectEntity(projectId, 'categories', category);
@@ -114,7 +118,6 @@ export default {
 
     return database.ref(`/projects/${projectId}/excludedCategories`).push(categoryId);
   },
-
   includeCategory(projectId, categoryId) {
 
     return database.ref(`/projects/${projectId}/excludedCategories`).orderByValue().equalTo(categoryId).once('value').then(snapshot => {
@@ -126,7 +129,6 @@ export default {
     })
   },
   createTransaction(projectId, dateKey, transaction) {
-
 
     return database.ref(`/transactions/${projectId}/${dateKey}`).push(transaction).then(res => {
 
@@ -148,6 +150,16 @@ export default {
 
     return createProjectEntity(projectId, 'events', event);
   },
+  createNotification(email, notification) {
+
+    return database.ref(`/notifications/${email}`).push(notification).then(res => {
+
+      return {
+        ...notification,
+        id: res.key
+      }
+    })
+  }
 }
 
 

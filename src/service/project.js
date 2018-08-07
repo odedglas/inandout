@@ -1,6 +1,7 @@
 import firebaseService from './firebase';
 import transactionService from './transaction';
-import budgetSerivce from './budget';
+import budgetService from './budget';
+import notificationService from './notification';
 import util from '@util/'
 import request from '@util/request';
 import {CURRENCIES} from "@const/";
@@ -70,7 +71,7 @@ export default {
       transactions
     );
 
-    const budgetsUsage = budgetSerivce.getBudgetsUsage(
+    const budgetsUsage = budgetService.getBudgetsUsage(
       budgets,
       transactions
     );
@@ -80,21 +81,34 @@ export default {
       budgetsUsage
     }
   },
-  sendMemberInvite(projectName, currentUser, existingUser, inviteEmail) {
+  sendMemberInvite(projectIdentifier, projectName, currentUser, existingUser, inviteEmail) {
 
     //Creating notification for the invite user
-    debugger;
-    //Sending invite mail if user does not exists
-    if(!existingUser && inviteEmail){
-      return request.post('sendInviteMail',{
-        email: inviteEmail,
-        owner: currentUser.displayName,
-        project: projectName
-      }).then(res => {
-        debugger;
-        return res;
-      })
-    }
+    return notificationService.sendInviteNotification(
+      projectIdentifier,
+      projectName,
+      currentUser,
+      inviteEmail
+    ).then(notification => {
+
+      //Sending invite Email if user does not exists
+      if(!existingUser && inviteEmail){
+        return request.post('sendInviteMail',{
+          email: inviteEmail,
+          owner: currentUser.displayName,
+          project: projectName
+        }).then(res => {
+
+          return {
+            ...res,
+            notification: notification
+          };
+        })
+      }
+
+      return notification;
+    });
+
   }
 }
 

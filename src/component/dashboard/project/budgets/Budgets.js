@@ -114,7 +114,7 @@ class Budgets extends Component {
   };
 
   handleCreateTransaction = (transaction, action, cb) => {
-    debugger;
+
     if (action === 'add') {
 
       this.props.createTransaction(

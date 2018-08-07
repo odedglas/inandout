@@ -31,8 +31,27 @@
     box-shadow: 0 1px 0 rgba(0,0,0,.15);
   }
 
-  .notifications-button {
-    @include offwhiteIcon()
+  .notification-badge {
+
+    > span {
+      top:5px;
+      right:5px;
+      height:18px;
+      width:18px;
+      color: white;
+      background-color:$error-color;
+    }
+
+    &.empty {
+
+      > span {
+        display: none;
+      }
+    }
+
+    .notifications-button {
+      @include offwhiteIcon()
+    }
   }
 
   &.transparent {
@@ -61,7 +80,7 @@
     align-items: center;
 
     .details {
-      width: 100%;
+      max-width: 180px;
       padding-left: 20px;
       flex-direction: column;
 
@@ -69,11 +88,13 @@
         font-size: 18px;
         color: $menu-text-color;
         font-weight: 500;
+        @include textOverflow();
       }
 
       span {
         font-size:14px;
         color: $light-text;
+        @include textOverflow();
       }
     }
   }

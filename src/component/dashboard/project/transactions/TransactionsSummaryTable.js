@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Avatar from '@material-ui/core/Avatar';
 import DynamicIcon from '@common/DynamicIcon';
+import UserAvatar from '@common/UserAvatar';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import {TransactionType} from "@model/transaction";
@@ -40,19 +41,12 @@ class TransactionsSummaryTable extends Component {
             <TableBody>
               {latestTransactions.map(t => {
 
-                const avatarBackground = {
-                  'backgroundColor' : t.owner.avatarColor
-                };
-
                 return (
                   <TableRow key={t.id} className={'table-row'}>
                     <TableCell>{t.formattedDate}</TableCell>
                     <TableCell>
                       <Tooltip title={t.owner.displayName} placement={'right'}>
-                        <Avatar className={'avatar small'}
-                                style={avatarBackground}>
-                          {t.owner.initials}
-                        </Avatar>
+                        <UserAvatar user={t.owner} size={'small'} />
                       </Tooltip>
                     </TableCell>
                     <TableCell>
