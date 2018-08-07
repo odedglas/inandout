@@ -82,7 +82,7 @@ export default {
     }
   },
   sendMemberInvite(project, currentUser, existingUser, inviteEmail) {
-
+    debugger;
     //Creating notification for the invite user
     return notificationService.sendInviteNotification(
       project,

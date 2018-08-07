@@ -9,10 +9,16 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DynamicIcon from '@common/DynamicIcon';
 import TextField from '@material-ui/core/TextField';
-
+import UsersSelect from '@common/UsersSelect';
 import {inviteProjectMember} from '@action/project';
 
 import validationService from '@service/validation';
+
+const initialState ={
+  mailInvite: '',
+  existingUserId: undefined,
+  error: undefined
+}
 
 class InviteUser extends Component {
 
@@ -26,11 +32,10 @@ class InviteUser extends Component {
   };
 
   state = {
-    mailInvite: '',
-    error: undefined
+    ...initialState
   };
 
-  setUserToInvite = (email) => {
+  setEmailUserToInvite = (email) => {
 
     const {error} = this.state;
 
@@ -42,42 +47,61 @@ class InviteUser extends Component {
     }
     else {
 
-      this.setState({mailInvite: email});
+      this.setState({mailInvite: email, existingUserId: ''});
     }
+  };
+
+  setExitingUserToInvite = (userId) => {
+
+    this.setState({
+      existingUserId: userId,
+      error: undefined,
+      mailInvite: '',
+    });
   };
 
   handleInvite = () => {
 
     const email = this.state.mailInvite;
+    const existingUserId = this.state.existingUserId;
 
-    if(validationService.isEmail(email)) {
+    if(validationService.isEmail(email) || existingUserId) {
+
+      let existingUser =  this.props.users.find(u => u.id === existingUserId) || {};
+      const inviteEmail = existingUser.email || email;
 
       this.props.inviteProjectMember(
         this.props.selectedProject,
-        undefined,
-        email,
-        () => this.props.showNotification(`Invite was successfully sent to ${email}`)
+        existingUser.email,
+        inviteEmail,
+        () => this.props.showNotification(`Invite was successfully sent to ${inviteEmail}`)
       );
 
       this.props.onClose();
-
     }
     else {
-      this.setState({error: 'Please insert a valid email'});
+
+      this.setState({error: 'Please provide a valid email address.'})
     }
 
   };
 
+  handleClose = () => {
+    this.setState({...initialState});
+    this.props.onClose();
+  };
+
   render() {
 
-    const {open, onClose, users} = this.props;
-    const {mailInvite, error} = this.state;
+    const {open} = this.props;
+    const {mailInvite, error, existingUserId} = this.state;
+    const canInvite = mailInvite || existingUserId;
 
     return (
       <Dialog
         open={open}
         disableRestoreFocus={true}
-        onClose={onClose}
+        onClose={this.handleClose}
         className={'modal invite-user'}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -94,11 +118,17 @@ class InviteUser extends Component {
 
             <div className={'col-sm-12 px-0 mt-2'}>
 
+              <UsersSelect selectedUser={existingUserId}
+                           onChange={this.setExitingUserToInvite} />
+            </div>
+
+            <div className={'col-sm-12 px-0 mt-2'}>
+
               <TextField
                 value={mailInvite}
                 type={'text'}
                 fullWidth
-                onChange={(e) => this.setUserToInvite(e.target.value)}
+                onChange={(e) => this.setEmailUserToInvite(e.target.value)}
                 error={error !== undefined}
                 title={error ? error : ''}
                 placeholder={'someone@example.com'}
@@ -110,7 +140,7 @@ class InviteUser extends Component {
         </DialogContent>
         <DialogActions className={'modal-actions'}>
           <Button onClick={this.handleInvite}
-                  disabled={!mailInvite}
+                  disabled={!canInvite}
                   color="primary" autoFocus>
             Invite
           </Button>
