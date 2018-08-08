@@ -8,15 +8,10 @@ import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Avatar from '@material-ui/core/Avatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import CreateCustomer from '@modal/CreateCustomer'
 import DynamicIcon from "@common/DynamicIcon";
 import UserAvatar from '@common/UserAvatar';
-
-import {CustomerType} from "@model/customer";
 
 const MenuProps = {
   PaperProps: {
@@ -58,7 +53,6 @@ class UsersSelect extends Component {
     const {
       users,
       selectedUser,
-      selectedProject,
       onChange,
       error,
       showCreateNewCustomer,
@@ -81,9 +75,7 @@ class UsersSelect extends Component {
               <div style={{'whiteSpace': 'initial'}}>
                 {
                   <div style={{display: 'flex', alignItems: 'center'}}>
-                    <Avatar className={'avatar small'} style={{'backgroundColor': user.avatarColor}}>
-                      {user.initials}
-                    </Avatar>
+                    <UserAvatar user={user} size={'small'} />
                     <span className={'mx-3'}>{user.displayName}</span>
                   </div>
                 }
@@ -97,9 +89,7 @@ class UsersSelect extends Component {
               key={user.id}
               value={user.id}>
               <ListItemIcon className={'menu-icon'}>
-                <Avatar className={'avatar medium'} style={{'backgroundColor': user.avatarColor, color:'white'}}>
-                  {user.initials}
-                </Avatar>
+                <UserAvatar user={user} size={'medium white'} />
               </ListItemIcon>
               <ListItemText className={'menu-text'}
                             secondary={user.email}

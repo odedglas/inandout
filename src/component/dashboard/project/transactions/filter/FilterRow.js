@@ -12,8 +12,7 @@ import Avatar from '@material-ui/core/Avatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AvatarSelect from '@common/AvatarSelect';
-//TODO - Implement this usage
-//import UserAvatar from '@common/UserAvatar';
+import UserAvatar from '@common/UserAvatar';
 
 const initialState = {
   filterId: '',
@@ -186,20 +185,19 @@ class FilterRow extends Component {
                         multi={true}
                         rawData={customers}
                         renderAvatar={(item) => (
-                          <Avatar className={'avatar smallest mr-1 white'}
-                                  key={item.id}
-                                  style={{'backgroundColor': item.avatarColor}}>
-                            {item.initials}
-                          </Avatar>
+                          <UserAvatar user={item}
+                                      key={item.id}
+                                      size={'smallest'}
+                                      className={'white mr-1'}/>
                         )}
                         renderListItem={(item) => (
                           <MenuItem
                             key={item.id}
                             value={item.id}>
                             <ListItemIcon className={'menu-icon'}>
-                              <Avatar className={'avatar small white'} style={{'backgroundColor': item.avatarColor}}>
-                                {item.initials}
-                              </Avatar>
+                              <UserAvatar user={item}
+                                          size={'small'}
+                                          className={'white'}/>
                             </ListItemIcon>
                             <ListItemText className={'menu-text'}
                                           primary={item.name}/>
@@ -216,20 +214,19 @@ class FilterRow extends Component {
                         multi={true}
                         rawData={members}
                         renderAvatar={(item) => (
-                          <Avatar className={'avatar smallest mr-1'}
-                                  key={item.id}
-                                  style={{'backgroundColor': item.avatarColor}}>
-                            {item.initials}
-                          </Avatar>
+                          <UserAvatar user={item}
+                                      key={item.id}
+                                      size={'smallest'}
+                                      className={'white mr-1'}/>
                         )}
                         renderListItem={(item) => (
                           <MenuItem
                             key={item.id}
                             value={item.id}>
                             <ListItemIcon className={'menu-icon'}>
-                              <Avatar className={'avatar small'} style={{'backgroundColor': item.avatarColor}}>
-                                {item.initials}
-                              </Avatar>
+                              <UserAvatar user={item}
+                                          size={'small'}
+                                          className={'white'}/>
                             </ListItemIcon>
                             <ListItemText className={'menu-text'}
                                           primary={item.displayName}/>

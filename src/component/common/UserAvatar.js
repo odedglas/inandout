@@ -6,17 +6,20 @@ const handleAvatarClick = (event, handler) => {
   handler && handler(event)
 };
 
-const UserAvatar = ({user, size, onClick, additionalClass, style, ...rest}) => {
+const UserAvatar = ({user, size, onClick, additionalClass, style, className, ...rest}) => {
 
   const avatarBackground = {
     'backgroundColor': user.avatarColor
   };
+  const hasAvatarImage = user.avatarImage;
   size = size ? size : 'medium';
 
+  style = {...(!hasAvatarImage ? avatarBackground : {} ), ...(style || {} )};
+  className = `avatar ${size} ${additionalClass ? additionalClass : ''} ${className ? className : ''}`;
+
   return (
-    <Avatar className={`avatar ${size} ${additionalClass ? additionalClass : ''}`}
-            key={user.id}
-            style={{...avatarBackground, ...(style || {})}}
+    <Avatar className={className}
+            style={style}
             {...rest}
             onClick={(e) => handleAvatarClick(e, onClick)}>
       {

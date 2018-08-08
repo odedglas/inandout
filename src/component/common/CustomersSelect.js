@@ -9,11 +9,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Avatar from '@material-ui/core/Avatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import CreateCustomer from '@modal/CreateCustomer'
 import DynamicIcon from "@common/DynamicIcon";
+import UserAvatar from '@common/UserAvatar';
 
 import {CustomerType} from "@model/customer";
 
@@ -110,9 +110,7 @@ class CustomersSelect extends Component {
               <div style={{'whiteSpace': 'initial'}}>
                 {
                   <div style={{display: 'flex', alignItems: 'center'}}>
-                    <Avatar className={'avatar small'} style={{'backgroundColor': customer.avatarColor}}>
-                      {customer.initials}
-                    </Avatar>
+                    <UserAvatar user={customer} size={'small'} />
                     <span className={'mx-3'}>{customer.name}</span>
                   </div>
                 }
@@ -126,9 +124,7 @@ class CustomersSelect extends Component {
               key={customer.id}
               value={customer.id}>
               <ListItemIcon className={'menu-icon'}>
-                <Avatar className={'avatar medium'} style={{'backgroundColor': customer.avatarColor, color:'white'}}>
-                  {customer.initials}
-                </Avatar>
+                <UserAvatar user={customer} size={'medium white'} />
               </ListItemIcon>
               <ListItemText className={'menu-text'}
                             secondary={customer.contactName}
