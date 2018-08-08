@@ -1,13 +1,16 @@
 import moment from 'moment'
 import {BUDGETS_PERIOD} from '@const/'
-const baseFormat = 'DD/MM/YY';
+import {TRANSACTIONS_DATE_KEY_FORMAT} from '@const/'
 
+const baseFormat = 'DD/MM/YY';
 const budgetPeriodMap = BUDGETS_PERIOD.reduce((map, bp) => {
   map[bp.key] = bp;
   return map;
 },{});
 
 export default {
+
+  monthYearKey: (date) => moment(date).format(TRANSACTIONS_DATE_KEY_FORMAT),
 
   format: (date, format) => moment(date).format(format || baseFormat),
 

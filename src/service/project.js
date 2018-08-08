@@ -3,6 +3,7 @@ import transactionService from './transaction';
 import budgetService from './budget';
 import notificationService from './notification';
 import util from '@util/'
+import dateUtil from '@util/date'
 import request from '@util/request';
 import {CURRENCIES} from "@const/";
 
@@ -25,10 +26,18 @@ export default {
       type,
       description,
       currency,
-      balance,
       members: [ownerId],
       owner: ownerId,
     };
+
+    if(balance) {
+
+      project.balance = {
+        [dateUtil.monthYearKey(new Date())]: {
+          value:balance
+        }
+      };
+    }
 
     let unique = normalizeProjectName(name);
     const validateUniqueness = (name) => firebaseService.database.ref('projectsIdentifier/' + name).once('value');
@@ -82,7 +91,7 @@ export default {
     }
   },
   sendMemberInvite(project, currentUser, existingUser, inviteEmail) {
-    debugger;
+
     //Creating notification for the invite user
     return notificationService.sendInviteNotification(
       project,

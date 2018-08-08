@@ -2,7 +2,7 @@ import firebaseService from './firebase';
 import calendarService from './calendar';
 import util from '@util/'
 import dateUtil from '@util/date'
-import {TRANSACTIONS_DATE_KEY_FORMAT, TRANSACTIONS_TYPE} from '@const/'
+import {TRANSACTIONS_TYPE} from '@const/'
 
 const transactionTypes = TRANSACTIONS_TYPE.reduce((map, item) => {
   map[item.key] = item.key;
@@ -26,7 +26,7 @@ export default {
             ...value[key]
           }
         });
-
+        console.log("Sync Transactions!");
         callback(result);
       }
     }
@@ -138,7 +138,7 @@ export default {
 
   fetchMonthlyTransactions (projectKeys) {
 
-    const monthlyKey = dateUtil.format(new Date(), TRANSACTIONS_DATE_KEY_FORMAT);
+    const monthlyKey = _transactionDateKey(new Date());
 
     return firebaseService.fetchByKeys('/transactions', projectKeys.map(pk => `${pk}/${monthlyKey}`), true).then(res => {
 
@@ -259,4 +259,4 @@ const createTransactionPaymentsMap = (date, payments, paymentIndex) => {
 
 };
 
-const _transactionDateKey = (date) => dateUtil.format(date, TRANSACTIONS_DATE_KEY_FORMAT);
+const _transactionDateKey = (date) => dateUtil.monthYearKey(date);

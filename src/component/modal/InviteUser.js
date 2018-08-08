@@ -18,7 +18,7 @@ const initialState ={
   mailInvite: '',
   existingUserId: undefined,
   error: undefined
-}
+};
 
 class InviteUser extends Component {
 

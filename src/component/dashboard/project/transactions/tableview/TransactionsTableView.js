@@ -176,7 +176,9 @@ class TransactionsTableView extends Component {
           'payments',
         ];
         dataManipulation = (data, transaction) => {
-          data.push(fillTransaction(transaction));
+          if (dateUtil.sameMonth(selectedDate, transaction.date)) {
+            data.push(fillTransaction(transaction));
+          }
           return data;
         };
         break;

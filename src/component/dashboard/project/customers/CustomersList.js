@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import Avatar from '@material-ui/core/Avatar';
 import DynamicIcon from '@common/DynamicIcon';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -12,6 +11,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {CustomerType} from "@model/customer";
 import {setStarred, deleteCustomer} from "@action/project";
 import {showConfirmation} from "@action/dashboard";
+import UserAvatar from '@common/UserAvatar';
+
 import util from '@util/';
 
 class CustomersList extends Component {
@@ -120,10 +121,9 @@ class CustomersList extends Component {
                     </IconButton>
 
                     <div className={'logo mx-3'}>
-                      <Avatar className={'avatar medium'}
-                              style={{backgroundColor: customer.avatarColor}}>
-                        {customer.initials}
-                      </Avatar>
+                      <UserAvatar user={customer}
+                                  size={'small'}
+                                  className={'white'}/>
                     </div>
 
                     <div className={'col-flex px-2'}>

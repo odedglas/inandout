@@ -1,5 +1,4 @@
 'use strict';
-
 const functions = require('firebase-functions');
 const firebase = require("firebase-admin");
 const nodemailer = require('nodemailer');
@@ -24,7 +23,6 @@ const mailTransport = nodemailer.createTransport({
     pass: gmailPassword,
   },
 });
-
 
 const app = express();
 
@@ -51,9 +49,6 @@ const validateFirebaseIdToken = (req, res, next) => {
 app.use(cors);
 app.use(cookieParser);
 app.use(validateFirebaseIdToken);
-
-exports.app = functions.https.onRequest(app);
-
 
 app.post('/sendInviteMail', (req, res) => {
 
@@ -83,3 +78,58 @@ app.post('/sendInviteMail', (req, res) => {
     res.status(500).send({error: e});
   });
 });
+
+let transactionPath = '/transactions/{projectKey}/{monthYearKey}/{transactionId}';
+exports.transactionCreateListener = functions.database.ref(transactionPath)
+  .onCreate((snapshot, context) => {
+
+    const {projectKey, monthYearKey} = context.params;
+    const transaction = snapshot.val();
+    console.log("Working on : ", transaction)
+    return projectBalanceSync(projectKey, monthYearKey, getTransactionAmount(transaction.amount, transaction.income))
+  });
+
+exports.transactionDeleteListener = functions.database.ref(transactionPath)
+  .onDelete((snapshot, context) => {
+
+    const {projectKey, monthYearKey} = context.params;
+    const transaction = snapshot.val();
+
+    console.log("Working on : ", transaction)
+    return projectBalanceSync(projectKey, monthYearKey, getTransactionAmount(transaction.amount * -1, transaction.income))
+  });
+
+exports.transactionUpdateListener = functions.database.ref(transactionPath)
+  .onUpdate((change, context) => {
+
+    const {projectKey, monthYearKey} = context.params;
+
+    const beforeTransaction = change.before.val();
+    const afterTransaction = change.after.val();
+
+    const deltaTransaction = afterTransaction.amount - beforeTransaction.amount;
+    console.log("Working on : ", afterTransaction)
+    return projectBalanceSync(projectKey, monthYearKey, getTransactionAmount(deltaTransaction, afterTransaction.income))
+  });
+
+const getTransactionAmount = (amount, income) => amount * (income ? 1 : -1);
+
+const projectBalanceSync = (projectKey, monthYearKey, amount) => {
+
+  let balanceRef = firebase.database().ref(`/projects/${projectKey}/balance/${monthYearKey}`);
+  return balanceRef.once('value').then(snapshot => {
+
+    const val = snapshot.val();
+    console.log("Val is", val);
+    const currentBalance = val ? val.value : 0;
+    console.log("currentBalance is", currentBalance);
+    console.log("nextAmount is ", amount);
+    const nextBalance = currentBalance + amount;
+    console.log("nextBalance is", nextBalance);
+    return balanceRef.set({value: nextBalance});
+  });
+
+};
+
+exports.app = functions.https.onRequest(app);
+
