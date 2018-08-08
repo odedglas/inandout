@@ -11,3 +11,15 @@
 .overage-indicator {
   color: $error-color;
 }
+
+.success-background {
+  background-color: $success-color;
+}
+
+.warning-background {
+  background-color: $warning-color;
+}
+
+.overage-background {
+  background-color: $error-color;
+}

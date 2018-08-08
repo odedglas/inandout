@@ -73,6 +73,8 @@ import BackIcon from '@material-ui/icons/ArrowBack';
 import ActionMenuIcon from '@material-ui/icons/KeyboardArrowDown';
 import ShareIcon from '@material-ui/icons/Share';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import toArrowIcon from '@material-ui/icons/TrendingFlat';
+import ProjectMembersIcon from '@material-ui/icons/GroupWork';
 
 // -- Social Media --//
 import GoogleIcon from '../icon/GoogleIcon';
@@ -148,6 +150,8 @@ const iconMap = {
   'github': GithubIcon,
   'share': ShareIcon,
   'balance': AccountBalanceIcon,
+  'toArrow': toArrowIcon,
+  'projectMembers': ProjectMembersIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {

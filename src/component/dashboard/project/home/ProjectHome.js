@@ -10,15 +10,18 @@ import SnackbarNotification from '@common/SnackbarNotification';
 import HomeCreateDial from './HomeCreateDial';
 import Breadcrumb from '../breadcrumbs/Breadcrumb';
 import ProjectKpiCard from './kpi/ProjectKpiCard';
-import TransactionsBalance from './kpi/TransactionsBalance';
+import TransactionsBalanceKpi from './kpi/TransactionsBalanceKpi';
+import BudgetsUsageKpi from './kpi/BudgetsUsageKpi';
+import ProjectBalanceKpi from './kpi/ProjectBalanceKpi';
 import {TransactionType} from "@model/transaction";
 import {BudgetType} from "@model/budget";
 
 import projectService from '@service/project';
-import util from '@util/';
+
 import dateUtil from '@util/date';
 
-
+const formatShort = date => dateUtil.format(date, 'MMM YY');
+const formatLong = date => dateUtil.format(date, 'MMM YYYY');
 
 class ProjectHome extends React.Component {
 
@@ -66,34 +69,38 @@ class ProjectHome extends React.Component {
     );
 
     console.log("Home indicator is : ", indicators);
-    const selectedDateLongFormat = dateUtil.format(selectedDate, 'MMM YYYY');
-    const selectedDateShortFormat = dateUtil.format(selectedDate, 'MMM YY');
+
 
     return (
       <div className={'project-home-wrapper row'}>
 
-        <Breadcrumb item={{id: 'projectHomeCrumb', value: selectedDateLongFormat}}/>
+        <Breadcrumb item={{id: 'projectHomeCrumb', value: formatLong(selectedDate)}}/>
 
         <div className={'col-sm-12 px-0 row'}>
 
           <div className={'col-sm-12 col-md-6'}>
-            <ProjectKpiCard title={'Transactions Balance'}
-                            body={<TransactionsBalance currency={currency}
-                                                       {...indicators.monthlyBalance}/>}
-                            badgeText={selectedDateShortFormat}>
+            <ProjectKpiCard title={'Monthly Balance'}
+                            body={<TransactionsBalanceKpi currency={currency}
+                                                          {...indicators.monthlyBalance}/>}
+                            badgeText={formatShort(selectedDate)}>
             </ProjectKpiCard>
           </div>
 
           <div className={'col-sm-6 mt-sm-3 col-md-3 mt-md-0'}>
-            <ProjectKpiCard title={'Budget usage'}
-                            body={<span>Card Body</span>}
-                            badgeText={selectedDateShortFormat}>
+            <ProjectKpiCard title={'Budgets usage'}
+                            body={<BudgetsUsageKpi currency={currency}
+                                                   {...indicators.budgetsUsage}/>}
+                            badgeText={formatShort(selectedDate)}>
             </ProjectKpiCard>
           </div>
 
           <div className={'col-sm-6 mt-sm-3 col-md-3 mt-md-0'}>
             <ProjectKpiCard title={'Project Balance'}
-                            body={<span>Card Body</span>}>
+                            badgeText={'Overall'}
+                            body={<ProjectBalanceKpi currency={currency}
+                                                     created={formatShort(selectedProject.created)}
+                                                     selectedDate={formatShort(selectedDate)}
+                                                     balance={indicators.totalBalance}/>}>
 
             </ProjectKpiCard>
           </div>

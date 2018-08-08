@@ -39,6 +39,7 @@ export function selectProject(project) {
       type: 'SET_SELECTED_PROJECT',
       project: {
         id: project.id,
+        created: project.created,
         identifier: project.identifier,
         owner: project.owner,
         type: project.type,

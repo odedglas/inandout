@@ -164,10 +164,16 @@ export default {
       return total;
     }, 0);
 
+    const hasLimit = cumulativeLimit > 0;
+    const usage = hasLimit ? Math.round((budgetsActual / cumulativeLimit) * 100) : 0;
+
+    const indicatorColor = usage < 50 ? 'success' : usage > 90 ? 'overage' : 'warning';
 
     return {
       limit: cumulativeLimit,
-      actual: budgetsActual
+      actual: budgetsActual,
+      usage,
+      indicatorColor
     };
   }
 }

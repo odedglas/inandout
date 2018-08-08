@@ -33,7 +33,7 @@ export default {
   createProject(name, type, description, currency, balance) {
 
     const ownerId = firebaseService.user.uid;
-
+    const now = new Date();
     const project = {
       name,
       type,
@@ -41,6 +41,7 @@ export default {
       currency,
       members: [ownerId],
       owner: ownerId,
+      created: now.getTime()
     };
 
     if(balance) {

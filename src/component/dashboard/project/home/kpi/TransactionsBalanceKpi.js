@@ -7,7 +7,7 @@ export default ({currency, income, outcome, balance}) => {
   const isPositiveBalance = balance >= 0;
 
   return (
-    <div className={'transactions-balance mt-2'}>
+    <div className={'transactions-balance pt-2'}>
       <div className={'item'}>
         <div className={'title mb-2'}>
           <span className={'income'}>
@@ -44,5 +44,3 @@ export default ({currency, income, outcome, balance}) => {
     </div>
   )
 }
-
-//#9cadc2
