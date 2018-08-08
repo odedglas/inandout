@@ -30,8 +30,82 @@
       width:36px;
     }
   }
+
   .project-kpi {
     padding: 1rem;
+
+    .card-header {
+      display:flex;
+      justify-content: space-between;
+
+      .title {
+        color: $card-title-color;
+        font-size: $big-font;
+        font-weight: 500;
+      }
+
+      .badge {
+        padding: 0.35rem;
+        background-color: $logo-color;
+        color: white;
+        font-weight: 500;
+        font-size: 0.675rem;
+        border-radius: 4px;
+        opacity: 0.8;
+      }
+    }
+
+    .card-body {
+
+      .transactions-balance {
+        display: flex;
+
+        .item {
+          flex: 1;
+          flex-direction:column;
+          display:flex;
+          align-items:center;
+          border-left: 1px solid $divider-color;
+
+          &:first-child {
+            border-left: none;
+          }
+
+          .title {
+            display:flex;
+            align-items:center;
+            font-size: $big-font;
+          }
+
+          .item-body {
+            display:flex;
+            align-items:center;
+            font-size: $medium-font;
+
+            svg.outcome, svg.income, .balance {
+              margin: 0 0.5rem;
+              font-size: $medium-font;
+            }
+
+            span {
+              color: $light-text;
+            }
+          }
+        }
+
+      }
+    }
+
+    .income {
+      color: $success-color
+    }
+    .outcome {
+      color: $error-color;
+    }
+
+    .balance {
+      color: $menu-icon-color;
+    }
   }
 
   .project-speed-dial {

@@ -8,6 +8,19 @@ import request from '@util/request';
 import {CURRENCIES} from "@const/";
 
 export default {
+  createProjectPropertiesListener(projectId, balanceCallback, membersCallback) {
+
+    return {
+      'balance': {
+        ref: firebaseService.database.ref(`/projects/${projectId}/balance`),
+        callback: (snap) => balanceCallback(snap.val())
+      },
+      'members': {
+        ref: firebaseService.database.ref(`/projects/${projectId}/members`),
+        callback: (snap) => membersCallback(snap.val())
+      }
+    }
+  },
   fetchUserProjects(projectKeys) {
 
     return firebaseService.fetchByKeys('/projects', projectKeys);
@@ -85,9 +98,22 @@ export default {
       transactions
     );
 
+    const projectBalance = project.balance;
+    const projectBalanceRecords = projectBalance ? Object.keys(projectBalance) : [];
+
+    const totalBalance = projectBalanceRecords.reduce((total, balanceKey) => {
+
+      const monthlyBalance = projectBalance[balanceKey].value;
+      total += monthlyBalance;
+
+      return total;
+
+    }, 0);
+
     return {
       monthlyBalance,
-      budgetsUsage
+      budgetsUsage,
+      totalBalance
     }
   },
   sendMemberInvite(project, currentUser, existingUser, inviteEmail) {
@@ -121,7 +147,7 @@ export default {
   updateProject(project, update) {
 
     return firebaseService.update(`/projects/${project.id}`, update);
-  }
+  },
 }
 
 const transformToViewProject = (firebaseProject) => {

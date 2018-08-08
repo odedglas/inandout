@@ -28,11 +28,11 @@ class TransactionTableViewHeader extends Component {
       {id: 'actions', sortable: false, additionalCls: 'action-cell'},
       {id: 'date', label: 'Date'},
       {id: 'owner', label: 'Owner', avatar: true, orderByProp: 'owner.displayName'},
+      {id: 'customer', label: 'Customer', avatar: true,},
       {id: 'description', label: 'Description', colspan: 2, additionalCls: 'px-3',},
       {id: 'amount', numeric: true, label: `Amount (${projectCurrency})`},
       {id: 'type', label: 'Type', additionalCls: 'small-cell', orderByProp: 'income'},
       {id: 'payments', label: 'Payments'},
-      {id: 'customer', label: 'Customer', avatar: true,},
       {id: 'category', label: 'Category', avatar: true, orderByProp: 'category.name'},
     ];
 

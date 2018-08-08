@@ -119,6 +119,10 @@ export default {
   },
   getInitials(str) {
     return str.split(" ").map((n)=>n[0]).slice(0,2).join("");
+  },
+  formatNumber(number, currency) {
+
+    return `${currency ? currency : ''} ${number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
   }
 }
 

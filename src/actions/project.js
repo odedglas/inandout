@@ -45,6 +45,7 @@ export function selectProject(project) {
         name: project.name,
         currency: project.currency,
         description: project.description,
+        balance: project.balance
       },
       customers: project.customers,
       budgets: project.budgets,
@@ -76,6 +77,15 @@ export function createProjectSyncListener (projectId, date) {
       date,
       (transactions) => dispatch({ type: 'SYNC_TRANSACTIONS', transactions })
     );
+
+    const projectPropertiesListener = projectService.createProjectPropertiesListener(
+      projectId,
+      (balance) => dispatch({ type: 'SYNC_PROJECT_BALANCE', balance }),
+      (members) => dispatch({ type: 'SYNC_PROJECT_MEMBERS', members })
+    );
+
+    projectSyncListener.balance = projectPropertiesListener.balance;
+    projectSyncListener.members = projectPropertiesListener.members;
 
     //Attaching
     const newKeys = Object.keys(projectSyncListener);

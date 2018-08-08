@@ -120,7 +120,8 @@ class TransactionsTableView extends Component {
         selectedDate: date,
         data: transactions,
         loading: false,
-        isEmpty: transactions.length === 0
+        isEmpty: transactions.length === 0,
+        page: 0,
       })
     });
   };
@@ -342,6 +343,17 @@ class TransactionsTableView extends Component {
                           {transaction.owner.displayName}
                         </div>
                       </TableCell>
+                      <TableCell className={'text-center'}>
+                        {
+                          transaction.customer ? <div>
+                            <UserAvatar user={transaction.customer}
+                                        additionalClass={' mb-2'}
+                                        style={{ margin: '0 auto'}}
+                                        size={'small'} />
+                            <div>{transaction.customer.name}</div>
+                          </div> : null
+                        }
+                      </TableCell>
                       <TableCell colSpan="2">
                        <span className={'px-3 block'}>
                           {transaction.description}
@@ -357,17 +369,6 @@ class TransactionsTableView extends Component {
                       </TableCell>
                       <TableCell>{transaction.payments ?
                         `${transaction.paymentIndex + 1} out of ${transaction.payments}` : 'None'}</TableCell>
-                      <TableCell className={'text-center'}>
-                        {
-                          transaction.customer ? <div>
-                            <UserAvatar user={transaction.customer}
-                                        additionalClass={' mb-2'}
-                                        style={{ margin: '0 auto'}}
-                                        size={'small'} />
-                            <div>{transaction.customer.name}</div>
-                          </div> : null
-                        }
-                      </TableCell>
                       <TableCell className={'text-center'}>
                         {
                           transaction.category ? (

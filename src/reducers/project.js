@@ -19,12 +19,12 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    //Select Project
     case 'SET_PRE_SELECTED_PROJECT':
       return {
         ...state,
         preSelectedProject: action.identifier
       };
-
     case 'SET_SELECTED_PROJECT': {
 
       const categories = mapExcludedCategories(action.categories, action.excludedCategories)
@@ -43,6 +43,34 @@ export default function (state = initialState, action) {
       }
     }
 
+    //Project Sync listeners
+    case 'SYNC_TRANSACTIONS' : {
+
+      return {
+        ...state,
+        transactions: action.transactions,
+      };
+    }
+    case 'SYNC_PROJECT_BALANCE' : {
+      const selectedProject = state.selectedProject;
+
+      return {
+        ...state,
+        selectedProject: {
+          ...selectedProject,
+          balance: action.balance
+        },
+      };
+    }
+    case 'SYNC_PROJECT_MEMBERS' : {
+
+      return {
+        ...state,
+        members: action.members,
+      };
+    }
+
+    //Project Categories
     case 'ADD_PROJECT_CATEGORY' : {
       return {
         ...state,
@@ -70,7 +98,6 @@ export default function (state = initialState, action) {
         categories: categories
       };
     }
-
     case 'EXCLUDE_PROJECT_CATEGORY': {
 
       state.excludedCategories.push(action.category.id)
@@ -84,6 +111,8 @@ export default function (state = initialState, action) {
         categories: categories
       };
     }
+
+    //Project Budgets
     case 'ADD_PROJECT_BUDGET' : {
       return {
         ...state,
@@ -104,13 +133,7 @@ export default function (state = initialState, action) {
         budgets: state.budgets.filter(b => b.id !== action.budgetId),
       };
 
-    case 'SYNC_TRANSACTIONS' : {
-
-      return {
-        ...state,
-        transactions: action.transactions,
-      };
-    }
+    //Project Customers
     case 'ADD_PROJECT_CUSTOMER' : {
       return {
         ...state,
@@ -129,6 +152,8 @@ export default function (state = initialState, action) {
         customers: state.customers.filter(c => c.id !== action.customerId),
       };
     }
+
+    //Project Events
     case 'ADD_PROJECT_EVENT' : {
       return {
         ...state,
@@ -147,6 +172,8 @@ export default function (state = initialState, action) {
         events: state.events.filter(c => c.id !== action.eventId),
       };
     }
+
+    //Project Drawer
     case 'TOGGLE_PROJECT_DRAWER':
       return {
         ...state,
@@ -156,7 +183,6 @@ export default function (state = initialState, action) {
       return state;
   }
 }
-
 
 const mapExcludedCategories = (categories, excluded) => {
 

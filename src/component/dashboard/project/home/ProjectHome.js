@@ -5,15 +5,20 @@ import {
 } from 'react-router-dom';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
-import Breadcrumb from '../breadcrumbs/Breadcrumb';
-import Paper from '@material-ui/core/Paper';
 
 import SnackbarNotification from '@common/SnackbarNotification';
 import HomeCreateDial from './HomeCreateDial';
-import projectService from '@service/project';
-import dateUtil from '@util/date';
+import Breadcrumb from '../breadcrumbs/Breadcrumb';
+import ProjectKpiCard from './kpi/ProjectKpiCard';
+import TransactionsBalance from './kpi/TransactionsBalance';
 import {TransactionType} from "@model/transaction";
 import {BudgetType} from "@model/budget";
+
+import projectService from '@service/project';
+import util from '@util/';
+import dateUtil from '@util/date';
+
+
 
 class ProjectHome extends React.Component {
 
@@ -27,6 +32,7 @@ class ProjectHome extends React.Component {
     showSuccessSnackbar: false,
     snackbarMessage: '',
     snackbarVariant: 'success',
+    selectedDate: new Date(),
   };
 
   showHideProjectActionMenu = show => {
@@ -50,39 +56,46 @@ class ProjectHome extends React.Component {
   render() {
 
     const {selectedProject, transactions, budgets} = this.props;
-    const {showSuccessSnackbar, snackbarMessage, snackbarVariant} = this.state;
+    const {showSuccessSnackbar, snackbarMessage, snackbarVariant, selectedDate} = this.state;
 
-    const today = new Date();
-
+    const currency = selectedProject.currency;
     const indicators = projectService.calculateProjectIndicators(
       selectedProject,
       transactions,
       budgets
     );
 
+    console.log("Home indicator is : ", indicators);
+    const selectedDateLongFormat = dateUtil.format(selectedDate, 'MMM YYYY');
+    const selectedDateShortFormat = dateUtil.format(selectedDate, 'MMM YY');
+
     return (
       <div className={'project-home-wrapper row'}>
 
-        <Breadcrumb item={{id: 'projectHomeCrumb', value: dateUtil.format(today, 'MMM YYYY')}}/>
+        <Breadcrumb item={{id: 'projectHomeCrumb', value: selectedDateLongFormat}}/>
 
         <div className={'col-sm-12 px-0 row'}>
 
-          <div className={'col-sm-6'}>
-            <Paper className={'project-kpi'}>
-              Monthly Balance indicator
-            </Paper>
+          <div className={'col-sm-12 col-md-6'}>
+            <ProjectKpiCard title={'Transactions Balance'}
+                            body={<TransactionsBalance currency={currency}
+                                                       {...indicators.monthlyBalance}/>}
+                            badgeText={selectedDateShortFormat}>
+            </ProjectKpiCard>
           </div>
 
-          <div className={'col-sm-3'}>
-            <Paper className={'project-kpi'}>
-              Budget usage
-            </Paper>
+          <div className={'col-sm-6 mt-sm-3 col-md-3 mt-md-0'}>
+            <ProjectKpiCard title={'Budget usage'}
+                            body={<span>Card Body</span>}
+                            badgeText={selectedDateShortFormat}>
+            </ProjectKpiCard>
           </div>
 
-          <div className={'col-sm-3'}>
-            <Paper className={'project-kpi'}>
-              Project Balance
-            </Paper>
+          <div className={'col-sm-6 mt-sm-3 col-md-3 mt-md-0'}>
+            <ProjectKpiCard title={'Project Balance'}
+                            body={<span>Card Body</span>}>
+
+            </ProjectKpiCard>
           </div>
 
         </div>
