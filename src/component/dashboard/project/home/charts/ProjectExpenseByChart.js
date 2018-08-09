@@ -92,7 +92,6 @@ class ProjectExpenseByChart extends Component {
               {
                 data.map((entry, index) => <Cell key={entry.name} fill={entry.color}/>)
               }
-
             </Pie>
             <Tooltip/>
           </PieChart>
