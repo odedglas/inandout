@@ -129,6 +129,7 @@
             transition: width 0.2s ease;
           }
         }
+
       }
 
       .project-balance {
@@ -161,6 +162,16 @@
     .balance {
       color: $menu-icon-color;
     }
+  }
+
+  .project-statistics {
+
+    .title {
+      color: $light-text;
+      font-size: $medium-font;
+      font-weight: 500;
+    }
+
   }
 
   .project-speed-dial {

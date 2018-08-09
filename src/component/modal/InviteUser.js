@@ -24,6 +24,7 @@ class InviteUser extends Component {
 
   static propTypes = {
     users: PropTypes.arrayOf(PropTypes.object),
+    projectMembers: PropTypes.array,
     selectedProject: PropTypes.object,
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
@@ -93,7 +94,7 @@ class InviteUser extends Component {
 
   render() {
 
-    const {open} = this.props;
+    const {open, projectMembers} = this.props;
     const {mailInvite, error, existingUserId} = this.state;
     const canInvite = mailInvite || existingUserId;
 
@@ -119,6 +120,7 @@ class InviteUser extends Component {
             <div className={'col-sm-12 px-0 mt-2'}>
 
               <UsersSelect selectedUser={existingUserId}
+                           filter={(member) => projectMembers.indexOf(member.id) === -1}
                            onChange={this.setExitingUserToInvite} />
             </div>
 
@@ -152,5 +154,6 @@ class InviteUser extends Component {
 
 export default connect(state => ({
   selectedProject: state.project.selectedProject,
+  projectMembers: state.project.members,
   users: state.dashboard.users,
 }), {inviteProjectMember})(InviteUser);

@@ -51,7 +51,7 @@ class CreateBudgetModal extends React.Component {
 
   };
 
-  modalContent = (model, validation, handleChange) => {
+  modalContent = (model, validation, handleChange, editMode) => {
 
     const {selectedProject} = this.props;
 
@@ -76,6 +76,7 @@ class CreateBudgetModal extends React.Component {
           <TextField
             select
             fullWidth
+            disabled={editMode}
             error={validation.period.isInvalid}
             placeholder={'Please set budget period'}
             label="Budget Period"

@@ -17,8 +17,8 @@ class BudgetOverview extends Component {
 
     const {budget, visible, indicator} = this.props;
 
-    const startDate = date.format(budget.startDate, 'MMM Do YY');
-    const endDate = date.format(budget.endDate, 'MMM Do YY');
+    const startDate = date.budgetRangeFormat(budget.startDate);
+    const endDate = date.budgetRangeFormat(budget.endDate);
 
     const usageAsWidth = indicator.usage.replace(" ", "").trim();
     const expectedAsWidth = indicator.expectedUsage.replace(" ", "").trim();

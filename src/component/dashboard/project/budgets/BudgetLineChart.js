@@ -118,7 +118,7 @@ class BudgetLineChart extends Component {
         ],
       },
     };
-
+    debugger;
     this.setState({chartOptions: options, chartData: data})
   }
 
@@ -135,3 +135,4 @@ class BudgetLineChart extends Component {
 }
 
 export default BudgetLineChart;
+

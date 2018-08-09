@@ -82,7 +82,8 @@ export default {
       ...indicator,
       expected: Math.round(expected),
       expectedUsage: `${expectedActualUsage} %`,
-      usage: `${budgetActualUsage} %`
+      usage: `${budgetActualUsage} %`,
+      deviation: actualVsExpectedDeviation,
     }
   },
 
@@ -107,6 +108,7 @@ export default {
       usersMap
     ));
 
+    //Filtering transactions by budget credentials
     const budgetCategories = budget.categories;
 
     const budgetCurrentRange = date.getBudgetRange(budget.period);

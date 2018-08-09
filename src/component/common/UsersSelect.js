@@ -4,13 +4,11 @@ import {connect} from 'react-redux';
 
 import MenuItem from '@material-ui/core/MenuItem';
 import Input from '@material-ui/core/Input';
-import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import DynamicIcon from "@common/DynamicIcon";
 import UserAvatar from '@common/UserAvatar';
 
 const MenuProps = {
@@ -30,6 +28,7 @@ class UsersSelect extends Component {
     onChange: PropTypes.func.isRequired,
     error: PropTypes.bool,
     users: PropTypes.arrayOf(PropTypes.object),
+    filter: PropTypes.func,
     onOpen: PropTypes.func,
     onClose: PropTypes.func
   };
@@ -52,11 +51,13 @@ class UsersSelect extends Component {
 
     const {
       users,
+      filter,
       selectedUser,
       onChange,
       error,
-      showCreateNewCustomer,
     } = this.props;
+
+    const _users = filter ? users.filter(filter) : users;
 
     return (
       <FormControl className={'form-control w-100'} error={error}>
@@ -84,7 +85,7 @@ class UsersSelect extends Component {
           }}
           MenuProps={MenuProps}
         >
-          {users.map(user => (
+          {_users.map(user => (
             <MenuItem
               key={user.id}
               value={user.id}>
@@ -96,16 +97,6 @@ class UsersSelect extends Component {
                             primary={user.displayName}/>
             </MenuItem>
           ))}
-
-          {
-            showCreateNewCustomer ? <div key={'add-customer'} value={'add-customer'} className={'flex'}>
-              <Button size="small" color="primary" style={{'flex': 1}} onClick={() => this.showHideCreateCustomerModal(true)}>
-                <DynamicIcon name={'add'}/>
-                Add new Customer
-              </Button>
-            </div> : null
-          }
-
         </Select>
       </FormControl>
     )

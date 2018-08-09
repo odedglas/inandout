@@ -50,5 +50,7 @@ export default {
       endDate:d.endOf(budgetPeriod.period).toDate(),
       statisticsPeriod: budgetPeriod.statisticsPeriod
     }
-  }
+  },
+
+  budgetRangeFormat: (date) => moment(date).format('MMM Do YY')
 }

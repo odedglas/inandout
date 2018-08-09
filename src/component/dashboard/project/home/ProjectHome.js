@@ -15,10 +15,12 @@ import BudgetsUsageKpi from './kpi/BudgetsUsageKpi';
 import ProjectBalanceKpi from './kpi/ProjectBalanceKpi';
 import {TransactionType} from "@model/transaction";
 import {BudgetType} from "@model/budget";
-
+import Paper from '@material-ui/core/Paper';
+import ProjectInOutChart from './charts/ProjectInOutChart';
+import ProjectExpenseByChart from './charts/ProjectExpenseByChart';
 import projectService from '@service/project';
-
 import dateUtil from '@util/date';
+
 
 const formatShort = date => dateUtil.format(date, 'MMM YY');
 const formatLong = date => dateUtil.format(date, 'MMM YYYY');
@@ -70,6 +72,8 @@ class ProjectHome extends React.Component {
 
     console.log("Home indicator is : ", indicators);
 
+    const firstBudget = budgets[0] || {};
+    firstBudget.transactions = transactions;
 
     return (
       <div className={'project-home-wrapper row'}>
@@ -105,6 +109,30 @@ class ProjectHome extends React.Component {
             </ProjectKpiCard>
           </div>
 
+        </div>
+
+        <div className={'col-sm-12 px-0 row my-4'}>
+
+          <div className={'col-sm-12'}>
+            <Paper className={'project-statistics p-3 row'}>
+
+              <div className={'col-sm-12 px-0 title mb-4'}>
+                Statistics
+              </div>
+
+              <div className={'col-sm-12 row'}>
+
+                <div className={'col-sm-8 px-0'}>
+                  <ProjectInOutChart budget={firstBudget}/>
+                </div>
+                <div className={'col-sm-4 px-0'}>
+                  <ProjectExpenseByChart />
+                </div>
+
+              </div>
+
+            </Paper>
+          </div>
         </div>
 
         <HomeCreateDial showNotification={(message, variant) => this.showSnackbar(message, variant)}/>
