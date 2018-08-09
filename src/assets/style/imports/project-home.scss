@@ -32,7 +32,7 @@
   }
 
   .project-kpi {
-    padding: 1rem;
+    padding: 0.75rem;
     height:100%;
 
     .card-header {
@@ -170,6 +170,49 @@
       color: $light-text;
       font-size: $medium-font;
       font-weight: 500;
+    }
+
+    .chart-holder {
+      position:relative;
+
+      .title {
+        color:#9cadc2;
+        font-size: $small-font;
+        margin-bottom: 1rem;
+      }
+
+      .category-display {
+        padding: 0.5rem;
+        position:absolute;
+        top:35%;
+        width:100%;
+        display:flex;
+        align-items:center;
+        flex-direction: column;
+
+        .category-details {
+          display:flex;
+          align-items: baseline;
+
+          > div {
+            text-align: center;
+            color: $light-text;
+            max-width:75px;
+          }
+
+          .value {
+            color: $light-text;
+            font-size: $medium-font;
+          }
+        }
+
+        .test {
+
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
     }
 
   }

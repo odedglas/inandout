@@ -28,6 +28,10 @@ class Project extends React.Component {
     loading: PropTypes.bool.isRequired,
   };
 
+  state = {
+    project: {}
+  };
+
   componentDidMount() {
 
     const {selectedProject, match, createProjectSyncListener} = this.props;

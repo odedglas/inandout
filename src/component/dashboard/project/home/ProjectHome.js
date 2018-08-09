@@ -15,6 +15,7 @@ import BudgetsUsageKpi from './kpi/BudgetsUsageKpi';
 import ProjectBalanceKpi from './kpi/ProjectBalanceKpi';
 import {TransactionType} from "@model/transaction";
 import {BudgetType} from "@model/budget";
+import {CategoryType} from "@model/category";
 import Paper from '@material-ui/core/Paper';
 import ProjectInOutChart from './charts/ProjectInOutChart';
 import ProjectExpenseByChart from './charts/ProjectExpenseByChart';
@@ -30,7 +31,8 @@ class ProjectHome extends React.Component {
   static propTypes = {
     selectedProject: PropTypes.object,
     transactions: PropTypes.arrayOf(TransactionType),
-    budgets: PropTypes.arrayOf(BudgetType)
+    budgets: PropTypes.arrayOf(BudgetType),
+    categories: PropTypes.arrayOf(CategoryType)
   };
 
   state = {
@@ -60,7 +62,7 @@ class ProjectHome extends React.Component {
 
   render() {
 
-    const {selectedProject, transactions, budgets} = this.props;
+    const {selectedProject, transactions, budgets, categories} = this.props;
     const {showSuccessSnackbar, snackbarMessage, snackbarVariant, selectedDate} = this.state;
 
     const currency = selectedProject.currency;
@@ -69,11 +71,6 @@ class ProjectHome extends React.Component {
       transactions,
       budgets
     );
-
-    console.log("Home indicator is : ", indicators);
-
-    const firstBudget = budgets[0] || {};
-    firstBudget.transactions = transactions;
 
     return (
       <div className={'project-home-wrapper row'}>
@@ -116,17 +113,20 @@ class ProjectHome extends React.Component {
           <div className={'col-sm-12'}>
             <Paper className={'project-statistics p-3 row'}>
 
-              <div className={'col-sm-12 px-0 title mb-4'}>
+              <div className={'col-sm-12 px-0 title mb-3'}>
                 Statistics
               </div>
 
-              <div className={'col-sm-12 row'}>
+              <div className={'col-sm-12 row px-0'}>
 
-                <div className={'col-sm-8 px-0'}>
-                  <ProjectInOutChart budget={firstBudget}/>
+                <div className={'col-sm-6 col-md-9 pr-3'}>
+                  <ProjectInOutChart selectedProject={selectedProject}
+                                     transactions={transactions}/>
                 </div>
-                <div className={'col-sm-4 px-0'}>
-                  <ProjectExpenseByChart />
+                <div className={'col-sm-6 col-md-3 px-0'}>
+                  <ProjectExpenseByChart selectedProject={selectedProject}
+                                         transactions={transactions}
+                                         categories={categories}/>
                 </div>
 
               </div>
@@ -156,6 +156,7 @@ export default compose(
   withRouter,
   connect(state => ({
     selectedProject: state.project.selectedProject,
+    categories: state.project.categories,
     transactions: state.project.transactions,
     budgets: state.project.budgets,
   }), {})

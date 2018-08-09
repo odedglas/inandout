@@ -103,10 +103,7 @@ export default {
     const projectBalanceRecords = projectBalance ? Object.keys(projectBalance) : [];
 
     const totalBalance = projectBalanceRecords.reduce((total, balanceKey) => {
-
-      const monthlyBalance = projectBalance[balanceKey].value;
-      total += monthlyBalance;
-
+      total += +projectBalance[balanceKey].value;
       return total;
 
     }, 0);

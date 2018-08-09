@@ -52,5 +52,27 @@ export default {
     }
   },
 
-  budgetRangeFormat: (date) => moment(date).format('MMM Do YY')
+  budgetRangeFormat: (date) => moment(date).format('MMM Do YY'),
+
+  getDatesBetween: (d1, d2, format) => {
+
+    const start = moment(d1);
+    const end =  moment(d2);
+
+    let dates = [];
+
+    while(start.isBefore(end)) {
+
+      dates.push(start.format(format || baseFormat));
+      start.set('day', start.day() + 1);
+    }
+
+    dates.push(start.format(format || baseFormat));
+    return dates;
+  },
+
+  startOf(date, unit) {
+
+    return moment(date).startOf(unit)
+  }
 }
