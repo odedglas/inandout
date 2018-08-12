@@ -48,7 +48,7 @@ export default {
 
       project.balance = {
         [dateUtil.monthYearKey(new Date())]: {
-          value:balance
+          value: +balance
         }
       };
     }

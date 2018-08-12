@@ -213,6 +213,24 @@
           }
         }
       }
+
+      .inout-chart-legend {
+        text-align: center;
+
+        .legend-item {
+          cursor:pointer;
+
+          .label {
+            min-width: 65px;
+            display: inline-block;
+            text-align: left;
+
+            &.disabled {
+              text-decoration: line-through;
+            }
+          }
+        }
+      }
     }
 
   }

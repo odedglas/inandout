@@ -63,7 +63,7 @@ class ProjectExpenseByChart extends Component {
 
     return (
       <div className={'chart-holder'}>
-        <div className={'title px-3 text-center'}> Expense by category</div>
+        <div className={'title px-3 text-center mt-'}> Expense by category</div>
         <CSSTransition
           in={showCategoryDisplay}
           timeout={300}
