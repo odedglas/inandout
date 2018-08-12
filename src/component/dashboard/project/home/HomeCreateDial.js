@@ -8,7 +8,12 @@ import SpeedDialAction from './SpeedDialAction';
 import DynamicIcon from '@common/DynamicIcon';
 
 import CreateBudget from '@modal/CreateBudget'
+import CreateTransaction from '@modal/CreateTransaction'
+import CreateCategory from '@modal/CreateCategory'
+import CreateCustomer from '@modal/CreateCustomer'
 import InviteUser from '@modal/InviteUser'
+
+import {createTransaction,} from "@action/project";
 
 const actions = [
   {key: 'budgets', icon: <DynamicIcon name={'budgets'}/>, name: 'Create Budget'},
@@ -23,6 +28,7 @@ class HomeCreateDial extends React.Component {
   static propTypes = {
     selectedProject: PropTypes.object,
     showNotification: PropTypes.func.isRequired,
+    createTransaction: PropTypes.func.isRequired,
   };
 
   state = {
@@ -54,6 +60,21 @@ class HomeCreateDial extends React.Component {
       }))
   };
 
+  handleTransactionCrud = (transaction, action, cb) => {
+
+    if(action === 'add') {
+
+      this.props.createTransaction(
+        this.props.selectedProject,
+        transaction,
+        () => {
+
+          cb();
+        }
+      )
+    }
+  };
+
 
   render() {
 
@@ -61,6 +82,9 @@ class HomeCreateDial extends React.Component {
     const {
       open,
       showCreateBudgetModal,
+      showCreateTransactionModal,
+      showCreateCategoryModal,
+      showCreateCustomerModal,
       showInviteModal,
     } = this.state;
 
@@ -104,6 +128,20 @@ class HomeCreateDial extends React.Component {
                       budget={{}}
                       project={selectedProject}
                       onClose={() => this.toggleDialogModalState('showCreateBudgetModal')}/>
+
+        <CreateTransaction open={showCreateTransactionModal}
+                           transaction={{}}
+                           transactionCrudHandler={this.handleTransactionCrud}
+                           onClose={() => this.toggleDialogModalState('showCreateTransactionModal')}/>
+
+        <CreateCategory open={showCreateCategoryModal}
+                        project={selectedProject}
+                        onClose={() => this.toggleDialogModalState('showCreateCategoryModal')}/>
+
+        <CreateCustomer open={showCreateCustomerModal}
+                        project={selectedProject}
+                        customer={{}}
+                        onClose={() => this.toggleDialogModalState('showCreateCustomerModal')}/>
       </div>
     );
   }
@@ -111,4 +149,4 @@ class HomeCreateDial extends React.Component {
 
 export default connect(state => ({
   selectedProject: state.project.selectedProject,
-}), {})(HomeCreateDial);
+}), {createTransaction})(HomeCreateDial);

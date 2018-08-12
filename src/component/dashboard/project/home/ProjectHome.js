@@ -42,10 +42,6 @@ class ProjectHome extends React.Component {
     selectedDate: new Date(),
   };
 
-  showHideProjectActionMenu = show => {
-
-  };
-
   hideSnackbar() {
 
     this.setState({showSuccessSnackbar: false})
@@ -110,7 +106,7 @@ class ProjectHome extends React.Component {
 
         <div className={'col-sm-12 px-0 row my-4'}>
 
-          <div className={'col-sm-12'}>
+          <div className={'col-sm-12 '}>
             <Paper className={'project-statistics p-3 row'}>
 
               <div className={'col-sm-12 px-0 title mb-3'}>
@@ -119,11 +115,11 @@ class ProjectHome extends React.Component {
 
               <div className={'col-sm-12 row px-0'}>
 
-                <div className={'col-sm-6 col-md-9 pr-3'}>
+                <div className={'col-sm-11 col-md-9 pr-3'}>
                   <ProjectInOutChart selectedProject={selectedProject}
                                      transactions={transactions}/>
                 </div>
-                <div className={'col-sm-6 col-md-3 px-0'}>
+                <div className={'col-sm-11 mt-sm-3 col-md-3 mt-md-0 px-0'}>
                   <ProjectExpenseByChart selectedProject={selectedProject}
                                          transactions={transactions}
                                          categories={categories}/>
@@ -133,6 +129,10 @@ class ProjectHome extends React.Component {
 
             </Paper>
           </div>
+        </div>
+
+        <div className={'col-sm-12 px-0 my-4'}>
+
         </div>
 
         <HomeCreateDial showNotification={(message, variant) => this.showSnackbar(message, variant)}/>

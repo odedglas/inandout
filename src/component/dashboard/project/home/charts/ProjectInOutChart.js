@@ -35,13 +35,44 @@ class ProjectInOutChart extends Component {
 
     this.setCalculatedData();
   }
+  static getDerivedStateFromProps(props, state) {
 
-  componentDidUpdate(prevProps) {
+    const {transactions} = props;
 
-    const {selectedProject} = this.props;
+    const today = new Date();
+    const monthStart = dateUtil.startOf(today, 'month');
 
-    if (selectedProject.id !== prevProps.selectedProject.id) {
-      this.setCalculatedData();
+    let maxDate = today;
+    transactions.forEach(t => {
+      if (dateUtil.isAfter(t.date, maxDate)) {
+        maxDate = t.date;
+      }
+    });
+
+    const datesMap = dateUtil.getDatesBetween(monthStart, maxDate);
+    const transactionsData = datesMap.reduce((map, date) => {
+
+      map[date] = transactions.filter(t => dateUtil.format(t.date) === date);
+      return map;
+    }, {});
+
+    let cumulativeIncomes = 0,
+      cumulativeOutcomes = 0;
+
+    return {
+      data: datesMap.map(date => {
+        return {
+          name: date,
+          [INCOME_KEY]: transactionsData[date].filter(t => t.income).reduce((total, t) => {
+            cumulativeIncomes += t.amount;
+            return cumulativeIncomes
+          }, cumulativeIncomes),
+          [OUTCOME_KEY]: transactionsData[date].filter(t => !t.income).reduce((total, t) => {
+            cumulativeOutcomes += t.amount;
+            return cumulativeOutcomes
+          }, cumulativeOutcomes)
+        }
+      })
     }
   }
 
@@ -69,7 +100,7 @@ class ProjectInOutChart extends Component {
     let cumulativeIncomes = 0,
       cumulativeOutcomes = 0;
 
-    this.setState({
+    return {
       data: datesMap.map(date => {
         return {
           name: date,
@@ -83,7 +114,7 @@ class ProjectInOutChart extends Component {
           }, cumulativeOutcomes)
         }
       })
-    })
+    }
   }
 
   handleLegendClick = (key) => {
@@ -174,7 +205,7 @@ class ProjectInOutChart extends Component {
             <YAxis/>
             <CartesianGrid strokeDasharray="3 3"/>
             <Legend verticalAlign="top"
-                    height={42}
+                    height={36}
                     content={this.renderCustomLegend}
                     onClick={this.handleLegendClick}/>
             <Tooltip/>

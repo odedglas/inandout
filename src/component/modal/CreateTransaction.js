@@ -22,6 +22,8 @@ import CustomersSelect from '@common/CustomersSelect';
 import DatePicker from 'material-ui-pickers/DatePicker';
 import variables from '@scss/_variables.scss';
 
+const today = new Date();
+
 class CreateTransactionModal extends React.Component {
 
   static propTypes = {
@@ -253,7 +255,7 @@ class CreateTransactionModal extends React.Component {
                          owner: '',
                          category: '',
                          customer: '',
-                         date: null,
+                         date: today.getTime(),
                          payments: '',
                          amount: '',
                          editMode: false,

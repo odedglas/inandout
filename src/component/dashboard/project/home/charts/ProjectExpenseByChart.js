@@ -25,20 +25,10 @@ class ProjectExpenseByChart extends Component {
     this.setCalculatedData();
   }
 
-  componentDidUpdate(prevProps) {
+  static getDerivedStateFromProps(props, state) {
+    const {transactions, categories} = props;
 
-    const {selectedProject} = this.props;
-
-    if (selectedProject.id !== prevProps.selectedProject.id) {
-      this.setCalculatedData();
-    }
-  }
-
-  setCalculatedData() {
-
-    const {transactions, categories} = this.props;
-
-    this.setState({
+    return{
       data: categories.map(c => ({
         name: c.name,
         icon: c.icon,
@@ -48,7 +38,24 @@ class ProjectExpenseByChart extends Component {
           return total;
         }, 0)
       }))
-    })
+    }
+  }
+
+  setCalculatedData() {
+
+    const {transactions, categories} = this.props;
+
+    return{
+      data: categories.map(c => ({
+        name: c.name,
+        icon: c.icon,
+        color: c.color,
+        value: transactions.filter(t => t.category === c.id).reduce((total, t) => {
+          total += t.amount;
+          return total;
+        }, 0)
+      }))
+    }
   }
 
   onItemEnterLeave = (item, show) => {
