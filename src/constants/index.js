@@ -128,4 +128,9 @@ export const NOTIFICATION_ACTIONS = {
 
 export const KEYBOARD_CODES = {
   ESCAPE: 27
-}
+};
+
+export const DIRECTIONS = {
+  LTR: 'ltr',
+  RTL: 'rtl'
+};

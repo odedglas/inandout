@@ -79,6 +79,7 @@ export function createProjectSyncListener (projectId, date) {
       (transactions) => dispatch({ type: 'SYNC_TRANSACTIONS', transactions })
     );
 
+    //Project members and balance
     const projectPropertiesListener = projectService.createProjectPropertiesListener(
       projectId,
       (balance) => dispatch({ type: 'SYNC_PROJECT_BALANCE', balance }),
