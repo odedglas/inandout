@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import ProjectInOutChart from './ProjectInOutChart';
 import ProjectExpenseByChart from './ProjectExpenseByChart';
 
-export default ({selectedProject, transactions, categories}) => {
+export default ({transactions, categories}) => {
 
   return (
     <div className={'col-sm-12 px-0 row my-4'}>
@@ -19,12 +19,10 @@ export default ({selectedProject, transactions, categories}) => {
           <div className={'col-sm-12 row px-0'}>
 
             <div className={'col-sm-11 col-md-9 pr-3'}>
-              <ProjectInOutChart selectedProject={selectedProject}
-                                 transactions={transactions}/>
+              <ProjectInOutChart transactions={transactions}/>
             </div>
             <div className={'col-sm-11 mt-sm-3 col-md-3 mt-md-0 px-0'}>
-              <ProjectExpenseByChart selectedProject={selectedProject}
-                                     transactions={transactions}
+              <ProjectExpenseByChart transactions={transactions}
                                      categories={categories}/>
             </div>
 

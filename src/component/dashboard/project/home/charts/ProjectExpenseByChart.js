@@ -6,12 +6,14 @@ import DynamicIcon from '@common/DynamicIcon';
 import {PieChart, Pie, ResponsiveContainer, Tooltip, Cell} from 'recharts';
 import {CSSTransition} from 'react-transition-group';
 
+import {TransactionType} from "@model/transaction";
+import {CategoryType} from "@model/category";
+
 class ProjectExpenseByChart extends Component {
 
   static propTypes = {
-    selectedProject: PropTypes.object,
-    transactions: PropTypes.array,
-    categories: PropTypes.array,
+    transactions: PropTypes.arrayOf(TransactionType),
+    categories: PropTypes.arrayOf(CategoryType),
   };
 
   state = {
@@ -20,42 +22,19 @@ class ProjectExpenseByChart extends Component {
     activeItem: undefined
   };
 
-  componentDidMount() {
-
-    this.setCalculatedData();
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    const {transactions, categories} = props;
-
-    return{
-      data: categories.map(c => ({
-        name: c.name,
-        icon: c.icon,
-        color: c.color,
-        value: transactions.filter(t => t.category === c.id).reduce((total, t) => {
-          total += t.amount;
-          return total;
-        }, 0)
-      }))
-    }
-  }
-
-  setCalculatedData() {
+  getData() {
 
     const {transactions, categories} = this.props;
 
-    return{
-      data: categories.map(c => ({
-        name: c.name,
-        icon: c.icon,
-        color: c.color,
-        value: transactions.filter(t => t.category === c.id).reduce((total, t) => {
-          total += t.amount;
-          return total;
-        }, 0)
-      }))
-    }
+    return categories.map(c => ({
+      name: c.name,
+      icon: c.icon,
+      color: c.color,
+      value: transactions.filter(t => !t.income && t.category.id === c.id).reduce((total, t) => {
+        total += t.amount;
+        return total;
+      }, 0)
+    }))
   }
 
   onItemEnterLeave = (item, show) => {
@@ -65,8 +44,10 @@ class ProjectExpenseByChart extends Component {
 
   render() {
 
-    const {data, activeItem, showCategoryDisplay} = this.state;
+    const {activeItem, showCategoryDisplay} = this.state;
+
     const _activeItem = activeItem ? activeItem : {};
+    const data = this.getData();
 
     return (
       <div className={'chart-holder'}>

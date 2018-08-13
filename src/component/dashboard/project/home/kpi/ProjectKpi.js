@@ -9,9 +9,9 @@ import dateUtil from '@util/date';
 
 const formatShort = date => dateUtil.format(date, 'MMM YY');
 
-export default  ({indicators, selectedProject, selectedDate }) => {
+export default  ({indicators, project, selectedDate }) => {
 
-  const currency = selectedProject.currency;
+  const currency = project.currency;
 
   return (
     <div className={'col-sm-12 px-0 row'}>
@@ -36,7 +36,7 @@ export default  ({indicators, selectedProject, selectedDate }) => {
         <ProjectKpiCard title={'Project Balance'}
                         badgeText={'Overall'}
                         body={<ProjectBalanceKpi currency={currency}
-                                                 created={formatShort(selectedProject.created)}
+                                                 created={formatShort(project.created)}
                                                  selectedDate={formatShort(selectedDate)}
                                                  balance={indicators.totalBalance}/>}>
 

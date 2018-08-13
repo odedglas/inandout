@@ -44,7 +44,7 @@ export default {
       created: now.getTime()
     };
 
-    if(balance) {
+    if (balance) {
 
       project.balance = {
         [dateUtil.monthYearKey(new Date())]: {
@@ -88,6 +88,10 @@ export default {
       categories: projectCategories
     }
   },
+  mergeProjectMembers(members, users) {
+    const usersMap = util.toIdsMap(users);
+    return members.map(m => usersMap[m]);
+  },
   calculateProjectIndicators(project, transactions, budgets) {
 
     const monthlyBalance = transactionService.getTransactionsBalance(
@@ -124,8 +128,8 @@ export default {
     ).then(notification => {
 
       //Sending invite Email if user does not exists
-      if(!existingUser && inviteEmail){
-        return request.post('sendInviteMail',{
+      if (!existingUser && inviteEmail) {
+        return request.post('sendInviteMail', {
           email: inviteEmail,
           owner: currentUser.displayName,
           project: project.name

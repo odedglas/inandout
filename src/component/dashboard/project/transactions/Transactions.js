@@ -6,32 +6,11 @@ import Breadcrumb from '../breadcrumbs/Breadcrumb';
 
 import PageTitle from "@common/PageTitle";
 import {TransactionType} from "@model/transaction";
+import {ProjectContext} from '../ProjectContext';
 
 import transactionsService from '@service/transaction';
 
 class Transactions extends Component {
-
-  static propTypes = {
-    transactions: PropTypes.arrayOf(PropTypes.object)
-  };
-
-  state = {
-    filledTransactions: PropTypes.arrayOf(TransactionType)
-  };
-
-  static getDerivedStateFromProps(props, state) {
-
-    const {transactions, categories, customers, users} = props;
-
-    return {
-      filledTransactions: transactionsService.mergeTransactions(
-        transactions,
-        customers,
-        categories,
-        users
-      )
-    }
-  }
 
   handleTransactionFill = (transaction) => {
 
@@ -40,17 +19,22 @@ class Transactions extends Component {
   };
 
   render() {
-    const { filledTransactions } = this.state;
-
     return (
       <div className={'transactions-container'}>
-        <Breadcrumb item={{id:'transactionsCrumb' ,value:'Transactions'}}/>
-        <PageTitle text={'Transactions'} icon={'transactions'}/>
+        <Breadcrumb item={{id: 'transactionsCrumb', value: 'Transactions'}}/>
+        <ProjectContext.Consumer>
+          {(projectContext) => (
+            <div>
+              <PageTitle text={'Transactions'} icon={'transactions'}/>
 
-        <div className={'px-4'}>
-          <TransactionsTableView transactions={filledTransactions}
-                                 fillTransaction={this.handleTransactionFill}/>
-        </div>
+              <div className={'px-4'}>
+                <TransactionsTableView transactions={projectContext.transactions}
+                                       fillTransaction={this.handleTransactionFill}/>
+              </div>
+            </div>
+          )}
+        </ProjectContext.Consumer>
+
       </div>
     );
   }

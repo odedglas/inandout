@@ -8,6 +8,8 @@ const budgetPeriodMap = BUDGETS_PERIOD.reduce((map, bp) => {
   return map;
 },{});
 
+
+
 export default {
 
   monthYearKey: (date) => moment(date).format(TRANSACTIONS_DATE_KEY_FORMAT),
@@ -15,6 +17,11 @@ export default {
   format: (date, format) => moment(date).format(format || baseFormat),
 
   fromNow: (date) => moment(date).fromNow(),
+
+  now: () => {
+    const now = new Date();
+    return now.getTime();
+  },
 
   sameMonth: (d1, d2) => moment(d1).format("MMYY") === moment(d2).format("MMYY"),
 

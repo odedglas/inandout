@@ -16,16 +16,13 @@ import CreateBudget from '@modal/CreateBudget'
 import CreateTransaction from '@modal/CreateTransaction'
 import BudgetStatistics from '@modal/BudgetStatistics'
 import {CategoryType} from "@model/category";
-import budgetService from '@service/budget';
+
+import dateUtil from '@util/date';
+import {ProjectContext} from '../ProjectContext';
 
 class Budgets extends Component {
 
   static propTypes = {
-    budgets: PropTypes.arrayOf(PropTypes.object),
-    transactions: PropTypes.arrayOf(PropTypes.object),
-    categories: PropTypes.arrayOf(CategoryType),
-    users: PropTypes.arrayOf(PropTypes.object),
-    customers: PropTypes.arrayOf(PropTypes.object),
     createTransaction: PropTypes.func.isRequired,
   };
 
@@ -37,31 +34,8 @@ class Budgets extends Component {
     transactionInitialState: {},
     budgetForEdit: {},
     budgetForStatistics: {},
-    filledBudgets: [],
     expandStateChange: false,
   };
-
-  static getDerivedStateFromProps(props, state) {
-
-    if (!state.expandStateChange) {
-
-      const {budgets, transactions, categories, customers, users} = props;
-
-      return {
-        filledBudgets: budgetService.mergeBudgets(
-          budgets,
-          categories,
-          transactions,
-          customers,
-          users
-        )
-      }
-    }
-
-    return {
-      expandStateChange: false
-    }
-  }
 
   handleExpandPanelChange = (budgetId) => {
 
@@ -80,7 +54,6 @@ class Budgets extends Component {
 
       this.setState({showCreateBudgetModal: false});
     }
-
   };
 
   showHideBudgetStatistics = (show, budget) => {
@@ -99,11 +72,11 @@ class Budgets extends Component {
 
   showHideCreateTransaction = (show, budget) => {
 
-    if(show) {
+    if (show) {
       this.setState({
         showTransactionModal: true,
         transactionInitialState: {
-          date: new Date(),
+          date: dateUtil.now(),
           category: budget.categories[0].id
         }
       })
@@ -113,12 +86,12 @@ class Budgets extends Component {
     }
   };
 
-  handleCreateTransaction = (transaction, action, cb) => {
+  handleCreateTransaction = (transaction, action, cb, project) => {
 
     if (action === 'add') {
 
       this.props.createTransaction(
-        this.props.selectedProject,
+        project,
         transaction,
         cb
       )
@@ -127,10 +100,8 @@ class Budgets extends Component {
 
   render() {
 
-    const {selectedProject} = this.props;
     const {
       expanded,
-      filledBudgets,
       budgetForEdit,
       budgetForStatistics,
       showCreateBudgetModal,
@@ -139,83 +110,86 @@ class Budgets extends Component {
       transactionInitialState
     } = this.state;
 
-    const hasBudgets = filledBudgets.length > 0;
-
     return (
-      <div className={'budgets-container'}>
+      <ProjectContext.Consumer>
+        {(context) => {
 
-        <PageTitle text={'Budgets'} icon={'budgets'}/>
+          const budgets = context.budgets;
+          const hasBudgets = budgets.length > 0;
 
-        <Breadcrumb item={{id: 'budgetsCrumb', value: 'Budgets'}}/>
+          return (
+            <div className={'budgets-container'}>
 
-        <div className={'px-2 py-3'}>
-          {
-            filledBudgets.map(budget => <BudgetPanel key={budget.id}
+              <PageTitle text={'Budgets'} icon={'budgets'}/>
+
+              <Breadcrumb item={{id: 'budgetsCrumb', value: 'Budgets'}}/>
+
+              <div className={'px-2 py-3'}>
+                {
+                  budgets.map(budget => <BudgetPanel key={budget.id}
                                                      onExpandChange={this.handleExpandPanelChange}
                                                      editBudget={(budget) => this.showHideCreateBudge(true, budget)}
-                                                     showCreateTransaction={(budget) => this.showHideCreateTransaction(true, budget)}
+                                                     showCreateTransaction={(budget) => this.showHideCreateTransaction(
+                                                       true, budget)}
                                                      showBudgetStatistics={(budget) => this.showHideBudgetStatistics(
                                                        true, budget)}
                                                      expanded={expanded === budget.id}
                                                      budget={budget}/>)
-          }
-        </div>
-
-        {
-          !hasBudgets ?
-            <div className={'row'}>
-              <div className={'col-sm-12 flex-center empty-budgets'}>
-                <img className={'icon'} src={require('@img/cactus.svg')} alt="no-budgets"/>
-                <span className={'my-4 text'}>
-                  There are no budgets yet...
-               </span>
-                <Button size="small" color="primary" onClick={() => this.showHideCreateBudge(true)}>
-                  <DynamicIcon name={'add'}/>
-                  Create Budget
-                </Button>
+                }
               </div>
+
+              {
+                !hasBudgets ?
+                  <div className={'row'}>
+                    <div className={'col-sm-12 flex-center empty-budgets'}>
+                      <img className={'icon'} src={require('@img/cactus.svg')} alt="no-budgets"/>
+                      <span className={'my-4 text'}>
+                        There are no budgets yet...
+                     </span>
+                      <Button size="small" color="primary" onClick={() => this.showHideCreateBudge(true)}>
+                        <DynamicIcon name={'add'}/>
+                        Create Budget
+                      </Button>
+                    </div>
+                  </div>
+                  : null
+              }
+
+              <Tooltip title={'Create Budget'} placement={'top'}>
+                <Zoom in={true} timeout={400}>
+                  <Button variant="fab"
+                          color="secondary"
+                          onClick={() => this.showHideCreateBudge(true)}
+                          aria-label="add"
+                          className={'fab'}>
+                    <DynamicIcon name={'add'}/>
+                  </Button>
+                </Zoom>
+              </Tooltip>
+
+
+              <CreateBudget open={showCreateBudgetModal}
+                            budget={budgetForEdit}
+                            project={context.project}
+                            onClose={this.showHideCreateBudge}/>
+
+              <CreateTransaction open={showTransactionModal}
+                                 transaction={{}}
+                                 createInitialState={transactionInitialState}
+                                 transactionCrudHandler={(transaction, action, cb) => this.handleCreateTransaction(transaction, action, cb, context.project)}
+                                 onClose={this.showHideCreateTransaction}/>
+
+              <BudgetStatistics onClose={() => this.showHideBudgetStatistics(false)}
+                                budget={budgetForStatistics}
+                                open={showBudgetStatisticsModal}/>
+
             </div>
-            : null
-        }
+          )
+        }}
+      </ProjectContext.Consumer>
 
-        <Tooltip title={'Create Budget'} placement={'top'}>
-          <Zoom in={true} timeout={400}>
-            <Button variant="fab"
-                    color="secondary"
-                    onClick={() => this.showHideCreateBudge(true)}
-                    aria-label="add"
-                    className={'fab'}>
-              <DynamicIcon name={'add'}/>
-            </Button>
-          </Zoom>
-        </Tooltip>
-
-
-        <CreateBudget open={showCreateBudgetModal}
-                      budget={budgetForEdit}
-                      project={selectedProject}
-                      onClose={this.showHideCreateBudge}/>
-
-        <CreateTransaction open={showTransactionModal}
-                           transaction={{}}
-                           createInitialState={transactionInitialState}
-                           transactionCrudHandler={this.handleCreateTransaction}
-                           onClose={this.showHideCreateTransaction}/>
-
-        <BudgetStatistics onClose={() => this.showHideBudgetStatistics(false)}
-                          budget={budgetForStatistics}
-                          open={showBudgetStatisticsModal}/>
-
-      </div>
     );
   }
 }
 
-export default connect(state => ({
-  budgets: state.project.budgets,
-  transactions: state.project.transactions,
-  categories: state.project.categories,
-  customers: state.project.customers,
-  users: state.dashboard.users,
-  selectedProject: state.project.selectedProject,
-}), {createTransaction})(Budgets);
+export default connect(null, {createTransaction})(Budgets);

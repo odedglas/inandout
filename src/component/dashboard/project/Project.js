@@ -12,12 +12,14 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Breadcrumbs from './breadcrumbs/Breadcrumbs';
 import Breadcrumb from './breadcrumbs/Breadcrumb';
 import ProjectBreadcrumb from './breadcrumbs/ProjectBreadcrumb';
+import ProjectProvider from './ProjectContext';
 
 import {setPreSelectedProject, updateCachedProject, createProjectSyncListener} from "@action/project";
 import util from '@util/';
 import {getProjectRoutes} from './ProjectRoutes';
 
 const today = new Date();
+
 class Project extends React.Component {
 
   static propTypes = {
@@ -40,7 +42,7 @@ class Project extends React.Component {
     if (util.isEmptyObject(selectedProject)) {
       this.props.setPreSelectedProject(match.params.identifier)
     }
-    else{
+    else {
       //Else, Creating sync listener
       createProjectSyncListener(selectedProject.id, today);
     }
@@ -53,7 +55,7 @@ class Project extends React.Component {
 
   componentDidUpdate(prevProps) {
 
-    const { selectedProject, createProjectSyncListener } = this.props;
+    const {selectedProject, createProjectSyncListener} = this.props;
 
     if (selectedProject.id !== prevProps.selectedProject.id) {
       createProjectSyncListener(selectedProject.id, today);
@@ -88,9 +90,11 @@ class Project extends React.Component {
               <CircularProgress size={50}/>
             </CSSTransition>
           </div>
-          {
-            !loading ? getProjectRoutes(location) : null
-          }
+          <ProjectProvider>
+            {
+              !loading ? getProjectRoutes(location) : null
+            }
+          </ProjectProvider>
         </div>
 
       </div>

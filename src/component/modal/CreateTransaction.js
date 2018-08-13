@@ -15,14 +15,13 @@ import withValidation from '../hoc/withValidation';
 import CreationModal from './CreationModal';
 
 import util from '@util/';
+import dateUtil from '@util/date';
 import navigationUtil from '@util/navigation';
 import {TRANSACTIONS_TYPE} from '@const/';
 import CategoriesSelect from '@common/CategoriesSelect';
 import CustomersSelect from '@common/CustomersSelect';
 import DatePicker from 'material-ui-pickers/DatePicker';
 import variables from '@scss/_variables.scss';
-
-const today = new Date();
 
 class CreateTransactionModal extends React.Component {
 
@@ -255,7 +254,7 @@ class CreateTransactionModal extends React.Component {
                          owner: '',
                          category: '',
                          customer: '',
-                         date: today.getTime(),
+                         date: dateUtil.now(),
                          payments: '',
                          amount: '',
                          editMode: false,

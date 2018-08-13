@@ -31,52 +31,7 @@ class ProjectInOutChart extends Component {
     disabledSets: [],
   };
 
-  componentDidMount() {
-
-    this.setCalculatedData();
-  }
-  static getDerivedStateFromProps(props, state) {
-
-    const {transactions} = props;
-
-    const today = new Date();
-    const monthStart = dateUtil.startOf(today, 'month');
-
-    let maxDate = today;
-    transactions.forEach(t => {
-      if (dateUtil.isAfter(t.date, maxDate)) {
-        maxDate = t.date;
-      }
-    });
-
-    const datesMap = dateUtil.getDatesBetween(monthStart, maxDate);
-    const transactionsData = datesMap.reduce((map, date) => {
-
-      map[date] = transactions.filter(t => dateUtil.format(t.date) === date);
-      return map;
-    }, {});
-
-    let cumulativeIncomes = 0,
-      cumulativeOutcomes = 0;
-
-    return {
-      data: datesMap.map(date => {
-        return {
-          name: date,
-          [INCOME_KEY]: transactionsData[date].filter(t => t.income).reduce((total, t) => {
-            cumulativeIncomes += t.amount;
-            return cumulativeIncomes
-          }, cumulativeIncomes),
-          [OUTCOME_KEY]: transactionsData[date].filter(t => !t.income).reduce((total, t) => {
-            cumulativeOutcomes += t.amount;
-            return cumulativeOutcomes
-          }, cumulativeOutcomes)
-        }
-      })
-    }
-  }
-
-  setCalculatedData() {
+  getData() {
 
     const {transactions} = this.props;
 
@@ -100,21 +55,19 @@ class ProjectInOutChart extends Component {
     let cumulativeIncomes = 0,
       cumulativeOutcomes = 0;
 
-    return {
-      data: datesMap.map(date => {
-        return {
-          name: date,
-          [INCOME_KEY]: transactionsData[date].filter(t => t.income).reduce((total, t) => {
-            cumulativeIncomes += t.amount;
-            return cumulativeIncomes
-          }, cumulativeIncomes),
-          [OUTCOME_KEY]: transactionsData[date].filter(t => !t.income).reduce((total, t) => {
-            cumulativeOutcomes += t.amount;
-            return cumulativeOutcomes
-          }, cumulativeOutcomes)
-        }
-      })
-    }
+    return datesMap.map(date => {
+      return {
+        name: date,
+        [INCOME_KEY]: transactionsData[date].filter(t => t.income).reduce((total, t) => {
+          cumulativeIncomes += t.amount;
+          return cumulativeIncomes
+        }, cumulativeIncomes),
+        [OUTCOME_KEY]: transactionsData[date].filter(t => !t.income).reduce((total, t) => {
+          cumulativeOutcomes += t.amount;
+          return cumulativeOutcomes
+        }, cumulativeOutcomes)
+      }
+    })
   }
 
   handleLegendClick = (key) => {
@@ -179,7 +132,9 @@ class ProjectInOutChart extends Component {
 
   render() {
 
-    const {data, disabledSets} = this.state;
+    const {disabledSets} = this.state;
+
+    const data = this.getData();
 
     const showIncomes = !disabledSets.includes(INCOME_KEY);
     const showOutcomes = !disabledSets.includes(OUTCOME_KEY);

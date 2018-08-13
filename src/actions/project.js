@@ -169,7 +169,6 @@ export function createBudget(project, { name, limit, period, categories }, onSuc
     budgetService.createBudget(project.id, name, limit, period, categories).then(budget => {
 
       dispatch({type: 'ADD_PROJECT_BUDGET', budget});
-
       onSuccess(budget);
 
       dispatch({type: 'APP_LOADING', loading: false})

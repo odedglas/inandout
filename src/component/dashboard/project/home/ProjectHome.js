@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   withRouter
 } from 'react-router-dom';
@@ -13,23 +12,15 @@ import ProjectKpi from './kpi/ProjectKpi';
 import ProjectCharts from './charts/ProjectCharts';
 import ProjectTransactions from './ProjectTransactions';
 import ProjectEvents from './ProjectEvents';
-import {TransactionType} from "@model/transaction";
-import {BudgetType} from "@model/budget";
-import {CategoryType} from "@model/category";
 import Paper from '@material-ui/core/Paper';
 import projectService from '@service/project';
 import dateUtil from '@util/date';
 
+import {ProjectContext} from '../ProjectContext';
+
 const formatLong = date => dateUtil.format(date, 'MMM YYYY');
 
 class ProjectHome extends React.Component {
-
-  static propTypes = {
-    selectedProject: PropTypes.object,
-    transactions: PropTypes.arrayOf(TransactionType),
-    budgets: PropTypes.arrayOf(BudgetType),
-    categories: PropTypes.arrayOf(CategoryType)
-  };
 
   state = {
     showSuccessSnackbar: false,
@@ -54,73 +45,73 @@ class ProjectHome extends React.Component {
 
   render() {
 
-    const {selectedProject, transactions, budgets, categories} = this.props;
     const {showSuccessSnackbar, snackbarMessage, snackbarVariant, selectedDate} = this.state;
 
-    const indicators = projectService.calculateProjectIndicators(
-      selectedProject,
-      transactions,
-      budgets
-    );
-
     return (
-      <div className={'project-home-wrapper row'}>
+      <ProjectContext.Consumer>
+        {(projectContext) => {
 
-        <Breadcrumb item={{id: 'projectHomeCrumb', value: formatLong(selectedDate)}}/>
+          const indicators = projectService.calculateProjectIndicators(
+            projectContext.project,
+            projectContext.transactions,
+            projectContext.budgets
+          );
 
-        <ProjectKpi indicators={indicators}
-                    selectedProject={selectedProject}
-                    selectedDate={selectedDate} />
+          return (
+            <div className={'project-home-wrapper row'}>
 
-        <ProjectCharts selectedProject={selectedProject}
-                       transactions={transactions}
-                       categories={categories}/>
+              <Breadcrumb item={{id: 'projectHomeCrumb', value: formatLong(selectedDate)}}/>
 
-        <div className={'col-sm-12 px-0 mb-4 row'}>
-          <div className={'col-sm-12 col-md-6'}>
-            <Paper className={'project-latest-transactions p-3 row'}>
+              <ProjectKpi indicators={indicators}
+                          project={projectContext.project}
+                          selectedDate={selectedDate} />
 
-              <div className={'col-sm-12 px-0 title mb-3'}>
-                <ProjectTransactions transactions={transactions} />
+              <ProjectCharts transactions={projectContext.transactions}
+                             categories={projectContext.categories}/>
+
+              <div className={'col-sm-12 px-0 mb-4 row'}>
+                <div className={'col-sm-12 col-md-6'}>
+                  <Paper className={'project-latest-transactions p-3 row'}>
+
+                    <div className={'col-sm-12 px-0 title mb-3'}>
+                      <ProjectTransactions transactions={projectContext.transactions.filter(t => !t.income)} />
+                    </div>
+
+                  </Paper>
+                </div>
+
+                <div className={'col-sm-12 col-md-6 mt-sm-3 mt-md-0'}>
+                  <Paper className={'project-events p-3 row'}>
+
+                    <div className={'col-sm-12 px-0 title mb-3'}>
+                      <ProjectEvents/>
+                    </div>
+
+                  </Paper>
+                </div>
               </div>
 
-            </Paper>
-          </div>
+              <HomeCreateDial showNotification={(message, variant) => this.showSnackbar(message, variant)}/>
 
-          <div className={'col-sm-12 col-md-6 mt-sm-3 mt-md-0'}>
-            <Paper className={'project-events p-3 row'}>
-
-              <div className={'col-sm-12 px-0 title mb-3'}>
-               <ProjectEvents/>
-              </div>
-
-            </Paper>
-          </div>
-        </div>
-
-        <HomeCreateDial showNotification={(message, variant) => this.showSnackbar(message, variant)}/>
-
-        <SnackbarNotification onClose={() => this.hideSnackbar()}
-                              anchor={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                              }}
-                              open={showSuccessSnackbar}
-                              duration={2500}
-                              variant={snackbarVariant}
-                              message={snackbarMessage}>
-        </SnackbarNotification>
-      </div>
+              <SnackbarNotification onClose={() => this.hideSnackbar()}
+                                    anchor={{
+                                      vertical: 'top',
+                                      horizontal: 'right',
+                                    }}
+                                    open={showSuccessSnackbar}
+                                    duration={2500}
+                                    variant={snackbarVariant}
+                                    message={snackbarMessage}>
+              </SnackbarNotification>
+            </div>
+          )
+        }}
+      </ProjectContext.Consumer>
     );
   }
 }
 
 export default compose(
   withRouter,
-  connect(state => ({
-    selectedProject: state.project.selectedProject,
-    categories: state.project.categories,
-    transactions: state.project.transactions,
-    budgets: state.project.budgets,
-  }), {})
+  connect(null, {})
 )(ProjectHome);

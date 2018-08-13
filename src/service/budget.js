@@ -1,5 +1,4 @@
 import firebaseService from './firebase';
-import transactionService from './transaction';
 import variables from '@scss/_variables.scss';
 import util from '@util/'
 import date from '@util/date'
@@ -101,13 +100,6 @@ export default {
 
   fillBudget (budget, categoriesMap, transactions, customersMap, usersMap){
 
-    transactions = transactions.map(t => transactionService.fillTransaction(
-      t,
-      customersMap,
-      categoriesMap,
-      usersMap
-    ));
-
     //Filtering transactions by budget credentials
     const budgetCategories = budget.categories;
 
@@ -142,8 +134,8 @@ export default {
     const categoriesExpenseMap = transactions.reduce((map, t) => {
 
       if(!t.income) {
-        const existingEntry = map[t.category] || 0;
-        map[t.category] = existingEntry + t.amount;
+        const existingEntry = map[t.category.id] || 0;
+        map[t.category.id] = existingEntry + t.amount;
       }
 
       return map;
@@ -154,7 +146,7 @@ export default {
     const cumulativeLimit = budgets.reduce((cumulativeLimit, b) => {
       cumulativeLimit += b.limit;
 
-      b.categories.forEach(c => budgetsCategories[c] = c);
+      b.categories.forEach(c => budgetsCategories[c.id] = c);
       return cumulativeLimit;
     }, 0);
 
