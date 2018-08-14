@@ -11,13 +11,11 @@ import PageTitle from "@common/PageTitle";
 import CustomersList from './CustomersList';
 import CreateCustomer from '@modal/CreateCustomer'
 import {createCustomer} from "@action/project";
-import {CustomerType} from "@model/customer";
+import {ProjectContext} from '../ProjectContext';
 
 class Customers extends Component {
 
   static propTypes = {
-    selectedProject: PropTypes.object,
-    customers: PropTypes.arrayOf(CustomerType),
     createCustomer: PropTypes.func.isRequired
   };
 
@@ -36,7 +34,6 @@ class Customers extends Component {
 
   render() {
 
-    const {selectedProject, customers} = this.props;
     const {showCreateCustomerModal, editCustomer} = this.state;
 
     return (
@@ -45,33 +42,37 @@ class Customers extends Component {
 
         <PageTitle text={'Customers'} icon={'customers'}/>
 
-        <div className={'row px-2'}>
-          <CustomersList customers={customers}
-                         showHideCreateCustomerModal={this.showHideCreateCustomerModal}/>
-        </div>
+        <ProjectContext.Consumer>
+          {(projectContext) => (
+            <div>
+              <div className={'row px-2'}>
+                <CustomersList customers={projectContext.customers}
+                               project={projectContext.project}
+                               showHideCreateCustomerModal={this.showHideCreateCustomerModal}/>
+              </div>
 
-        <Tooltip title={'Create Customer'} placement={'top'}>
-          <Zoom in={true} timeout={400}>
-            <Button variant="fab"
-                    color="secondary"
-                    onClick={() => this.showHideCreateCustomerModal(true)}
-                    aria-label="add"
-                    className={'fab'}>
-              <DynamicIcon name={'add'}/>
-            </Button>
-          </Zoom>
-        </Tooltip>
+              <Tooltip title={'Create Customer'} placement={'top'}>
+                <Zoom in={true} timeout={400}>
+                  <Button variant="fab"
+                          color="secondary"
+                          onClick={() => this.showHideCreateCustomerModal(true)}
+                          aria-label="add"
+                          className={'fab'}>
+                    <DynamicIcon name={'add'}/>
+                  </Button>
+                </Zoom>
+              </Tooltip>
 
-        <CreateCustomer open={showCreateCustomerModal}
-                        customer={editCustomer}
-                        project={selectedProject}
-                        onClose={this.showHideCreateCustomerModal}/>
+              <CreateCustomer open={showCreateCustomerModal}
+                              customer={editCustomer}
+                              project={projectContext.project}
+                              onClose={this.showHideCreateCustomerModal}/>
+            </div>
+          )}
+        </ProjectContext.Consumer>
       </div>
     );
   }
 }
 
-export default connect(state => ({
-  selectedProject: state.project.selectedProject,
-  customers: state.project.customers,
-}), {createCustomer})(Customers);
+export default connect(null, {createCustomer})(Customers);

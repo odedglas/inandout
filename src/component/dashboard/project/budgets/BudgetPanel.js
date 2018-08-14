@@ -21,16 +21,17 @@ import IconButton from '@material-ui/core/IconButton';
 import TransactionsSummary from '../transactions/TransactionsSummaryTable';
 import BudgetOverview from './BudgetOverview';
 import {BudgetType} from '@model/budget'
+import {ProjectType} from "@model/project";
 import {deleteBudget} from "@action/project";
 import {showConfirmation} from "@action/dashboard";
 
 import navgationUtil from '@util/navigation';
-
 import budgetService from '@service/budget';
 
 class BudgetPanel extends Component {
 
   static propTypes = {
+    project: ProjectType,
     budget: BudgetType,
     expanded: PropTypes.bool,
     editBudget: PropTypes.func.isRequired,
@@ -58,7 +59,7 @@ class BudgetPanel extends Component {
 
   handleBudgetRemove = () => {
 
-    const {budget, deleteBudget, showConfirmation, selectedProject} = this.props;
+    const {budget, deleteBudget, showConfirmation, project} = this.props;
 
     showConfirmation({
       title:'Remove This Budget ?',
@@ -66,7 +67,7 @@ class BudgetPanel extends Component {
       icon: 'delete',
       onConfirm: () => {
 
-        deleteBudget(selectedProject, budget.id);
+        deleteBudget(project, budget.id);
       }
     });
 
@@ -77,7 +78,7 @@ class BudgetPanel extends Component {
     const {history, budget} = this.props;
 
     history.push({
-      pathname: navgationUtil.projectLink(this.props.selectedProject, 'transactions'),
+      pathname: navgationUtil.projectLink(this.props.project, 'transactions'),
       state: {
         initialFilter:[{
           filterId:"category",
@@ -239,9 +240,7 @@ class BudgetPanel extends Component {
 
 export default compose(
   withRouter,
-  connect(state => ({
-    selectedProject: state.project.selectedProject
-  }), {
+  connect(null, {
     deleteBudget,
     showConfirmation
   })

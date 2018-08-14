@@ -90,7 +90,7 @@ export default {
   },
   mergeProjectMembers(members, users) {
     const usersMap = util.toIdsMap(users);
-    return members.map(m => usersMap[m]);
+    return members ? members.map(m => usersMap[m]) : [];
   },
   calculateProjectIndicators(project, transactions, budgets) {
 

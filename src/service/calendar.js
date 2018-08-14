@@ -104,7 +104,7 @@ export default {
       start: new Date(event.date),
       end: new Date(event.date)
     }))
-  } ,
+  },
   transformEventToTransaction (event) {
 
     const description = getEventTransactionDescription(event);

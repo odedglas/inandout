@@ -44,6 +44,10 @@ class ProjectProvider extends Component {
     balance: PropTypes.object,
   };
 
+  state ={
+    test:false,
+  }
+
   prepareContext = () => {
 
     const {
@@ -55,7 +59,7 @@ class ProjectProvider extends Component {
       members,
       users,
       balance,
-      project
+      project,
     } = this.props;
 
     const contextTransactions = transactions ? getContextTransactions(transactions, customers, categories, users) : [];
@@ -74,18 +78,20 @@ class ProjectProvider extends Component {
 
     const contextKeys = Object.keys(contextWrapper);
 
-    return contextKeys.reduce((context, key) => {
+    const context = contextKeys.reduce((context, key) => {
       const usableKey = key.replace("context", "").toLowerCase();
       context[usableKey] = contextWrapper[key];
       return context;
     }, {});
 
+    context['fillTransaction'] = transaction => getContextTransactions([transaction], customers, categories, users)[0]
+    return context;
   };
 
   render() {
 
-    const context = this.prepareContext();
-    console.log("Context ready")
+    const context = !this.state.test ? this.prepareContext() :  {};
+
     return <ProjectContext.Provider value={context}>
       {this.props.children}
     </ProjectContext.Provider>

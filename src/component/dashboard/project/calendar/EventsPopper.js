@@ -12,7 +12,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import withValidation from '@hoc/withValidation';
-import DynamicIcon from "../../../common/DynamicIcon";
+import DynamicIcon from "@common/DynamicIcon";
 import ColorPicker from '@common/ColorPicker'
 import {DateTimePicker} from 'material-ui-pickers';
 import Menu from '@material-ui/core/Menu';
@@ -34,6 +34,7 @@ import {
 import {setLoading} from "@action/loading";
 import {showConfirmation} from "@action/dashboard";
 import {EVENT_TYPE} from '@const/'
+import {ProjectType} from "@model/project";
 import util from '@util/';
 import dateUtil from '@util/date';
 import themeService from '@service/theme';
@@ -53,7 +54,7 @@ const getEventsInitialState = () => ({
 class EventsPopper extends Component {
 
   static propTypes = {
-    selectedProject: PropTypes.object.isRequired,
+    project: ProjectType,
     open: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
     anchorEl: PropTypes.object,
@@ -135,7 +136,7 @@ class EventsPopper extends Component {
 
   handleCreateOrEditEvent = () => {
 
-    const {validate, selectedProject} = this.props;
+    const {validate, project} = this.props;
     const {editMode} = this.state;
     const model = this.state.data;
 
@@ -143,13 +144,13 @@ class EventsPopper extends Component {
     if (validationResult.isValid) {
 
       const method = editMode ? 'editEvent' : 'createEvent';
-      this.props[method](selectedProject, model, this.handlePopperClose);
+      this.props[method](project, model, this.handlePopperClose);
     }
   };
 
   handleEventDelete = () => {
 
-    const { selectedProject, event, deleteEvent, showConfirmation } = this.props;
+    const { project, event, deleteEvent, showConfirmation } = this.props;
 
     this.setState({popperPickerOpen: true});
 
@@ -161,7 +162,7 @@ class EventsPopper extends Component {
 
         this.handlePopperClose(true);
         deleteEvent(
-          selectedProject,
+          project,
           event.id
         )
       },
@@ -173,7 +174,7 @@ class EventsPopper extends Component {
 
     this.handlePopperClose();
     this.props.markEventComplete(
-      this.props.selectedProject,
+      this.props.project,
       this.props.event.id,
       completed
     )
@@ -221,7 +222,7 @@ class EventsPopper extends Component {
     if(action === 'add') {
 
       createTransaction(
-        this.props.selectedProject,
+        this.props.project,
         {
           ...transaction,
           sourceEventId: data.id
@@ -229,7 +230,7 @@ class EventsPopper extends Component {
         (transaction) => {
 
           this.props.attachEventTransaction(
-            this.props.selectedProject,
+            this.props.project,
             data.id,
             transaction,
             done
@@ -240,7 +241,7 @@ class EventsPopper extends Component {
     else {
 
       updateTransaction(
-        this.props.selectedProject,
+        this.props.project,
         transaction,
         done
       );
@@ -470,9 +471,7 @@ export default compose(
       method: (v, f, state, validator, args) => true
     },
   ]),
-  connect(state => ({
-    selectedProject: state.project.selectedProject
-  }), {
+  connect(null, {
     createEvent,
     editEvent,
     deleteEvent,

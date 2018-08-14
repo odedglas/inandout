@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {
   withRouter
 } from 'react-router-dom';
@@ -15,12 +16,25 @@ import ProjectEvents from './ProjectEvents';
 import Paper from '@material-ui/core/Paper';
 import projectService from '@service/project';
 import dateUtil from '@util/date';
-
 import {ProjectContext} from '../ProjectContext';
+import {ProjectType} from "@model/project";
+import {TransactionType} from "@model/transaction";
+import {BudgetType} from "@model/budget";
+import {CategoryType} from "@model/category";
 
 const formatLong = date => dateUtil.format(date, 'MMM YYYY');
 
 class ProjectHome extends React.Component {
+
+  static propTypes = {
+    project: PropTypes.oneOfType([
+      PropTypes.object,
+      ProjectType
+    ]),
+    transactions: PropTypes.arrayOf(TransactionType),
+    budgets: PropTypes.arrayOf(BudgetType),
+    categories: PropTypes.arrayOf(CategoryType)
+  };
 
   state = {
     showSuccessSnackbar: false,
@@ -51,10 +65,12 @@ class ProjectHome extends React.Component {
       <ProjectContext.Consumer>
         {(projectContext) => {
 
+          const {project, transactions, budgets, categories} = projectContext;
+
           const indicators = projectService.calculateProjectIndicators(
-            projectContext.project,
-            projectContext.transactions,
-            projectContext.budgets
+            project,
+            transactions,
+            budgets
           );
 
           return (
@@ -63,18 +79,18 @@ class ProjectHome extends React.Component {
               <Breadcrumb item={{id: 'projectHomeCrumb', value: formatLong(selectedDate)}}/>
 
               <ProjectKpi indicators={indicators}
-                          project={projectContext.project}
-                          selectedDate={selectedDate} />
+                          project={project}
+                          selectedDate={selectedDate}/>
 
-              <ProjectCharts transactions={projectContext.transactions}
-                             categories={projectContext.categories}/>
+              <ProjectCharts transactions={transactions}
+                             categories={categories}/>
 
               <div className={'col-sm-12 px-0 mb-4 row'}>
                 <div className={'col-sm-12 col-md-6'}>
                   <Paper className={'project-latest-transactions p-3 row'}>
 
                     <div className={'col-sm-12 px-0 title mb-3'}>
-                      <ProjectTransactions transactions={projectContext.transactions.filter(t => !t.income)} />
+                      <ProjectTransactions transactions={transactions.filter(t => !t.income)}/>
                     </div>
 
                   </Paper>
@@ -104,10 +120,10 @@ class ProjectHome extends React.Component {
                                     message={snackbarMessage}>
               </SnackbarNotification>
             </div>
-          )
+          );
         }}
       </ProjectContext.Consumer>
-    );
+    )
   }
 }
 

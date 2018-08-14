@@ -14,11 +14,12 @@ import {showConfirmation} from "@action/dashboard";
 import UserAvatar from '@common/UserAvatar';
 
 import util from '@util/';
+import {ProjectType} from "@model/project";
 
 class CustomersList extends Component {
 
   static propTypes = {
-    selectedProject: PropTypes.object,
+    project: ProjectType,
     customers: PropTypes.arrayOf(CustomerType),
     showHideCreateCustomerModal: PropTypes.func.isRequired,
     showConfirmation: PropTypes.func.isRequired,
@@ -53,7 +54,7 @@ class CustomersList extends Component {
       icon: 'delete',
       onConfirm: () => {
 
-        deleteCustomer(this.props.selectedProject, anchorCustomer.id);
+        deleteCustomer(this.props.project, anchorCustomer.id);
       }
     });
 
@@ -62,10 +63,10 @@ class CustomersList extends Component {
 
   handleCustomerStar = (customer) => {
 
-    const {setStarred, selectedProject} = this.props;
+    const {setStarred, project} = this.props;
 
     setStarred(
-      selectedProject,
+      project,
       {
         id: customer.id,
         star: !customer.star
@@ -193,9 +194,7 @@ class CustomersList extends Component {
   }
 }
 
-export default connect(state => ({
-  selectedProject: state.project.selectedProject,
-}), {
+export default connect(null, {
   deleteCustomer,
   setStarred,
   showConfirmation

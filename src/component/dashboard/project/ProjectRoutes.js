@@ -49,6 +49,7 @@ import Transactions from './transactions/Transactions';
 export function getProjectRoutes(location) {
 
   return (
+
     <Switch location={location}>
 
       <Route exact path={routes.PROJECT}
@@ -70,6 +71,5 @@ export function getProjectRoutes(location) {
              component={ProjectCalendar}/>
 
     </Switch>
-
   );
 }

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 
 import Breadcrumb from '../breadcrumbs/Breadcrumb';
@@ -9,17 +8,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DynamicIcon from "@common/DynamicIcon";
 import PageTitle from "@common/PageTitle";
 import CreateCategory from '@modal/CreateCategory'
-
+import {ProjectContext} from '../ProjectContext';
 import CategoryCard from './CategoryCard';
 
 import Zoom from '@material-ui/core/Zoom';
-
 class Categories extends Component {
-
-  static propTypes = {
-    selectedProject: PropTypes.any,
-    categories: PropTypes.array,
-  };
 
   state = {
     showCreateCategoryModal: false,
@@ -35,7 +28,7 @@ class Categories extends Component {
   };
 
   render() {
-    const {selectedProject, categories} = this.props;
+
     const {showCreateCategoryModal, editCategory} = this.state;
 
     return (
@@ -43,20 +36,25 @@ class Categories extends Component {
         <Breadcrumb item={{id: 'categoriesCrumb', value: 'Categories'}}/>
 
         <PageTitle text={'Categories'} icon={'categories'}/>
+        <ProjectContext.Consumer>
+          {(projectContext) => (
+            <div>
+              <div className={'row px-2'}>
+                {projectContext.categories.map(
+                  category => <CategoryCard key={category.id}
+                                            project={projectContext.project}
+                                            editCategory={(category) => this.showHideCreateCategory(true, category)}
+                                            category={category} />
+                )}
+              </div>
 
-        <div className={'row px-2'}>
-          {categories.map(
-            category => <CategoryCard key={category.id}
-                                      project={selectedProject}
-                                      editCategory={(category) => this.showHideCreateCategory(true, category)}
-                                      category={category} />
+              <CreateCategory open={showCreateCategoryModal}
+                              category={editCategory}
+                              project={projectContext.project}
+                              onClose={this.showHideCreateCategory}/>
+            </div>
           )}
-        </div>
-
-        <CreateCategory open={showCreateCategoryModal}
-                        category={editCategory}
-                        project={selectedProject}
-                        onClose={this.showHideCreateCategory}/>
+        </ProjectContext.Consumer>
 
         <Tooltip title={'Create Category'} placement={'top'}>
           <Zoom in={true} timeout={400}>
@@ -74,7 +72,4 @@ class Categories extends Component {
   }
 }
 
-export default connect(state => ({
-  selectedProject: state.project.selectedProject,
-  categories: state.project.categories,
-}), {})(Categories);
+export default connect(null, {})(Categories);

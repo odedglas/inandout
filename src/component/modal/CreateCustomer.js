@@ -10,6 +10,8 @@ import {createCustomer, editCustomer} from "@action/project";
 import CreationModal from './CreationModal';
 
 import util from '@util/';
+import {ProjectType} from "@model/project";
+import {CustomerType} from "@model/customer";
 
 class CreateCustomerModal extends React.Component {
 
@@ -24,8 +26,8 @@ class CreateCustomerModal extends React.Component {
     editCustomer: PropTypes.func.isRequired,
     createCustomer: PropTypes.func.isRequired,
     confirmCallback: PropTypes.func,
-    project: PropTypes.object,
-    customer: PropTypes.object,
+    project: ProjectType,
+    customer: PropTypes.oneOfType([CustomerType, PropTypes.object]),
   };
 
   handleCustomerCreate = (model, close) => {

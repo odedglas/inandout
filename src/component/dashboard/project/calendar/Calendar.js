@@ -16,6 +16,8 @@ import EventsPopper from './EventsPopper';
 import {editEvent} from "@action/project";
 import calendarService from '@service/calendar';
 import DynamicIcon from "@common/DynamicIcon";
+import {EventType} from "@model/event";
+import {ProjectType} from "@model/project";
 
 const DragAndDropCalendar = withDragAndDrop(BigCalendar);
 
@@ -33,8 +35,8 @@ const Event = ({event}) => {
 class Calendar extends Component {
 
   static propTypes = {
-    events: PropTypes.array,
-    selectedProject: PropTypes.object,
+    events: PropTypes.arrayOf(EventType),
+    project: ProjectType,
     editEvent: PropTypes.func.isRequired,
   };
 
@@ -59,7 +61,7 @@ class Calendar extends Component {
   moveEvent = ({event, start}) => {
 
     this.props.editEvent(
-      this.props.selectedProject,
+      this.props.project,
       {...event, date: start.getTime()},
       () => {}
     );
@@ -117,7 +119,7 @@ class Calendar extends Component {
 
   render() {
 
-    const {events} = this.props;
+    const {events, project} = this.props;
     const {open, anchorEl, eventForEdit} = this.state;
 
     return (
@@ -156,6 +158,7 @@ class Calendar extends Component {
 
         <EventsPopper open={open}
                       anchorEl={anchorEl}
+                      project={project}
                       handleClose={this.handleClose}
                       event={eventForEdit}/>
       </div>
@@ -166,8 +169,5 @@ class Calendar extends Component {
 export default compose(
   withRouter,
   DragDropContext(HTML5Backend),
-  connect(state => ({
-    events: state.project.events,
-    selectedProject: state.project.selectedProject,
-  }), {editEvent})
+  connect(null, {editEvent})
 )(Calendar);

@@ -4,6 +4,7 @@ import PageTitle from "@common/PageTitle";
 import Breadcrumb from '../breadcrumbs/Breadcrumb';
 import Paper from '@material-ui/core/Paper';
 import Calendar from './Calendar';
+import {ProjectContext} from '../ProjectContext';
 
 class ProjectCalendar extends Component {
 
@@ -15,10 +16,15 @@ class ProjectCalendar extends Component {
         <PageTitle text={'Calendar'} icon={'calendar'}/>
 
         <Breadcrumb item={{id: 'calendarsCrumb', value: 'Calendar'}}/>
+        <ProjectContext.Consumer>
+          {(projectContext) => (
+            <Paper className={'mx-3 mt-3 p-3'}>
+              <Calendar events={projectContext.events}
+                        project={projectContext.project}/>
+            </Paper>
+          )}
+        </ProjectContext.Consumer>
 
-        <Paper className={'mx-3 mt-3 p-3'}>
-          <Calendar />
-        </Paper>
       </div>
 
     );

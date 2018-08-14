@@ -15,9 +15,6 @@ import {createTransaction} from "@action/project";
 import CreateBudget from '@modal/CreateBudget'
 import CreateTransaction from '@modal/CreateTransaction'
 import BudgetStatistics from '@modal/BudgetStatistics'
-import {CategoryType} from "@model/category";
-
-import dateUtil from '@util/date';
 import {ProjectContext} from '../ProjectContext';
 
 class Budgets extends Component {
@@ -34,6 +31,7 @@ class Budgets extends Component {
     transactionInitialState: {},
     budgetForEdit: {},
     budgetForStatistics: {},
+    filledBudgets: [],
     expandStateChange: false,
   };
 
@@ -54,6 +52,7 @@ class Budgets extends Component {
 
       this.setState({showCreateBudgetModal: false});
     }
+
   };
 
   showHideBudgetStatistics = (show, budget) => {
@@ -76,7 +75,7 @@ class Budgets extends Component {
       this.setState({
         showTransactionModal: true,
         transactionInitialState: {
-          date: dateUtil.now(),
+          date: new Date(),
           category: budget.categories[0].id
         }
       })
@@ -112,10 +111,11 @@ class Budgets extends Component {
 
     return (
       <ProjectContext.Consumer>
-        {(context) => {
+        {(projectContext) => {
 
-          const budgets = context.budgets;
+          const budgets = projectContext.budgets;
           const hasBudgets = budgets.length > 0;
+          const project = projectContext.project;
 
           return (
             <div className={'budgets-container'}>
@@ -127,6 +127,7 @@ class Budgets extends Component {
               <div className={'px-2 py-3'}>
                 {
                   budgets.map(budget => <BudgetPanel key={budget.id}
+                                                     project={project}
                                                      onExpandChange={this.handleExpandPanelChange}
                                                      editBudget={(budget) => this.showHideCreateBudge(true, budget)}
                                                      showCreateTransaction={(budget) => this.showHideCreateTransaction(
@@ -144,8 +145,8 @@ class Budgets extends Component {
                     <div className={'col-sm-12 flex-center empty-budgets'}>
                       <img className={'icon'} src={require('@img/cactus.svg')} alt="no-budgets"/>
                       <span className={'my-4 text'}>
-                        There are no budgets yet...
-                     </span>
+                  There are no budgets yet...
+               </span>
                       <Button size="small" color="primary" onClick={() => this.showHideCreateBudge(true)}>
                         <DynamicIcon name={'add'}/>
                         Create Budget
@@ -170,13 +171,13 @@ class Budgets extends Component {
 
               <CreateBudget open={showCreateBudgetModal}
                             budget={budgetForEdit}
-                            project={context.project}
+                            project={project}
                             onClose={this.showHideCreateBudge}/>
 
               <CreateTransaction open={showTransactionModal}
                                  transaction={{}}
                                  createInitialState={transactionInitialState}
-                                 transactionCrudHandler={(transaction, action, cb) => this.handleCreateTransaction(transaction, action, cb, context.project)}
+                                 transactionCrudHandler={(transaction, action, cb) => this.handleCreateTransaction(transaction, action, cb, project)}
                                  onClose={this.showHideCreateTransaction}/>
 
               <BudgetStatistics onClose={() => this.showHideBudgetStatistics(false)}
@@ -184,10 +185,9 @@ class Budgets extends Component {
                                 open={showBudgetStatisticsModal}/>
 
             </div>
-          )
+          );
         }}
       </ProjectContext.Consumer>
-
     );
   }
 }
