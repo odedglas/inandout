@@ -8,6 +8,8 @@ const handleAvatarClick = (event, handler) => {
 
 const UserAvatar = ({user, size, onClick, additionalClass, style, className, ...rest}) => {
 
+  if(!user) return null;
+
   const avatarBackground = {
     'backgroundColor': user.avatarColor
   };

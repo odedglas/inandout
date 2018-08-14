@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import transactionsService from '@service/transaction';
 import projectService from '@service/project';
 import budgetService from '@service/budget';
+import calendarService from '@service/calendar';
 import util from '@util/';
 
 const ProjectContext = React.createContext();
@@ -72,7 +73,7 @@ class ProjectProvider extends Component {
       contextBudgets: getContextBudgets(budgets, contextTransactions, customers, categories, users),
       contextUsers: users,
       contextMembers: projectService.mergeProjectMembers(members, users),
-      contextEvents: events,
+      contextEvents: calendarService.mergeEvents(events, customers),
       contextBalance: balance
     };
 

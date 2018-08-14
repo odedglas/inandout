@@ -19,12 +19,22 @@ class TransactionsSummaryTable extends Component {
   static propTypes = {
     transactions: PropTypes.arrayOf(TransactionType),
     selectedProject: PropTypes.object,
+    showIncomes: PropTypes.bool,
+    transactionsAmount: PropTypes.number
+  };
+
+  static defaultProps = {
+    showIncomes: false,
+    transactionsAmount: 5,
   };
 
   render() {
 
-    const { selectedProject, transactions } = this.props;
-    const latestTransactions = transactions.reverse().slice(0, transactions.length > 4 ? 5 : transactions.length)
+    const {selectedProject, transactions, showIncomes, transactionsAmount} = this.props;
+    const latestTransactions = transactions.reverse()
+      .filter(t => t.income === showIncomes)
+      .slice(0, transactions.length > transactionsAmount - 1 ? transactionsAmount : transactions.length);
+
     return (
       <div className={'row col-sm- px-0'}>
         <div className={'col-sm-12'}>
@@ -33,9 +43,9 @@ class TransactionsSummaryTable extends Component {
               <TableRow className={'table-head'}>
                 <TableCell>Date</TableCell>
                 <TableCell>Owner</TableCell>
-                <TableCell >Description</TableCell>
+                <TableCell>Description</TableCell>
                 <TableCell>Amount ({selectedProject.currency})</TableCell>
-                <TableCell>Category</TableCell>
+                <TableCell>{showIncomes ? 'Customer' : 'Category'}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -46,26 +56,34 @@ class TransactionsSummaryTable extends Component {
                     <TableCell>{t.formattedDate}</TableCell>
                     <TableCell>
                       <Tooltip title={t.owner.displayName} placement={'right'}>
-                        <UserAvatar user={t.owner} size={'small'} />
+                        <UserAvatar user={t.owner} size={'smaller'}/>
                       </Tooltip>
                     </TableCell>
                     <TableCell>
-                        {t.description }
+                      {t.description}
                     </TableCell>
                     <TableCell>
                       <div className={'outcome-amount'}>
                         <span> {t.amount} </span>
-                        <Tooltip title={'Outcome'} placement={'top'}>
-                          <DynamicIcon className={'icon mx-2'} name={'outcome'}/>
+                        <Tooltip title={showIncomes ? 'Income' : 'Outcome'} placement={'top'}>
+                          <DynamicIcon
+                            className={`icon mx-2 ${showIncomes ? 'success-indicator' : 'overage-indicator'}`}
+                            name={showIncomes ? 'income' : 'outcome'}/>
                         </Tooltip>
                       </div>
-                      </TableCell>
+                    </TableCell>
                     <TableCell>
-                      {t.category ? <Tooltip title={t.category.name} placement={'right'}>
-                        <Avatar className={'avatar small'} style={{'backgroundColor': t.category.color}}>
-                          <DynamicIcon className={'icon'} name={t.category.icon}/>
-                        </Avatar>
-                      </Tooltip> : null
+                      {
+                        showIncomes ?
+                          (t.customer ? <Tooltip title={t.customer.name} placement={'right'}>
+                            <UserAvatar user={t.customer} size={'smaller'}/>
+                          </Tooltip> : null)
+                          :
+                          (t.category ? <Tooltip title={t.category.name} placement={'right'}>
+                            <Avatar className={'avatar smaller'} style={{'backgroundColor': t.category.color}}>
+                              <DynamicIcon className={'icon'} name={t.category.icon}/>
+                            </Avatar>
+                          </Tooltip> : null)
                       }
                     </TableCell>
                   </TableRow>

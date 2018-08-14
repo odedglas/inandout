@@ -26,7 +26,7 @@ export default {
             ...value[key]
           }
         });
-        console.log("Sync Transactions!");
+
         callback(result);
       }
     }

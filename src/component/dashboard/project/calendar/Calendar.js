@@ -93,7 +93,10 @@ class Calendar extends Component {
     this.setState({
       anchorEl: target,
       open: true,
-      eventForEdit: event || {},
+      eventForEdit: event ? {
+        ...event,
+        customer: event.customer ? event.customer.id : ''
+      } : {},
     });
   };
 

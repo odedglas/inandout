@@ -1,5 +1,6 @@
 import firebaseService from './firebase';
 import transactionService from './transaction';
+import util from '@util/';
 
 export default {
 
@@ -97,6 +98,14 @@ export default {
         firebaseService.update(transactionPath, {sourceEventId: ''})
       }
     });
+  },
+  mergeEvents (events, customers) {
+    const customersMap = util.toIdsMap(customers);
+
+    return events.map(event => ({
+      ...event,
+      customer: event.customer ? customersMap[event.customer] : undefined,
+    }))
   },
   transformToCalendarEvents (events) {
     return events.map(event => ({

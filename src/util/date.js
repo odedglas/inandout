@@ -3,6 +3,7 @@ import {BUDGETS_PERIOD} from '@const/'
 import {TRANSACTIONS_DATE_KEY_FORMAT} from '@const/'
 
 const baseFormat = 'DD/MM/YY';
+const shortFormat = 'MMM Do YY';
 const budgetPeriodMap = BUDGETS_PERIOD.reduce((map, bp) => {
   map[bp.key] = bp;
   return map;
@@ -59,7 +60,7 @@ export default {
     }
   },
 
-  budgetRangeFormat: (date) => moment(date).format('MMM Do YY'),
+  budgetRangeFormat: (date) => moment(date).format(shortFormat),
 
   getDatesBetween: (d1, d2, format) => {
 
@@ -81,5 +82,5 @@ export default {
   startOf(date, unit) {
 
     return moment(date).startOf(unit)
-  }
+  },
 }

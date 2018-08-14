@@ -65,7 +65,7 @@ class ProjectHome extends React.Component {
       <ProjectContext.Consumer>
         {(projectContext) => {
 
-          const {project, transactions, budgets, categories} = projectContext;
+          const {project, transactions, budgets, categories, events} = projectContext;
 
           const indicators = projectService.calculateProjectIndicators(
             project,
@@ -87,20 +87,20 @@ class ProjectHome extends React.Component {
 
               <div className={'col-sm-12 px-0 mb-4 row'}>
                 <div className={'col-sm-12 col-md-6'}>
-                  <Paper className={'project-latest-transactions p-3 row'}>
+                  <Paper className={'p-0 row'}>
 
                     <div className={'col-sm-12 px-0 title mb-3'}>
-                      <ProjectTransactions transactions={transactions.filter(t => !t.income)}/>
+                      <ProjectTransactions transactions={transactions}/>
                     </div>
 
                   </Paper>
                 </div>
 
                 <div className={'col-sm-12 col-md-6 mt-sm-3 mt-md-0'}>
-                  <Paper className={'project-events p-3 row'}>
+                  <Paper className={'p-0 row'}>
 
                     <div className={'col-sm-12 px-0 title mb-3'}>
-                      <ProjectEvents/>
+                      <ProjectEvents events={events}/>
                     </div>
 
                   </Paper>

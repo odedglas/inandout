@@ -67,37 +67,37 @@ class Project extends React.Component {
     const {selectedProject, loading, location} = this.props;
 
     return (
-      <div className={'project-container'}>
+      <ProjectProvider>
+        <div className={'project-container'}>
 
-        <Breadcrumbs project={selectedProject}/>
+          <Breadcrumbs project={selectedProject}/>
 
-        <Breadcrumb item={{
-          id: 'projectCrumb',
-          render: (val) => <ProjectBreadcrumb selectedProjectId={val}/>,
-          value: selectedProject.id,
-          path: '/dashboard'
-        }}
-        />
+          <Breadcrumb item={{
+            id: 'projectCrumb',
+            render: (val) => <ProjectBreadcrumb selectedProjectId={val}/>,
+            value: selectedProject.id,
+            path: '/dashboard'
+          }}
+          />
 
-        <div className={'content scrollable'}>
-          <div className="flex-center" style={{position: 'absolute'}}>
-            <CSSTransition
-              in={loading}
-              timeout={300}
-              classNames="fade"
-              unmountOnExit
-            >
-              <CircularProgress size={50}/>
-            </CSSTransition>
-          </div>
-          <ProjectProvider>
+          <div className={'content scrollable'}>
+            <div className="flex-center" style={{position: 'absolute'}}>
+              <CSSTransition
+                in={loading}
+                timeout={300}
+                classNames="fade"
+                unmountOnExit
+              >
+                <CircularProgress size={50}/>
+              </CSSTransition>
+            </div>
             {
               !loading ? getProjectRoutes(location) : null
             }
-          </ProjectProvider>
-        </div>
+          </div>
 
-      </div>
+        </div>
+      </ProjectProvider>
     );
   }
 }
