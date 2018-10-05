@@ -10,6 +10,14 @@ import util from '@util/';
 
 const ProjectContext = React.createContext();
 
+const getContextProject = (project, users) => {
+  const usersMap = util.toIdsMap(users);
+  return {
+    ...project,
+    owner: usersMap[project.owner]
+  }
+}
+
 const getContextTransactions = (transactions, customers, categories, users) => {
 
   return transactions ? transactionsService.mergeTransactions(
@@ -21,14 +29,12 @@ const getContextTransactions = (transactions, customers, categories, users) => {
     : []
 };
 
-const getContextBudgets = (budgets, filledTransactions, customers, categories, users) => {
-  return filledTransactions.length > 0 ? budgetService.mergeBudgets(
+const getContextBudgets = (budgets, filledTransactions, customers, categories) => {
+  return budgetService.mergeBudgets(
     budgets,
     categories,
-    filledTransactions,
-    customers,
-    users
-  ) : []
+    filledTransactions
+  )
 };
 
 class ProjectProvider extends Component {
@@ -44,10 +50,6 @@ class ProjectProvider extends Component {
     users: PropTypes.array,
     balance: PropTypes.object,
   };
-
-  state ={
-    test:false,
-  }
 
   prepareContext = () => {
 
@@ -66,11 +68,11 @@ class ProjectProvider extends Component {
     const contextTransactions = transactions ? getContextTransactions(transactions, customers, categories, users) : [];
 
     const contextWrapper = {
-      contextProject: project,
+      contextProject: getContextProject(project, users),
       contextCustomers: customers,
       contextCategories: categories,
       contextTransactions,
-      contextBudgets: getContextBudgets(budgets, contextTransactions, customers, categories, users),
+      contextBudgets: getContextBudgets(budgets, contextTransactions, customers, categories),
       contextUsers: users,
       contextMembers: projectService.mergeProjectMembers(members, users),
       contextEvents: calendarService.mergeEvents(events, customers),
@@ -85,13 +87,13 @@ class ProjectProvider extends Component {
       return context;
     }, {});
 
-    context['fillTransaction'] = transaction => getContextTransactions([transaction], customers, categories, users)[0]
+    context['fillTransaction'] = transaction => getContextTransactions([transaction], customers, categories, users)[0];
     return context;
   };
 
   render() {
 
-    const context = !this.state.test ? this.prepareContext() :  {};
+    const context = this.prepareContext();
 
     return <ProjectContext.Provider value={context}>
       {this.props.children}

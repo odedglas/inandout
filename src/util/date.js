@@ -75,7 +75,6 @@ export default {
       start.set('day', start.day() + 1);
     }
 
-    dates.push(start.format(format || baseFormat));
     return dates;
   },
 

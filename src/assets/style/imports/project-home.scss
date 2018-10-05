@@ -233,6 +233,9 @@
       }
     }
 
+    .empty-statistics {
+      padding: 1rem;
+    }
   }
 
   .project-events,
@@ -263,14 +266,22 @@
 
           .event-chip {
             height:20px;
+            flex: 0 0 10%;
+            font-size: 0.725rem;
+
+            span {
+              padding:0 10px;
+            }
           }
 
           .title {
-            max-width: 50%;
+            flex: 1;
+            font-size: $smaller-font;
           }
 
           .date {
             color: #333;
+            min-width:60px;
             font-size: $smallest-font;
             padding: 4px 0;
             display: block;

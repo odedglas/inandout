@@ -62,7 +62,7 @@ class Calendar extends Component {
 
     this.props.editEvent(
       this.props.project,
-      {...event, date: start.getTime()},
+      {...event, customer: event.customer.id, date: start.getTime()},
       () => {}
     );
 

@@ -395,8 +395,6 @@ class TransactionsTableView extends Component {
                     <img src={require('@img/no-results.png')} alt={'no-results'}/>
                     <div>
                       No transactions was found for the selected period.
-                      <br/>
-                      Try choosing different one...
                     </div>
                   </TableCell>
                 </TableRow> : null

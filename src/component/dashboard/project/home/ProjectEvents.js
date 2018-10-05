@@ -61,17 +61,18 @@ class ProjectEvents extends React.Component {
       <div className={'events-container p-2'}>
         {data.map(event => {
 
+          const isEventType = event.type === 'EVENT';
           return (
             <div className={'event'} key={event.id}>
               <div className={'body'}>
-                <Chip className={'event-chip mr-3 white'}
+                <Chip className={'event-chip mr-2 white'}
                       style={{backgroundColor: event.color}}
-                      label={event.type === 'EVENT' ? 'Event' : 'Task'}/>
+                      label={isEventType ? 'Event' : 'Task'}/>
 
                 <span className={'title'}>
                     {event.title}
                   </span>
-                <div className={'flex'}></div>
+
                 {
                   event.customer ? <Tooltip title={`Event Customer: ${event.customer.name}`}>
                     <UserAvatar user={event.customer}
@@ -81,11 +82,6 @@ class ProjectEvents extends React.Component {
                 }
                 <div className={`date mx-3 ${tab.overdue ? 'overdue' : ''}`}>
                   {dateUtil.format(event.date, "Do MMM")}
-                </div>
-                <div className={'action'}>
-                  <Button size="small" color="primary" onClick={this.handleEditBudge}>
-                    Complete
-                  </Button>
                 </div>
               </div>
             </div>

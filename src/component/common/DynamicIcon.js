@@ -46,6 +46,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import CancelIcon from '@material-ui/icons/Cancel';
 import CloseIcon from '@material-ui/icons/Close';
+import CheckIcon from '@material-ui/icons/CheckBox';
 
 // -- Drawer -- //
 import TodosIcon from '@material-ui/icons/CheckBox';
@@ -152,6 +153,7 @@ const iconMap = {
   'balance': AccountBalanceIcon,
   'toArrow': toArrowIcon,
   'projectMembers': ProjectMembersIcon,
+  'check': CheckIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {

@@ -1984,6 +1984,11 @@
   justify-content: center;
 }
 
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .col-flex {
   display:flex;
   flex:1;

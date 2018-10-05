@@ -86,7 +86,7 @@ class NotificationsDrawer extends Component {
 
     return (
       <div key={notification.id}
-           className={`notification hover-popout p-2 ${isUnread ? 'unread' : ''}`}>
+           className={`notification hover-popout p-2 ${isUnread ? 'unread' : 'read'}`}>
         <div className={'notification-body flex'}>
           <UserAvatar user={notification.from} size={'small'}/>
           <div className={'px-3'}>

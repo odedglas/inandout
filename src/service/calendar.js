@@ -101,7 +101,6 @@ export default {
   },
   mergeEvents (events, customers) {
     const customersMap = util.toIdsMap(customers);
-
     return events.map(event => ({
       ...event,
       customer: event.customer ? customersMap[event.customer] : undefined,

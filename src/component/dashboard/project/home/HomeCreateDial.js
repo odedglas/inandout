@@ -16,10 +16,10 @@ import InviteUser from '@modal/InviteUser'
 import {createTransaction,} from "@action/project";
 
 const actions = [
+  {key: 'categories',icon: <DynamicIcon name={'categories'}/>, name: 'Create Category'},
+  {key: 'customers',icon: <DynamicIcon name={'customers'}/>, name: 'Create Customer'},
   {key: 'budgets', icon: <DynamicIcon name={'budgets'}/>, name: 'Create Budget'},
   {key: 'transactions',icon: <DynamicIcon name={'transactions'}/>, name: 'Create Transaction'},
-  {key: 'categories',icon: <DynamicIcon name={'categories'}/>, name: 'Create Category'},
-  {key: 'customers',icon: <DynamicIcon name={'customers'}/>, name: 'CreateCustomer'},
   {key: 'share',icon: <DynamicIcon name={'share'}/>, name: 'Invite'},
 ];
 

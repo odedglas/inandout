@@ -86,19 +86,17 @@ export default {
     }
   },
 
-  mergeBudgets(budgets, categories, transactions, customers, users) {
+  mergeBudgets(budgets, categories, transactions) {
 
     const categoriesMap = util.toIdsMap(categories);
-    const usersMap = util.toIdsMap(users);
-    const customersMap = util.toIdsMap(customers);
 
-    return budgets.map(budget => {
+    return budgets ? budgets.map(budget => {
 
-      return this.fillBudget(budget, categoriesMap, transactions, customersMap, usersMap)
-    });
+      return this.fillBudget(budget, categoriesMap, transactions)
+    }) : [];
   },
 
-  fillBudget (budget, categoriesMap, transactions, customersMap, usersMap){
+  fillBudget (budget, categoriesMap, transactions){
 
     //Filtering transactions by budget credentials
     const budgetCategories = budget.categories;

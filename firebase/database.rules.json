@@ -1,17 +1,47 @@
 {
   "rules": {
-    ".read": true,
-    ".write": true,
+    ".read": false,
+    ".write": false,
+    "users": {
+      ".read": true,
+      ".write": false,
+      "$user_id": {
+        ".write": "$user_id === auth.uid"
+      }
+    },
     "projects": {
+      ".read": "false",
+      ".write": "false",
       ".indexOn": [
         "owner"
       ],
       "$projectId": {
+        ".read": "true",
+        ".write": "true",
         "excludedCategories": {
           ".indexOn": [
             ".value"
           ]
         }
+      }
+    },
+    "transactions": {
+      ".read": true,
+      ".write": true
+    },
+    "categories": {
+      ".read": true,
+      ".write": false
+    },
+    "projectsIdentifier": {
+      ".read": true,
+      ".write": true
+    },
+    "notifications": {
+      ".read": false,
+      ".write": true,
+      "$email": {
+        ".read": "$email.replace('_','.') === auth.email"
       }
     }
   }

@@ -25,11 +25,6 @@ export default {
 
     return firebaseService.fetchByKeys('/projects', projectKeys);
   },
-  fetchProject(identifier) {
-    firebaseService.fetch(`/projectsIdentifier/${identifier}`).then(res => {
-      return firebaseService.fetch(`/projects/${res.value}`);
-    })
-  },
   createProject(name, type, description, currency, balance) {
 
     const ownerId = firebaseService.user.uid;

@@ -15,19 +15,13 @@ export default ({transactions, categories}) => {
           <div className={'col-sm-12 px-0 title mb-3'}>
             Statistics
           </div>
-
-          <div className={'col-sm-12 row px-0'}>
-
-            <div className={'col-sm-11 col-md-9 pr-3'}>
-              <ProjectInOutChart transactions={transactions}/>
-            </div>
-            <div className={'col-sm-11 mt-sm-3 col-md-3 mt-md-0 px-0'}>
-              <ProjectExpenseByChart transactions={transactions}
-                                     categories={categories}/>
-            </div>
-
+          <div className={'col-sm-11 col-md-9 pr-3'}>
+            <ProjectInOutChart transactions={transactions}/>
           </div>
-
+          <div className={'col-sm-11 mt-sm-3 col-md-3 mt-md-0 px-0'}>
+            <ProjectExpenseByChart transactions={transactions}
+                                   categories={categories}/>
+          </div>
         </Paper>
       </div>
     </div>
