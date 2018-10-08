@@ -24,6 +24,14 @@ export class ColorPicker extends Component {
       'global',
       'gas',
       'flight',
+      'addShop',
+      'assignment',
+      'build',
+      'favorite',
+      'print',
+      'electricity',
+      'security',
+      'work',
     ]
   };
 

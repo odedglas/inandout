@@ -205,13 +205,6 @@
             font-size: $medium-font;
           }
         }
-
-        .test {
-
-          &:hover {
-            transform: scale(1.1);
-          }
-        }
       }
 
       .inout-chart-legend {
@@ -233,8 +226,17 @@
       }
     }
 
-    .empty-statistics {
-      padding: 1rem;
+    &.empty-charts {
+
+      > img {
+        height: 270px;
+        width:480px;
+      }
+
+      .text {
+        max-width:300px;
+        color: $light-text;
+      }
     }
   }
 

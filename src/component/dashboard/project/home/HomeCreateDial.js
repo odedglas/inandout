@@ -67,14 +67,10 @@ class HomeCreateDial extends React.Component {
       this.props.createTransaction(
         this.props.selectedProject,
         transaction,
-        () => {
-
-          cb();
-        }
+        cb
       )
     }
   };
-
 
   render() {
 

@@ -33,6 +33,37 @@ const tabs = [
   },
 ];
 
+const ProjectEventsTab = (events, overdue) => (
+  events.map(event => {
+
+    const isEventType = event.type === 'EVENT';
+    return (
+      <div className={'event'} key={event.id}>
+        <div className={'body'}>
+          <Chip className={'event-chip mr-2 white'}
+                style={{backgroundColor: event.color}}
+                label={isEventType ? 'Event' : 'Task'}/>
+
+          <span className={'title'}>
+                    {event.title}
+                  </span>
+
+          {
+            event.customer ? <Tooltip title={`Event Customer: ${event.customer.name}`}>
+              <UserAvatar user={event.customer}
+                          size={'smallest'}
+                          className={'white mx-1'}/>
+            </Tooltip> : null
+          }
+          <div className={`date mx-3 ${overdue ? 'overdue' : ''}`}>
+            {dateUtil.format(event.date, "Do MMM")}
+          </div>
+        </div>
+      </div>
+    );
+  })
+);
+
 class ProjectEvents extends React.Component {
 
   static propTypes = {
@@ -54,39 +85,14 @@ class ProjectEvents extends React.Component {
   renderTabEvents = tab => {
     const {events} = this.props;
 
+    const isEmpty = events.length === 0;
+
     const data = tab.getData(events)
       .sort(util.sortJsonFN([{name: 'date'}]));
 
     return (
       <div className={'events-container p-2'}>
-        {data.map(event => {
-
-          const isEventType = event.type === 'EVENT';
-          return (
-            <div className={'event'} key={event.id}>
-              <div className={'body'}>
-                <Chip className={'event-chip mr-2 white'}
-                      style={{backgroundColor: event.color}}
-                      label={isEventType ? 'Event' : 'Task'}/>
-
-                <span className={'title'}>
-                    {event.title}
-                  </span>
-
-                {
-                  event.customer ? <Tooltip title={`Event Customer: ${event.customer.name}`}>
-                    <UserAvatar user={event.customer}
-                                size={'smallest'}
-                                className={'white mx-1'}/>
-                  </Tooltip> : null
-                }
-                <div className={`date mx-3 ${tab.overdue ? 'overdue' : ''}`}>
-                  {dateUtil.format(event.date, "Do MMM")}
-                </div>
-              </div>
-            </div>
-          );
-        })}
+        {!isEmpty ? ProjectEventsTab(data, tab.overdue) : <div> There are no events</div>}
       </div>
     );
   };

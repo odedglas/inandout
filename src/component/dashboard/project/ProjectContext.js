@@ -88,6 +88,7 @@ class ProjectProvider extends Component {
     }, {});
 
     context['fillTransaction'] = transaction => getContextTransactions([transaction], customers, categories, users)[0];
+
     return context;
   };
 

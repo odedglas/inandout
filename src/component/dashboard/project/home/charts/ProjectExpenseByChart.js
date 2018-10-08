@@ -1,30 +1,56 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-
+import {connect} from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import DynamicIcon from '@common/DynamicIcon';
 import {PieChart, Pie, ResponsiveContainer, Tooltip, Cell} from 'recharts';
-import {CSSTransition} from 'react-transition-group';
 
+import util from '@util/'
 import {TransactionType} from "@model/transaction";
 import {CategoryType} from "@model/category";
+import {ProjectType} from "@model/project";
 
 class ProjectExpenseByChart extends Component {
 
   static propTypes = {
+    selectedProject: ProjectType,
     transactions: PropTypes.arrayOf(TransactionType),
     categories: PropTypes.arrayOf(CategoryType),
   };
 
   state = {
     data: [],
-    showCategoryDisplay: false,
     activeItem: undefined
   };
 
-  getData() {
+  componentDidMount() {
+    const {transactions, categories} =  this.props;
+    this.setMaxActiveItem(transactions, categories);
+  }
 
-    const {transactions, categories} = this.props;
+  componentWillReceiveProps(nextProps) {
+
+    const lastProjectId = this.props.selectedProject && this.props.selectedProject.id;
+    const nextProjectId = nextProps.selectedProject && nextProps.selectedProject.id;
+
+    if (lastProjectId !== nextProjectId) {
+
+      this.setMaxActiveItem(nextProps.transactions, nextProps.categories);
+    }
+  }
+
+  setMaxActiveItem(transactions, categories) {
+
+    const nextCategories = this.getData(transactions, categories);
+    const valuedCategories = nextCategories.filter(c => c.value);
+    const maxValuedCategory = valuedCategories.sort(util.sortJsonFN([{name: 'value', reverse: true}]))[0];
+
+    this.setState({
+      activeItem: maxValuedCategory ? maxValuedCategory : undefined
+    });
+  }
+
+  getData(transactions, categories) {
 
     return categories.map(c => ({
       name: c.name,
@@ -37,46 +63,40 @@ class ProjectExpenseByChart extends Component {
     }))
   }
 
-  onItemEnterLeave = (item, show) => {
+  onItemEnterLeave = (item) => {
 
-    this.setState({activeItem: item, showCategoryDisplay: show});
+    this.setState({activeItem: item});
   };
 
   render() {
 
-    const {activeItem, showCategoryDisplay} = this.state;
+    const {transactions, categories} = this.props;
+    const {activeItem} = this.state;
 
+    const data = this.getData(transactions, categories);
     const _activeItem = activeItem ? activeItem : {};
-    const data = this.getData();
 
     return (
       <div className={'chart-holder'}>
         <div className={'title px-3 text-center mt-'}> Expense by category</div>
-        <CSSTransition
-          in={showCategoryDisplay}
-          timeout={300}
-          classNames="fade"
-          unmountOnExit
-        >
-          <div className="category-display">
-            <Avatar className={'avatar medium mt-2'} style={{'backgroundColor': _activeItem.color}}>
-              {activeItem ? <DynamicIcon className={'icon'} name={_activeItem.icon}/> : null}
-            </Avatar>
-            <div className="category-details my-2">
-              <div>{_activeItem.name} </div>
-              <span className={'value'}> : <b> {_activeItem.value} </b> </span></div>
-          </div>
-        </CSSTransition>
 
-        < ResponsiveContainer height={200}>
+        <div className="category-display">
+          <Avatar className={'avatar medium mt-2'} style={{'backgroundColor': _activeItem.color}}>
+            {activeItem ? <DynamicIcon className={'icon'} name={_activeItem.icon}/> : null}
+          </Avatar>
+          <div className="category-details my-2">
+            <div>{_activeItem.name} </div>
+            <span className={'value'}> : <b> {_activeItem.value} </b> </span></div>
+        </div>
+
+        <ResponsiveContainer height={200}>
           <PieChart>
             <Pie
               dataKey="value"
               data={data}
               innerRadius={80}
               outerRadius={100}
-              onMouseEnter={item => this.onItemEnterLeave(item, true)}
-              onMouseLeave={item => this.onItemEnterLeave(undefined, false)}>
+              onMouseEnter={item => this.onItemEnterLeave(item, true)}>
               {
                 data.map((entry, index) => <Cell key={entry.name} fill={entry.color}/>)
               }
@@ -89,4 +109,6 @@ class ProjectExpenseByChart extends Component {
   }
 }
 
-export default ProjectExpenseByChart;
+export default connect(state => ({
+  selectedProject: state.project.selectedProject,
+}), {})(ProjectExpenseByChart);

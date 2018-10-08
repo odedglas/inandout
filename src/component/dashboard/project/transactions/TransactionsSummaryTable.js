@@ -20,77 +20,83 @@ class TransactionsSummaryTable extends Component {
     transactions: PropTypes.arrayOf(TransactionType),
     selectedProject: PropTypes.object,
     showIncomes: PropTypes.bool,
-    transactionsAmount: PropTypes.number
+    transactionsAmount: PropTypes.number,
+    emptyMessage: PropTypes.string,
   };
 
   static defaultProps = {
     showIncomes: false,
     transactionsAmount: 5,
+    emptyMessage: 'There are no transactions for display'
   };
 
   render() {
 
-    const {selectedProject, transactions, showIncomes, transactionsAmount} = this.props;
+    const {selectedProject, transactions, emptyMessage, showIncomes, transactionsAmount} = this.props;
+    const isEmpty = transactions.length === 0;
+
     const latestTransactions = transactions.reverse()
       .filter(t => t.income === showIncomes)
       .slice(0, transactions.length > transactionsAmount - 1 ? transactionsAmount : transactions.length);
 
     return (
-      <div className={'row col-sm- px-0'}>
+      <div className={'row col-sm-12 px-0'}>
         <div className={'col-sm-12'}>
-          <Table className={'transactions-summary'}>
-            <TableHead>
-              <TableRow className={'table-head'}>
-                <TableCell>Date</TableCell>
-                <TableCell>Owner</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Amount ({selectedProject.currency})</TableCell>
-                <TableCell>{showIncomes ? 'Customer' : 'Category'}</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {latestTransactions.map(t => {
+          {
+            !isEmpty ? <Table className={'transactions-summary'}>
+              <TableHead>
+                <TableRow className={'table-head'}>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Owner</TableCell>
+                  <TableCell>Description</TableCell>
+                  <TableCell>Amount ({selectedProject.currency})</TableCell>
+                  <TableCell>{showIncomes ? 'Customer' : 'Category'}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {latestTransactions.map(t => {
 
-                return (
-                  <TableRow key={t.id} className={'table-row'}>
-                    <TableCell>{t.formattedDate}</TableCell>
-                    <TableCell>
-                      <Tooltip title={t.owner.displayName} placement={'right'}>
-                        <UserAvatar user={t.owner} size={'smaller'}/>
-                      </Tooltip>
-                    </TableCell>
-                    <TableCell>
-                      {t.description}
-                    </TableCell>
-                    <TableCell>
-                      <div className={'outcome-amount'}>
-                        <span> {t.amount} </span>
-                        <Tooltip title={showIncomes ? 'Income' : 'Outcome'} placement={'top'}>
-                          <DynamicIcon
-                            className={`icon mx-2 ${showIncomes ? 'success-indicator' : 'overage-indicator'}`}
-                            name={showIncomes ? 'income' : 'outcome'}/>
+                  return (
+                    <TableRow key={t.id} className={'table-row'}>
+                      <TableCell>{t.formattedDate}</TableCell>
+                      <TableCell>
+                        <Tooltip title={t.owner.displayName} placement={'right'}>
+                          <UserAvatar user={t.owner} size={'smaller'}/>
                         </Tooltip>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {
-                        showIncomes ?
-                          (t.customer ? <Tooltip title={t.customer.name} placement={'right'}>
-                            <UserAvatar user={t.customer} size={'smaller'}/>
-                          </Tooltip> : null)
-                          :
-                          (t.category ? <Tooltip title={t.category.name} placement={'right'}>
-                            <Avatar className={'avatar smaller'} style={{'backgroundColor': t.category.color}}>
-                              <DynamicIcon className={'icon'} name={t.category.icon}/>
-                            </Avatar>
-                          </Tooltip> : null)
-                      }
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+                      </TableCell>
+                      <TableCell>
+                        {t.description}
+                      </TableCell>
+                      <TableCell>
+                        <div className={'outcome-amount'}>
+                          <span> {t.amount} </span>
+                          <Tooltip title={showIncomes ? 'Income' : 'Outcome'} placement={'top'}>
+                            <DynamicIcon
+                              className={`icon mx-2 ${showIncomes ? 'success-indicator' : 'overage-indicator'}`}
+                              name={showIncomes ? 'income' : 'outcome'}/>
+                          </Tooltip>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {
+                          showIncomes ?
+                            (t.customer ? <Tooltip title={t.customer.name} placement={'right'}>
+                              <UserAvatar user={t.customer} size={'smaller'}/>
+                            </Tooltip> : null)
+                            :
+                            (t.category ? <Tooltip title={t.category.name} placement={'right'}>
+                              <Avatar className={'avatar smaller'} style={{'backgroundColor': t.category.color}}>
+                                <DynamicIcon className={'icon'} name={t.category.icon}/>
+                              </Avatar>
+                            </Tooltip> : null)
+                        }
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table> : <div className={'p-4'}> {emptyMessage} </div>
+          }
         </div>
       </div>
     );

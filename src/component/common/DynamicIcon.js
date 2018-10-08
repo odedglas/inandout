@@ -40,6 +40,14 @@ import CakeIcon from '@material-ui/icons/Cake';
 import CoffeeIcon from '@material-ui/icons/LocalCafe';
 import GasIcon from '@material-ui/icons/LocalGasStation';
 import FlightIcon from '@material-ui/icons/LocalAirport';
+import ElectricityIcon from '@material-ui/icons/SettingsInputHdmi';
+import PrintIcon from '@material-ui/icons/Print';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import BuildIcon from '@material-ui/icons/Build';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import WorkIcon from '@material-ui/icons/Work';
+import SecurityIcon from '@material-ui/icons/Security';
 
 // -- Actions -- //
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -154,6 +162,14 @@ const iconMap = {
   'toArrow': toArrowIcon,
   'projectMembers': ProjectMembersIcon,
   'check': CheckIcon,
+  'addShop': AddShoppingCartIcon,
+  'assignment': AssignmentIcon,
+  'build': BuildIcon,
+  'favorite': FavoriteIcon,
+  'print': PrintIcon,
+  'electricity': ElectricityIcon,
+  'work': WorkIcon,
+  'security': SecurityIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {

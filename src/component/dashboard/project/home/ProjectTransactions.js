@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+
 import SwipeableViews from 'react-swipeable-views';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -8,6 +10,7 @@ import {DIRECTIONS} from '@const/';
 import {TransactionType} from "@model/transaction";
 import DynamicIcon from "@common/DynamicIcon";
 import util from '@util/';
+import {ProjectType} from "@model/project";
 
 const tabs = [
   {
@@ -22,16 +25,44 @@ const tabs = [
     getData:  transactions => transactions.filter(t => !t.income)
   },
 ];
+const incomeTabIndex = 0, outcomeTabIndex = 1;
 
 class ProjectTransactions extends React.Component {
 
   static propTypes = {
+    selectedProject: ProjectType,
     transactions: PropTypes.arrayOf(TransactionType),
   };
 
   state = {
     activeTabIndex: 0,
   };
+
+  componentDidMount() {
+    const {transactions} =  this.props;
+    this.setInitialActiveTab(transactions,);
+  }
+
+  componentWillReceiveProps(nextProps) {
+
+    const lastProjectId = this.props.selectedProject && this.props.selectedProject.id;
+    const nextProjectId = nextProps.selectedProject && nextProps.selectedProject.id;
+
+    if (lastProjectId !== nextProjectId) {
+
+      this.setInitialActiveTab(nextProps.transactions);
+    }
+  }
+
+  setInitialActiveTab(transactions) {
+
+    const incomes = tabs[incomeTabIndex].getData(transactions);
+    const outcomes = tabs[outcomeTabIndex].getData(transactions);
+
+    this.setState({
+      activeTabIndex: (incomes.length === 0 && outcomes.length > 0) ? outcomeTabIndex : incomeTabIndex
+    });
+  }
 
   handleChange = (event, value) => {
     this.setState({activeTabIndex: value});
@@ -42,6 +73,7 @@ class ProjectTransactions extends React.Component {
   };
 
   renderTransactionsTab = tab => {
+
     const {transactions} = this.props;
 
     const income = tab.income;
@@ -50,6 +82,7 @@ class ProjectTransactions extends React.Component {
 
     return (
       <TransactionsSummary showIncomes={income}
+                           emptyMessage={`There are no ${tab.label} to display`}
                            transactions={data}/>
     );
   };
@@ -92,5 +125,6 @@ class ProjectTransactions extends React.Component {
   }
 }
 
-
-export default ProjectTransactions;
+export default connect(state => ({
+  selectedProject: state.project.selectedProject,
+}), {})(ProjectTransactions);
