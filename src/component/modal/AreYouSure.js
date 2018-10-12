@@ -9,6 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {hideConfirmation} from "@action/dashboard";
+import DynamicIcon from "../common/DynamicIcon";
 
 class AreYouSure extends Component {
 
@@ -34,9 +35,20 @@ class AreYouSure extends Component {
     hideConfirmation();
   };
 
+  handleButtonClick = (button) => {
+
+    const { confirmPayload, hideConfirmation } = this.props;
+
+    button.onClick(confirmPayload, hideConfirmation);
+
+  };
+
   render() {
 
     const { showConfirmModal, confirmPayload} = this.props;
+    const title = confirmPayload.title || 'Are You Sure ?';
+
+    const hasCustomButtons = confirmPayload.buttons && confirmPayload.buttons.length > 0;
 
     return (
       <div>
@@ -49,7 +61,8 @@ class AreYouSure extends Component {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle className={'title'}>
-            {confirmPayload.title || 'Are You Sure ?'}
+            <DynamicIcon name={confirmPayload.icon}/>
+            {title}
           </DialogTitle>
           <DialogContent className={'content'}>
             <DialogContentText>
@@ -57,12 +70,26 @@ class AreYouSure extends Component {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="secondary" autoFocus>
-              Cancel
-            </Button>
-            <Button onClick={this.handleConfirm} color="primary" >
-              Confirm
-            </Button>
+            {
+              hasCustomButtons ? <div>
+                  {confirmPayload.buttons.map(button => (
+                    <Button onClick={() => this.handleButtonClick(button)}
+                            key={button.text.toLowerCase()}
+                            color={button.color}>
+                      {button.text}
+                    </Button>
+                  ))}
+                </div>
+                :
+                <div>
+                <Button onClick={this.handleClose} color="secondary" autoFocus>
+                  Cancel
+                </Button>
+                <Button onClick={this.handleConfirm} color="primary" >
+                  Confirm
+                </Button>
+              </div>
+            }
           </DialogActions>
         </Dialog>
       </div>

@@ -120,7 +120,7 @@ export default {
     return {
       type: 'INCOME',
       date: event.date,
-      customer: event.customer,
+      customer: event.customer ? event.customer.id || event.customer : "",
       description
     }
   },

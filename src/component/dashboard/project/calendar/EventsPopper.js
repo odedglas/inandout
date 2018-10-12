@@ -255,6 +255,7 @@ class EventsPopper extends Component {
     const {data, eventTypeMenuAnchor, editMode} = this.state;
 
     const eventTypeLabel = util.searchInConst(EVENT_TYPE, data.type);
+
     return (
       <div className={'content'}>
 
@@ -339,6 +340,7 @@ class EventsPopper extends Component {
 
     const isCompleted = data.completed === true;
     const canComplete = () => editMode && (!isEventType || dateUtil.isAfter(new Date(), data.date));
+    const transactionReported = isCompleted && data.transaction !== undefined;
 
     return (
       <div className={'footer'}>
@@ -362,10 +364,10 @@ class EventsPopper extends Component {
         {
           canComplete() ? (
             isEventType ?
-              <Button onClick={() => isCompleted ? this.handleTransactionModalShow(true) : this.handleTransactionModalShow(false)}
+              <Button onClick={() => this.handleTransactionModalShow(transactionReported)}
                       color="primary"
                       size={'small'}>
-                {isCompleted ? 'View Transaction' : 'To Transaction'}
+                {transactionReported ? 'View Transaction' : 'To Transaction'}
               </Button> :
               <Button onClick={() => this.markEventComplete(!isCompleted)}
                       color="primary"

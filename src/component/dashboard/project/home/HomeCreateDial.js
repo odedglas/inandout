@@ -93,7 +93,7 @@ class HomeCreateDial extends React.Component {
     };
 
     return (
-      <div className={'project-speed-dial fab'}>
+      <div className={'project-speed-dial fab'} style={{'pointerEvents': 'none'}}>
         <ClickAwayListener onClickAway={this.closeDialMenu}>
           <SpeedDial
             ariaLabel="SpeedDial example"

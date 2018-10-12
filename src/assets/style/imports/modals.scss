@@ -76,6 +76,14 @@
 
   .title {
 
+    h2 {
+      display:flex;
+
+      svg {
+        margin-right: 0.5rem;
+      }
+    }
+
   }
 
   .content {

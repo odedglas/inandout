@@ -8,14 +8,21 @@ import Tab from '@material-ui/core/Tab';
 import Tooltip from '@material-ui/core/Tooltip';
 import Avatar from '@material-ui/core/Avatar';
 import UserAvatar from '@common/UserAvatar';
+import DynamicIcon from "@common/DynamicIcon";
+import Button from "@material-ui/core/es/Button/Button";
+import CreateTransaction from '@modal/CreateTransaction'
 import {DIRECTIONS} from '@const/';
 import {EventType} from "@model/event";
 import {ProjectType} from "@model/project";
-import DynamicIcon from "@common/DynamicIcon";
-
+import {showConfirmation} from "@action/dashboard";
+import {
+  markEventComplete,
+  createTransaction,
+  attachEventTransaction,
+} from "@action/project";
 import dateUtil from '@util/date';
 import util from '@util/';
-import Button from "@material-ui/core/es/Button/Button";
+import calendarService from '@service/calendar';
 
 const tabs = [
   {
@@ -39,7 +46,7 @@ const tabs = [
 
 const overdueTabIndex = 0, upcomingTabIndex = 1;
 
-const ProjectEventsTab = (events, overdue) => (
+const ProjectEventsTab = (events, overdue, completeTask, reportEvent) => (
   events.map(event => {
 
     const isEventType = event.type === 'EVENT';
@@ -67,7 +74,10 @@ const ProjectEventsTab = (events, overdue) => (
             {dateUtil.format(event.date, "Do MMM")}
           </div>
 
-          <Button size="small" className={'button--xs ml-2'} color="primary" >
+          <Button size="small" className={'button--xs ml-2'}
+                  style={{'justifyContent':'flex-start'}}
+                  onClick={() => isEventType ? reportEvent(event) : completeTask(event)}
+                  color="primary" >
             <DynamicIcon name={icon}/>
             {isEventType ? 'Report' : 'Complete'}
           </Button>
@@ -83,10 +93,16 @@ class ProjectEvents extends React.Component {
   static propTypes = {
     events: PropTypes.arrayOf(EventType),
     selectedProject: ProjectType,
+    createTransaction: PropTypes.func.isRequired,
+    attachEventTransaction: PropTypes.func.isRequired,
+    markEventComplete: PropTypes.func.isRequired,
+    showConfirmation: PropTypes.func.isRequired,
   };
 
   state = {
     activeTabIndex: 0,
+    reportedEvent: undefined,
+    showCreateTransactionModal: false,
   };
 
   componentDidMount() {
@@ -115,11 +131,11 @@ class ProjectEvents extends React.Component {
     });
   }
 
-  handleChange = (event, value) => {
+  handleTabChange = (event, value) => {
     this.setState({activeTabIndex: value});
   };
 
-  handleChangeIndex = index => {
+  handleTabChangeIndex = index => {
     this.setState({activeTabIndex: index});
   };
 
@@ -133,14 +149,115 @@ class ProjectEvents extends React.Component {
 
     return (
       <div className={'events-container p-3'}>
-        {!isEmpty ? ProjectEventsTab(data, tab.overdue)
+        {!isEmpty ? ProjectEventsTab(data, tab.overdue, this.onTaskComplete, this.onEventReport)
           :
           <div className={'p-4'}> There are no {tab.label.toLowerCase()} events for display</div>}
       </div>
     );
   };
 
+  onTaskComplete = event => {
+
+    const {showConfirmation, selectedProject, markEventComplete} = this.props;
+
+    showConfirmation({
+      title:'Complete Task',
+      body: 'Please confirm this task has been done',
+      icon: 'task',
+      onConfirm: () => {
+
+        markEventComplete(
+          selectedProject,
+          event.id,
+          true
+        )
+      }
+    });
+  };
+
+  onEventReport = event => {
+
+    const {showConfirmation, selectedProject, markEventComplete} = this.props;
+
+    showConfirmation({
+      title:'Event Report',
+      body: 'Report this event and attach if needed a transaction to it',
+      icon: 'calendar',
+      buttons:[
+        {
+          color:'secondary',
+          text:'Cancel',
+          onClick: (payload, close) => close()
+        },
+        {
+          color: 'primary',
+          text: 'Complete Event',
+          onClick: (payload, close) => {
+            markEventComplete(
+              selectedProject,
+              event.id,
+              true
+            );
+            close();
+          }
+        },
+        {
+          color: 'primary',
+          text: 'Report Transaction',
+          onClick: (payload, close) => {
+
+            //Show transaction modal
+            this.setState({
+              showCreateTransactionModal: true,
+              reportedEvent: event
+            });
+            close();
+          }
+        }
+      ]
+    });
+  };
+
+
+  handleTransactionCrud = (transaction, action, cb) => {
+
+    const {reportedEvent} = this.state;
+    const {createTransaction, selectedProject} = this.props;
+
+    if (action === 'add') {
+
+      createTransaction(
+        selectedProject,
+        {
+          ...transaction,
+          sourceEventId: reportedEvent.id
+        },
+        (transaction) => {
+
+          this.props.attachEventTransaction(
+            selectedProject,
+            reportedEvent.id,
+            transaction,
+            () => {
+              cb();
+              this.setState({
+                reportedEvent: undefined
+              })
+            }
+          );
+        }
+      )
+    }
+  };
+
+  handleTransactionModalHide = () => this.setState({showCreateTransactionModal: false});
+
   render() {
+
+    const {showCreateTransactionModal, reportedEvent} = this.state;
+    const eventReportTransaction = reportedEvent ? calendarService.transformEventToTransaction(
+      reportedEvent
+    ) : {};
 
     const direction = DIRECTIONS.LTR;
 
@@ -153,7 +270,7 @@ class ProjectEvents extends React.Component {
         <div>
           <Tabs
             value={this.state.activeTabIndex}
-            onChange={this.handleChange}
+            onChange={this.handleTabChange}
             indicatorColor="primary"
             className={'tabs'}
             textColor="primary"
@@ -168,11 +285,17 @@ class ProjectEvents extends React.Component {
         <SwipeableViews
           axis={direction === 'rtl' ? 'x-reverse' : 'x'}
           index={this.state.activeTabIndex}
-          onChangeIndex={this.handleChangeIndex}
+          onChangeIndex={this.handleTabChangeIndex}
         >
           {tabs.map(tab => <div key={tab.key}> {this.renderTabEvents(tab)} </div>)}
 
         </SwipeableViews>
+
+        <CreateTransaction open={showCreateTransactionModal}
+                           createInitialState={eventReportTransaction}
+                           transaction={{}}
+                           transactionCrudHandler={this.handleTransactionCrud}
+                           onClose={this.handleTransactionModalHide}/>
       </div>
     );
   }
@@ -180,4 +303,4 @@ class ProjectEvents extends React.Component {
 
 export default connect(state => ({
   selectedProject: state.project.selectedProject,
-}), {})(ProjectEvents);
+}), {showConfirmation, markEventComplete, createTransaction, attachEventTransaction})(ProjectEvents);
