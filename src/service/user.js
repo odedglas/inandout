@@ -10,7 +10,7 @@ export default {
       user: {
         id: res.id,
         ...res.user,
-        projects: getUserProjectsMeta(res.projects)
+        projects: Object.keys(res.projects)
       },
     } : undefined
   }),
@@ -23,7 +23,7 @@ export default {
       email,
       initials: initials.toUpperCase(),
       avatarColor: themeService.getAvatarRandomColor(),
-      projects: []
+      projects: {}
     };
 
     if(avatarImage) {
@@ -48,10 +48,3 @@ export default {
     });
   },
 }
-
-const getUserProjectsMeta = projects => {
-
-  //Getting user projects meta
-  const userProjects = projects ? Object.keys(projects) : [];
-  return userProjects.map(userProject => projects[userProject]);
-};

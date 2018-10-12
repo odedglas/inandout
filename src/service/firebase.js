@@ -89,7 +89,7 @@ export default {
         const projectKey = res.key;
 
         //Adding to user projects
-        database.ref(`users/${project.owner}/projects`).push(
+        database.ref(`users/${project.owner}/projects/${projectKey}`).set(
           projectKey
         );
 

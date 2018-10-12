@@ -81,9 +81,11 @@ class ProjectTransactions extends React.Component {
       .sort(util.sortJsonFN([{name: 'date'}]));
 
     return (
-      <TransactionsSummary showIncomes={income}
-                           emptyMessage={`There are no ${tab.label} to display`}
-                           transactions={data}/>
+      <div className={'mb-3'}>
+        <TransactionsSummary showIncomes={income}
+                             emptyMessage={`There are no ${tab.label.toLowerCase()} to display`}
+                             transactions={data}/>
+      </div>
     );
   };
 

@@ -53,7 +53,9 @@ export function getProjectRoutes(location) {
     <Switch location={location}>
 
       <Route exact path={routes.PROJECT}
-             component={ProjectHome}/>
+             render={(props) => (
+               <ProjectHome key={props.match.params.identifier} {...props} />)
+             } />
 
       <Route exact path={routes.BUDGETS}
              component={Budgets}/>

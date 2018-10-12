@@ -89,8 +89,8 @@ class ProjectHome extends React.Component {
                 <div className={'col-sm-12 col-md-6'}>
                   <Paper className={'p-0 row'}>
 
-                    <div className={'col-sm-12 px-0 title mb-3'}>
-                      <ProjectTransactions transactions={transactions}/>
+                    <div className={'col-sm-12 px-0'}>
+                      <ProjectEvents events={events}/>
                     </div>
 
                   </Paper>
@@ -99,8 +99,8 @@ class ProjectHome extends React.Component {
                 <div className={'col-sm-12 col-md-6 mt-sm-3 mt-md-0'}>
                   <Paper className={'p-0 row'}>
 
-                    <div className={'col-sm-12 px-0 title mb-3'}>
-                      <ProjectEvents events={events}/>
+                    <div className={'col-sm-12 px-0'}>
+                      <ProjectTransactions transactions={transactions}/>
                     </div>
 
                   </Paper>

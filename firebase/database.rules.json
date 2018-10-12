@@ -16,8 +16,8 @@
         "owner"
       ],
       "$projectId": {
-        ".read": "true",
-        ".write": "true",
+        ".read": "root.child('users').child(auth.uid).child('projects').child($projectId).exists()",
+        ".write": "!data.exists() || root.child('users').child(auth.uid).child('projects').child($projectId).exists()",
         "excludedCategories": {
           ".indexOn": [
             ".value"
@@ -26,8 +26,12 @@
       }
     },
     "transactions": {
-      ".read": true,
-      ".write": true
+      ".read": false,
+      ".write": false,
+      "$projectId": {
+        ".read": "root.child('users').child(auth.uid).child('projects').child($projectId).exists()",
+        ".write": "root.child('users').child(auth.uid).child('projects').child($projectId).exists()",
+      }
     },
     "categories": {
       ".read": true,

@@ -1,17 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+
 import SwipeableViews from 'react-swipeable-views';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Tooltip from '@material-ui/core/Tooltip';
-import Button from '@material-ui/core/Button';
+import Avatar from '@material-ui/core/Avatar';
 import UserAvatar from '@common/UserAvatar';
 import {DIRECTIONS} from '@const/';
 import {EventType} from "@model/event";
+import {ProjectType} from "@model/project";
 import DynamicIcon from "@common/DynamicIcon";
-import Chip from '@material-ui/core/Chip';
+
 import dateUtil from '@util/date';
 import util from '@util/';
+import Button from "@material-ui/core/es/Button/Button";
 
 const tabs = [
   {
@@ -33,20 +37,24 @@ const tabs = [
   },
 ];
 
+const overdueTabIndex = 0, upcomingTabIndex = 1;
+
 const ProjectEventsTab = (events, overdue) => (
   events.map(event => {
 
     const isEventType = event.type === 'EVENT';
+    const icon = isEventType ? 'calendar' : 'task';
+
     return (
       <div className={'event'} key={event.id}>
         <div className={'body'}>
-          <Chip className={'event-chip mr-2 white'}
-                style={{backgroundColor: event.color}}
-                label={isEventType ? 'Event' : 'Task'}/>
+          <Avatar className={'avatar smallest mr-2'} style={{'backgroundColor': event.color}}>
+            <DynamicIcon className={'icon white'} name={icon}/>
+          </Avatar>
 
           <span className={'title'}>
                     {event.title}
-                  </span>
+          </span>
 
           {
             event.customer ? <Tooltip title={`Event Customer: ${event.customer.name}`}>
@@ -55,9 +63,15 @@ const ProjectEventsTab = (events, overdue) => (
                           className={'white mx-1'}/>
             </Tooltip> : null
           }
-          <div className={`date mx-3 ${overdue ? 'overdue' : ''}`}>
+          <div className={`date ml-3 ${overdue ? 'overdue' : ''}`}>
             {dateUtil.format(event.date, "Do MMM")}
           </div>
+
+          <Button size="small" className={'button--xs ml-2'} color="primary" >
+            <DynamicIcon name={icon}/>
+            {isEventType ? 'Report' : 'Complete'}
+          </Button>
+
         </div>
       </div>
     );
@@ -68,11 +82,38 @@ class ProjectEvents extends React.Component {
 
   static propTypes = {
     events: PropTypes.arrayOf(EventType),
+    selectedProject: ProjectType,
   };
 
   state = {
     activeTabIndex: 0,
   };
+
+  componentDidMount() {
+    const {events} = this.props;
+    this.setInitialActiveTab(events,);
+  }
+
+  componentWillReceiveProps(nextProps) {
+
+    const lastProjectId = this.props.selectedProject && this.props.selectedProject.id;
+    const nextProjectId = nextProps.selectedProject && nextProps.selectedProject.id;
+
+    if (lastProjectId !== nextProjectId) {
+
+      this.setInitialActiveTab(nextProps.events);
+    }
+  }
+
+  setInitialActiveTab(events) {
+
+    const overdues = tabs[overdueTabIndex].getData(events);
+    const upcoming = tabs[upcomingTabIndex].getData(events);
+
+    this.setState({
+      activeTabIndex: (overdues.length === 0 && upcoming.length > 0) ? upcomingTabIndex : overdueTabIndex
+    });
+  }
 
   handleChange = (event, value) => {
     this.setState({activeTabIndex: value});
@@ -91,8 +132,10 @@ class ProjectEvents extends React.Component {
       .sort(util.sortJsonFN([{name: 'date'}]));
 
     return (
-      <div className={'events-container p-2'}>
-        {!isEmpty ? ProjectEventsTab(data, tab.overdue) : <div> There are no events</div>}
+      <div className={'events-container p-3'}>
+        {!isEmpty ? ProjectEventsTab(data, tab.overdue)
+          :
+          <div className={'p-4'}> There are no {tab.label.toLowerCase()} events for display</div>}
       </div>
     );
   };
@@ -135,4 +178,6 @@ class ProjectEvents extends React.Component {
   }
 }
 
-export default ProjectEvents;
+export default connect(state => ({
+  selectedProject: state.project.selectedProject,
+}), {})(ProjectEvents);

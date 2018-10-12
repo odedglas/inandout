@@ -12,3 +12,15 @@
 .hover-popout {
   transition: box-shadow .2s cubic-bezier(0,.5,.265,2),transform .2s cubic-bezier(0,.5,.265,2);
 }
+
+.slide-out {
+  animation: slide-out 1s ease;
+}
+
+@keyframes slide-out {
+  0% {transform: translate(0%);}
+  100% {
+    transform: translate(150%);
+    display:none;
+  }
+}

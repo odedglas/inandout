@@ -111,3 +111,15 @@ div[role="tooltip"]  > div{
     bottom:0;
   }
 }
+
+.button--xs {
+  padding: 3px 4px !important;
+  min-width: 90px !important;
+  font-size: 0.7rem !important;
+  min-height: 24px !important;
+
+  svg {
+    font-size: 16px;
+    margin-right: 5px;
+  }
+}

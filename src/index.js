@@ -12,7 +12,6 @@ import moment from 'moment'
 // Styles
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import 'react-big-calendar/lib/css/react-big-calendar.css'
-
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.less'
 
 import themeService from './service/theme'
