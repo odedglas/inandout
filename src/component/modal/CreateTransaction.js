@@ -93,7 +93,7 @@ class CreateTransactionModal extends React.Component {
 
     //Adjusting amount if it's edit mode and payment type transaction
     const amount = paymentsEditMode ? Math.round(model.amount * model.payments) : model.amount;
-    console.log(model)
+
     return (
       <div>
         {

@@ -80,7 +80,7 @@ class NotificationsDrawer extends Component {
     const isUnread = notification.unread;
 
     let completedAction;
-    if(notification.completedAction) {
+    if (notification.completedAction) {
       completedAction = notification.actions.find(a => a.key === notification.completedAction);
     }
 
@@ -91,8 +91,19 @@ class NotificationsDrawer extends Component {
           <UserAvatar user={notification.from} size={'small'}/>
           <div className={'px-3'}>
             <span className={'text mt-2'}>
-              <span dangerouslySetInnerHTML={{ __html: notification.text }}/>
-              <div className={'date'}> {notification.date}</div>
+              <span dangerouslySetInnerHTML={{__html: notification.text}}/>
+              <div className={'date-wrapper mt-2'}>
+                <span>
+                  {
+                    completedAction ? <div className={'notification-result'}>
+                      <span>* {completedAction.completedText}</span>
+                    </div> : null
+                  }
+                </span>
+                <span>
+                  {notification.date}
+                </span>
+                </div>
               </span>
           </div>
 
@@ -110,12 +121,6 @@ class NotificationsDrawer extends Component {
               ))
             }
           </div> : null
-        }
-
-        {
-          completedAction ? <div className={'notification-result mt-2'}>
-          <span>* {completedAction.completedText}</span>
-          </div>: null
         }
 
       </div>
@@ -141,9 +146,9 @@ class NotificationsDrawer extends Component {
     const isEmpty = filledNotifications.length === 0;
 
     const _notifications = filledNotifications.sort(util.sortJsonFN([
-      {name:'unread', reverse: true},
-      {name:'created', reverse: true},
-      ]));
+      {name: 'unread', reverse: true},
+      {name: 'created', reverse: true},
+    ]));
 
     return (
       <Drawer anchor="right" open={open}

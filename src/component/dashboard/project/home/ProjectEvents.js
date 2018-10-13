@@ -9,7 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Avatar from '@material-ui/core/Avatar';
 import UserAvatar from '@common/UserAvatar';
 import DynamicIcon from "@common/DynamicIcon";
-import Button from "@material-ui/core/es/Button/Button";
+import Button from "@material-ui/core/Button";
 import CreateTransaction from '@modal/CreateTransaction'
 import {DIRECTIONS} from '@const/';
 import {EventType} from "@model/event";
@@ -303,4 +303,9 @@ class ProjectEvents extends React.Component {
 
 export default connect(state => ({
   selectedProject: state.project.selectedProject,
-}), {showConfirmation, markEventComplete, createTransaction, attachEventTransaction})(ProjectEvents);
+}), {
+  showConfirmation,
+  markEventComplete,
+  createTransaction,
+  attachEventTransaction
+})(ProjectEvents);
