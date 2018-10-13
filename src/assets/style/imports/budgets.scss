@@ -20,19 +20,29 @@
 .budget-panel {
   color: $text-color;
 
-  .budget-summary {
-    align-items: center;
-    flex: 1;
-    font-size: 0.875rem;
+  .budget-summary-head{
+    transition: border .2s ease;
 
-    .budget-name {
-      transition: font-size .2s ease;
+    .budget-summary {
+      align-items: center;
+      flex: 1;
+      font-size: 0.875rem;
+
+      .budget-name {
+        transition: font-size .2s ease;
+      }
+
+      .budget-range {
+        display: flex;
+        align-items: center;
+        color: $light-text;
+      }
+
+      .usage, .separator {
+        color: $light-text;
+      }
+
     }
-
-    .usage, .separator {
-      color: $light-text;
-    }
-
   }
 
   .budget-content {
@@ -129,6 +139,10 @@
   }
 
   &.expanded {
+
+    .budget-summary-head {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
 
     .budget-name {
       font-size: 1rem;

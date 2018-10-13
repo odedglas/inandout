@@ -142,10 +142,9 @@ class ProjectEvents extends React.Component {
   renderTabEvents = tab => {
     const {events} = this.props;
 
-    const isEmpty = events.length === 0;
-
     const data = tab.getData(events)
       .sort(util.sortJsonFN([{name: 'date'}]));
+    const isEmpty = data.length === 0;
 
     return (
       <div className={'events-container p-3'}>

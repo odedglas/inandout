@@ -123,3 +123,14 @@ div[role="tooltip"]  > div{
     margin-right: 5px;
   }
 }
+
+.badge {
+  padding: 0.35rem;
+  background-color: $logo-color;
+  color: white;
+  font-weight: 500;
+  font-size: 0.675rem;
+  border-radius: 4px;
+  max-height: 24px;
+  display: table;
+}
