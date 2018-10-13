@@ -94,8 +94,7 @@ export default {
     );
 
     const budgetsUsage = budgetService.getBudgetsUsage(
-      budgets.filter(b => b.period === 'MONTHLY' || b.period === 'WEEKLY'),
-      transactions
+      budgets
     );
 
     const projectBalance = project.balance;

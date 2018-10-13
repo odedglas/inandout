@@ -18,6 +18,12 @@
   .content {
     height: calc(100% - #{$header-height} - #{$breadcrumbs-height}) !important;
     padding: 2rem;
+
+    .project-loader {
+      position:absolute;
+      left: 50%;
+      transform: translateX(50%);
+    }
   }
 }
 

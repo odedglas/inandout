@@ -318,6 +318,7 @@ class EventsPopper extends Component {
         <CustomersSelect customer={data.customer}
                          onClose={this.onPopperPickerClose}
                          onOpen={this.onPopperPickerOpen}
+                         showCreateNewCustomer={true}
                          onChange={(val) => this.handleChange(val, 'customer')}/>
 
         {

@@ -126,33 +126,23 @@ export default {
     }
   },
 
-  getBudgetsUsage(budgets, transactions) {
-
-    //Calculating expense by category
-    const categoriesExpenseMap = transactions.reduce((map, t) => {
-
-      if(!t.income) {
-        const existingEntry = map[t.category.id] || 0;
-        map[t.category.id] = existingEntry + t.amount;
-      }
-
-      return map;
-    }, {});
-
-    //Calculating budgets cumulative limit
-    let budgetsCategories = {};
+  getBudgetsUsage(budgets) {
+  
+    //Calculating budgets cumulative limit, Creating transactions array
+    let budgetTransactions = [];
     const cumulativeLimit = budgets.reduce((cumulativeLimit, b) => {
-      cumulativeLimit += b.limit;
 
-      b.categories.forEach(c => budgetsCategories[c.id] = c);
+      const isYearlyBudget = b.period === 'YEARLY';
+      cumulativeLimit += Math.round(b.limit / (isYearlyBudget ? 12 : 1));
+
+      b.transactions.forEach(t => budgetTransactions.push(t));
       return cumulativeLimit;
     }, 0);
 
-    //Filtering categories by collected budget keys
-    const budgetsCategoryKeys = Object.keys(budgetsCategories);
-    const budgetsActual = budgetsCategoryKeys.reduce((total, key) => {
+    //Summing budget transactions
+    const budgetsActual = budgetTransactions.reduce((total, transaction) => {
 
-      total += categoriesExpenseMap[key] || 0;
+      total += transaction.amount;
       return total;
     }, 0);
 

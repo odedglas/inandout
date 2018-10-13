@@ -29,7 +29,7 @@ import navgationUtil from '@util/navigation';
 import budgetService from '@service/budget';
 import dateUtil from '@util/date';
 
-const formatShort = date => dateUtil.format(date, 'Do MMM YY');
+const formatBudgetSummaryRange = date => dateUtil.format(date, 'Do MMM');
 
 class BudgetPanel extends Component {
 
@@ -106,9 +106,9 @@ class BudgetPanel extends Component {
               <Typography className={'budget-name'}>{budget.name}</Typography>
             </div>
             <div className={'col-sm-4 budget-range'}>
-              {formatShort(budget.startDate)}
+              {formatBudgetSummaryRange(budget.startDate)}
               <DynamicIcon className={'mx-2'} name={'toArrow'}/>
-              {formatShort(budget.endDate)}
+              {formatBudgetSummaryRange(budget.endDate)}
             </div>
             <div className={'col-sm-4'}>
                               <span className={'usage'}>

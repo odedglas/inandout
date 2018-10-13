@@ -81,7 +81,7 @@ class Project extends React.Component {
           />
 
           <div className={'content scrollable'}>
-            <div className="flex-center" style={{position: 'absolute'}}>
+            <div className="flex-center project-loader" style={{position: 'absolute'}}>
               <CSSTransition
                 in={loading}
                 timeout={300}
