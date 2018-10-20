@@ -62,6 +62,21 @@ export const LOCAL_STORAGE = {
 
 export const TRANSACTIONS_DATE_KEY_FORMAT = 'MMYY';
 
+export const TRANSACTIONS_STATUS = [
+  {
+    key: 'PENDING',
+    label: 'Pending'
+  },
+  {
+    key: 'ACCEPTED',
+    label: 'Accepted'
+  },
+  {
+    key: 'DENIED',
+    label: 'Denied'
+  },
+];
+
 export const BUDGETS_PERIOD = [
   {
     key: 'WEEKLY',

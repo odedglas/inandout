@@ -11,11 +11,11 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-
+import Hidden from '@material-ui/core/Hidden';
 import DynamicIcon from '@common/DynamicIcon';
 
 import navigationUtil from '@util/navigation'
-import { toggleProjectDrawer } from '@action/project';
+import {toggleProjectDrawer} from '@action/project';
 
 class ProjectDrawer extends Component {
 
@@ -33,7 +33,7 @@ class ProjectDrawer extends Component {
 
   drawerItem = (path, icon, text) => {
 
-    const { selectedProject, location} = this.props;
+    const {selectedProject, location} = this.props;
 
     const fullPath = navigationUtil.projectLink(
       selectedProject,
@@ -48,7 +48,7 @@ class ProjectDrawer extends Component {
           <ListItemIcon className={'icon'}>
             {icon}
           </ListItemIcon>
-          <ListItemText className={'drawer-item-text'} primary={text} />
+          <ListItemText className={'drawer-item-text'} primary={text}/>
         </NavLink>
       </ListItem>
     );
@@ -56,17 +56,10 @@ class ProjectDrawer extends Component {
 
   render() {
 
-    const { open} = this.props;
+    const {open} = this.props;
     const drawerClasses = `project-drawer ${!open ? 'collapsed' : ''}`;
 
-    return (
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: drawerClasses,
-        }}
-        open={open}
-      >
+    const drawer = ( <div>
         <ListItem button onClick={this.handleDrawerToggle} className={'toggle-drawer'}>
           <ListItemIcon>
             {open ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
@@ -75,12 +68,45 @@ class ProjectDrawer extends Component {
         <Divider/>
 
         {this.drawerItem(``, <DynamicIcon name={'home'}/>, 'Home')}
-        {this.drawerItem('budgets',  <DynamicIcon name={'budgets'}/>, 'Budgets')}
-        {this.drawerItem('transactions',  <DynamicIcon name={'transactions'}/>, 'Transactions')}
-        {this.drawerItem('categories',  <DynamicIcon name={'categories'}/>, 'Categories')}
-        {this.drawerItem('customers',  <DynamicIcon name={'customers'}/>, 'Customers')}
-        {this.drawerItem('calendar',  <DynamicIcon name={'calendar'}/>, 'Calendar')}
-      </Drawer>
+        {this.drawerItem('budgets', <DynamicIcon name={'budgets'}/>, 'Budgets')}
+        {this.drawerItem('transactions', <DynamicIcon name={'transactions'}/>, 'Transactions')}
+        {this.drawerItem('categories', <DynamicIcon name={'categories'}/>, 'Categories')}
+        {this.drawerItem('customers', <DynamicIcon name={'customers'}/>, 'Customers')}
+        {this.drawerItem('calendar', <DynamicIcon name={'calendar'}/>, 'Calendar')}
+      </div>
+    )
+
+    return (
+      <div>
+        <Hidden mdUp>
+          <Drawer
+            variant="temporary"
+            anchor={'left'}
+            open={open}
+            onClose={this.handleDrawerToggle}
+            classes={{
+              paper: drawerClasses,
+            }}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+        <Hidden smDown implementation="css">
+          <Drawer
+            variant="permanent"
+            open={open}
+            classes={{
+              paper: drawerClasses,
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+
+      </div>
     );
   }
 }
