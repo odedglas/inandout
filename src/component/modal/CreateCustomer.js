@@ -105,6 +105,7 @@ class CreateCustomerModal extends React.Component {
         </div>
 
         <div className={'form-control'}>
+
           <TextField
             value={model.address}
             error={validation.address.isInvalid}

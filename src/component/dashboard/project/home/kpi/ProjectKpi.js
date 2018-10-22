@@ -24,7 +24,7 @@ export default  ({indicators, project, selectedDate }) => {
         </ProjectKpiCard>
       </div>
 
-      <div className={'col-sm-6 mt-sm-3 col-md-3 mt-md-0'}>
+      <div className={'col-sm-6 mt-3 col-md-3 mt-md-0'}>
         <ProjectKpiCard title={'Budgets usage'}
                         body={<BudgetsUsageKpi currency={currency}
                                                {...indicators.budgetsUsage}/>}
@@ -32,7 +32,7 @@ export default  ({indicators, project, selectedDate }) => {
         </ProjectKpiCard>
       </div>
 
-      <div className={'col-sm-6 mt-sm-3 col-md-3 mt-md-0'}>
+      <div className={'col-sm-6 mt-3 col-md-3 mt-md-0'}>
         <ProjectKpiCard title={'Project Balance'}
                         badgeText={'Overall'}
                         body={<ProjectBalanceKpi currency={currency}

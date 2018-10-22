@@ -96,6 +96,15 @@ class ProjectHome extends React.Component {
                   </Paper>
                 </div>
 
+                <div className={'col-sm-12 col-md-6 mt-sm-3 mt-md-0'}>
+                  <Paper className={'p-0 row'}>
+
+                    <div className={'col-sm-12 px-0'}>
+                      <ProjectTransactions transactions={transactions}/>
+                    </div>
+
+                  </Paper>
+                </div>
               </div>
 
               <HomeCreateDial showNotification={(message, variant) => this.showSnackbar(message, variant)}/>

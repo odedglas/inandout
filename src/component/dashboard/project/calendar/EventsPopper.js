@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
-
 import Popper from '@material-ui/core/Popper';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
@@ -57,6 +56,7 @@ class EventsPopper extends Component {
     project: ProjectType,
     open: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
+    customers: PropTypes.array.isRequired,
     anchorEl: PropTypes.object,
     event: PropTypes.object,
     isValid: PropTypes.func.isRequired,
@@ -251,9 +251,16 @@ class EventsPopper extends Component {
 
   getPopperContent = (isEventType) => {
 
-    const {validation} = this.props;
+    const {validation, customers} = this.props;
     const {data, eventTypeMenuAnchor, editMode} = this.state;
 
+    const handleCustomerSelect = (customerId) => {
+
+      if(!data.location) {
+        const customer = customers.find(c => c.id === customerId);
+        this.handleChange(customer.address, 'location')
+      }
+    };
     const eventTypeLabel = util.searchInConst(EVENT_TYPE, data.type);
 
     return (
@@ -319,7 +326,10 @@ class EventsPopper extends Component {
                          onClose={this.onPopperPickerClose}
                          onOpen={this.onPopperPickerOpen}
                          showCreateNewCustomer={true}
-                         onChange={(val) => this.handleChange(val, 'customer')}/>
+                         onChange={(val) => {
+                           this.handleChange(val, 'customer');
+                           handleCustomerSelect(val)
+                         }}/>
 
         {
           isEventType ?
@@ -474,7 +484,9 @@ export default compose(
       method: (v, f, state, validator, args) => true
     },
   ]),
-  connect(null, {
+  connect(state => ({
+    customers: state.project.customers,
+  }), {
     createEvent,
     editEvent,
     deleteEvent,

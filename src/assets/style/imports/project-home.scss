@@ -181,24 +181,22 @@
       .category-display {
         padding: 0.5rem;
         position: absolute;
-        top: 35%;
+        top: 30%;
         width: 100%;
         display: flex;
         align-items: center;
         flex-direction: column;
 
         .category-details {
-          display: flex;
-          align-items: baseline;
 
           > div {
             text-align: center;
             color: $light-text;
-            max-width: 75px;
+            max-width: 100px;
           }
 
           .value {
-            color: $light-text;
+            margin-top:0.5rem;
             font-size: $medium-font;
           }
         }

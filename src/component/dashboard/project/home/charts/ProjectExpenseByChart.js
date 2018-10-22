@@ -86,7 +86,8 @@ class ProjectExpenseByChart extends Component {
           </Avatar>
           <div className="category-details my-2">
             <div>{_activeItem.name} </div>
-            <span className={'value'}> : <b> {_activeItem.value} </b> </span></div>
+            <div className={'value'}> <b> {_activeItem.value} </b> </div>
+          </div>
         </div>
 
         <ResponsiveContainer height={200}>

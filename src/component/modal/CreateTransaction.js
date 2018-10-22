@@ -143,7 +143,6 @@ class CreateTransactionModal extends React.Component {
               const calcValue = paymentsEditMode ? value / model.payments : value;
               handleChange(calcValue, 'amount')
             }}
-            margin="dense"
             id="amount"
             label={`Amount (${selectedProject.currency})`}
             title={validation.amount.message}
@@ -180,21 +179,6 @@ class CreateTransactionModal extends React.Component {
           />
         </div>
 
-        {!editMode && !isIncome ?
-          <div className={'form-control'} style={{flexDirection: 'column'}}>
-            <TextField
-              label="Payments"
-              value={model.payments}
-              title={validation.payments.message}
-              error={validation.payments.isInvalid}
-              placeholder={"Payments"}
-              onChange={(event) => handleChange(event.target.value, 'payments')}
-              fullWidth
-              margin="dense"
-            />
-            <FormHelperText> Number of monthly payments </FormHelperText></div> : null
-        }
-
         <div className={'form-control'}>
 
           <TextField
@@ -207,11 +191,23 @@ class CreateTransactionModal extends React.Component {
             rowsMax="4"
             onChange={(event) => handleChange(event.target.value, 'description')}
             fullWidth
-            margin="dense"
           />
 
         </div>
 
+        {!editMode && !isIncome ?
+          <div className={'form-control'} style={{flexDirection: 'column'}}>
+            <TextField
+              label="Payments"
+              value={model.payments}
+              title={validation.payments.message}
+              error={validation.payments.isInvalid}
+              placeholder={"Payments"}
+              onChange={(event) => handleChange(event.target.value, 'payments')}
+              fullWidth
+            />
+            <FormHelperText> Number of monthly payments </FormHelperText></div> : null
+        }
       </div>
     );
   };

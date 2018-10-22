@@ -10,6 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import Avatar from '@material-ui/core/Avatar';
 import DynamicIcon from '@common/DynamicIcon';
@@ -404,11 +405,13 @@ class TransactionsTableView extends Component {
         </div>
         <div className={'col-sm-12 px-0 row footer'}>
           <Tooltip title="Add Transaction" placement={'left'}>
-            <IconButton className={'mx-2 my-1 add-transaction'}
+            <Button className={'mx-2 my-1 add-transaction'}
                         onClick={() => this.showHideCreateTransaction(true)}
                         aria-label="Add Transaction">
               <DynamicIcon name={'add'}/>
-            </IconButton>
+
+              ADD
+            </Button>
           </Tooltip>
           <div className={'flex'}></div>
           <TablePagination
