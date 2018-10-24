@@ -80,14 +80,14 @@ export function createProjectSyncListener (projectId, date) {
     );
 
     //Project members and balance
-    const projectPropertiesListener = projectService.createProjectPropertiesListener(
+    const {balance, members} = projectService.createProjectPropertiesListener(
       projectId,
       (balance) => dispatch({ type: 'SYNC_PROJECT_BALANCE', balance }),
       (members) => dispatch({ type: 'SYNC_PROJECT_MEMBERS', members })
     );
 
-    projectSyncListener.balance = projectPropertiesListener.balance;
-    projectSyncListener.members = projectPropertiesListener.members;
+    projectSyncListener.balance = balance;
+    projectSyncListener.members = members;
 
     //Attaching
     const newKeys = Object.keys(projectSyncListener);

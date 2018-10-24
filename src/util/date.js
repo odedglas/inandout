@@ -80,4 +80,9 @@ export default {
 
     return moment(date).startOf(unit)
   },
+
+  endOf(date, unit = 'month') {
+
+    return moment(date).endOf(unit)
+  },
 }

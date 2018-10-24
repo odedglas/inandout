@@ -17,13 +17,14 @@ import ProjectProvider from './ProjectContext';
 import {setPreSelectedProject, updateCachedProject, createProjectSyncListener} from "@action/project";
 import util from '@util/';
 import {getProjectRoutes} from './ProjectRoutes';
-
-const today = new Date();
+import {loadTransactions} from "@action/project";
 
 class Project extends React.Component {
 
   static propTypes = {
     selectedProject: PropTypes.object,
+    loadTransactions: PropTypes.func.isRequired,
+    selectedDate: PropTypes.object,
     setPreSelectedProject: PropTypes.func.isRequired,
     updateCachedProject: PropTypes.func.isRequired,
     createProjectSyncListener: PropTypes.func.isRequired,
@@ -36,7 +37,7 @@ class Project extends React.Component {
 
   componentDidMount() {
 
-    const {selectedProject, match, createProjectSyncListener} = this.props;
+    const {selectedProject, selectedDate,  match, createProjectSyncListener} = this.props;
 
     //Setting preselected if none exists
     if (util.isEmptyObject(selectedProject)) {
@@ -44,7 +45,7 @@ class Project extends React.Component {
     }
     else {
       //Else, Creating sync listener
-      createProjectSyncListener(selectedProject.id, today);
+      createProjectSyncListener(selectedProject.id, selectedDate);
     }
   }
 
@@ -55,17 +56,31 @@ class Project extends React.Component {
 
   componentDidUpdate(prevProps) {
 
-    const {selectedProject, createProjectSyncListener} = this.props;
+    const {selectedProject, selectedDate, createProjectSyncListener} = this.props;
 
     if (selectedProject.id !== prevProps.selectedProject.id) {
-      createProjectSyncListener(selectedProject.id, today);
+      createProjectSyncListener(selectedProject.id, selectedDate);
     }
   }
 
+  onProjectSelectedDateChange = (date) => {
+
+    this.setState({loading: true});
+
+    this.props.loadTransactions(date, (transactions) => {
+debugger;
+      this.setState({
+        loading: false,
+      })
+    });
+
+  };
+
   render() {
 
-    const {selectedProject, loading, location} = this.props;
+    const {selectedProject, selectedDate, loading, location} = this.props;
 
+    console.log(`Project render for : ${selectedDate}`)
     return (
       <ProjectProvider>
         <div className={'project-container'}>
@@ -106,6 +121,7 @@ export default compose(
   withRouter,
   connect(state => ({
     selectedProject: state.project.selectedProject,
+    selectedDate: state.project.selectedDate,
     loading: state.dashboard.loading,
-  }), {setPreSelectedProject, updateCachedProject, createProjectSyncListener})
+  }), {setPreSelectedProject, updateCachedProject, createProjectSyncListener, loadTransactions})
 )(Project);

@@ -97,6 +97,7 @@ class ProjectEvents extends React.Component {
     attachEventTransaction: PropTypes.func.isRequired,
     markEventComplete: PropTypes.func.isRequired,
     showConfirmation: PropTypes.func.isRequired,
+    selectedDate: PropTypes.object.isRequired,
   };
 
   state = {
@@ -140,12 +141,14 @@ class ProjectEvents extends React.Component {
   };
 
   renderTabEvents = tab => {
-    const {events} = this.props;
+    const {events, selectedDate} = this.props;
 
-    const data = tab.getData(events)
+    const endOfSelected = dateUtil.endOf(selectedDate);
+
+    const data = tab.getData(events.filter(e => e.date < endOfSelected))
       .sort(util.sortJsonFN([{name: 'date'}]));
-    const isEmpty = data.length === 0;
 
+    const isEmpty = data.length === 0;
     return (
       <div className={'events-container p-3'}>
         {!isEmpty ? ProjectEventsTab(data, tab.overdue, this.onTaskComplete, this.onEventReport)
@@ -216,7 +219,6 @@ class ProjectEvents extends React.Component {
       ]
     });
   };
-
 
   handleTransactionCrud = (transaction, action, cb) => {
 
@@ -302,6 +304,7 @@ class ProjectEvents extends React.Component {
 
 export default connect(state => ({
   selectedProject: state.project.selectedProject,
+  selectedDate: state.project.selectedProject,
 }), {
   showConfirmation,
   markEventComplete,

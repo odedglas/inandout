@@ -16,6 +16,7 @@ const initialState = {
   customers: [],
   events: [],
   drawerOpen: localStorageService.get(projectDrawerLocalStorageKey),
+  selectedDate: new Date(),
 };
 
 export default function (state = initialState, action) {

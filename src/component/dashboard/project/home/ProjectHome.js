@@ -14,6 +14,7 @@ import ProjectCharts from './charts/ProjectCharts';
 import ProjectTransactions from './ProjectTransactions';
 import ProjectEvents from './ProjectEvents';
 import Paper from '@material-ui/core/Paper';
+import ProjectToolbar from './ProjectToolbar';
 import projectService from '@service/project';
 import dateUtil from '@util/date';
 import {ProjectContext} from '../ProjectContext';
@@ -33,14 +34,14 @@ class ProjectHome extends React.Component {
     ]),
     transactions: PropTypes.arrayOf(TransactionType),
     budgets: PropTypes.arrayOf(BudgetType),
-    categories: PropTypes.arrayOf(CategoryType)
+    categories: PropTypes.arrayOf(CategoryType),
+    selectedDate: PropTypes.object.isRequired,
   };
 
   state = {
     showSuccessSnackbar: false,
     snackbarMessage: '',
     snackbarVariant: 'success',
-    selectedDate: new Date(),
   };
 
   hideSnackbar() {
@@ -59,7 +60,8 @@ class ProjectHome extends React.Component {
 
   render() {
 
-    const {showSuccessSnackbar, snackbarMessage, snackbarVariant, selectedDate} = this.state;
+    const { selectedDate } = this.props;
+    const {showSuccessSnackbar, snackbarMessage, snackbarVariant} = this.state;
 
     return (
       <ProjectContext.Consumer>
@@ -77,6 +79,8 @@ class ProjectHome extends React.Component {
             <div className={'project-home-wrapper row'}>
 
               <Breadcrumb item={{id: 'projectHomeCrumb', value: formatLong(selectedDate)}}/>
+
+              <ProjectToolbar selectedDate={selectedDate}/>
 
               <ProjectKpi indicators={indicators}
                           project={project}
@@ -129,5 +133,7 @@ class ProjectHome extends React.Component {
 
 export default compose(
   withRouter,
-  connect(null, {})
+  connect(state => ({
+    selectedDate: state.project.selectedDate,
+  }), {})
 )(ProjectHome);

@@ -105,7 +105,6 @@ class CategoriesSelect extends Component {
           value={selectedCategories}
           onChange={(event) => {
             const isOption = event.currentTarget.getAttribute('data-value') !== 'add-category';
-
             if (isOption) {
               onChange(event.target.value);
             }
@@ -117,7 +116,7 @@ class CategoriesSelect extends Component {
           renderValue={selected => (
             <div style={{'whiteSpace': 'initial'}}>
               {
-                (multi ? selected : [selected]).map(value => {
+                selected.map(value => {
 
                 const category = data.find(c => c.id === value);
 
