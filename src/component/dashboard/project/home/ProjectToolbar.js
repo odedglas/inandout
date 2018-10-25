@@ -7,47 +7,50 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DynamicIcon from '@common/DynamicIcon';
 
+import {setSelectedDate} from '@action/project';
 import dateUtil from '@util/date';
+import {ProjectType} from "@model/project";
 
 class ProjectToolbar extends React.Component {
 
   static propTypes = {
+    selectedProject: ProjectType,
     selectedDate: PropTypes.object,
+    setSelectedDate: PropTypes.func.isRequired,
+  };
+
+  handleSelectedDateChange = (prev, today) => {
+
+    const {selectedProject, selectedDate} = this.props;
+
+    const newSelected = dateUtil[prev ? 'prev' : 'next'](selectedDate, 'month', 1);
+
+    this.props.setSelectedDate(selectedProject.id, today ? new Date() : newSelected);
   };
 
   render() {
 
-    const {selectedDate} = this.props;
-
     return (
-      <div className={'transaction-toolbar col-sm-12 px-0'}>
+      <div className={'project-toolbar col-sm-12 px-0'}>
 
         <div className={'months-navigator mx-2'}>
           <Button
-            //color="secondary" onClick={setSelectedForToday}
+            color="secondary" onClick={() => this.handleSelectedDateChange(false, true)}
             size="small">
             Today
           </Button>
-          <Tooltip title="Show Previous Month" enterDelay={300}>
-            <IconButton className={'icon-button ml-2'}
-                        aria-label="Previous Month"
-              //onClick={() => onSelectedDateChange(true)}
-                        size={'small'}>
-              <DynamicIcon name={'left'}/>
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Show Next Month" enterDelay={300}>
-            <IconButton className={'icon-button'}
-              //onClick={() => onSelectedDateChange(false)}
-                        aria-label="Next Month"
-                        size={'small'}>
-              <DynamicIcon name={'right'}/>
-            </IconButton>
-          </Tooltip>
-
-          <span className={'selected-month mx-3'}>
-          {dateUtil.format(selectedDate, 'MMM YYYY')}
-        </span>
+          <IconButton className={'icon-button ml-2'}
+                      aria-label="Previous Month"
+                      onClick={() => this.handleSelectedDateChange(true)}
+                      size={'small'}>
+            <DynamicIcon name={'left'}/>
+          </IconButton>
+          <IconButton className={'icon-button'}
+                      onClick={() => this.handleSelectedDateChange(false)}
+                      aria-label="Next Month"
+                      size={'small'}>
+            <DynamicIcon name={'right'}/>
+          </IconButton>
         </div>
       </div>
     );
@@ -55,5 +58,6 @@ class ProjectToolbar extends React.Component {
 }
 
 export default connect(state => ({
+  selectedProject: state.project.selectedProject,
   selectedDate: state.project.selectedDate,
-}), {})(ProjectToolbar);
+}), {setSelectedDate})(ProjectToolbar);

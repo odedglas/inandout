@@ -23,8 +23,6 @@ import {TransactionType} from "@model/transaction";
 import {BudgetType} from "@model/budget";
 import {CategoryType} from "@model/category";
 
-const formatLong = date => dateUtil.format(date, 'MMM YYYY');
-
 class ProjectHome extends React.Component {
 
   static propTypes = {
@@ -72,13 +70,14 @@ class ProjectHome extends React.Component {
           const indicators = projectService.calculateProjectIndicators(
             project,
             transactions,
-            budgets
+            budgets,
+            selectedDate
           );
 
           return (
             <div className={'project-home-wrapper row'}>
 
-              <Breadcrumb item={{id: 'projectHomeCrumb', value: formatLong(selectedDate)}}/>
+              <Breadcrumb item={{id: 'projectHomeCrumb', value: dateUtil.formantMothYearLong(selectedDate)}}/>
 
               <ProjectToolbar selectedDate={selectedDate}/>
 

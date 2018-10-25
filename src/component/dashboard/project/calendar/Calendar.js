@@ -37,6 +37,7 @@ class Calendar extends Component {
   static propTypes = {
     events: PropTypes.arrayOf(EventType),
     project: ProjectType,
+    selectedDate: PropTypes.object,
     editEvent: PropTypes.func.isRequired,
   };
 
@@ -122,7 +123,7 @@ class Calendar extends Component {
 
   render() {
 
-    const {events, project} = this.props;
+    const {events, project, selectedDate} = this.props;
     const {open, anchorEl, eventForEdit} = this.state;
 
     return (
@@ -156,7 +157,7 @@ class Calendar extends Component {
           onSelectSlot={this.handleSlotClick}
           onSelectEvent={this.handleEventClick}
           defaultView={BigCalendar.Views.MONTH}
-          defaultDate={new Date()}
+          defaultDate={selectedDate}
         />
 
         <EventsPopper open={open}
@@ -172,5 +173,7 @@ class Calendar extends Component {
 export default compose(
   withRouter,
   DragDropContext(HTML5Backend),
-  connect(null, {editEvent})
+  connect(state => ({
+    selectedDate: state.project.selectedDate,
+  }), {editEvent})
 )(Calendar);

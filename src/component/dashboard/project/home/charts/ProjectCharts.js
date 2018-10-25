@@ -14,7 +14,7 @@ class ProjectCharts extends React.Component {
 
   static propTypes = {
     selectedProject: ProjectType,
-
+    selectedDate: PropTypes.object,
     createTransaction: PropTypes.func.isRequired,
   };
 
@@ -44,7 +44,7 @@ class ProjectCharts extends React.Component {
   render() {
 
     const {showCreateTransactionModal} = this.state;
-    const {transactions, categories} = this.props;
+    const {transactions, categories, selectedDate} = this.props;
     const hasTransactions = transactions.length > 0;
 
     return (
@@ -59,10 +59,11 @@ class ProjectCharts extends React.Component {
                   Statistics
                 </div>
                 <div className={'col-sm-11 col-md-9 pr-3'}>
-                  <ProjectInOutChart transactions={transactions}/>
+                  <ProjectInOutChart transactions={transactions} selectedDate={selectedDate}/>
                 </div>
                 <div className={'col-sm-11 mt-sm-3 col-md-3 mt-md-0 px-0'}>
                   <ProjectExpenseByChart transactions={transactions}
+                                         selectedDate={selectedDate}
                                          categories={categories}/>
                 </div>
               </Paper>
@@ -93,4 +94,5 @@ class ProjectCharts extends React.Component {
 
 export default connect(state => ({
   selectedProject: state.project.selectedProject,
+  selectedDate: state.project.selectedDate,
 }), {createTransaction})(ProjectCharts);

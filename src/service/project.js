@@ -36,7 +36,8 @@ export default {
       currency,
       members: [ownerId],
       owner: ownerId,
-      created: now.getTime()
+      created: now.getTime(),
+      initialBalance: balance ? balance : 0
     };
 
     if (balance) {
@@ -87,7 +88,7 @@ export default {
     const usersMap = util.toIdsMap(users);
     return members ? members.map(m => usersMap[m]) : [];
   },
-  calculateProjectIndicators(project, transactions, budgets) {
+  calculateProjectIndicators(project, transactions, budgets, selectedDate) {
 
     const monthlyBalance = transactionService.getTransactionsBalance(
       transactions
@@ -100,8 +101,13 @@ export default {
     const projectBalance = project.balance;
     const projectBalanceRecords = projectBalance ? Object.keys(projectBalance) : [];
 
+    const dateKey = dateUtil.monthYearKey(selectedDate);
     const totalBalance = projectBalanceRecords.reduce((total, balanceKey) => {
-      total += +projectBalance[balanceKey].value;
+
+      if(dateUtil.beforeOrEqualBalanceKey(balanceKey, dateKey)) {
+        total += +projectBalance[balanceKey].value;
+      }
+
       return total;
 
     }, 0);

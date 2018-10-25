@@ -17,10 +17,13 @@ import CreateTransaction from '@modal/CreateTransaction'
 import BudgetStatistics from '@modal/BudgetStatistics'
 import {ProjectContext} from '../ProjectContext';
 
+import dateUtil from '@util/date';
+
 class Budgets extends Component {
 
   static propTypes = {
     createTransaction: PropTypes.func.isRequired,
+    selectedDate: PropTypes.object.isRequired,
   };
 
   state = {
@@ -109,6 +112,8 @@ class Budgets extends Component {
       transactionInitialState
     } = this.state;
 
+    const selectedDate = this.props.selectedDate;
+
     return (
       <ProjectContext.Consumer>
         {(projectContext) => {
@@ -116,13 +121,12 @@ class Budgets extends Component {
           const budgets = projectContext.budgets;
           const hasBudgets = budgets.length > 0;
           const project = projectContext.project;
-
           return (
             <div className={'budgets-container'}>
 
               <PageTitle text={'Budgets'} icon={'budgets'}/>
 
-              <Breadcrumb item={{id: 'budgetsCrumb', value: 'Budgets'}}/>
+              <Breadcrumb item={{id: 'budgetsCrumb', value: `Budgets - ${dateUtil.formantMothYearLong(selectedDate)}`}}/>
 
               <div className={'px-2 py-3'}>
                 {
@@ -192,4 +196,6 @@ class Budgets extends Component {
   }
 }
 
-export default connect(null, {createTransaction})(Budgets);
+export default connect(state => ({
+  selectedDate: state.project.selectedDate
+}), {createTransaction})(Budgets);

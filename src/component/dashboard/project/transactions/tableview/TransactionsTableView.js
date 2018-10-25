@@ -20,6 +20,7 @@ import CreateTransaction from '@modal/CreateTransaction'
 import TransactionTableViewHeader from './TransactionTableViewHeader';
 import TransactionsTableViewToolbar from './TransactionsTableViewToolbar';
 import TransactionFilter from '../filter/TransactionFilter';
+import {ProjectType} from "@model/project";
 import {TransactionType} from "@model/transaction";
 import withFilter from '@hoc/withFilter';
 import UserAvatar from '@common/UserAvatar';
@@ -46,7 +47,8 @@ class TransactionsTableView extends Component {
     setLoading: PropTypes.func.isRequired,
     showConfirmation: PropTypes.func.isRequired,
     fillTransaction: PropTypes.func.isRequired,
-    selectedProject: PropTypes.object,
+    selectedProject: ProjectType,
+    selectedDate: PropTypes.object,
     projectCurrency: PropTypes.string,
     filter: PropTypes.arrayOf(PropTypes.object).isRequired,
     doFilter: PropTypes.func.isRequired,
@@ -56,7 +58,7 @@ class TransactionsTableView extends Component {
   state = {
     order: 'asc',
     orderBy: {id: 'date', prop: 'date'},
-    selectedDate: new Date(),
+    selectedDate: this.props.selectedDate,
     data: [],
     page: 0,
     rowsPerPage: 5,
@@ -230,27 +232,28 @@ class TransactionsTableView extends Component {
 
     //Starting operation with Backend service action by collected args
     setLoading(true);
-    transactionService[serviceAction](selectedProject.id, ...args.map(key => transaction[key]), sourceEventId).then(persisted => {
+    transactionService[serviceAction](selectedProject.id, ...args.map(key => transaction[key]), sourceEventId).then(
+      persisted => {
 
-      if (!dateUtil.sameMonth(persisted.date, selectedDate)) {
-        //Meaning we should remove old month entry
-        transactionService.deleteTransaction(selectedProject.id, persisted.id, selectedDate)
-      }
+        if (!dateUtil.sameMonth(persisted.date, selectedDate)) {
+          //Meaning we should remove old month entry
+          transactionService.deleteTransaction(selectedProject.id, persisted.id, selectedDate)
+        }
 
-      const currentTransactions = this.state.data;
+        const currentTransactions = this.state.data;
 
-      //Setting local component state
-      this.setState({
-        data: dataManipulation(
-          currentTransactions,
-          persisted
-        )
-      });
+        //Setting local component state
+        this.setState({
+          data: dataManipulation(
+            currentTransactions,
+            persisted
+          )
+        });
 
-      //Finally, Triggering callback if sent
-      cb && cb();
-      setLoading(false);
-    })
+        //Finally, Triggering callback if sent
+        cb && cb();
+        setLoading(false);
+      })
 
   };
 
@@ -338,8 +341,8 @@ class TransactionsTableView extends Component {
                       <TableCell className={'text-center'}>
                         <UserAvatar user={transaction.owner}
                                     additionalClass={' mb-2'}
-                                    style={{ margin: '0 auto'}}
-                                    size={'small'} />
+                                    style={{margin: '0 auto'}}
+                                    size={'small'}/>
                         <div>
                           {transaction.owner.displayName}
                         </div>
@@ -349,8 +352,8 @@ class TransactionsTableView extends Component {
                           transaction.customer ? <div>
                             <UserAvatar user={transaction.customer}
                                         additionalClass={' mb-2'}
-                                        style={{ margin: '0 auto'}}
-                                        size={'small'} />
+                                        style={{margin: '0 auto'}}
+                                        size={'small'}/>
                             <div>{transaction.customer.name}</div>
                           </div> : null
                         }
@@ -406,8 +409,8 @@ class TransactionsTableView extends Component {
         <div className={'col-sm-12 px-0 row footer'}>
           <Tooltip title="Add Transaction" placement={'left'}>
             <Button className={'mx-2 my-1 add-transaction'}
-                        onClick={() => this.showHideCreateTransaction(true)}
-                        aria-label="Add Transaction">
+                    onClick={() => this.showHideCreateTransaction(true)}
+                    aria-label="Add Transaction">
               <DynamicIcon name={'add'}/>
 
               ADD
@@ -486,7 +489,8 @@ export default compose(
     },
   ]),
   connect(state => ({
-    selectedProject: state.project.selectedProject
+    selectedProject: state.project.selectedProject,
+    selectedDate: state.project.selectedDate,
   }), {
     loadTransactions,
     setLoading,

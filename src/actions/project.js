@@ -55,8 +55,25 @@ export function selectProject(project) {
       excludedCategories: project.excludedCategories,
       transactions: project.transactions,
       members: project.members,
+      selectedDate: new Date(),
     });
   }
+}
+
+export function setSelectedDate(projectId, date) {
+
+  return dispatch => {
+
+    const dateKey = transactionService.transactionsDateKey(date);
+    transactionService.fetchTransactions(projectId, dateKey).then(transactions => {
+
+      dispatch({
+        type: 'SET_SELECTED_DATE',
+        selectedDate: date,
+        transactions
+      });
+    });
+  };
 }
 
 export function createProjectSyncListener (projectId, date) {

@@ -63,24 +63,10 @@ class Project extends React.Component {
     }
   }
 
-  onProjectSelectedDateChange = (date) => {
-
-    this.setState({loading: true});
-
-    this.props.loadTransactions(date, (transactions) => {
-debugger;
-      this.setState({
-        loading: false,
-      })
-    });
-
-  };
-
   render() {
 
-    const {selectedProject, selectedDate, loading, location} = this.props;
+    const {selectedProject, loading, location} = this.props;
 
-    console.log(`Project render for : ${selectedDate}`)
     return (
       <ProjectProvider>
         <div className={'project-container'}>

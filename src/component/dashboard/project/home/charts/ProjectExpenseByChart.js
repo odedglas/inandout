@@ -14,6 +14,7 @@ class ProjectExpenseByChart extends Component {
 
   static propTypes = {
     selectedProject: ProjectType,
+    selectedDate: PropTypes.object,
     transactions: PropTypes.arrayOf(TransactionType),
     categories: PropTypes.arrayOf(CategoryType),
   };
@@ -33,7 +34,10 @@ class ProjectExpenseByChart extends Component {
     const lastProjectId = this.props.selectedProject && this.props.selectedProject.id;
     const nextProjectId = nextProps.selectedProject && nextProps.selectedProject.id;
 
-    if (lastProjectId !== nextProjectId) {
+    const lastSelected = this.props.selectedDate;
+    const currentSelected = nextProps.selectedDate;
+
+    if (lastProjectId !== nextProjectId || lastSelected !== currentSelected) {
 
       this.setMaxActiveItem(nextProps.transactions, nextProps.categories);
     }

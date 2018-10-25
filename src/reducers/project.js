@@ -45,6 +45,14 @@ export default function (state = initialState, action) {
       }
     }
 
+    case 'SET_SELECTED_DATE': {
+
+      return {
+        ...state,
+        selectedDate: action.selectedDate,
+        transactions: action.transactions
+      }
+    }
     //Project Sync listeners
     case 'SYNC_TRANSACTIONS' : {
 

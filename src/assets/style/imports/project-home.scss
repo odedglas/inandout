@@ -20,7 +20,7 @@
     padding: 2rem;
 
     .project-loader {
-      position:absolute;
+      position: absolute;
       left: 50%;
       transform: translateX(50%);
     }
@@ -28,12 +28,18 @@
 }
 
 .project-home-wrapper {
+  padding-top: 1rem;
 
-  .project-actions {
+  .project-toolbar {
+    position: absolute;
+    top: calc(#{$header-height} + #{$breadcrumbs-height});
+    height:48px;
+    display: flex;
+    align-items: center;
 
-    .actions-menu {
-      height: 36px;
-      width: 36px;
+    .icon-button {
+      height:32px;
+      width:32px;
     }
   }
 
@@ -196,7 +202,7 @@
           }
 
           .value {
-            margin-top:0.5rem;
+            margin-top: 0.5rem;
             font-size: $medium-font;
           }
         }
@@ -225,25 +231,25 @@
 
       > img {
         height: 270px;
-        width:480px;
+        width: 480px;
       }
 
       .text {
-        max-width:300px;
+        max-width: 300px;
         color: $light-text;
       }
     }
   }
 
   .project-events,
-  .project-transactions{
+  .project-transactions {
 
     .tabs {
       border-bottom: 1px solid #adb5bd;
 
       .tab {
         min-width: 100px;
-        max-width:600px;
+        max-width: 600px;
       }
     }
 
@@ -257,17 +263,17 @@
         transition: transform 1000ms ease-in-out;
         .body {
           flex: 1;
-          display:flex;
+          display: flex;
           align-items: center;
           max-width: 100%;
 
           .event-chip {
-            height:20px;
+            height: 20px;
             flex: 0 0 10%;
             font-size: 0.725rem;
 
             span {
-              padding:0 10px;
+              padding: 0 10px;
             }
           }
 
@@ -278,7 +284,7 @@
 
           .date {
             color: #333;
-            min-width:60px;
+            min-width: 60px;
             font-size: $smallest-font;
             padding: 4px 0;
             display: block;
@@ -290,7 +296,7 @@
           }
 
           .action {
-            font-size:11px;
+            font-size: 11px;
           }
         }
       }

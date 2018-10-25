@@ -14,6 +14,7 @@ import {
   Surface,
   Symbols
 } from 'recharts';
+import {ProjectType} from "@model/project";
 
 
 const INCOME_KEY = "Income";
@@ -22,7 +23,8 @@ const OUTCOME_KEY = "Outcome";
 class ProjectInOutChart extends Component {
 
   static propTypes = {
-    selectedProject: PropTypes.object,
+    selectedProject: ProjectType,
+    selectedDate: PropTypes.object,
     transactions: PropTypes.array,
   };
 
@@ -33,12 +35,11 @@ class ProjectInOutChart extends Component {
 
   getData() {
 
-    const {transactions} = this.props;
+    const {transactions, selectedDate} = this.props;
 
-    const today = new Date();
-    const monthStart = dateUtil.startOf(today, 'month');
+    const monthStart = dateUtil.startOf(selectedDate, 'month');
 
-    let maxDate = today;
+    let maxDate = selectedDate;
     transactions.forEach(t => {
       if (dateUtil.isAfter(t.date, maxDate)) {
         maxDate = t.date;

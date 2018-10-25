@@ -97,7 +97,6 @@ class ProjectEvents extends React.Component {
     attachEventTransaction: PropTypes.func.isRequired,
     markEventComplete: PropTypes.func.isRequired,
     showConfirmation: PropTypes.func.isRequired,
-    selectedDate: PropTypes.object.isRequired,
   };
 
   state = {
@@ -141,11 +140,9 @@ class ProjectEvents extends React.Component {
   };
 
   renderTabEvents = tab => {
-    const {events, selectedDate} = this.props;
+    const {events} = this.props;
 
-    const endOfSelected = dateUtil.endOf(selectedDate);
-
-    const data = tab.getData(events.filter(e => e.date < endOfSelected))
+    const data = tab.getData(events)
       .sort(util.sortJsonFN([{name: 'date'}]));
 
     const isEmpty = data.length === 0;
@@ -304,7 +301,6 @@ class ProjectEvents extends React.Component {
 
 export default connect(state => ({
   selectedProject: state.project.selectedProject,
-  selectedDate: state.project.selectedProject,
 }), {
   showConfirmation,
   markEventComplete,
