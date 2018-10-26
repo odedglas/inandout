@@ -101,6 +101,7 @@ class ProjectEvents extends React.Component {
 
   state = {
     activeTabIndex: 0,
+    maxItems: 0,
     reportedEvent: undefined,
     showCreateTransactionModal: false,
   };
@@ -125,9 +126,11 @@ class ProjectEvents extends React.Component {
 
     const overdues = tabs[overdueTabIndex].getData(events);
     const upcoming = tabs[upcomingTabIndex].getData(events);
+    const maxItemsLength = Math.max(upcoming.length, overdues.length);
 
     this.setState({
-      activeTabIndex: (overdues.length === 0 && upcoming.length > 0) ? upcomingTabIndex : overdueTabIndex
+      activeTabIndex: (overdues.length === 0 && upcoming.length > 0) ? upcomingTabIndex : overdueTabIndex,
+      maxItems: Math.min(maxItemsLength, 5)
     });
   }
 
@@ -253,12 +256,13 @@ class ProjectEvents extends React.Component {
 
   render() {
 
-    const {showCreateTransactionModal, reportedEvent} = this.state;
+    const {showCreateTransactionModal, reportedEvent, maxItems} = this.state;
     const eventReportTransaction = reportedEvent ? calendarService.transformEventToTransaction(
       reportedEvent
     ) : {};
 
     const direction = DIRECTIONS.LTR;
+    const minHeight = (maxItems * 34) + 32;
 
     return (
       <div className={'project-events'}>
@@ -286,7 +290,7 @@ class ProjectEvents extends React.Component {
           index={this.state.activeTabIndex}
           onChangeIndex={this.handleTabChangeIndex}
         >
-          {tabs.map((tab, tabIndex) => <div key={tab.key}> {this.renderTabEvents(tab, tabIndex)} </div>)}
+          {tabs.map((tab, tabIndex) => <div style={{'minHeight': minHeight}} key={tab.key}> {this.renderTabEvents(tab, tabIndex)} </div>)}
 
         </SwipeableViews>
 

@@ -36,6 +36,7 @@ class ProjectTransactions extends React.Component {
 
   state = {
     activeTabIndex: 0,
+    maxItems: 0,
   };
 
   componentDidMount() {
@@ -58,9 +59,10 @@ class ProjectTransactions extends React.Component {
 
     const incomes = tabs[incomeTabIndex].getData(transactions);
     const outcomes = tabs[outcomeTabIndex].getData(transactions);
-
+    const maxItemsLength = Math.max(incomes.length, outcomes.length);
     this.setState({
-      activeTabIndex: (incomes.length === 0 && outcomes.length > 0) ? outcomeTabIndex : incomeTabIndex
+      activeTabIndex: (incomes.length === 0 && outcomes.length > 0) ? outcomeTabIndex : incomeTabIndex,
+      maxItems: Math.min(maxItemsLength, 5)
     });
   }
 
@@ -75,7 +77,7 @@ class ProjectTransactions extends React.Component {
   renderTransactionsTab = (tab, tabIndex) => {
 
     const {transactions} = this.props;
-    const {activeTabIndex} = this.state;
+    const {activeTabIndex, maxItems} = this.state;
 
     const income = tab.income;
     const data = tab.getData(transactions)
@@ -92,7 +94,10 @@ class ProjectTransactions extends React.Component {
 
   render() {
 
+    const {maxItems} = this.state;
     const direction = DIRECTIONS.LTR;
+
+    const minHeight = (maxItems * 48) + 56;
 
     return (
       <div className={'project-transactions'}>
@@ -120,7 +125,7 @@ class ProjectTransactions extends React.Component {
           index={this.state.activeTabIndex}
           onChangeIndex={this.handleChangeIndex}
         >
-          {tabs.map((tab, tabIndex) => <div key={tab.key}> {this.renderTransactionsTab(tab, tabIndex)} </div>)}
+          {tabs.map((tab, tabIndex) => <div key={tab.key} style={{'minHeight': minHeight}}> {this.renderTransactionsTab(tab, tabIndex)} </div>)}
 
         </SwipeableViews>
       </div>

@@ -32,7 +32,7 @@ class TransactionsSummaryTable extends Component {
 
   render() {
 
-    const {selectedProject, transactions, emptyMessage, showIncomes, transactionsAmount} = this.props;
+    const {selectedProject, transactions, emptyMessage, showIncomes, transactionsAmount, minHeight} = this.props;
     const isEmpty = transactions.length === 0;
 
     const latestTransactions = transactions.reverse()
