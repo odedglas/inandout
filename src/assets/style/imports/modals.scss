@@ -95,3 +95,43 @@
 
 
 }
+
+.transaction-create-topbar {
+  display:flex;
+
+
+
+  .date-picker {
+    font-size: $smaller-font;
+    color: $menu-icon-color;
+
+    > div {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .error {
+        color: $error-color;
+      }
+
+      .disabled {
+        opacity: 0.6;
+      }
+    }
+
+    .date-control {
+      display: none;
+    }
+  }
+}
+
+#transaction-type-menu {
+
+  .transaction-type-menu-item {
+
+    svg {
+      margin-right: 0.5rem;
+    }
+  }
+}

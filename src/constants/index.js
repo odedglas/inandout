@@ -101,11 +101,13 @@ export const BUDGETS_PERIOD = [
 export const TRANSACTIONS_TYPE = [
   {
     key: 'INCOME',
-    label: 'Income'
+    label: 'Income',
+    icon: 'income'
   },
   {
     key: 'OUTCOME',
-    label: 'Outcome'
+    label: 'Outcome',
+    icon: 'outcome'
   }
 ];
 

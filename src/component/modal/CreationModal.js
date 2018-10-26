@@ -26,6 +26,11 @@ class CreationModal extends React.Component {
     title: PropTypes.string.isRequired,
     context: PropTypes.string,
     editMode: PropTypes.bool,
+    noPadding: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    noPadding: false,
   };
 
   constructor(props) {
@@ -104,7 +109,7 @@ class CreationModal extends React.Component {
 
   render() {
 
-    const { open, title, editMode, context, validation, renderContent} = this.props;
+    const { open, title, editMode, context, validation, renderContent, noPadding} = this.props;
     const { model } = this.state;
 
     return (
@@ -121,7 +126,7 @@ class CreationModal extends React.Component {
           <DialogTitle className={'modal-title'}>
             <span>{title}</span>
           </DialogTitle>
-          <DialogContent className={'modal-content'}>
+          <DialogContent className={`modal-content ${noPadding ? 'p-0' : ''}`}>
             <DialogContentText>
               {context}
             </DialogContentText>

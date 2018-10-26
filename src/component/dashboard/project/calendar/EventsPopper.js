@@ -273,7 +273,6 @@ class EventsPopper extends Component {
             title={validation.title.message}
             error={validation.title.isInvalid}
             onChange={(event) => this.handleChange(event.target.value, 'title')}
-            margin="dense"
             placeholder="Add Title"
             fullWidth
           />
@@ -336,7 +335,6 @@ class EventsPopper extends Component {
             <TextField
               value={data.location}
               onChange={(event) => this.handleChange(event.target.value, 'location')}
-              margin="dense"
               placeholder="Location"
               fullWidth
             /> : null

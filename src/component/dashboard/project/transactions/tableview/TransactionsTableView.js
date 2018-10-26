@@ -338,7 +338,7 @@ class TransactionsTableView extends Component {
                       <TableCell>
                         {transaction.formattedDate}
                       </TableCell>
-                      <TableCell className={'text-center'}>
+                      <TableCell className={'text-center px-0'}>
                         <UserAvatar user={transaction.owner}
                                     additionalClass={' mb-2'}
                                     style={{margin: '0 auto'}}
@@ -347,7 +347,7 @@ class TransactionsTableView extends Component {
                           {transaction.owner.displayName}
                         </div>
                       </TableCell>
-                      <TableCell className={'text-center'}>
+                      <TableCell className={'text-center px-0'}>
                         {
                           transaction.customer ? <div>
                             <UserAvatar user={transaction.customer}
@@ -373,7 +373,7 @@ class TransactionsTableView extends Component {
                       </TableCell>
                       <TableCell>{transaction.payments ?
                         `${transaction.paymentIndex + 1} out of ${transaction.payments}` : 'None'}</TableCell>
-                      <TableCell className={'text-center'}>
+                      <TableCell className={'text-center px-0'}>
                         {
                           transaction.category ? (
                             <div>

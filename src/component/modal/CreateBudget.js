@@ -64,7 +64,6 @@ class CreateBudgetModal extends React.Component {
             error={validation.name.isInvalid}
             placeholder={'My budget'}
             onChange={(event) => handleChange(event.target.value, 'name')}
-            margin="dense"
             id="budget-name"
             label="Budget Name"
             title={validation.name.message}
@@ -98,7 +97,6 @@ class CreateBudgetModal extends React.Component {
             error={validation.limit.isInvalid}
             placeholder={'Budget Limit'}
             onChange={(event) => handleChange(event.target.value, 'limit')}
-            margin="dense"
             id="limit"
             label="Limit"
             title={validation.limit.message}

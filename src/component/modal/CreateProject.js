@@ -43,7 +43,6 @@ class CreateProjectModal extends React.Component {
           error={validation.projectName.isInvalid}
           placeholder={'My awesome project'}
           onChange={(event) => handleChange(event.target.value, 'projectName')}
-          margin="dense"
           id="project-name"
           label="Project Name"
           title={validation.projectName.message}
@@ -109,7 +108,6 @@ class CreateProjectModal extends React.Component {
           value={model.balance}
           error={validation.balance.isInvalid}
           onChange={(event) => handleChange(event.target.value, 'balance')}
-          margin="dense"
           label={`Initial Balance`}
           title={validation.balance.message}
           fullWidth
@@ -140,7 +138,6 @@ class CreateProjectModal extends React.Component {
         <TextField
           value={model.projectDescription}
           onChange={(event) => handleChange(event.target.value, 'projectDescription')}
-          margin="dense"
           label="Project Description"
           id="project-description"
           fullWidth

@@ -60,7 +60,6 @@ class CreateCustomerModal extends React.Component {
             value={model.name}
             error={validation.name.isInvalid}
             onChange={(event) => handleChange(event.target.value, 'name')}
-            margin="dense"
             label="Business Name"
             title={validation.name.message}
             fullWidth
@@ -72,7 +71,6 @@ class CreateCustomerModal extends React.Component {
             value={model.contactName}
             error={validation.contactName.isInvalid}
             onChange={(event) => handleChange(event.target.value, 'contactName')}
-            margin="dense"
             label="Contact Name"
             title={validation.contactName.message}
             fullWidth
@@ -84,7 +82,6 @@ class CreateCustomerModal extends React.Component {
             value={model.phone}
             error={validation.phone.isInvalid}
             onChange={(event) => handleChange(event.target.value, 'phone')}
-            margin="dense"
             label="Phone Number"
             title={validation.phone.message}
             fullWidth
@@ -97,7 +94,6 @@ class CreateCustomerModal extends React.Component {
             error={validation.email.isInvalid}
             placeholder={'someone@example.com'}
             onChange={(event) => handleChange(event.target.value, 'email')}
-            margin="dense"
             label="Email"
             title={validation.email.message}
             fullWidth
@@ -111,7 +107,6 @@ class CreateCustomerModal extends React.Component {
             error={validation.address.isInvalid}
             placeholder={'Tel Aviv, Ruppin 24'}
             onChange={(event) => handleChange(event.target.value, 'address')}
-            margin="dense"
             label="Adress"
             title={validation.address.message}
             fullWidth

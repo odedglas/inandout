@@ -66,7 +66,6 @@ class CreateCategoryModal extends React.Component {
           error={validation.name.isInvalid}
           placeholder={'My new category'}
           onChange={(event) => handleChange(event.target.value, 'name')}
-          margin="dense"
           id="category-name"
           label="Category Name"
           title={validation.name.message}

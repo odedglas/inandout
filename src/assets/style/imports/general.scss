@@ -134,3 +134,10 @@ div[role="tooltip"]  > div{
   max-height: 24px;
   display: table;
 }
+
+.income {
+  color: $success-color
+}
+.outcome {
+  color: $error-color;
+}

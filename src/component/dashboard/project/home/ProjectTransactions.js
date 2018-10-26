@@ -77,7 +77,7 @@ class ProjectTransactions extends React.Component {
   renderTransactionsTab = (tab, tabIndex) => {
 
     const {transactions} = this.props;
-    const {activeTabIndex, maxItems} = this.state;
+    const {activeTabIndex} = this.state;
 
     const income = tab.income;
     const data = tab.getData(transactions)
