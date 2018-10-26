@@ -116,7 +116,7 @@ class CategoriesSelect extends Component {
           renderValue={selected => (
             <div style={{'whiteSpace': 'initial'}}>
               {
-                selected.map(value => {
+                (Array.isArray(selected) ? selected : [selected]).map(value => {
 
                 const category = data.find(c => c.id === value);
 

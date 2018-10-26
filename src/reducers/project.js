@@ -15,7 +15,7 @@ const initialState = {
   transactions: [],
   customers: [],
   events: [],
-  drawerOpen: localStorageService.get(projectDrawerLocalStorageKey),
+  drawerOpen: localStorageService.get(projectDrawerLocalStorageKey) || false,
   selectedDate: new Date(),
 };
 

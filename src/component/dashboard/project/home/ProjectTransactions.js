@@ -72,21 +72,22 @@ class ProjectTransactions extends React.Component {
     this.setState({activeTabIndex: index});
   };
 
-  renderTransactionsTab = tab => {
+  renderTransactionsTab = (tab, tabIndex) => {
 
     const {transactions} = this.props;
+    const {activeTabIndex} = this.state;
 
     const income = tab.income;
     const data = tab.getData(transactions)
       .sort(util.sortJsonFN([{name: 'date'}]));
 
-    return (
+    return tabIndex === activeTabIndex ? (
       <div className={'mb-3'}>
         <TransactionsSummary showIncomes={income}
                              emptyMessage={`There are no ${tab.label.toLowerCase()} to display`}
                              transactions={data}/>
       </div>
-    );
+    ) : null;
   };
 
   render() {
@@ -119,7 +120,7 @@ class ProjectTransactions extends React.Component {
           index={this.state.activeTabIndex}
           onChangeIndex={this.handleChangeIndex}
         >
-          {tabs.map(tab => <div key={tab.key}> {this.renderTransactionsTab(tab)} </div>)}
+          {tabs.map((tab, tabIndex) => <div key={tab.key}> {this.renderTransactionsTab(tab, tabIndex)} </div>)}
 
         </SwipeableViews>
       </div>

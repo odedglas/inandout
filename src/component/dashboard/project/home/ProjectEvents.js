@@ -139,20 +139,21 @@ class ProjectEvents extends React.Component {
     this.setState({activeTabIndex: index});
   };
 
-  renderTabEvents = tab => {
+  renderTabEvents = (tab, tabIndex) => {
     const {events} = this.props;
+    const {activeTabIndex} = this.state;
 
     const data = tab.getData(events)
       .sort(util.sortJsonFN([{name: 'date'}]));
 
     const isEmpty = data.length === 0;
-    return (
+    return tabIndex === activeTabIndex ? (
       <div className={'events-container p-3'}>
         {!isEmpty ? ProjectEventsTab(data, tab.overdue, this.onTaskComplete, this.onEventReport)
           :
           <div className={'p-4'}> There are no {tab.label.toLowerCase()} events for display</div>}
       </div>
-    );
+    ) : null;
   };
 
   onTaskComplete = event => {
@@ -285,7 +286,7 @@ class ProjectEvents extends React.Component {
           index={this.state.activeTabIndex}
           onChangeIndex={this.handleTabChangeIndex}
         >
-          {tabs.map(tab => <div key={tab.key}> {this.renderTabEvents(tab)} </div>)}
+          {tabs.map((tab, tabIndex) => <div key={tab.key}> {this.renderTabEvents(tab, tabIndex)} </div>)}
 
         </SwipeableViews>
 
