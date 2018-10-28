@@ -223,7 +223,7 @@ export function deleteBudget(project, budgetId) {
   }
 }
 
-export function createTransaction(project, { type, owner, description, category, customer, date, amount, payments, sourceEventId }, onSuccess) {
+export function createTransaction(project, { type, owner, description, category, customer, date, amount, payments, paymentMethod, status, sourceEventId}, onSuccess) {
 
   return dispatch => {
 
@@ -239,7 +239,9 @@ export function createTransaction(project, { type, owner, description, category,
       date,
       amount,
       payments,
-      sourceEventId
+      paymentMethod,
+      status,
+      sourceEventId,
     ).then(transaction => {
 
       onSuccess(transaction);
@@ -248,7 +250,7 @@ export function createTransaction(project, { type, owner, description, category,
   }
 }
 
-export function updateTransaction(project, { id, type, owner, description, category, customer, date, amount, payments, paymentIndex }, onSuccess) {
+export function updateTransaction(project, { id, type, owner, description, category, customer, date, amount, payments, paymentIndex, paymentMethod, status }, onSuccess) {
 
   return dispatch => {
 
@@ -265,7 +267,9 @@ export function updateTransaction(project, { id, type, owner, description, categ
       date,
       amount,
       payments,
-      paymentIndex
+      paymentIndex,
+      paymentMethod,
+      status
     ).then(transaction => {
 
       onSuccess(transaction);

@@ -84,12 +84,16 @@ import ShareIcon from '@material-ui/icons/Share';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import toArrowIcon from '@material-ui/icons/TrendingFlat';
 import ProjectMembersIcon from '@material-ui/icons/GroupWork';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
+import ChequeIcon from '../icon/ChequeIcon';
 
 // -- Social Media --//
 import GoogleIcon from '../icon/GoogleIcon';
 import TwitterIcon from '../icon/TwitterIcon';
 import FacebookIcon from '../icon/FacebookIcon';
 import GithubIcon from '../icon/GithubIcon';
+
+const CashIcon = BudgetsIcon;
 
 const iconMap = {
   'home': HomeIcon,
@@ -170,6 +174,9 @@ const iconMap = {
   'electricity': ElectricityIcon,
   'work': WorkIcon,
   'security': SecurityIcon,
+  'cash': CashIcon,
+  'credit': CreditCardIcon,
+  'cheque': ChequeIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {

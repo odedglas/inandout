@@ -65,7 +65,8 @@ export const TRANSACTIONS_DATE_KEY_FORMAT = 'MMYY';
 export const TRANSACTIONS_STATUS = [
   {
     key: 'PENDING',
-    label: 'Pending'
+    label: 'Pending',
+    className:'pending'
   },
   {
     key: 'ACCEPTED',
@@ -73,7 +74,8 @@ export const TRANSACTIONS_STATUS = [
   },
   {
     key: 'DENIED',
-    label: 'Denied'
+    label: 'Denied',
+    className: 'denied'
   },
 ];
 
@@ -109,6 +111,29 @@ export const TRANSACTIONS_TYPE = [
     label: 'Outcome',
     icon: 'outcome'
   }
+];
+
+export const TRANSACTIONS_PAYMENT_METHODS= [
+  {
+    key: 'CASH',
+    label: 'Cash',
+    icon: 'cash'
+  },
+  {
+    key: 'CREDIT',
+    label: 'Credit',
+    icon: 'credit'
+  },
+  {
+    key: 'CHEQUE',
+    label: 'Cheque',
+    icon: 'cheque'
+  },
+  {
+    key: 'BALANCE',
+    label: 'Balance',
+    icon: 'balance'
+  },
 ];
 
 export const EVENT_TYPE = [

@@ -141,3 +141,12 @@ div[role="tooltip"]  > div{
 .outcome {
   color: $error-color;
 }
+
+.select-menu-item {
+  color: $menu-icon-color;
+
+  svg {
+    margin-right:1rem;
+    color: $menu-icon-color;
+  }
+}

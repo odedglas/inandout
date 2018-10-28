@@ -37,9 +37,10 @@ class ProjectInOutChart extends Component {
 
     const {transactions, selectedDate} = this.props;
 
-    const monthStart = dateUtil.startOf(selectedDate, 'month');
+    const monthStart = dateUtil.startOf(selectedDate);
+    const thisMonth = dateUtil.sameMonth(selectedDate, dateUtil.now())
 
-    let maxDate = selectedDate;
+    let maxDate = thisMonth ? selectedDate : dateUtil.endOf(selectedDate);
     transactions.forEach(t => {
       if (dateUtil.isAfter(t.date, maxDate)) {
         maxDate = t.date;

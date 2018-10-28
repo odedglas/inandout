@@ -39,9 +39,9 @@ export default {
 
   getTransactionType: (transaction) => transaction.income ? transactionTypes.INCOME : transactionTypes.OUTCOME ,
 
-  createTransaction (projectId, type, owner, description, category, customer, date, amount, payments, sourceEventId) {
+  createTransaction (projectId, type, owner, description, category, customer, date, amount, payments, paymentMethod, status, sourceEventId) {
 
-    const transaction = transformTransaction(type, owner, description, category, customer, date || new Date(), amount, payments);
+    const transaction = transformTransaction(type, owner, description, category, customer, date || new Date(), amount, payments, false, undefined, paymentMethod, status);
     if(sourceEventId) transaction.sourceEventId = sourceEventId;
 
     const dateKey = this.transactionsDateKey(transaction.date);
@@ -72,9 +72,9 @@ export default {
     })
   },
 
-  updateTransaction (projectId, id, type, owner, description, category, customer, date, amount, payments, paymentIndex) {
+  updateTransaction (projectId, id, type, owner, description, category, customer, date, amount, payments, paymentIndex, paymentMethod, status) {
 
-    const transaction = transformTransaction(type, owner, description, category, customer, date, amount, payments, paymentIndex, true);
+    const transaction = transformTransaction(type, owner, description, category, customer, date, amount, payments, paymentIndex, true, paymentMethod, status);
 
     const dateKey = this.transactionsDateKey(transaction.date);
     const updatePath = transactionPath(projectId, dateKey, id);
@@ -192,15 +192,8 @@ export default {
     let income = 0;
     let outcome = 0;
 
-    transactions.forEach(transaction => {
-
-      if(transaction.income) {
-        income += transaction.amount;
-      }
-      else {
-        outcome += transaction.amount;
-      }
-    });
+    const acceptedTransactions = transactions.filter(t => !t.status || t.status === 'ACCEPTED');
+    acceptedTransactions.forEach(transaction => transaction.income ? income : outcome += transaction.amount);
 
     return {
       income,
@@ -212,7 +205,7 @@ export default {
 
 const transactionPath = (projectId, monthKey, transactionId) => `/transactions/${projectId}/${monthKey}/${transactionId}`;
 
-const transformTransaction = (type, owner, description, category, customer, date, amount, payments, paymentIndex, edit) => {
+const transformTransaction = (type, owner, description, category, customer, date, amount, payments, paymentIndex, edit, paymentMethod, status) => {
 
   const trueAmount = (!edit && hasPayments(payments)) ? +(amount / payments) : +amount;
 
@@ -221,12 +214,14 @@ const transformTransaction = (type, owner, description, category, customer, date
     owner: owner.id,
     date: date instanceof Date ? date.getTime() : date,
     amount: Number(trueAmount.toFixed(2)),
+    paymentMethod: paymentMethod ? paymentMethod : 'CREDIT',
+    status: status ? status : 'ACCEPTED'
   };
 
   if(description) transaction.description = description;
   if(category) transaction.category = category;
   if(customer) transaction.customer = customer;
-  if(hasPayments) {
+  if(hasPayments(payments)) {
     transaction.paymentIndex = paymentIndex || 0;
     transaction.payments = +payments
   }

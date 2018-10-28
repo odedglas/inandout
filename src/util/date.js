@@ -65,7 +65,7 @@ export default {
     return dates;
   },
 
-  startOf(date, unit) {
+  startOf(date, unit = 'month') {
 
     return moment(date).startOf(unit)
   },

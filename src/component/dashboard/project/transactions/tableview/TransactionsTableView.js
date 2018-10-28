@@ -178,6 +178,8 @@ class TransactionsTableView extends Component {
           'date',
           'amount',
           'payments',
+          'paymentMethod',
+          'status'
         ];
         dataManipulation = (data, transaction) => {
           if (dateUtil.sameMonth(selectedDate, transaction.date)) {
@@ -200,6 +202,8 @@ class TransactionsTableView extends Component {
           'amount',
           'payments',
           'paymentIndex',
+          'paymentMethod',
+          'status'
         ];
         dataManipulation = (data, transaction) => {
 

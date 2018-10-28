@@ -27,6 +27,7 @@ class CreationModal extends React.Component {
     context: PropTypes.string,
     editMode: PropTypes.bool,
     noPadding: PropTypes.bool,
+    mainClass: PropTypes.string,
   };
 
   static defaultProps = {
@@ -109,7 +110,7 @@ class CreationModal extends React.Component {
 
   render() {
 
-    const { open, title, editMode, context, validation, renderContent, noPadding} = this.props;
+    const { open, title, editMode, context, validation, renderContent, noPadding, mainClass} = this.props;
     const { model } = this.state;
 
     return (
@@ -120,7 +121,7 @@ class CreationModal extends React.Component {
           disableRestoreFocus={true}
           TransitionComponent={Grow}
           transitionDuration={300}
-          className={'modal'}
+          className={`modal ${mainClass ? mainClass : ''}`}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle className={'modal-title'}>

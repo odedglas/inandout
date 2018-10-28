@@ -19,12 +19,13 @@ import CreationModal from './CreationModal';
 import util from '@util/';
 import dateUtil from '@util/date';
 import navigationUtil from '@util/navigation';
-import {TRANSACTIONS_TYPE} from '@const/';
+import {TRANSACTIONS_TYPE, TRANSACTIONS_PAYMENT_METHODS, TRANSACTIONS_STATUS} from '@const/';
 import CategoriesSelect from '@common/CategoriesSelect';
 import CustomersSelect from '@common/CustomersSelect';
 import DatePicker from 'material-ui-pickers/DatePicker';
 import variables from '@scss/_variables.scss';
 import DynamicIcon from "@common/DynamicIcon";
+import DropdownIcon from '@material-ui/icons/ArrowDropDown';
 
 class CreateTransactionModal extends React.Component {
 
@@ -49,6 +50,7 @@ class CreateTransactionModal extends React.Component {
 
   state = {
     transactionTypeMenuAnchor: null,
+    statusTypeMenuAnchor: null,
   };
 
   static defaultProps = {
@@ -58,7 +60,7 @@ class CreateTransactionModal extends React.Component {
   handleTransactionCreate = (model, close) => {
 
     const {transaction, transactionCrudHandler, currentUser} = this.props;
-    const {type, owner, description, category, customer, date, amount, payments} = model;
+    const {type, owner, description, category, customer, date, amount, payments, paymentMethod, status} = model;
 
     const editMode = !util.isUndefined(transaction.id);
 
@@ -74,6 +76,8 @@ class CreateTransactionModal extends React.Component {
         amount,
         payments,
         paymentIndex: transaction.paymentIndex,
+        paymentMethod,
+        status,
         id: editMode ? transaction.id : undefined
       },
       editMode ? 'edit' : 'add',
@@ -95,148 +99,22 @@ class CreateTransactionModal extends React.Component {
     onClose();
   };
 
-  modalContent = (model, validation, handleChange, editMode) => {
-
-    const {selectedProject, showEventLink} = this.props;
-
-    const isIncome = model.type === 'INCOME';
-    const paymentsEditMode = !!model.payments && editMode;
-    const hasEventSource = !util.isEmpty(this.props.transaction.sourceEventId);
-
-    //Adjusting amount if it's edit mode and payment type transaction
-    const amount = paymentsEditMode ? Math.round(model.amount * model.payments) : model.amount;
-
-    return (
-      <div>
-        {
-          hasEventSource && showEventLink ? <div className={'event-source-link mb-2'}>
-            * Please not that this transaction is controlled by calendar <span className={'link'}> <a
-            onClick={this.gotoTransactionEvent}> Event </a> </span>
-          </div> : null
-        }
-        {
-          !editMode ? <div className={'form-control'}>
-              <TextField
-                select
-                autoFocus
-                fullWidth
-                placeholder={'Please set transaction type'}
-                label="Transaction Type"
-                value={model.type}
-                onChange={(event) => handleChange(event.target.value, 'type')}
-              >
-                {TRANSACTIONS_TYPE.map(option => (
-                  <MenuItem key={option.key} value={option.key}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </div> :
-            null
-        }
-
-        {
-          !isIncome ? <CategoriesSelect selectedCategories={model.category}
-                                        error={validation.category.isInvalid}
-                                        multi={false}
-                                        onChange={(val) => handleChange(val, 'category')}/>
-            :
-            <CustomersSelect customer={model.customer}
-                             showCreateNewCustomer={true}
-                             disabled={hasEventSource}
-                             onChange={(val) => handleChange(val, 'customer')}/>
-        }
-
-        <div className={'form-control'} style={{flexDirection: 'column'}}>
-          <TextField
-            value={amount}
-            error={validation.amount.isInvalid}
-            onChange={(event) => {
-              const value = event.target.value;
-              const calcValue = paymentsEditMode ? value / model.payments : value;
-              handleChange(calcValue, 'amount')
-            }}
-            id="amount"
-            label={`Amount (${selectedProject.currency})`}
-            title={validation.amount.message}
-            fullWidth
-            InputProps={{
-              startAdornment: <InputAdornment position="start">
-                <span style={{
-                  color: isIncome ? variables.successColor : variables.errorColor,
-                  fontSize: '1.25rem'
-                }}>
-                  {isIncome ? '+' : '-'}
-                </span>
-              </InputAdornment>,
-            }}
-          />
-          {
-            paymentsEditMode ? <FormHelperText>
-              This transaction is {model.paymentIndex + 1} of {model.payments} Payments of {model.amount.toFixed(
-              2)}{selectedProject.currency}
-            </FormHelperText> : null
-          }
-        </div>
-
-        <div className={'form-control'} style={{flexDirection: 'column'}}>
-          <DatePicker
-            value={model.date}
-            label={'Date'}
-            title={validation.date.message}
-            error={validation.date.isInvalid}
-            disabled={paymentsEditMode || hasEventSource}
-            className={'flex mt-2'}
-            onChange={(date) => {
-              handleChange(date.toDate().getTime(), 'date')
-            }}
-          />
-        </div>
-
-        <div className={'form-control'}>
-
-          <TextField
-            label="Description"
-            value={model.description}
-            error={validation.description.isInvalid}
-            disabled={hasEventSource}
-            placeholder={"Description"}
-            multiline
-            rowsMax="4"
-            onChange={(event) => handleChange(event.target.value, 'description')}
-            fullWidth
-          />
-
-        </div>
-
-        {!editMode && !isIncome ?
-          <div className={'form-control'} style={{flexDirection: 'column'}}>
-            <TextField
-              label="Payments"
-              value={model.payments}
-              title={validation.payments.message}
-              error={validation.payments.isInvalid}
-              placeholder={"Payments"}
-              onChange={(event) => handleChange(event.target.value, 'payments')}
-              fullWidth
-            />
-            <FormHelperText> Number of monthly payments </FormHelperText></div> : null
-        }
-      </div>
-    );
-  };
-
   handleTransactionTypeMenuShowHide = event => {
     this.setState({transactionTypeMenuAnchor: event ? event.currentTarget : null});
+  };
+
+  handleTransactionStatusMenuShowHide = event => {
+
+    this.setState({statusTypeMenuAnchor: event ? event.currentTarget : null});
   };
 
   showDatePicker = () => {
     this.datePicker.open()
   };
 
-  modalContentv2 = (model, validation, handleChange, editMode) => {
+  modalContent = (model, validation, handleChange, editMode) => {
 
-    const {transactionTypeMenuAnchor} = this.state;
+    const {transactionTypeMenuAnchor, statusTypeMenuAnchor} = this.state;
     const {selectedProject, showEventLink} = this.props;
 
     const isIncome = model.type === 'INCOME';
@@ -247,13 +125,14 @@ class CreateTransactionModal extends React.Component {
     const amount = paymentsEditMode ? Math.round(model.amount * model.payments) : model.amount;
 
     const selectedTransactionType = TRANSACTIONS_TYPE.find(item => item.key === model.type);
+    const transactionStatus = TRANSACTIONS_STATUS.find(item => item.key === (model.status || 'ACCEPTED'));
     const isToday = dateUtil.dayDiff(new Date(), model.date) !== 0;
     const datePickerDisabled = paymentsEditMode || hasEventSource;
 
     return (
       <div className={'py-3 px-4'}>
 
-        <div className={'transaction-create-topbar'}>
+        <div className={'transaction-create-topbar mb-2'}>
 
           <Chip aria-owns={transactionTypeMenuAnchor ? 'transaction-type-menu' : null}
                 onClick={this.handleTransactionTypeMenuShowHide}
@@ -285,13 +164,43 @@ class CreateTransactionModal extends React.Component {
 
           <div className={'flex'}></div>
 
+          <div className={`status-indicator mr-4 ${transactionStatus.className}`}
+               aria-owns={statusTypeMenuAnchor ? 'transaction-status-menu' : null}
+               onClick={this.handleTransactionStatusMenuShowHide}
+               aria-haspopup="true">
+            <div className={'px-2 py-1 wrapper'}>
+              <span> </span>
+              {transactionStatus.label}
+            </div>
+          </div>
+          <Menu
+            id="transaction-status-menu"
+            anchorEl={statusTypeMenuAnchor}
+            open={Boolean(statusTypeMenuAnchor)}
+            onClose={() => this.handleTransactionStatusMenuShowHide()}>
+
+            {TRANSACTIONS_STATUS.map(option => (
+              <MenuItem key={option.key}
+                        value={option.key}
+                        onClick={e => {
+                          handleChange(e.target.getAttribute('value'), 'status');
+                          this.handleTransactionStatusMenuShowHide();
+                        }}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Menu>
           <div className={'date-picker'}>
-            <div className={'date-picker-trigger'} onClick={() => !datePickerDisabled && this.showDatePicker()}>
-              <DynamicIcon name={'calendar'} className={`${validation.date.isInvalid ? 'error' : ''} ${datePickerDisabled ? 'disabled' : ''}`}/>
-              <span>{isToday ?  dateUtil.format(model.date, 'MMM Do') : 'Today'}</span>
+            <div className={`date-picker-trigger ${validation.date.isInvalid ? 'error' : ''} ${datePickerDisabled ?
+              'disabled' : ''}`}
+                 onClick={() => !datePickerDisabled && this.showDatePicker()}>
+              <DynamicIcon name={'calendar'}/>
+              <span>{isToday ? dateUtil.format(model.date, 'MMM Do') : 'Today'}</span>
             </div>
             <DatePicker
-              ref={(node) => { this.datePicker = node; }}
+              ref={(node) => {
+                this.datePicker = node;
+              }}
               value={model.date}
               className={'date-control'}
               autoOk={true}
@@ -300,9 +209,120 @@ class CreateTransactionModal extends React.Component {
               }}
             />
           </div>
+        </div>
+
+        <div className={'form-control row'}>
+          <div className={'col-sm-8 px-0'} style={{flexDirection: 'column'}}>
+            <TextField
+              value={amount}
+              autoFocus
+              error={validation.amount.isInvalid}
+              onChange={(event) => {
+                const value = event.target.value;
+                const calcValue = paymentsEditMode ? value / model.payments : value;
+                handleChange(calcValue, 'amount')
+              }}
+              label={`Amount (${selectedProject.currency})`}
+              title={validation.amount.message}
+              fullWidth
+              InputProps={{
+                startAdornment: <InputAdornment position="start">
+                <span style={{
+                  color: isIncome ? variables.successColor : variables.errorColor,
+                  fontSize: '1.25rem'
+                }}>
+                  {isIncome ? '+' : '-'}
+                </span>
+                </InputAdornment>,
+              }}
+            />
+          </div>
+          <div className={'col-sm-4 px-0'}>
+            <TextField
+              select
+              className={'payment-method'}
+              value={model.paymentMethod || 'CREDIT'}
+              label="Method"
+              SelectProps={{
+                renderValue: selected => {
+                  let method = TRANSACTIONS_PAYMENT_METHODS.find(m => m.key === selected);
+                  return (
+                    method ? <div className={'display'}>
+                      <DynamicIcon name={method.icon} className={'icon'}/>
+                      <span>{method.label}</span>
+                    </div> : ''
+                  )
+                }
+              }}
+              onChange={(e) => {
+                handleChange(e.target.value, 'paymentMethod');
+              }}>
+              {
+                TRANSACTIONS_PAYMENT_METHODS.map(method => (
+                  <MenuItem key={method.key} value={method.key} className={'select-menu-item'}>
+                    <DynamicIcon name={method.icon} className={'icon'}/>
+                    {method.label}
+                  </MenuItem>
+                ))
+              }
+            </TextField>
+          </div>
+          {
+            paymentsEditMode ? <FormHelperText>
+              This transaction is {model.paymentIndex + 1} of {model.payments} Payments of {model.amount.toFixed(
+              2)}{selectedProject.currency}
+            </FormHelperText> : null
+          }
+        </div>
+
+        {
+          !isIncome ? <CategoriesSelect selectedCategories={model.category}
+                                        error={validation.category.isInvalid}
+                                        multi={false}
+                                        onChange={(val) => handleChange(val, 'category')}/>
+            :
+            <CustomersSelect customer={model.customer}
+                             showCreateNewCustomer={true}
+                             disabled={hasEventSource}
+                             onChange={(val) => handleChange(val, 'customer')}/>
+        }
+
+        <div className={'form-control'}>
+
+          <TextField
+            label="Description"
+            value={model.description}
+            error={validation.description.isInvalid}
+            disabled={hasEventSource}
+            placeholder={"Description"}
+            multiline
+            rowsMax="4"
+            onChange={(event) => handleChange(event.target.value, 'description')}
+            fullWidth
+          />
 
         </div>
 
+        {
+          hasEventSource && showEventLink ? <div className={'event-source-link mb-2'}>
+            * Please not that this transaction is controlled by calendar <span className={'link'}> <a
+            onClick={this.gotoTransactionEvent}> Event </a> </span>
+          </div> : null
+        }
+
+        {!editMode && !isIncome ?
+          <div className={'form-control'} style={{flexDirection: 'column'}}>
+            <TextField
+              label="Payments"
+              value={model.payments}
+              title={validation.payments.message}
+              error={validation.payments.isInvalid}
+              placeholder={"Payments"}
+              onChange={(event) => handleChange(event.target.value, 'payments')}
+              fullWidth
+            />
+            <FormHelperText> Number of monthly payments </FormHelperText></div> : null
+        }
       </div>
     );
   };
@@ -336,6 +356,7 @@ class CreateTransactionModal extends React.Component {
     return (
       <CreationModal open={open}
                      onClose={onClose}
+                     mainClass={'transaction-modal'}
                      title={editMode ? 'Edit Transaction' : 'Create Transaction'}
                      editMode={editMode}
                      noPadding={true}
@@ -349,11 +370,13 @@ class CreateTransactionModal extends React.Component {
                          date: dateUtil.now(),
                          payments: '',
                          amount: '',
+                         paymentMethod: 'CREDIT',
+                         status: 'ACCEPTED',
                          editMode: false,
                        },
                        ...createInitialState
                      })}
-                     renderContent={this.modalContentv2}
+                     renderContent={this.modalContent}
                      onCreate={this.handleTransactionCreate}
                      validate={validate}
                      validation={validation}
