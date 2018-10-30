@@ -76,7 +76,7 @@ class CategoryCard extends Component {
     const { anchorEl } = this.state;
 
     const excluded = category.excluded;
-    const canEdit = category.isCustom && !excluded;
+    const canEdit = !excluded;
 
     return (
       <div className={`category col-sm-12 col-md-3 ${excluded ? 'excluded' : ''}`} key={category.id}>

@@ -74,7 +74,10 @@ export default {
 
     let _project = transformToViewProject(project);
 
-    const projectCategories = _project.categories.reverse().concat(defaultCategories);
+    const projectOverrideCategories = _project.categories.map(category => category.id);
+    const nonOverridedDefaultCategories = defaultCategories.filter(c => projectOverrideCategories.indexOf(c.id) === -1);
+
+    const projectCategories = _project.categories.reverse().concat(nonOverridedDefaultCategories);
     const projectTransactions = transactionsMap[_project.id] || [];
 
     return {

@@ -25,7 +25,6 @@ import CustomersSelect from '@common/CustomersSelect';
 import DatePicker from 'material-ui-pickers/DatePicker';
 import variables from '@scss/_variables.scss';
 import DynamicIcon from "@common/DynamicIcon";
-import DropdownIcon from '@material-ui/icons/ArrowDropDown';
 
 class CreateTransactionModal extends React.Component {
 
