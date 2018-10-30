@@ -192,14 +192,19 @@ export default {
     let income = 0;
     let outcome = 0;
 
-    const acceptedTransactions = transactions.filter(t => !t.status || t.status === 'ACCEPTED');
-    acceptedTransactions.forEach(transaction => transaction.income ? income : outcome += transaction.amount);
+    const acceptedTransactions = this.filterAccepted(transactions);
+    transactions.forEach(transaction => transaction.income ? income+= transaction.amount : outcome += transaction.amount);
 
     return {
       income,
       outcome,
       balance: income - outcome
     }
+  },
+
+  filterAccepted (transactions) {
+
+    return transactions.filter(t => t.status === 'ACCEPTED');
   }
 }
 

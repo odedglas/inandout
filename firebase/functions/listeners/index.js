@@ -1,5 +1,5 @@
 const firebase = require("firebase-admin");
-const accepted = transaction => transaction.status === ACCEPTED;
+const accepted = transaction => transaction.status === 'ACCEPTED';
 exports.transactionCreate = (snapshot, context) => {
 
   const {projectKey, monthYearKey} = context.params;

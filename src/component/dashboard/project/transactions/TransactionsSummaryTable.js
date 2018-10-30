@@ -11,6 +11,7 @@ import Avatar from '@material-ui/core/Avatar';
 import DynamicIcon from '@common/DynamicIcon';
 import UserAvatar from '@common/UserAvatar';
 import Tooltip from '@material-ui/core/Tooltip';
+import Status from '@common/Status';
 
 import {TransactionType} from "@model/transaction";
 
@@ -49,6 +50,7 @@ class TransactionsSummaryTable extends Component {
                   <TableCell>Date</TableCell>
                   <TableCell>Owner</TableCell>
                   <TableCell>Description</TableCell>
+                  <TableCell>Status</TableCell>
                   <TableCell>Amount ({selectedProject.currency})</TableCell>
                   <TableCell>{showIncomes ? 'Customer' : 'Category'}</TableCell>
                 </TableRow>
@@ -66,6 +68,9 @@ class TransactionsSummaryTable extends Component {
                       </TableCell>
                       <TableCell>
                         {t.description}
+                      </TableCell>
+                      <TableCell>
+                        <Status status={t.status} small={true}/>
                       </TableCell>
                       <TableCell>
                         <div className={'outcome-amount'}>

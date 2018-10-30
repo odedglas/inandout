@@ -24,6 +24,7 @@ import {ProjectType} from "@model/project";
 import {TransactionType} from "@model/transaction";
 import withFilter from '@hoc/withFilter';
 import UserAvatar from '@common/UserAvatar';
+import Status from '@common/Status';
 
 import util from "@util/"
 import {loadTransactions} from "@action/project";
@@ -31,6 +32,7 @@ import {setLoading} from "@action/loading";
 import {showConfirmation} from "@action/dashboard";
 import dateUtil from '@util/date';
 import transactionService from '@service/transaction';
+import {TRANSACTIONS_PAYMENT_METHODS} from '@const/';
 
 const getSorting = (order, orderBy) => {
 
@@ -275,10 +277,10 @@ class TransactionsTableView extends Component {
       transactionForEdit,
       showFilter,
     } = this.state;
-
     const {selectedProject, filter, handleFilterChange, doFilter} = this.props;
 
     const filteredData = data.filter(doFilter);
+
     return (
       <Paper className={'mt-3 row'} style={{position: 'relative'}}>
 
@@ -295,6 +297,7 @@ class TransactionsTableView extends Component {
         <TransactionsTableViewToolbar date={selectedDate}
                                       filter={filter}
                                       showFilter={this.showHideFilter}
+                                      handleFilterChange={handleFilterChange}
                                       setSelectedForToday={this.setSelectedForToday}
                                       onSelectedDateChange={this.handleSelectedDateChange}/>
         <div className={'table-view-wrapper col-sm-12 px-0'}>
@@ -310,6 +313,7 @@ class TransactionsTableView extends Component {
                 .sort(getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(transaction => {
+                  const paymentMethod = util.getConst(TRANSACTIONS_PAYMENT_METHODS, transaction.paymentMethod);
 
                   return (
                     <TableRow
@@ -367,12 +371,22 @@ class TransactionsTableView extends Component {
                           {transaction.description}
                         </span>
                       </TableCell>
+                      <TableCell>
+                        <Status status={transaction.status}/>
+                      </TableCell>
                       <TableCell numeric>{transaction.amount}</TableCell>
                       <TableCell>
                         <Tooltip title={transaction.income ? 'Income' : 'Outcome'} placement={'top'}>
                           <DynamicIcon className={`icon mx-2 ${transaction.income ? 'income' : 'outcome'}`}
                                        name={transaction.income ? 'income' : 'outcome'}
                           />
+                        </Tooltip>
+                      </TableCell>
+                      <TableCell>
+                        <Tooltip title={paymentMethod.label} placement={'top'}>
+                          <span className={'p-2'}>
+                            <DynamicIcon name={paymentMethod.icon} className={'select-menu-item'}/>
+                          </span>
                         </Tooltip>
                       </TableCell>
                       <TableCell>{transaction.payments ?
@@ -490,6 +504,16 @@ export default compose(
       type: 'date',
       label: 'Date',
       id: 'date',
+    },
+    {
+      type: 'singleSelect',
+      label: 'Status',
+      id: 'status',
+    },
+    {
+      type: 'singleSelect',
+      label: 'Payment Method',
+      id: 'paymentMethod',
     },
   ]),
   connect(state => ({

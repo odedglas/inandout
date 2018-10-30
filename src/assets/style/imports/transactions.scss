@@ -30,7 +30,7 @@
 .transactions-container {
 
   .transaction-toolbar {
-
+    justify-content: space-between;
     .months-navigator {
       display:flex;
       align-items:center;
@@ -66,6 +66,10 @@
       }
     }
 
+    .filter-display {
+      flex-direction: row-reverse;
+      padding: 0.5rem;
+    }
   }
 
   .table-view-wrapper {

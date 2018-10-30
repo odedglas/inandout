@@ -162,7 +162,6 @@ export default {
   }
 }
 
-
 //Generic creation for project sub entities.
 const createProjectEntity = (projectId, entityName, entity) => {
 

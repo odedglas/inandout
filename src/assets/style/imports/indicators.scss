@@ -23,3 +23,27 @@
 .overage-background {
   background-color: $error-color;
 }
+
+.status-indicator {
+  color: $success-color;
+  font-weight: 500;
+  border: 1px solid  $success-color;
+  border-radius:4px;
+  padding: 0.25rem 0.5rem;
+  text-align: center;
+  font-size: 0.725rem;
+
+  &.pending {
+    color: $warning-color;
+    border: 1px solid  $warning-color;
+  }
+
+  &.denied {
+    color: $error-color;
+    border: 1px solid  $error-color;
+  }
+
+  &.small {
+    max-width:70px;
+  }
+}

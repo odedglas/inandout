@@ -126,6 +126,8 @@ class CreateTransactionModal extends React.Component {
 
     const selectedTransactionType = TRANSACTIONS_TYPE.find(item => item.key === model.type);
     const transactionStatus = TRANSACTIONS_STATUS.find(item => item.key === (model.status || 'ACCEPTED'));
+
+    const isCheckMethod = model.paymentMethod === 'CREDIT';
     const isToday = dateUtil.dayDiff(new Date(), model.date) !== 0;
     const datePickerDisabled = paymentsEditMode || hasEventSource;
 
@@ -164,11 +166,11 @@ class CreateTransactionModal extends React.Component {
 
           <div className={'flex'}></div>
 
-          <div className={`status-indicator mr-4 ${transactionStatus.className}`}
+          <div className={'mr-4'}
                aria-owns={statusTypeMenuAnchor ? 'transaction-status-menu' : null}
                onClick={this.handleTransactionStatusMenuShowHide}
                aria-haspopup="true">
-            <div className={'px-2 py-1 wrapper'}>
+            <div className={`status-indicator  ${transactionStatus.className}`}>
               <span> </span>
               {transactionStatus.label}
             </div>
@@ -310,7 +312,7 @@ class CreateTransactionModal extends React.Component {
           </div> : null
         }
 
-        {!editMode && !isIncome ?
+        {(!editMode && !isIncome && isCheckMethod )?
           <div className={'form-control'} style={{flexDirection: 'column'}}>
             <TextField
               label="Payments"

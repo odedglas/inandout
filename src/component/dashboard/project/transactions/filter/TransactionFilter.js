@@ -15,6 +15,7 @@ class TransactionFilter extends Component {
   static propTypes = {
     open: PropTypes.bool.isRequired,
     filter: PropTypes.arrayOf(PropTypes.object),
+    filterValues: PropTypes.arrayOf(PropTypes.object),
     hideFilter: PropTypes.func.isRequired,
     handleFilterChange: PropTypes.func.isRequired,
     categories: PropTypes.array,
@@ -44,7 +45,7 @@ class TransactionFilter extends Component {
     if (open !== prevProps.open) {
       const projectMembers = dashboardUsers.filter(u => projectMemberKeys.indexOf(u.id) !== -1);
       this.setState({projectMembers});
-      this.resetValues();
+      this.setFilterValues();
     }
   }
 
@@ -52,7 +53,7 @@ class TransactionFilter extends Component {
     this.editFilterRowsRef = [];
   }
 
-  resetValues = () => {
+  setFilterValues = () => {
 
     const filterValues = this.props.filter.reduce((values, lf) => {
       !util.isEmptyObject(lf.value) && values.push({...lf.value});

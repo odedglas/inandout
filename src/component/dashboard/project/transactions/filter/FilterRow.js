@@ -7,7 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import DynamicIcon from "../../../../common/DynamicIcon";
 import DatePicker from 'material-ui-pickers/DatePicker';
 import util from '@util/'
-import {TRANSACTIONS_TYPE} from '@const/';
+import {TRANSACTIONS_TYPE, TRANSACTIONS_STATUS, TRANSACTIONS_PAYMENT_METHODS} from '@const/';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -58,8 +58,9 @@ class FilterRow extends Component {
     update[field] = val;
 
     if (field === 'filterId') {
-      //Cleaning current operator
-      update.operator = '';
+      const filter = this.props.filter.find(f => f.id === val);
+      //Resetting current operator
+      update.operator = filter.operators[0].key;
       update.value = '';
     }
 
@@ -132,6 +133,42 @@ class FilterRow extends Component {
             onChange={(e) => this.handleFieldChange('value', e.target.value)}
           >
             {TRANSACTIONS_TYPE.map(option => (
+              <MenuItem key={option.key} value={option.key}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        );
+
+        if(filterId === 'status') return (
+          <TextField
+            select
+            fullWidth
+            label="Value"
+            error={validation.value.isInvalid}
+            title={validation.value.message}
+            value={value}
+            onChange={(e) => this.handleFieldChange('value', e.target.value)}
+          >
+            {TRANSACTIONS_STATUS.map(option => (
+              <MenuItem key={option.key} value={option.key}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        );
+
+        if(filterId === 'paymentMethod') return (
+          <TextField
+            select
+            fullWidth
+            label="Value"
+            error={validation.value.isInvalid}
+            title={validation.value.message}
+            value={value}
+            onChange={(e) => this.handleFieldChange('value', e.target.value)}
+          >
+            {TRANSACTIONS_PAYMENT_METHODS.map(option => (
               <MenuItem key={option.key} value={option.key}>
                 {option.label}
               </MenuItem>

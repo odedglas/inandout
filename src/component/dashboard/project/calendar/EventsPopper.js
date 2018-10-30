@@ -266,18 +266,6 @@ class EventsPopper extends Component {
     return (
       <div className={'content'}>
 
-        <div className={'form-control'}>
-
-          <TextField
-            value={data.title}
-            title={validation.title.message}
-            error={validation.title.isInvalid}
-            onChange={(event) => this.handleChange(event.target.value, 'title')}
-            placeholder="Add Title"
-            fullWidth
-          />
-        </div>
-
         {
           !editMode ?
             <div className={'form-control'}>
@@ -305,6 +293,18 @@ class EventsPopper extends Component {
             </MenuItem>
           ))}
         </Menu>
+
+        <div className={'form-control'}>
+
+          <TextField
+            value={data.title}
+            title={validation.title.message}
+            error={validation.title.isInvalid}
+            onChange={(event) => this.handleChange(event.target.value, 'title')}
+            placeholder="Add Title"
+            fullWidth
+          />
+        </div>
 
         <div className={'form-control'}>
           <div className="picker">

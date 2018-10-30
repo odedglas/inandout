@@ -8,14 +8,18 @@ export default {
   isEmpty(o) {
     return this.isUndefined(o) || o === ''
   },
-  searchInConst(constant, key) {
-
+  getConst(constant, key) {
     if (!key) return;
 
     const constantKeys = Object.keys(constant);
     const matchedKey = constantKeys.filter(constKey => constant[constKey].key === key);
 
-    return matchedKey ? constant[matchedKey].label : undefined;
+    return matchedKey ? constant[matchedKey] : undefined;
+  },
+  searchInConst(constant, key) {
+
+    const matched = this.getConst(constant, key);
+    return matched ? matched.label : undefined;
   },
   isPromise(p) {
     return !this.isUndefined(p) && typeof p.then === 'function'

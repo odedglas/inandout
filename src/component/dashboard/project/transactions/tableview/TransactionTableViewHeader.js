@@ -30,8 +30,10 @@ class TransactionTableViewHeader extends Component {
       {id: 'owner', label: 'Owner', avatar: true, orderByProp: 'owner.displayName'},
       {id: 'customer', label: 'Customer', avatar: true,},
       {id: 'description', label: 'Description', colspan: 2, additionalCls: 'px-3',},
+      {id: 'status', label: 'Status', additionalCls: 'small-cell' },
       {id: 'amount', numeric: true, label: `Amount (${projectCurrency})`},
       {id: 'type', label: 'Type', additionalCls: 'small-cell', orderByProp: 'income'},
+      {id: 'paymentMethod', label: 'Method', additionalCls: 'small-cell'},
       {id: 'payments', label: 'Payments'},
       {id: 'category', label: 'Category', avatar: true, orderByProp: 'category.name'},
     ];

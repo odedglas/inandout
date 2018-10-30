@@ -1,4 +1,5 @@
 import firebaseService from './firebase';
+import transactionService from './transaction';
 import variables from '@scss/_variables.scss';
 import util from '@util/'
 import date from '@util/date'
@@ -109,8 +110,8 @@ export default {
 
       return dateMatch && categoryMatch;
     });
-
-    const actual = budgetTransactions.reduce((total, t) => {
+    const acceptedTransactions = transactionService.filterAccepted(budgetTransactions);
+    const actual = acceptedTransactions.reduce((total, t) => {
       total += t.amount;
       return total;
     },0);
@@ -140,7 +141,8 @@ export default {
     }, 0);
 
     //Summing budget transactions
-    const budgetsActual = budgetTransactions.reduce((total, transaction) => {
+    const acceptedTransactions = transactionService.filterAccepted(budgetTransactions);
+    const budgetsActual = acceptedTransactions.reduce((total, transaction) => {
 
       total += transaction.amount;
       return total;
