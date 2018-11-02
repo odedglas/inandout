@@ -12,7 +12,7 @@ import DynamicIcon from '@common/DynamicIcon';
 import UserAvatar from '@common/UserAvatar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Status from '@common/Status';
-
+import util from '@util/';
 import {TransactionType} from "@model/transaction";
 
 class TransactionsSummaryTable extends Component {
@@ -74,7 +74,7 @@ class TransactionsSummaryTable extends Component {
                       </TableCell>
                       <TableCell>
                         <div className={'outcome-amount'}>
-                          <span> {t.amount} </span>
+                          <span> {util.formatNumber(t.amount)} </span>
                           <Tooltip title={showIncomes ? 'Income' : 'Outcome'} placement={'top'}>
                             <DynamicIcon
                               className={`icon mx-2 ${showIncomes ? 'success-indicator' : 'overage-indicator'}`}

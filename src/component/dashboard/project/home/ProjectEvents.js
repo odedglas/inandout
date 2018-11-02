@@ -74,13 +74,15 @@ const ProjectEventsTab = (events, overdue, completeTask, reportEvent) => (
             {dateUtil.format(event.date, "Do MMM")}
           </div>
 
-          <Button size="small" className={'button--xs ml-2'}
-                  style={{'justifyContent':'flex-start'}}
-                  onClick={() => isEventType ? reportEvent(event) : completeTask(event)}
-                  color="primary" >
-            <DynamicIcon name={icon}/>
-            {isEventType ? 'Report' : 'Complete'}
-          </Button>
+          {
+            overdue && <Button size="small" className={'button--xs ml-2'}
+                               style={{'justifyContent': 'flex-start'}}
+                               onClick={() => isEventType ? reportEvent(event) : completeTask(event)}
+                               color="primary">
+              <DynamicIcon name={icon}/>
+              {isEventType ? 'Report' : 'Complete'}
+            </Button>
+          }
 
         </div>
       </div>
@@ -164,7 +166,7 @@ class ProjectEvents extends React.Component {
     const {showConfirmation, selectedProject, markEventComplete} = this.props;
 
     showConfirmation({
-      title:'Complete Task',
+      title: 'Complete Task',
       body: 'Please confirm this task has been done',
       icon: 'task',
       onConfirm: () => {
@@ -183,13 +185,13 @@ class ProjectEvents extends React.Component {
     const {showConfirmation, selectedProject, markEventComplete} = this.props;
 
     showConfirmation({
-      title:'Event Report',
+      title: 'Event Report',
       body: 'Report this event and attach if needed a transaction to it',
       icon: 'calendar',
-      buttons:[
+      buttons: [
         {
-          color:'secondary',
-          text:'Cancel',
+          color: 'secondary',
+          text: 'Cancel',
           onClick: (payload, close) => close()
         },
         {
@@ -290,7 +292,9 @@ class ProjectEvents extends React.Component {
           index={this.state.activeTabIndex}
           onChangeIndex={this.handleTabChangeIndex}
         >
-          {tabs.map((tab, tabIndex) => <div style={{'minHeight': minHeight}} key={tab.key}> {this.renderTabEvents(tab, tabIndex)} </div>)}
+          {tabs.map((tab, tabIndex) => <div style={{'minHeight': minHeight}} key={tab.key}> {this.renderTabEvents(tab,
+            tabIndex
+          )} </div>)}
 
         </SwipeableViews>
 

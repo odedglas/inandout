@@ -16,7 +16,7 @@ const getContextProject = (project, users) => {
     ...project,
     owner: usersMap[project.owner]
   }
-}
+};
 
 const getContextTransactions = (transactions, customers, categories, users) => {
 
@@ -29,11 +29,13 @@ const getContextTransactions = (transactions, customers, categories, users) => {
     : []
 };
 
-const getContextBudgets = (budgets, filledTransactions, customers, categories) => {
+const getContextBudgets = (budgets, filledTransactions, customers, categories, selectedDate) => {
+
   return budgetService.mergeBudgets(
     budgets,
     categories,
-    filledTransactions
+    filledTransactions,
+    selectedDate
   )
 };
 
@@ -41,6 +43,7 @@ class ProjectProvider extends Component {
 
   static propTypes = {
     project: PropTypes.object,
+    selectedDate: PropTypes.object,
     budgets: PropTypes.array,
     transactions: PropTypes.array,
     customers: PropTypes.array,
@@ -63,6 +66,7 @@ class ProjectProvider extends Component {
       users,
       balance,
       project,
+      selectedDate
     } = this.props;
 
     const contextTransactions = transactions ? getContextTransactions(transactions, customers, categories, users) : [];
@@ -72,7 +76,7 @@ class ProjectProvider extends Component {
       contextCustomers: customers,
       contextCategories: categories,
       contextTransactions,
-      contextBudgets: getContextBudgets(budgets, contextTransactions, customers, categories),
+      contextBudgets: getContextBudgets(budgets, contextTransactions, customers, categories, selectedDate),
       contextUsers: users,
       contextMembers: projectService.mergeProjectMembers(members, users),
       contextEvents: calendarService.mergeEvents(events, customers),
@@ -104,6 +108,7 @@ class ProjectProvider extends Component {
 
 export default connect(state => ({
   project: state.project.selectedProject,
+  selectedDate: state.project.selectedDate,
   balance: state.project.selectedProject.balance,
   budgets: state.project.budgets,
   transactions: state.project.transactions,

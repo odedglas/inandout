@@ -87,22 +87,22 @@ export default {
     }
   },
 
-  mergeBudgets(budgets, categories, transactions) {
+  mergeBudgets(budgets, categories, transactions, selectedDate) {
 
     const categoriesMap = util.toIdsMap(categories);
 
     return budgets ? budgets.map(budget => {
 
-      return this.fillBudget(budget, categoriesMap, transactions)
+      return this.fillBudget(budget, categoriesMap, transactions, selectedDate)
     }) : [];
   },
 
-  fillBudget (budget, categoriesMap, transactions){
+  fillBudget (budget, categoriesMap, transactions, selectedDate){
 
     //Filtering transactions by budget credentials
     const budgetCategories = budget.categories;
 
-    const budgetCurrentRange = date.getBudgetRange(budget.period);
+    const budgetCurrentRange = date.getBudgetRange(budget.period, selectedDate);
     const budgetTransactions = transactions.filter(t => {
 
       const categoryMatch = t.category && budgetCategories.indexOf(t.category.id) !== -1;

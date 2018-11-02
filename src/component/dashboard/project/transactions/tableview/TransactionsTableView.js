@@ -374,7 +374,7 @@ class TransactionsTableView extends Component {
                       <TableCell>
                         <Status status={transaction.status}/>
                       </TableCell>
-                      <TableCell numeric>{transaction.amount}</TableCell>
+                      <TableCell numeric>{util.formatNumber(transaction.amount)}</TableCell>
                       <TableCell>
                         <Tooltip title={transaction.income ? 'Income' : 'Outcome'} placement={'top'}>
                           <DynamicIcon className={`icon mx-2 ${transaction.income ? 'income' : 'outcome'}`}

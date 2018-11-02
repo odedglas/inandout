@@ -104,11 +104,9 @@ class CreateCustomerModal extends React.Component {
 
           <TextField
             value={model.address}
-            error={validation.address.isInvalid}
             placeholder={'Tel Aviv, Ruppin 24'}
             onChange={(event) => handleChange(event.target.value, 'address')}
             label="Adress"
-            title={validation.address.message}
             fullWidth
           />
         </div>
@@ -177,11 +175,6 @@ export default compose(
       method: (v, f, state, validator, args) => validator.isEmail(v),
       message: 'Please provide a customer email.'
     },
-    {
-      field: 'address',
-      method: (v, f, state, validator, args) => !validator.isEmpty(v),
-      message: 'Please provide a customer address.'
-    }
   ]),
   connect(state => ({
     selectedProject: state.project.selectedProject

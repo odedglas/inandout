@@ -75,9 +75,9 @@ export default {
     return moment(date).endOf(unit)
   },
 
-  getBudgetRange (period)  {
+  getBudgetRange (period, selectedDate)  {
 
-    let d = moment();
+    let d = moment(selectedDate);
 
     const budgetPeriod = budgetPeriodMap[period];
 
