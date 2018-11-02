@@ -7,8 +7,6 @@ import ProjectBalanceKpi from './ProjectBalanceKpi';
 
 import dateUtil from '@util/date';
 
-const formatShort = date => dateUtil.format(date, 'MMM YY');
-
 export default  ({indicators, project, selectedDate }) => {
 
   const currency = project.currency;
@@ -20,7 +18,7 @@ export default  ({indicators, project, selectedDate }) => {
         <ProjectKpiCard title={'Monthly Balance'}
                         body={<TransactionsBalanceKpi currency={currency}
                                                       {...indicators.monthlyBalance}/>}
-                        badgeText={formatShort(selectedDate)}>
+                        badgeText={dateUtil.formatShortMont(selectedDate)}>
         </ProjectKpiCard>
       </div>
 
@@ -28,7 +26,7 @@ export default  ({indicators, project, selectedDate }) => {
         <ProjectKpiCard title={'Budgets usage'}
                         body={<BudgetsUsageKpi currency={currency}
                                                {...indicators.budgetsUsage}/>}
-                        badgeText={formatShort(selectedDate)}>
+                        badgeText={dateUtil.formatShortMont(selectedDate)}>
         </ProjectKpiCard>
       </div>
 
@@ -36,8 +34,8 @@ export default  ({indicators, project, selectedDate }) => {
         <ProjectKpiCard title={'Project Balance'}
                         badgeText={'Overall'}
                         body={<ProjectBalanceKpi currency={currency}
-                                                 created={formatShort(project.created)}
-                                                 selectedDate={formatShort(selectedDate)}
+                                                 created={project.created}
+                                                 selectedDate={selectedDate}
                                                  balance={indicators.totalBalance}/>}>
 
         </ProjectKpiCard>
