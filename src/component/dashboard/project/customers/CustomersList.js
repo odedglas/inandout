@@ -133,7 +133,10 @@ class CustomersList extends Component {
                         {customer.name} <span className={'separator'}></span> {customer.contactName}
                       </p>
                       <div className={'contact-info'}>
-                        {customer.email}, {customer.phone}
+                        {customer.email}, {util.formatPhone(customer.phone)}
+                        {
+                          customer.additionalPhoneNumber && <span> / {customer.additionalContactName} - {customer.additionalPhoneNumber}</span>
+                        }
                       </div>
                     </div>
 

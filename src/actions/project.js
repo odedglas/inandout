@@ -278,7 +278,7 @@ export function updateTransaction(project, { id, type, owner, description, categ
   }
 }
 
-export function createCustomer(project, { name, contactName, phone, email, address, logo }, onSuccess) {
+export function createCustomer(project, { name, contactName, phone, email, address, logo, additionalPhoneNumber, additionalContactName }, onSuccess) {
 
   return dispatch => {
 
@@ -291,7 +291,9 @@ export function createCustomer(project, { name, contactName, phone, email, addre
       phone,
       email,
       address,
-      logo
+      logo,
+      additionalPhoneNumber,
+      additionalContactName
     ).then(customer => {
 
       dispatch({type: 'ADD_PROJECT_CUSTOMER', customer});
@@ -302,7 +304,7 @@ export function createCustomer(project, { name, contactName, phone, email, addre
   }
 }
 
-export function editCustomer(project, { id, name, contactName, phone, email, address, logo }, onSuccess) {
+export function editCustomer(project, { id, name, contactName, phone, email, address, logo, additionalPhoneNumber, additionalContactName }, onSuccess) {
 
   return dispatch => {
 
@@ -316,7 +318,9 @@ export function editCustomer(project, { id, name, contactName, phone, email, add
       phone,
       email,
       address,
-      logo
+      logo,
+      additionalPhoneNumber,
+      additionalContactName
     ).then(customer => {
 
       dispatch({type: 'EDIT_PROJECT_CUSTOMER', customer});

@@ -85,6 +85,7 @@ import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import toArrowIcon from '@material-ui/icons/TrendingFlat';
 import ProjectMembersIcon from '@material-ui/icons/GroupWork';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ChequeIcon from '../icon/ChequeIcon';
 
 // -- Social Media --//
@@ -177,6 +178,7 @@ const iconMap = {
   'cash': CashIcon,
   'credit': CreditCardIcon,
   'cheque': ChequeIcon,
+  'addPerson': PersonAddIcon,
 };
 
 const DynamicIcon = ({ name, ...iconProps}) => {

@@ -4,7 +4,7 @@ import themeService from '@service/theme';
 
 export default {
 
-  createCustomer: (projectId, name, contactName, phone, email, address, logo) => {
+  createCustomer: (projectId, name, contactName, phone, email, address, logo, additionalPhoneNumber, additionalContactName) => {
 
     const now = new Date();
     const customer = {
@@ -17,6 +17,8 @@ export default {
       star: false,
     };
 
+    if(additionalPhoneNumber) customer.additionalPhoneNumber = additionalPhoneNumber;
+    if(additionalContactName) customer.additionalContactName = additionalContactName;
     if(logo) customer.logo = logo;
     else {
 
@@ -27,7 +29,7 @@ export default {
     return firebaseService.createCustomer(projectId, customer)
 
   },
-  editCustomer: (projectId, customerId, name, contactName, phone, email, address, logo) => {
+  editCustomer: (projectId, customerId, name, contactName, phone, email, address, logo, additionalPhoneNumber, additionalContactName) => {
 
     const customer = {
       name,
@@ -36,6 +38,9 @@ export default {
       email,
       address,
     };
+
+    if(additionalPhoneNumber) customer.additionalPhoneNumber = additionalPhoneNumber;
+    if(additionalContactName) customer.additionalContactName = additionalContactName;
     if(logo) customer.logo = logo;
 
     const updatePath = customersPath(projectId, customerId);

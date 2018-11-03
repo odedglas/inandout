@@ -2,16 +2,51 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
-
+import MaskedInput from 'react-text-mask';
 import TextField from '@material-ui/core/TextField';
 
 import withValidation from '../hoc/withValidation';
 import {createCustomer, editCustomer} from "@action/project";
 import CreationModal from './CreationModal';
-
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
 import util from '@util/';
 import {ProjectType} from "@model/project";
 import {CustomerType} from "@model/customer";
+import DynamicIcon from "../common/DynamicIcon";
+
+function TextMaskCustom(props) {
+  const {inputRef, ...other} = props;
+
+  return (
+    <MaskedInput
+      {...other}
+      ref={inputRef}
+      placeholder="(052) 240-4223"
+      guide={false}
+      keepCharPositions={true}
+      mask={[
+        '(',
+        /[0-9]/,
+        /\d/,
+        /\d/,
+        ')',
+        ' ',
+        /\d/,
+        /\d/,
+        /\d/,
+        '-',
+        /\d/,
+        /\d/,
+        /\d/,
+        /\d/
+      ]}
+      placeholderChar={'\u2000'}
+      showMask={true}
+    />
+  );
+}
 
 class CreateCustomerModal extends React.Component {
 
@@ -27,13 +62,16 @@ class CreateCustomerModal extends React.Component {
     createCustomer: PropTypes.func.isRequired,
     confirmCallback: PropTypes.func,
     project: ProjectType,
-    customer: PropTypes.oneOfType([CustomerType, PropTypes.object]),
+    customer: PropTypes.oneOfType([
+      CustomerType,
+      PropTypes.object
+    ]),
   };
 
   handleCustomerCreate = (model, close) => {
 
     const {project, customer, editCustomer, createCustomer, confirmCallback} = this.props;
-    const {name, contactName, phone, email, address, logo} = model;
+    const {name, contactName, phone, email, address, logo, additionalPhoneNumber, additionalContactName} = model;
 
     const editMode = !util.isEmptyObject(customer);
     const method = editMode ? editCustomer : createCustomer;
@@ -41,7 +79,7 @@ class CreateCustomerModal extends React.Component {
     //Triggering Create / Edit
     method(
       project,
-      {name, contactName, phone, email, address, logo, id: editMode ? customer.id : undefined},
+      {name, contactName, phone, email, address, logo, id: editMode ? customer.id : undefined, additionalPhoneNumber, additionalContactName},
       (customer) => {
         confirmCallback && confirmCallback(customer);
         close();
@@ -51,6 +89,8 @@ class CreateCustomerModal extends React.Component {
   };
 
   modalContent = (model, validation, handleChange) => {
+
+    const showAdditionalContacts = model.showAdditionalContact || model.additionalPhoneNumber;
 
     return (
       <div>
@@ -62,28 +102,6 @@ class CreateCustomerModal extends React.Component {
             onChange={(event) => handleChange(event.target.value, 'name')}
             label="Business Name"
             title={validation.name.message}
-            fullWidth
-          />
-        </div>
-
-        <div className={'form-control'}>
-          <TextField
-            value={model.contactName}
-            error={validation.contactName.isInvalid}
-            onChange={(event) => handleChange(event.target.value, 'contactName')}
-            label="Contact Name"
-            title={validation.contactName.message}
-            fullWidth
-          />
-        </div>
-
-        <div className={'form-control'}>
-          <TextField
-            value={model.phone}
-            error={validation.phone.isInvalid}
-            onChange={(event) => handleChange(event.target.value, 'phone')}
-            label="Phone Number"
-            title={validation.phone.message}
             fullWidth
           />
         </div>
@@ -110,6 +128,74 @@ class CreateCustomerModal extends React.Component {
             fullWidth
           />
         </div>
+
+        <div>
+          <div className={'customer-contacts mb-2'}>
+            <span> Contacts info </span>
+            {
+              !showAdditionalContacts &&
+              <IconButton onClick={(event) => handleChange(true, 'showAdditionalContact')}>
+                <DynamicIcon name={'addPerson'}/>
+              </IconButton>
+            }
+          </div>
+          <div className={'row'}>
+            <div className={'col-sm-6 pl-0'}>
+              <div className={'form-control'}>
+                <TextField
+                  value={model.contactName}
+                  error={validation.contactName.isInvalid}
+                  onChange={(event) => handleChange(event.target.value, 'contactName')}
+                  label="Contact Name"
+                  title={validation.contactName.message}
+                  fullWidth
+                />
+              </div>
+            </div>
+            <div className={'col-sm-6'}>
+              <div className={'form-control col-flex'}>
+                <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
+                <Input
+                  value={model.phone}
+                  error={validation.phone.isInvalid}
+                  title={validation.phone.message}
+                  onChange={(event) => handleChange(event.target.value, 'phone')}
+                  id="phoneNumber"
+                  fullWidth
+                  inputComponent={TextMaskCustom}
+                />
+
+              </div>
+            </div>
+          </div>
+          {
+            showAdditionalContacts ? <div className={'row'}>
+              <div className={'col-sm-6 pl-0'}>
+                <div className={'form-control'}>
+                  <TextField
+                    value={model.additionalContactName || ''}
+                    onChange={(event) => handleChange(event.target.value, 'additionalContactName')}
+                    label="Contact Name"
+                    fullWidth
+                  />
+                </div>
+              </div>
+              <div className={'col-sm-6'}>
+                <div className={'form-control col-flex'}>
+                  <InputLabel htmlFor="additionalPhoneNumber">Phone Number</InputLabel>
+                  <Input
+                    value={model.additionalPhoneNumber || ''}
+                    onChange={(event) => handleChange(event.target.value, 'additionalPhoneNumber')}
+                    id="additionalPhoneNumber"
+                    fullWidth
+                    inputComponent={TextMaskCustom}
+                  />
+
+                </div>
+              </div>
+            </div> : null
+          }
+        </div>
       </div>
     );
   };
@@ -132,13 +218,15 @@ class CreateCustomerModal extends React.Component {
     return (
       <CreationModal open={open}
                      onClose={onClose}
-                     title={ editMode ? 'Edit Customer' : 'Create Customer'}
+                     title={editMode ? 'Edit Customer' : 'Create Customer'}
                      editMode={editMode}
                      model={model}
                      getInitialState={() => ({
                        name: '',
                        contactName: '',
                        phone: '',
+                       additionalContactName: '',
+                       additionalPhoneNumber: '',
                        email: '',
                        address: '',
                        star: false,
@@ -163,12 +251,20 @@ export default compose(
     },
     {
       field: 'contactName',
-      method: (v, f, state, validator, args) => true,
+      method: (v, f, state, validator, args) => !validator.isEmpty(v),
     },
     {
       field: 'phone',
       method: (v, f, state, validator, args) => validator.isMobilePhone(v, 'any'),
       message: 'Please provide a customer phone number.'
+    },
+    {
+      field: 'additionalContactName',
+      method: (v, f, state, validator, args) => true,
+    },
+    {
+      field: 'additionalPhoneNumber',
+      method: (v, f, state, validator, args) => true
     },
     {
       field: 'email',

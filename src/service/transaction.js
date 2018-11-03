@@ -193,7 +193,7 @@ export default {
     let outcome = 0;
 
     const acceptedTransactions = this.filterAccepted(transactions);
-    transactions.forEach(transaction => transaction.income ? income+= transaction.amount : outcome += transaction.amount);
+    acceptedTransactions.forEach(transaction => transaction.income ? income+= transaction.amount : outcome += transaction.amount);
 
     return {
       income,
