@@ -278,7 +278,8 @@ class TransactionsTableView extends Component {
       showFilter,
     } = this.state;
     const {selectedProject, filter, handleFilterChange, doFilter} = this.props;
-
+    console.log(filter)
+    console.log(filter.filter(f => JSON.stringify(f.value) !== JSON.stringify(f.value)))
     const filteredData = data.filter(doFilter);
 
     return (

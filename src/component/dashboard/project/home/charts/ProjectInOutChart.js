@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import dateUtil from '@util/date';
+import util from '@util';
 
 import {
   AreaChart,
@@ -16,9 +17,28 @@ import {
 } from 'recharts';
 import {ProjectType} from "@model/project";
 
+const INCOME_KEY = "Incomes";
+const OUTCOME_KEY = "Outcomes";
 
-const INCOME_KEY = "Income";
-const OUTCOME_KEY = "Outcome";
+const ChartTooltip = ({value, name, props}) => {
+
+  const {payload} = props;
+  const {dailyIncomes, dailyOutcomes} = payload;
+
+  let isIncome = name === INCOME_KEY;
+  const showDaily = isIncome ? dailyIncomes > 0 : dailyOutcomes > 0;
+  const dailyAmount = isIncome ? dailyIncomes : dailyOutcomes;
+
+  return (
+    <span>
+      {util.formatNumber(value)}
+      <small className={`inandout-chart-tooltip ${isIncome ? 'income' : 'outcome'}`}>
+        {showDaily && <span> |&nbsp; Daily: </span>}
+        {showDaily && <span key={'dailyIncomes'}>+{util.formatNumber(dailyAmount)}</span>}
+      </small>
+    </span>
+  );
+};
 
 class ProjectInOutChart extends Component {
 
@@ -60,14 +80,18 @@ class ProjectInOutChart extends Component {
     return datesMap.map(date => {
       return {
         name: date,
-        [INCOME_KEY]: transactionsData[date].filter(t => t.income).reduce((total, t) => {
+        dailyIncomes: transactionsData[date].filter(t => t.income).reduce((total, t) => {
+          total += t.amount;
           cumulativeIncomes += t.amount;
-          return cumulativeIncomes
-        }, cumulativeIncomes),
-        [OUTCOME_KEY]: transactionsData[date].filter(t => !t.income).reduce((total, t) => {
+          return total
+        }, 0),
+        dailyOutcomes: transactionsData[date].filter(t => !t.income).reduce((total, t) => {
+          total += t.amount;
           cumulativeOutcomes += t.amount;
-          return cumulativeOutcomes
-        }, cumulativeOutcomes)
+          return total
+        }, 0),
+        [INCOME_KEY]: cumulativeIncomes,
+        [OUTCOME_KEY]: cumulativeOutcomes
       }
     })
   }
@@ -78,7 +102,7 @@ class ProjectInOutChart extends Component {
     const currentDisabled = this.state.disabledSets;
     const isDisabled = currentDisabled.includes(dataKey);
 
-    if(isDisabled) {
+    if (isDisabled) {
       //Removing
       this.setState({
         disabledSets: currentDisabled.filter(d => d !== dataKey)
@@ -87,7 +111,10 @@ class ProjectInOutChart extends Component {
     else {
       //Adding
       this.setState({
-        disabledSets: [...currentDisabled, dataKey]
+        disabledSets: [
+          ...currentDisabled,
+          dataKey
+        ]
       })
     }
 
@@ -112,7 +139,7 @@ class ProjectInOutChart extends Component {
               onClick={() => this.handleLegendClick(_dataKey)}
               style={style}
             >
-              <Surface width={10} height={10} viewBox={{x:0, y:0, height:10, width:10}}>
+              <Surface width={10} height={10} viewBox={{x: 0, y: 0, height: 10, width: 10}}>
                 <Symbols cx={5} cy={5} type="circle" size={80} fill={color}/>
                 {disabled && (
                   <Symbols
@@ -143,7 +170,7 @@ class ProjectInOutChart extends Component {
 
     return (
       <div className={'chart-holder'}>
-        <div className={'title'} style={{position:'absolute'}}> Income vs Outcome</div>
+        <div className={'title'} style={{position: 'absolute'}}> Income vs Outcome</div>
         <ResponsiveContainer height={240}>
           <AreaChart data={data}
                      padding={{top: 0, right: 10, left: 10, bottom: 0}}
@@ -165,7 +192,7 @@ class ProjectInOutChart extends Component {
                     height={36}
                     content={this.renderCustomLegend}
                     onClick={this.handleLegendClick}/>
-            <Tooltip/>
+            <Tooltip formatter={(value, name, props) => <ChartTooltip value={value} name={name} props={props}/>}/>
             <Area type="monotone"
                   dataKey={showIncomes ? INCOME_KEY : INCOME_KEY + ' '}
                   stroke="#82ca9d" fill="url(#IncomeColor)" activeDot={{r: 8}}/>

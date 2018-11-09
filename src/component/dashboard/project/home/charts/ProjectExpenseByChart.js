@@ -1,11 +1,16 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {
+  withRouter,
+} from 'react-router-dom';
+import {compose} from 'recompose';
 import {connect} from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import DynamicIcon from '@common/DynamicIcon';
 import {PieChart, Pie, ResponsiveContainer, Tooltip, Cell} from 'recharts';
 
 import util from '@util/'
+import navgationUtil from '@util/navigation';
 import {TransactionType} from "@model/transaction";
 import {CategoryType} from "@model/category";
 import {ProjectType} from "@model/project";
@@ -57,6 +62,7 @@ class ProjectExpenseByChart extends Component {
   getData(transactions, categories) {
 
     return categories.map(c => ({
+      id: c.id,
       name: c.name,
       icon: c.icon,
       color: c.color,
@@ -72,6 +78,24 @@ class ProjectExpenseByChart extends Component {
     this.setState({activeItem: item});
   };
 
+  viewCategoryTransactions = (categoryId) => {
+
+    const {history, selectedProject} = this.props;
+
+    history.push({
+      pathname: navgationUtil.projectLink(selectedProject, 'transactions'),
+      state: {
+        initialFilter: [
+          {
+            filterId: "category",
+            operator: "in",
+            value: [categoryId]
+          }
+        ]
+      }
+    })
+  };
+
   render() {
 
     const {transactions, categories} = this.props;
@@ -85,7 +109,9 @@ class ProjectExpenseByChart extends Component {
         <div className={'title px-3 text-center mt-'}> Expense by category</div>
 
         <div className="category-display">
-          <Avatar className={'avatar medium mt-2'} style={{'backgroundColor': _activeItem.color}}>
+          <Avatar className={'avatar medium mt-2'}
+                  onClick={() => this.viewCategoryTransactions(_activeItem.id)}
+                  style={{'backgroundColor': _activeItem.color, cursor: 'pointer', zIndex: 2}}>
             {activeItem ? <DynamicIcon className={'icon'} name={_activeItem.icon}/> : null}
           </Avatar>
           <div className="category-details my-2">
@@ -99,14 +125,14 @@ class ProjectExpenseByChart extends Component {
             <Pie
               dataKey="value"
               data={data}
+              onClick={(item) => this.viewCategoryTransactions(item.id)}
               innerRadius={80}
               outerRadius={100}
               onMouseEnter={item => this.onItemEnterLeave(item, true)}>
               {
-                data.map((entry, index) => <Cell key={entry.name} fill={entry.color}/>)
+                data.map((entry, index) => <Cell style={{cursor: 'pointer'}} key={entry.name} fill={entry.color}/>)
               }
             </Pie>
-            <Tooltip/>
           </PieChart>
         </ResponsiveContainer>
       </div>
@@ -114,6 +140,9 @@ class ProjectExpenseByChart extends Component {
   }
 }
 
-export default connect(state => ({
-  selectedProject: state.project.selectedProject,
-}), {})(ProjectExpenseByChart);
+export default compose(
+  withRouter,
+  connect(state => ({
+    selectedProject: state.project.selectedProject,
+  }), {})
+)(ProjectExpenseByChart);

@@ -72,7 +72,7 @@ class ProjectCharts extends React.Component {
                 <img src={require('@img/white-page.png')} alt={'no-transactions'}/>
 
                 <div>
-                  <div className={'text'}>There are no transactions created under this project just yet</div>
+                  <div className={'text'}>There are no transactions created under this month just yet...</div>
                   <Button className={'mt-3'} color="primary" onClick={this.showHideCreateTransaction}>
                     &#43; Create Transaction
                   </Button>

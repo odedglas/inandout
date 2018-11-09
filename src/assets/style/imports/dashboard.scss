@@ -7,6 +7,7 @@
   .dashboard-body {
     display: flex;
     flex-grow:1;
+    max-width: 100%;
 
     &.landing {
       background-image: url('~@img/dashboard-header.jpg');

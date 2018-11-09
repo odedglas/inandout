@@ -193,6 +193,7 @@
             text-align: center;
             color: $light-text;
             max-width: 100px;
+
           }
 
           .value {
@@ -308,8 +309,9 @@
       font-weight: 500;
     }
   }
+}
 
-  .project-speed-dial {
-
-  }
+.inandout-chart-tooltip {
+  font-size: $smallest-font;
+  padding: 0 0.25rem;
 }

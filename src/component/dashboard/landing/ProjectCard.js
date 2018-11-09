@@ -69,7 +69,7 @@ class ProjectCard extends Component {
     const iconMeta = this.projectIcon(project.type);
 
     return (
-      <Card className={'project-card'}>
+      <Card className={'project-card'} onClick={this.handleProjectClick}>
         <CardHeader
           avatar={
             <Avatar style={{'backgroundColor': iconMeta.color}}>
