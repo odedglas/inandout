@@ -6,6 +6,10 @@
   height: 100%;
   overflow-y: hidden;
 
+  @include mq('tablet-small', 'max') {
+    width: auto;
+  }
+
   .header {
     background-color: $theme-primary;
     color: white;
@@ -27,6 +31,10 @@
   .content {
     padding: 1rem 0;
     height: 100%;
+
+    @include mq('tablet-small', 'max') {
+      padding: 0;
+    }
 
     .empty-notifications {
       display: flex;
@@ -59,14 +67,14 @@
       @include withScrollbar();
 
       .notification {
-        margin-bottom:.25rem;
+        margin-bottom: .25rem;
 
         &.unread {
           background-color: #E0F2F1;
         }
 
-        .notification-body{
-          align-items:center;
+        .notification-body {
+          align-items: center;
           font-size: $smallest-font;
 
           .text {
@@ -75,7 +83,7 @@
             }
           }
 
-          .date-wrapper{
+          .date-wrapper {
             color: $light-text;
             display: flex;
             align-items: center;
@@ -83,7 +91,7 @@
           }
         }
 
-        .notification-footer{
+        .notification-footer {
           display: flex;
           justify-content: flex-end;
         }
@@ -102,7 +110,7 @@
 }
 
 .project-drawer {
-  z-index:0 !important;
+  z-index: 0 !important;
   position: relative !important;
   transition: width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
   white-space: nowrap;

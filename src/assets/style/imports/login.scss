@@ -13,8 +13,18 @@
   border-radius: 3px;
   box-shadow: 0 2px 40px -10px rgba(0, 0, 0, 0.5);
 
+  @include mq('tablet', 'max') {
+    width: 330px;
+    background-color: transparent;
+    box-shadow: none;
+  }
+
   .login-form {
     padding-top: 1.5rem;
+
+    @include mq('tablet', 'max') {
+      padding-top: 0.5rem;
+    }
 
     .form-control {
       margin-bottom: 2rem;
@@ -33,6 +43,14 @@
 
   .logo {
     margin: 1.5rem 0;
+
+    @include mq('tablet', 'max') {
+      padding: .5rem 0;
+    }
+
+    @include mq('tablet-small', 'max') {
+      margin: 0 0 1rem 0;
+    }
   }
 
   .login-with-media {
@@ -41,8 +59,15 @@
     -webkit-justify-content: space-between;
     padding: 1rem 0;
 
-    .title {
+    @include mq('tablet', 'max') {
+      padding: .5rem 0;
+      justify-content: center;
+    }
 
+    .title {
+      @include mq('tablet', 'max') {
+        display:none;
+      }
     }
 
     .media-icons-holder {
@@ -61,6 +86,10 @@
         cursor: pointer;
         transition: all 0.2s ease;
 
+        @include mq('tablet', 'max') {
+          margin: 0 1rem;
+        }
+
         svg {
           font-size: 1.25rem;
         }
@@ -73,13 +102,23 @@
       }
     }
   }
-
 }
 
 .login-layout {
   position: absolute;
   @include withZIndex();
   height: 100%;
+
+  @include mq('tablet', 'max') {
+    height:auto;
+    max-width:100%;
+    overflow: hidden;
+
+    img {
+      max-height: 100%;
+    }
+  }
+
 }
 
 

@@ -153,6 +153,7 @@ class NotificationsDrawer extends Component {
     return (
       <Drawer anchor="right" open={open}
               disableRestoreFocus={true}
+              variant="temporary"
               onClose={() => toggleNotificationsDrawer()}>
         <div
           className={'notifications-drawer'}

@@ -80,8 +80,22 @@ a {
   &:hover {
     color: darken($link-color, 15%);
   }
+
+  @include mq('tablet-small', 'max') {
+    color: rgba(0, 0, 0, 0.42);
+
+    &:hover {
+      color: darken(rgba(0, 0, 0, 0.42), 15%);
+    }
+  }
 }
 
+
+#root {
+  @include mq('tablet-small', 'max') {
+    overflow-y: hidden;
+  }
+}
 div[role="tooltip"]  > div{
   font-size: .85rem;
   padding: 0.5rem;
