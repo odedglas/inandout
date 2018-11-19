@@ -34,117 +34,123 @@ class CreateProjectModal extends React.Component {
     createProject: PropTypes.func.isRequired,
   };
 
-  modalContent = (model, validation, handleChange) => (
-    <div>
-      <div className={'form-control'}>
-        <TextField
-          autoFocus
-          value={model.projectName}
-          error={validation.projectName.isInvalid}
-          placeholder={'My awesome project'}
-          onChange={(event) => handleChange(event.target.value, 'projectName')}
-          id="project-name"
-          label="Project Name"
-          title={validation.projectName.message}
-          fullWidth
-        />
-      </div>
+  modalContent = (model, validation, handleChange) => {
 
-      <FormControl className={'form-control'} error={validation && validation.projectType.isInvalid}>
-        <InputLabel htmlFor="project-type">Project Type</InputLabel>
-        <Select
-          value={model.projectType}
-          fullWidth
-          className={'dicks'}
-          MenuProps={{'className': 'select-project-type'}}
-          onChange={(event) => handleChange(event.target.value, 'projectType')}
-          renderValue={(v) => this.getSelectedProjectLabel(v)}
-          inputProps={{
-            name: 'project-type',
-            id: 'project-type',
-          }}
-        >
+    const mobile = util.isMobile();
 
-          <MenuItem value={PROJECT_TYPES.PERSONAL.key}>
-            <ListItemIcon className={'menu-icon'}>
-              <DynamicIcon name={'person'}/>
-            </ListItemIcon>
-            <ListItemText className={'menu-text'}
-                          secondary={PROJECT_TYPES.PERSONAL.description}
-                          primary={PROJECT_TYPES.PERSONAL.label}/>
-          </MenuItem>
+    return (
+      <div>
+        <div className={'form-control'}>
+          <TextField
+            autoFocus
+            value={model.projectName}
+            error={validation.projectName.isInvalid}
+            placeholder={'My awesome project'}
+            onChange={(event) => handleChange(event.target.value, 'projectName')}
+            id="project-name"
+            label="Project Name"
+            title={validation.projectName.message}
+            fullWidth
+          />
+        </div>
 
-          <MenuItem value={PROJECT_TYPES.HOUSE_HOLD.key}>
-            <ListItemIcon className={'menu-icon'}>
-              <DynamicIcon name={'home'}/>
-            </ListItemIcon>
-            <ListItemText className={'menu-text'}
-                          secondary={PROJECT_TYPES.HOUSE_HOLD.description}
-                          primary={PROJECT_TYPES.HOUSE_HOLD.label}/>
-          </MenuItem>
+        <FormControl className={'form-control'} error={validation && validation.projectType.isInvalid}>
+          <InputLabel htmlFor="project-type">Project Type</InputLabel>
+          <Select
+            value={model.projectType}
+            fullWidth
+            className={'dicks'}
+            MenuProps={{'className': 'select-project-type'}}
+            onChange={(event) => handleChange(event.target.value, 'projectType')}
+            renderValue={(v) => this.getSelectedProjectLabel(v)}
+            inputProps={{
+              name: 'project-type',
+              id: 'project-type',
+            }}
+          >
 
-          <MenuItem value={PROJECT_TYPES.SMALL_BUSINESS.key}>
-            <ListItemIcon className={'menu-icon'}>
-              <DynamicIcon name={'smallBusiness'}/>
-            </ListItemIcon>
-            <ListItemText className={'menu-text'}
-                          secondary={PROJECT_TYPES.SMALL_BUSINESS.description}
-                          primary={<span> {PROJECT_TYPES.SMALL_BUSINESS.label} </span>} />
-          </MenuItem>
-
-          <MenuItem value={PROJECT_TYPES.MEDIUM_BUSINESS.key}  disabled={true}>
-            <ListItemIcon className={'menu-icon'}>
-              <DynamicIcon name={'mediumBusiness'}/>
-            </ListItemIcon>
-            <ListItemText className={'menu-text'}
-                          secondary={PROJECT_TYPES.MEDIUM_BUSINESS.description}
-                          primary={<span> {PROJECT_TYPES.MEDIUM_BUSINESS.label} </span>} />
-          </MenuItem>
-        </Select>
-      </FormControl>
-
-      <div className={'form-control'}>
-        <TextField
-          value={model.balance}
-          error={validation.balance.isInvalid}
-          onChange={(event) => handleChange(event.target.value, 'balance')}
-          label={`Initial Balance`}
-          title={validation.balance.message}
-          fullWidth
-        />
-
-      </div>
-
-      <div className={'form-control'}>
-        <TextField
-          select
-          fullWidth
-          error={validation.projectCurrency.isInvalid}
-          placeholder={'Please select your currency'}
-          label="Project Currency"
-          value={model.projectCurrency}
-          onChange={(event) => handleChange(event.target.value, 'projectCurrency')}
-        >
-          {CURRENCIES.map(option => (
-            <MenuItem key={option.key} value={option.key}>
-              {option.label}
+            <MenuItem value={PROJECT_TYPES.PERSONAL.key}>
+              <ListItemIcon className={'menu-icon'}>
+                <DynamicIcon name={'person'}/>
+              </ListItemIcon>
+              <ListItemText className={'menu-text'}
+                            secondary={!mobile && PROJECT_TYPES.PERSONAL.description}
+                            primary={PROJECT_TYPES.PERSONAL.label}/>
             </MenuItem>
-          ))}
-        </TextField>
 
-      </div>
+            <MenuItem value={PROJECT_TYPES.HOUSE_HOLD.key}>
+              <ListItemIcon className={'menu-icon'}>
+                <DynamicIcon name={'home'}/>
+              </ListItemIcon>
+              <ListItemText className={'menu-text'}
+                            secondary={!mobile && PROJECT_TYPES.HOUSE_HOLD.description}
+                            primary={PROJECT_TYPES.HOUSE_HOLD.label}/>
+            </MenuItem>
 
-      <div className={'form-control'}>
-        <TextField
-          value={model.projectDescription}
-          onChange={(event) => handleChange(event.target.value, 'projectDescription')}
-          label="Project Description"
-          id="project-description"
-          fullWidth
-        />
+            <MenuItem value={PROJECT_TYPES.SMALL_BUSINESS.key}>
+              <ListItemIcon className={'menu-icon'}>
+                <DynamicIcon name={'smallBusiness'}/>
+              </ListItemIcon>
+              <ListItemText className={'menu-text'}
+                            secondary={!mobile && PROJECT_TYPES.SMALL_BUSINESS.description}
+                            primary={<span> {PROJECT_TYPES.SMALL_BUSINESS.label} </span>} />
+            </MenuItem>
+
+            <MenuItem value={PROJECT_TYPES.MEDIUM_BUSINESS.key}  disabled={true}>
+              <ListItemIcon className={'menu-icon'}>
+                <DynamicIcon name={'mediumBusiness'}/>
+              </ListItemIcon>
+              <ListItemText className={'menu-text'}
+                            secondary={!mobile && PROJECT_TYPES.MEDIUM_BUSINESS.description}
+                            primary={<span> {PROJECT_TYPES.MEDIUM_BUSINESS.label} </span>} />
+            </MenuItem>
+          </Select>
+        </FormControl>
+
+        <div className={'form-control'}>
+          <TextField
+            select
+            fullWidth
+            error={validation.projectCurrency.isInvalid}
+            placeholder={'Please select your currency'}
+            label="Project Currency"
+            value={model.projectCurrency}
+            onChange={(event) => handleChange(event.target.value, 'projectCurrency')}
+          >
+            {CURRENCIES.map(option => (
+              <MenuItem key={option.key} value={option.key}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+
+        </div>
+
+        <div className={'form-control'}>
+          <TextField
+            value={model.balance}
+            error={validation.balance.isInvalid}
+            placeholder={'0'}
+            onChange={(event) => handleChange(event.target.value, 'balance')}
+            label={`Initial Balance`}
+            title={validation.balance.message}
+            fullWidth
+          />
+
+        </div>
+
+        <div className={'form-control'}>
+          <TextField
+            value={model.projectDescription}
+            onChange={(event) => handleChange(event.target.value, 'projectDescription')}
+            label="Project Description"
+            id="project-description"
+            fullWidth
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   getSelectedProjectLabel = key => util.searchInConst(PROJECT_TYPES, key);
 
@@ -189,7 +195,7 @@ class CreateProjectModal extends React.Component {
                        projectName: '',
                        projectCurrency: '',
                        projectDescription: '',
-                       balance: '0',
+                       balance: '',
                      })}
                      renderContent={this.modalContent}
                      onCreate={this.createProject}
@@ -221,7 +227,7 @@ export default compose(
     },
     {
       field    : 'balance',
-      method   : (v, f, state, validator, args) => validator.isNumeric(v),
+      method   : (v, f, state, validator, args) => !v || validator.isNumeric(v),
       message  : 'Please choose a valid project balance ( Negative or positive .'
     },
     {

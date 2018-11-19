@@ -9,6 +9,10 @@
     0 2px 10px 0 rgba(0, 0, 0, .12);
     min-width: 400px;
 
+    @include mq('tablet-wide', 'max') {
+      padding: 0;
+    }
+
     h2 {
       color: whitesmoke;
       display: flex;
@@ -18,6 +22,9 @@
   .modal-content {
     padding: 2rem 2rem 0;
 
+    @include mq('tablet-wide', 'max') {
+      padding: 1rem 1rem 0;
+    }
   }
 
   .modal-actions {
@@ -42,6 +49,9 @@
 
   border-bottom: 1px solid rgba(0, 0, 0, 0.42);
 
+  @include mq('tablet-small', 'max') {
+    border-bottom: none;
+  }
   .separator {
     border-right: 1px solid $divider-color;
   }
@@ -67,11 +77,16 @@
   }
 
   .category-avatar {
-    height: 35px;
-    width: 35px;
+    @include withSize(35);
 
     svg {
       font-size: 21px;
+    }
+    @include mq('tablet-small', 'max') {
+      @include withSize(42);
+      svg {
+        font-size: 24px;
+      }
     }
   }
 }

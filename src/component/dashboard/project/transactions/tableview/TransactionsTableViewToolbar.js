@@ -41,7 +41,18 @@ export default ({date, filter, onSelectedDateChange, handleFilterChange, setSele
           {dateUtil.format(date, 'MMM YYYY')}
         </span>
         </div>
-        <div className={'spacer'}> </div>
+        <div className={'spacer row'}>
+          <div className={'col-sm-1'} />
+          <div className={'col-sm-8 summary'}>
+            <div className={'text-center'}>
+              Summary
+            </div>
+            <div>
+              Content
+            </div>
+          </div>
+          <div className={'col-sm-3'} />
+        </div>
         <div className={'filter-wrapper mx-2'}>
           {
             hasFilter ? <Button size="small" className={'button--xs ml-2'}

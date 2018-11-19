@@ -7,7 +7,16 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
 import Grow from '@material-ui/core/Grow';
+import Slide from '@material-ui/core/Slide';
+import Hidden from '@material-ui/core/Hidden';
+import util from '@util/';
+import DynamicIcon from '@common/DynamicIcon';
+
+function SliderTransition(props) {
+  return <Slide direction="up" {...props} />;
+}
 
 class CreationModal extends React.Component {
 
@@ -38,7 +47,7 @@ class CreationModal extends React.Component {
     super(props);
 
     this.state = {
-      didClose:true,
+      didClose: true,
       editInitialized: false,
       model: props.getInitialState()
     };
@@ -47,8 +56,8 @@ class CreationModal extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
 
-    if(props.open) {
-      if(props.editMode && !state.editInitialized) {
+    if (props.open) {
+      if (props.editMode && !state.editInitialized) {
 
         return {
           model: props.model,
@@ -56,7 +65,7 @@ class CreationModal extends React.Component {
         }
       }
 
-      if(!props.editMode && state.didClose) {
+      if (!props.editMode && state.didClose) {
 
         return {
           model: props.getInitialState(),
@@ -92,7 +101,7 @@ class CreationModal extends React.Component {
     this.props.onClose();
     this.props.clearValidation();
 
-    this.setState({ didClose: true, editInitialized: false });
+    this.setState({didClose: true, editInitialized: false});
   };
 
   handleCreate = () => {
@@ -110,27 +119,39 @@ class CreationModal extends React.Component {
 
   render() {
 
-    const { open, title, editMode, context, validation, renderContent, noPadding, mainClass} = this.props;
-    const { model } = this.state;
+    const {open, title, editMode, context, validation, renderContent, noPadding, mainClass} = this.props;
+    const {model} = this.state;
+
+    const mobile = util.isMobile();
 
     return (
       <div>
         <Dialog
+          fullScreen={mobile}
           open={open}
           onClose={this.handleClose}
           disableRestoreFocus={true}
-          TransitionComponent={Grow}
+          TransitionComponent={mobile ? SliderTransition : Grow}
           transitionDuration={300}
           className={`modal ${mainClass ? mainClass : ''}`}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle className={'modal-title'}>
-            <span>{title}</span>
+            <div className={'flex'} style={{alignItems: 'center'}}>
+              <Hidden mdUp>
+                <IconButton className={'back-button mr-2'} onClick={this.handleClose}>
+                  <DynamicIcon name={'back'}/>
+                </IconButton>
+              </Hidden>
+              <span>{title}</span>
+            </div>
           </DialogTitle>
           <DialogContent className={`modal-content ${noPadding ? 'p-0' : ''}`}>
-            <DialogContentText>
-              {context}
-            </DialogContentText>
+            <Hidden smDown implementation="css">
+              <DialogContentText>
+                {context}
+              </DialogContentText>
+            </Hidden>
 
             {renderContent(model, validation, this.handleChange, editMode)}
 

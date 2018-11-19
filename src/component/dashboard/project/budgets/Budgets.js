@@ -126,7 +126,7 @@ class Budgets extends Component {
 
               <PageTitle text={'Budgets'} icon={'budgets'}/>
 
-              <Breadcrumb item={{id: 'budgetsCrumb', value: `Budgets - ${dateUtil.formantMothYearLong(selectedDate)}`}}/>
+              <Breadcrumb item={{id: 'budgetsCrumb', value: `Budgets - ${dateUtil.formatShortMont(selectedDate)}`}}/>
 
               <div className={'px-2 py-3'}>
                 {

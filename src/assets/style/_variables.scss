@@ -160,6 +160,11 @@ $breakpoints: (
   white-space: nowrap;
 }
 
+@mixin withSize($size) {
+  width: $size + px;
+  height: $size + px;
+}
+
 :export {
   successColor: #43A047;
   errorColor: #e53935;

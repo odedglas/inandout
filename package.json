@@ -1,11 +1,12 @@
 {
     "name": "inandout",
-    "version": "1.7.0",
+    "version": "2.2.0",
     "private": true,
     "scripts": {
         "dev": "node scripts/start.js",
         "build": "node scripts/build.js --env.minor",
         "deploy": "npm run build && cd firebase && firebase deploy",
+        "deploy-m": "node scripts/build.js --env.major && cd firebase && firebase deploy",
         "test": "node scripts/test.js --env=jsdom"
     },
     "dependencies": {

@@ -5,6 +5,7 @@ import {compose} from 'recompose';
 import {NavLink, withRouter} from 'react-router-dom';
 
 import Drawer from '@material-ui/core/Drawer';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Divider from '@material-ui/core/Divider';
@@ -13,7 +14,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Hidden from '@material-ui/core/Hidden';
 import DynamicIcon from '@common/DynamicIcon';
-
+import util from '@util/'
 import navigationUtil from '@util/navigation'
 import {toggleProjectDrawer} from '@action/project';
 
@@ -31,6 +32,11 @@ class ProjectDrawer extends Component {
     this.props.toggleProjectDrawer(newOpenState);
   };
 
+  drawerClick = () => {
+
+    util.isMobile() && this.handleDrawerToggle();
+  };
+
   drawerItem = (path, icon, text) => {
 
     const {selectedProject, location} = this.props;
@@ -43,7 +49,7 @@ class ProjectDrawer extends Component {
     const isActive = fullPath === location.pathname;
 
     return (
-      <ListItem button className={`drawer-item p-0 ${isActive ? 'active' : ''}`}>
+      <ListItem button className={`drawer-item p-0 ${isActive ? 'active' : ''}`} onClick={this.drawerClick}>
         <NavLink activeClassName='is-active' className={'drawer-link'} exact={true} to={fullPath}>
           <ListItemIcon className={'icon'}>
             {icon}
@@ -74,25 +80,26 @@ class ProjectDrawer extends Component {
         {this.drawerItem('customers', <DynamicIcon name={'customers'}/>, 'Customers')}
         {this.drawerItem('calendar', <DynamicIcon name={'calendar'}/>, 'Calendar')}
       </div>
-    )
+    );
 
     return (
       <div>
         <Hidden mdUp>
-          <Drawer
+          <SwipeableDrawer
             variant="temporary"
             anchor={'left'}
             open={open}
+            onOpen={this.handleDrawerToggle}
             onClose={this.handleDrawerToggle}
             classes={{
-              paper: drawerClasses,
+              paper: 'project-drawer',
             }}
             ModalProps={{
               keepMounted: true, // Better open performance on mobile.
             }}
           >
             {drawer}
-          </Drawer>
+          </SwipeableDrawer>
         </Hidden>
         <Hidden smDown implementation="css">
           <Drawer

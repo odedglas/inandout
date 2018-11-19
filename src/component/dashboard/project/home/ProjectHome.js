@@ -77,7 +77,7 @@ class ProjectHome extends React.Component {
           return (
             <div className={'project-home-wrapper row'}>
 
-              <Breadcrumb item={{id: 'projectHomeCrumb', value: dateUtil.formantMothYearLong(selectedDate)}}/>
+              <Breadcrumb item={{id: 'projectHomeCrumb', value: dateUtil.formatShortMont(selectedDate)}}/>
 
               <ProjectToolbar selectedDate={selectedDate}/>
 

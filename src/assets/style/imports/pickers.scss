@@ -12,10 +12,13 @@
 .color-picker {
   .color {
     margin: .5rem;
-    height: 20px;
-    width: 20px;
+    @include withSize(20);
     cursor: pointer;
     transition: all .2s cubic-bezier(0, .5, .265, 2);
+
+    @include mq('tablet-small', 'max') {
+      @include withSize(24);
+    }
 
     &:hover, &.selected {
       box-shadow: 0 0 5px currentColor;
@@ -25,9 +28,12 @@
 }
 
 .color-picker-target {
-  height: 16px;
-  width: 16px;
+  @include withSize(16);
   transition: all .2s cubic-bezier(0, .5, .265, 2);
+
+  @include mq('tablet-small', 'max') {
+    @include withSize(24);
+  }
 
   &:hover {
     box-shadow: 0 0 5px currentColor;
@@ -38,11 +44,18 @@
 .icon-picker {
   color: $menu-icon-color;
   max-width: 350px;
+
   .icon {
     margin: .25rem;
     cursor: pointer;
     padding: .5rem;
     transition: all .2s cubic-bezier(0, .5, .265, 2);
+
+    @include mq('tablet-small', 'max') {
+      svg {
+        font-size:32px;
+      }
+    }
 
     &:hover {
       box-shadow:$icon-hover-shadow;
@@ -55,6 +68,11 @@
   padding: .25rem;
   transition: all .2s cubic-bezier(0, .5, .265, 2);
 
+  @include mq('tablet-small', 'max') {
+    svg {
+      font-size:32px;
+    }
+  }
   &:hover {
     box-shadow: $icon-hover-shadow;
     cursor: pointer;

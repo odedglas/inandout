@@ -57,46 +57,49 @@ class CreateCategoryModal extends React.Component {
 
   };
 
-  modalContent = (model, validation, handleChange) => (
-    <div>
-      <div className={'form-control'}>
-        <TextField
-          autoFocus
-          value={model.name}
-          error={validation.name.isInvalid}
-          placeholder={'My new category'}
-          onChange={(event) => handleChange(event.target.value, 'name')}
-          id="category-name"
-          label="Category Name"
-          title={validation.name.message}
-          fullWidth
-        />
-      </div>
+  modalContent = (model, validation, handleChange) => {
 
-      <div className={'row py-1 category-theme'}>
-        <div className={'col-sm-6 px-0 separator'}>
-          <div className={'cell  mb-2'}>
-            <span className={'label'}>Color:</span>
-            <ColorPicker selectedColor={model.color}
-                         onChange={color => handleChange(color, 'color')}/>
-          </div>
-          <div className={'cell'}>
-            <span className={'label'}>Icon:</span>
-            <IconPicker selectedIcon={model.icon}
-                        onChange={icon => handleChange(icon, 'icon')}/>
-          </div>
+    return (
+      <div>
+        <div className={'form-control'}>
+          <TextField
+            autoFocus
+            value={model.name}
+            error={validation.name.isInvalid}
+            placeholder={'My new category'}
+            onChange={(event) => handleChange(event.target.value, 'name')}
+            id="category-name"
+            label="Category Name"
+            title={validation.name.message}
+            fullWidth
+          />
         </div>
-        <div className={'col px-0'}>
-          <div className={'preview'}>
-            <span className={'label pb-1'}>Preview</span>
-            <Avatar style={{'backgroundColor': model.color}} className={'category-avatar'}>
-              <DynamicIcon name={model.icon}/>
-            </Avatar>
+
+        <div className={'row py-3 py-sm-2 category-theme'}>
+          <div className={`col-6 px-0 separator`}>
+            <div className={'cell  mb-2'}>
+              <span className={'label'}>Color:</span>
+              <ColorPicker selectedColor={model.color}
+                           onChange={color => handleChange(color, 'color')}/>
+            </div>
+            <div className={'cell'}>
+              <span className={'label'}>Icon:</span>
+              <IconPicker selectedIcon={model.icon}
+                          onChange={icon => handleChange(icon, 'icon')}/>
+            </div>
+          </div>
+          <div className={'col-6 px-0'}>
+            <div className={'preview'}>
+              <span className={'label pb-2'}>Preview</span>
+              <Avatar style={{'backgroundColor': model.color}} className={'category-avatar'}>
+                <DynamicIcon name={model.icon}/>
+              </Avatar>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   render() {
 

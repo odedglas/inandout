@@ -8,11 +8,20 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DynamicIcon from '@common/DynamicIcon';
+import IconButton from '@material-ui/core/IconButton';
+import Grow from '@material-ui/core/Grow';
+import Slide from '@material-ui/core/Slide';
+import Hidden from '@material-ui/core/Hidden';
 import TextField from '@material-ui/core/TextField';
 import UsersSelect from '@common/UsersSelect';
+import util from '@util/'
 import {inviteProjectMember} from '@action/project';
 
 import validationService from '@service/validation';
+
+function SliderTransition(props) {
+  return <Slide direction="up" {...props} />;
+};
 
 const initialState ={
   mailInvite: '',
@@ -97,10 +106,13 @@ class InviteUser extends Component {
     const {open, projectMembers} = this.props;
     const {mailInvite, error, existingUserId} = this.state;
     const canInvite = mailInvite || existingUserId;
+    const mobile = util.isMobile();
 
     return (
       <Dialog
         open={open}
+        fullScreen={mobile}
+        TransitionComponent={mobile ? SliderTransition : Grow}
         disableRestoreFocus={true}
         onClose={this.handleClose}
         className={'modal invite-user'}
@@ -108,8 +120,17 @@ class InviteUser extends Component {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle className={'modal-title'}>
-          <DynamicIcon name={'share'} className={'icon mr-3'}/>
-          Invite User
+          <div className={'flex'} style={{alignItems: 'center'}}>
+            <Hidden mdUp>
+              <IconButton className={'back-button mr-2'} onClick={this.handleClose}>
+                <DynamicIcon name={'back'}/>
+              </IconButton>
+            </Hidden>
+            <Hidden smDown>
+              <DynamicIcon name={'share'} className={'icon mr-3'}/>
+            </Hidden>
+            <span> Invite User </span>
+          </div>
         </DialogTitle>
         <DialogContent className={'modal-content'}>
           <DialogContentText>
@@ -141,8 +162,12 @@ class InviteUser extends Component {
           </div>
         </DialogContent>
         <DialogActions className={'modal-actions'}>
+          <Button onClick={this.handleClose} color="primary">
+            Cancel
+          </Button>
           <Button onClick={this.handleInvite}
                   disabled={!canInvite}
+                  variant="contained"
                   color="primary" autoFocus>
             Invite
           </Button>

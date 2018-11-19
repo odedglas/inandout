@@ -213,7 +213,7 @@ class CreateTransactionModal extends React.Component {
         </div>
 
         <div className={'form-control row'}>
-          <div className={'col-sm-8 px-0'} style={{flexDirection: 'column'}}>
+          <div className={'col-sm-12 col-md-8 px-0'} style={{flexDirection: 'column'}}>
             <TextField
               value={amount}
               autoFocus
@@ -238,7 +238,7 @@ class CreateTransactionModal extends React.Component {
               }}
             />
           </div>
-          <div className={'col-sm-4 px-0'}>
+          <div className={'col-sm-12 col-md-4 mt-3 mt-sm-0 px-0'}>
             <TextField
               select
               className={'payment-method'}

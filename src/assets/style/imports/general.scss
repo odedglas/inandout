@@ -3,7 +3,7 @@
 html {
   height: 100%;
   width: 100%;
-  box-sizing:border-box;
+  box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -24,14 +24,13 @@ body {
   -ms-touch-action: manipulation;
   touch-action: manipulation;
   -webkit-font-smoothing: antialiased;
-  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif
 }
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
   padding: 0;
 }
-
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -52,6 +51,7 @@ time, mark, audio, video {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
 }
+
 input, textarea, select {
   -webkit-user-select: auto;
   -ms-user-select: auto;
@@ -59,10 +59,12 @@ input, textarea, select {
   -moz-user-select: text;
   -webkit-touch-callout: none;
 }
+
 a, button, input, textarea, select {
   -ms-touch-action: manipulation;
   touch-action: manipulation;
 }
+
 input:active, input:focus, textarea:active, textarea:focus, select:active, select:focus {
   outline: none;
 }
@@ -71,11 +73,11 @@ a {
   text-decoration: none;
 }
 
-.link > a{
-  text-decoration:none;
+.link > a {
+  text-decoration: none;
   color: $link-color;
   transition: color .2s ease;
-  cursor:pointer;
+  cursor: pointer;
 
   &:hover {
     color: darken($link-color, 15%);
@@ -90,13 +92,13 @@ a {
   }
 }
 
-
 #root {
   @include mq('tablet-small', 'max') {
     overflow-y: hidden;
   }
 }
-div[role="tooltip"]  > div{
+
+div[role="tooltip"] > div {
   font-size: .85rem;
   padding: 0.5rem;
   white-space: pre-line;
@@ -121,8 +123,8 @@ div[role="tooltip"]  > div{
   position: absolute !important;
 
   &.cornered {
-    right:0;
-    bottom:0;
+    right: 0;
+    bottom: 0;
   }
 }
 
@@ -152,6 +154,7 @@ div[role="tooltip"]  > div{
 .income {
   color: $success-color
 }
+
 .outcome {
   color: $error-color;
 }
@@ -160,7 +163,11 @@ div[role="tooltip"]  > div{
   color: $menu-icon-color;
 
   svg {
-    margin-right:1rem;
+    margin-right: 1rem;
     color: $menu-icon-color;
   }
+}
+
+.back-button {
+  color: white !important;
 }

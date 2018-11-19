@@ -140,7 +140,7 @@ class CreateCustomerModal extends React.Component {
             }
           </div>
           <div className={'row'}>
-            <div className={'col-sm-6 pl-0'}>
+            <div className={'col-6 pl-0'}>
               <div className={'form-control'}>
                 <TextField
                   value={model.contactName}
@@ -152,7 +152,7 @@ class CreateCustomerModal extends React.Component {
                 />
               </div>
             </div>
-            <div className={'col-sm-6'}>
+            <div className={'col-6'}>
               <div className={'form-control col-flex'}>
                 <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
                 <Input
@@ -170,7 +170,7 @@ class CreateCustomerModal extends React.Component {
           </div>
           {
             showAdditionalContacts ? <div className={'row'}>
-              <div className={'col-sm-6 pl-0'}>
+              <div className={'col-6 pl-0'}>
                 <div className={'form-control'}>
                   <TextField
                     value={model.additionalContactName || ''}
@@ -180,7 +180,7 @@ class CreateCustomerModal extends React.Component {
                   />
                 </div>
               </div>
-              <div className={'col-sm-6'}>
+              <div className={'col-6'}>
                 <div className={'form-control col-flex'}>
                   <InputLabel htmlFor="additionalPhoneNumber">Phone Number</InputLabel>
                   <Input
