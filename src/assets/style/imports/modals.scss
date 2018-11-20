@@ -121,6 +121,11 @@
     font-size: $smallest-font;
     color: $menu-icon-color;
 
+    @include mq('tablet-small', 'max') {
+      align-items: center;
+      justify-content: space-between;
+    }
+
     .status-indicator {
       cursor: pointer;
       color: $success-color;

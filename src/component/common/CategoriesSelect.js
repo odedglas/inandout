@@ -73,12 +73,14 @@ class CategoriesSelect extends Component {
 
   handleCreateCategory = category => {
 
-    const {selectedCategories, onChange} = this.props;
+    const {selectedCategories, multi, onChange} = this.props;
 
-    onChange([
+    const changeValue = multi ? [
       category.id,
       ...selectedCategories
-    ])
+      ] : category.id;
+
+    onChange(changeValue)
   };
 
   render() {

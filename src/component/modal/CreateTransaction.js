@@ -15,7 +15,7 @@ import Avatar from '@material-ui/core/Avatar';
 import InputAdornment from '@material-ui/core/InputAdornment'
 import withValidation from '../hoc/withValidation';
 import CreationModal from './CreationModal';
-
+import Hidden from '@material-ui/core/Hidden';
 import util from '@util/';
 import dateUtil from '@util/date';
 import navigationUtil from '@util/navigation';
@@ -163,7 +163,9 @@ class CreateTransactionModal extends React.Component {
             ))}
           </Menu>
 
-          <div className={'flex'}></div>
+          <Hidden smDown>
+            <div className={'flex'}/>
+          </Hidden>
 
           <div className={'mr-4'}
                aria-owns={statusTypeMenuAnchor ? 'transaction-status-menu' : null}
@@ -213,7 +215,7 @@ class CreateTransactionModal extends React.Component {
         </div>
 
         <div className={'form-control row'}>
-          <div className={'col-sm-12 col-md-8 px-0'} style={{flexDirection: 'column'}}>
+          <div className={'col-6 col-sm-8 col-md-8 px-0'} style={{flexDirection: 'column'}}>
             <TextField
               value={amount}
               autoFocus
@@ -238,7 +240,7 @@ class CreateTransactionModal extends React.Component {
               }}
             />
           </div>
-          <div className={'col-sm-12 col-md-4 mt-3 mt-sm-0 px-0'}>
+          <div className={'col-6 col-sm-4 col-md-4 px-0'}>
             <TextField
               select
               className={'payment-method'}

@@ -281,11 +281,6 @@ class TransactionsTableView extends Component {
 
     const filteredData = data.filter(doFilter);
 
-    const transactionsTotal = filteredData.reduce((total, t) => {
-      t.income ? total += t.amount : total -= t.amount;
-      return total
-    }, 0);
-
     return (
       <Paper className={'mt-3 row'} style={{position: 'relative'}}>
 
