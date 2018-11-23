@@ -15,7 +15,7 @@ import navigationUtil from '@util/navigation'
 import {ROUTER} from '@const/'
 import {selectProject} from "@action/project";
 
-class ProjectBreadCrumb extends React.Component {
+class ProjectsMenu extends React.Component {
 
   static propTypes = {
     selectedProjectId: PropTypes.string,
@@ -66,7 +66,7 @@ class ProjectBreadCrumb extends React.Component {
     const _projects = projects.filter(p => p.id !== selectedProjectId);
 
     return (
-      <div className={'project-breadcrumb'}>
+      <div className={'project-menu'}>
         <span aria-owns={anchorEl ? 'projects-menu' : null}
               aria-haspopup="true"
               className={'menu-trigger'}
@@ -108,4 +108,4 @@ export default compose(
   connect(state => ({
     projects: state.projects,
   }), {selectProject})
-)(ProjectBreadCrumb);
+)(ProjectsMenu);

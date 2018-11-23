@@ -8,7 +8,7 @@ import {selectProject} from "./project";
 
 import util from '@util/';
 
-export function init() {
+export function init(done) {
   return (dispatch, getState) => {
 
     dispatch({type: 'SET_DASHBOARD_LOADING', loading: true});
@@ -48,6 +48,10 @@ export function init() {
       if (selectedProject) {
 
         dispatch(selectProject(selectedProject));
+      }
+
+      if(done) {
+        done(mergedProjectsResult)
       }
 
       dispatch({type: 'SET_DASHBOARD_INITIALIZED'});

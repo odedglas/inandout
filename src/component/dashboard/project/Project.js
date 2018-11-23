@@ -11,7 +11,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Breadcrumbs from './breadcrumbs/Breadcrumbs';
 import Breadcrumb from './breadcrumbs/Breadcrumb';
-import ProjectBreadcrumb from './breadcrumbs/ProjectBreadcrumb';
+import ProjectsMenu from '@common/ProjectsMenu';
 import ProjectProvider from './ProjectContext';
 
 import {setPreSelectedProject, updateCachedProject, createProjectSyncListener} from "@action/project";
@@ -71,7 +71,7 @@ class Project extends React.Component {
 
           <Breadcrumb item={{
             id: 'projectCrumb',
-            render: (val) => <ProjectBreadcrumb selectedProjectId={val}/>,
+            render: (val) => <ProjectsMenu selectedProjectId={val}/>,
             value: selectedProject.id,
             path: '/dashboard'
           }}
