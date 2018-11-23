@@ -251,20 +251,20 @@ export default compose(
     },
     {
       field: 'contactName',
-      method: (v, f, state, validator, args) => !validator.isEmpty(v),
+      method: (v, f, state, validator, args) => !v || !validator.isEmpty(v),
     },
     {
       field: 'phone',
-      method: (v, f, state, validator, args) => validator.isMobilePhone(v, 'any'),
+      method: (v, f, state, validator, args) => !v || validator.isMobilePhone(v, 'any'),
       message: 'Please provide a customer phone number.'
     },
     {
       field: 'additionalContactName',
-      method: (v, f, state, validator, args) => true,
+      method: (v, f, state, validator, args) => !v || !validator.isEmpty(v),
     },
     {
       field: 'additionalPhoneNumber',
-      method: (v, f, state, validator, args) => true
+      method: (v, f, state, validator, args) =>  !v || validator.isMobilePhone(v, 'any')
     },
     {
       field: 'email',

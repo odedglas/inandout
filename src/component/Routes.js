@@ -7,7 +7,7 @@ import {
 import {asyncComponent} from 'react-async-component';
 //import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import {ROUTER as routes} from '../constants'
-
+import util from '@util/';
 
 const SignUp = asyncComponent({
   resolve: () => import('./signup/SignUp')
@@ -16,7 +16,7 @@ const Login = asyncComponent({
   resolve: () => import('./login/Login')
 });
 const Dashboard = asyncComponent({
-  resolve: () => import('./dashboard/Dashboard')
+  resolve: () => !util.isMobile() ? import('./dashboard/Dashboard') : import('./mobile/MobileDashboard')
 });
 
 const AuthenticatedRoute = ({authenticated, component: Component, ...routeProps}) => {

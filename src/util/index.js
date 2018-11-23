@@ -1,5 +1,7 @@
 const abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+const isProduction = () => process.env.NODE_ENV === 'production';
+
 export default {
   isUndefined(u) {
 
@@ -132,7 +134,8 @@ export default {
     return phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
   },
   isMobile() {
-    return window.matchMedia("(max-width: 640px)").matches;
+
+    return isProduction() ? window.orientation !== 'undefined' : window.matchMedia("(max-width: 640px)").matches;
   }
 }
 

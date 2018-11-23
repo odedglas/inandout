@@ -255,14 +255,13 @@ class EventsPopper extends Component {
     const {data, eventTypeMenuAnchor, editMode} = this.state;
 
     const handleCustomerSelect = (customerId) => {
-
       if(!data.location) {
         const customer = customers.find(c => c.id === customerId);
         this.handleChange(customer.address, 'location')
       }
     };
-    const eventTypeLabel = util.searchInConst(EVENT_TYPE, data.type);
 
+    const eventTypeLabel = util.searchInConst(EVENT_TYPE, data.type);
     return (
       <div className={'content'}>
 
@@ -324,7 +323,6 @@ class EventsPopper extends Component {
         <CustomersSelect customer={data.customer}
                          onClose={this.onPopperPickerClose}
                          onOpen={this.onPopperPickerOpen}
-                         showCreateNewCustomer={true}
                          onChange={(val) => {
                            this.handleChange(val, 'customer');
                            handleCustomerSelect(val)

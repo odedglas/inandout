@@ -10,15 +10,14 @@ import {compose} from 'recompose';
 
 import {init} from "@action/dashboard";
 import AreYouSure from '@modal/AreYouSure'
-import NotificationsDrawer from './drawer/NotificationsDrawer';
+import NotificationsDrawer from '../dashboard/drawer/NotificationsDrawer';
 import {ROUTER as routes} from '@const/';
-import Header from './header/Header';
-import Landing from './landing/Landing';
-import Settings from './settings/Settings';
-import Project from './project/Project';
-import ProjectDrawer from './drawer/ProjectDrawer';
+import Landing from '../dashboard/landing/Landing';
+import MobileView from './MobileView';
+import MobileHeader from './MobileHeader';
+import MobileDrawer from './MobileDrawer';
 
-class Dashboard extends Component {
+class MobileDashboard extends Component {
 
   static propTypes = {
     init: PropTypes.func.isRequired,
@@ -46,26 +45,21 @@ class Dashboard extends Component {
     const {showNotificationsBar} = this.state;
 
     const isLanding = location.pathname === routes.DASHBOARD;
-    const isProjectRoute = location.pathname.startsWith('/dashboard/project');
 
     return (
       <div className={'dashboard-container'}>
-        <Header transparentMode={false}
-                withShade={true}
-                toggleNotificationsDrawer={this.toggleNotificationsDrawer}/>
+
+        <MobileHeader />
 
         <div className={'flex h-100'}>
-          {isProjectRoute && <ProjectDrawer/>}
+          <MobileDrawer/>
           <div className={'dashboard-body ' + (isLanding ? 'landing' : '')}>
             <Switch>
               <Route exact path={routes.DASHBOARD}
                      component={Landing}/>
 
-              <Route exact path={routes.SETTINGS}
-                     component={Settings}/>
-
               <Route path={routes.PROJECT}
-                     component={Project}/>
+                     component={MobileView}/>
             </Switch>
           </div>
 
@@ -84,4 +78,4 @@ class Dashboard extends Component {
 export default compose(
   withRouter,
   connect(null, {init})
-)(Dashboard);
+)(MobileDashboard);
