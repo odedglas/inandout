@@ -47,9 +47,9 @@ class MobileDashboard extends Component {
     const isLanding = location.pathname === routes.DASHBOARD;
 
     return (
-      <div className={'dashboard-container'}>
+      <div className={'mobile dashboard-container'}>
 
-        <MobileHeader />
+        <MobileHeader toggleNotificationsDrawer={this.toggleNotificationsDrawer} />
 
         <div className={'flex h-100'}>
           <MobileDrawer/>

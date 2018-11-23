@@ -14,7 +14,6 @@ import ProjectCharts from './charts/ProjectCharts';
 import ProjectTransactions from './ProjectTransactions';
 import ProjectEvents from './ProjectEvents';
 import Paper from '@material-ui/core/Paper';
-import Hidden from '@material-ui/core/Hidden';
 import ProjectToolbar from './ProjectToolbar';
 import projectService from '@service/project';
 import dateUtil from '@util/date';

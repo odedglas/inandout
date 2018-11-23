@@ -7,7 +7,7 @@ import {compose} from 'recompose';
 import {connect} from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import DynamicIcon from '@common/DynamicIcon';
-import {PieChart, Pie, ResponsiveContainer, Tooltip, Cell} from 'recharts';
+import {PieChart, Pie, ResponsiveContainer, Cell} from 'recharts';
 
 import util from '@util/'
 import navgationUtil from '@util/navigation';
