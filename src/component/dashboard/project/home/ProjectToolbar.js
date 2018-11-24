@@ -15,7 +15,14 @@ class ProjectToolbar extends React.Component {
   static propTypes = {
     selectedProject: ProjectType,
     selectedDate: PropTypes.object,
+    showToday: PropTypes.bool,
+    c: PropTypes.bool,
     setSelectedDate: PropTypes.func.isRequired,
+  };
+
+  static defaultPropTypes = {
+    showToday: true,
+    showSelected: false
   };
 
   handleSelectedDateChange = (prev, today) => {
@@ -28,16 +35,16 @@ class ProjectToolbar extends React.Component {
   };
 
   render() {
-
+    const {showToday, showSelected, selectedDate} = this.props;
     return (
       <div className={'project-toolbar col-sm-12 px-0'}>
 
         <div className={'months-navigator mx-2'}>
-          <Button
+          {showToday && <Button
             color="secondary" onClick={() => this.handleSelectedDateChange(false, true)}
             size="small">
             Today
-          </Button>
+          </Button>}
           <IconButton className={'icon-button ml-2'}
                       aria-label="Previous Month"
                       onClick={() => this.handleSelectedDateChange(true)}
@@ -50,6 +57,9 @@ class ProjectToolbar extends React.Component {
                       size={'small'}>
             <DynamicIcon name={'right'}/>
           </IconButton>
+          {
+            showSelected && <span> { dateUtil.formatShortMont(selectedDate) } </span>
+          }
         </div>
       </div>
     );

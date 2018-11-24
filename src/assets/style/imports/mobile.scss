@@ -1,50 +1,100 @@
 @import '../variables';
 
-$mobile-header-height: 50px;
+$mobile-header-height: 45px;
+$tabs-height: 42px;
+$mobile-header-color: rgba(255, 255, 255, 0.8);
 
 .dashboard-container.mobile {
 
-    .app-header {
-        height: $mobile-header-height;
+  .mobile-container {
+    overflow-y: hidden;
+  }
 
-        .logo {
-            opacity: 0.8;
-            height: 35px;
-            margin: 0 1rem;
-        }
+  .app-header {
+    height: $mobile-header-height;
 
-        .toggle-drawer {
-            color: rgba(255, 255, 255, 0.8);
-        }
+    .logo {
+      opacity: 0.8;
+      height: 35px;
+      margin: 0 1rem;
     }
+
+    .toggle-drawer {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .project-toolbar {
+      color: $mobile-header-color;
+      .month-navigation {
+        display: flex;
+        align-items: center;
+      }
+      button {
+        color: $mobile-header-color;
+        @include withSize(36)
+      }
+    }
+  }
+
+  .mobile-view-wrapper {
+
+    .tabs {
+      background-color: $theme-primary;
+      min-height: $tabs-height;
+
+      button {
+        color: white;
+        min-height: $tabs-height;
+      }
+
+      div > span:last-child {
+        box-shadow: rgb(0, 0, 0) 0 0 1px inset;
+        height: 4px;
+        background-color: white;
+      }
+    }
+
+    .tabs-content {
+      height: calc(100vh - (#{$mobile-header-height} + #{$tabs-height}));
+      overflow-y: hidden;
+
+      > div {
+        height: 100%;
+      }
+
+      .react-swipeable-view-container {
+        height: 100%;
+      }
+    }
+  }
 }
 
 .project-drawer.mobile {
-    width:80%;
+  width: 80%;
 
-    .user-header {
-        padding:2rem 1rem;
-        background-color: $theme-primary;
-        color:white;
-        min-height: 140px;
-        display: flex;
-        align-items: center;
-        .user-image {
+  .user-header {
+    padding: 2rem 1rem;
+    background-color: $theme-primary;
+    color: white;
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    .user-image {
 
-            .details {
-                h3 {
-                    font-weight: 500;
-                }
-            }
-            .avatar {
-                border: 1px solid white;
-            }
+      .details {
+        h3 {
+          font-weight: 500;
         }
+      }
+      .avatar {
+        border: 1px solid white;
+      }
     }
+  }
 
-    .active {
-        span {
-            color: $active-text-color;
-        }
+  .active {
+    span {
+
     }
+  }
 }

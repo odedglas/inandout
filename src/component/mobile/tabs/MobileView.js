@@ -5,7 +5,9 @@ import {
 } from 'react-router-dom';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
-
+import SwipeableViews from 'react-swipeable-views';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import SnackbarNotification from '@common/SnackbarNotification';
 import HomeCreateDial from '../../dashboard/project/home/HomeCreateDial';
 import projectService from '@service/project';
@@ -14,6 +16,9 @@ import {ProjectType} from "@model/project";
 import {TransactionType} from "@model/transaction";
 import {BudgetType} from "@model/budget";
 import {CategoryType} from "@model/category";
+import dateUtil from '@util/date';
+import {DIRECTIONS} from '@const/';
+import DynamicIcon from "../../common/DynamicIcon";
 
 class ProjectHome extends React.Component {
 
@@ -32,6 +37,15 @@ class ProjectHome extends React.Component {
     showSuccessSnackbar: false,
     snackbarMessage: '',
     snackbarVariant: 'success',
+    activeTabIndex: 0,
+  };
+
+  handleChange = (event, value) => {
+    this.setState({activeTabIndex: value});
+  };
+
+  handleChangeIndex = index => {
+    this.setState({activeTabIndex: index});
   };
 
   hideSnackbar() {
@@ -52,6 +66,7 @@ class ProjectHome extends React.Component {
 
     const {selectedDate} = this.props;
     const {showSuccessSnackbar, snackbarMessage, snackbarVariant} = this.state;
+    const direction = DIRECTIONS.LTR;
 
     return (
       <ProjectContext.Consumer>
@@ -67,9 +82,37 @@ class ProjectHome extends React.Component {
           );
 
           return (
-            <div className={'mobile-home-wrapper row'}>
+            <div className={'mobile-view-wrapper row'}>
 
-              <div> {project.id} </div>
+              <div className={'col-12 px-0'}>
+                <Tabs
+                  value={this.state.activeTabIndex}
+                  onChange={this.handleChange}
+                  className={'tabs'}
+                  fullWidth
+                >
+                  <Tab icon={<DynamicIcon name={'projects'} />} />
+                  <Tab icon={<DynamicIcon name={'transactions'} />} />
+                  <Tab icon={<DynamicIcon name={'categories'} />} />
+                  <Tab icon={<DynamicIcon name={'budgets'} />} />
+                  <Tab icon={<DynamicIcon name={'calendar'} />} />
+
+                </Tabs>
+                <div className={'tabs-content'}>
+                  <SwipeableViews
+                    axis={direction === 'rtl' ? 'x-reverse' : 'x'}
+                    index={this.state.activeTabIndex}
+                    onChangeIndex={this.handleChangeIndex}
+                  >
+
+                    <div> Overview  <div> {project.id} / {dateUtil.formatShortMont(selectedDate)} </div> </div>
+                    <div> Transactions </div>
+                    <div> Categories </div>
+                    <div> Budgets </div>
+                    <div> Calendar </div>
+                  </SwipeableViews>
+                </div>
+              </div>
 
               <HomeCreateDial showNotification={(message, variant) => this.showSnackbar(message, variant)}/>
               <SnackbarNotification onClose={() => this.hideSnackbar()}

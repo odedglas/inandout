@@ -135,7 +135,7 @@ export default {
   },
   isMobile() {
 
-    return isProduction() ? window.orientation !== 'undefined' : window.matchMedia("(max-width: 640px)").matches;
+    return window.matchMedia("(max-width: 640px)").matches;
   }
 }
 

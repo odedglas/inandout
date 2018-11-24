@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import DynamicIcon from '@common/DynamicIcon';
 import Tooltip from '@material-ui/core/Tooltip';
+import ProjectToolbar from '../dashboard/project/home/ProjectToolbar';
 import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import {toggleProjectDrawer} from '@action/project';
@@ -11,6 +12,7 @@ import {toggleProjectDrawer} from '@action/project';
 class MobileHeader extends React.Component {
 
   static propTypes = {
+    selectedDate: PropTypes.object.isRequired,
     toggleNotificationsDrawer: PropTypes.func.isRequired,
     toggleProjectDrawer: PropTypes.func.isRequired,
     notifications: PropTypes.arrayOf(PropTypes.object),
@@ -22,19 +24,21 @@ class MobileHeader extends React.Component {
 
   render () {
 
-    const {notifications, toggleProjectDrawer} = this.props;
+    const {notifications, selectedDate, toggleProjectDrawer} = this.props;
 
     const newNotifications = notifications.filter(n => n.unread);
     const hasNewNotifications = newNotifications.length > 0;
     const notificationsBadge = hasNewNotifications ? newNotifications.length : '';
 
     return (
-      <div className={'app-header with-sade px-3 py-2'}>
+      <div className={'app-header px-3 py-2'}>
 
         <span className={'toggle-drawer'} onClick={() => toggleProjectDrawer(true)}>
           <MenuIcon/>
         </span>
-        <div className={'flex'}> </div>
+        <div className={'flex'}>
+          <ProjectToolbar selectedDate={selectedDate} showToday={false} showSelected={true}/>
+        </div>
         <div>
           <Tooltip title={'Notifications'}>
             <Badge badgeContent={notificationsBadge} className={`notification-badge ${!hasNewNotifications ? 'empty' : ''}`}>
@@ -51,5 +55,6 @@ class MobileHeader extends React.Component {
 
 export default connect(state => ({
   user: state.user,
+  selectedDate: state.project.selectedDate,
   notifications: state.notifications
 }), {toggleProjectDrawer})(MobileHeader);
