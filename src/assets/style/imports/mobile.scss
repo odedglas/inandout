@@ -1,11 +1,12 @@
 @import '../variables';
 
 $mobile-header-height: 45px;
+$mobile-background: #e9ecef;
 $tabs-height: 42px;
 $mobile-header-color: rgba(255, 255, 255, 0.8);
 
 .dashboard-container.mobile {
-
+  background-color: $mobile-background;
   .mobile-container {
     overflow-y: hidden;
   }
@@ -57,6 +58,7 @@ $mobile-header-color: rgba(255, 255, 255, 0.8);
     .tabs-content {
       height: calc(100vh - (#{$mobile-header-height} + #{$tabs-height}));
       overflow-y: hidden;
+      padding: 1rem 0;
 
       > div {
         height: 100%;
@@ -92,9 +94,9 @@ $mobile-header-color: rgba(255, 255, 255, 0.8);
     }
   }
 
-  .active {
-    span {
-
+    .active {
+        span {
+            color: $active-text-color;
+        }
     }
-  }
 }

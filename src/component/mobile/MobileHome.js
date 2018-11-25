@@ -42,5 +42,7 @@ class MobileHome extends React.Component {
 
 export default compose(
   withRouter,
-  connect(null, {})
+  connect(state => ({
+    loading: state.dashboard.loading,
+  }), {})
 )(MobileHome);

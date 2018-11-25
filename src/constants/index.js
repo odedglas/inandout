@@ -58,6 +58,7 @@ export const PROJECT_TYPES = {
 
 export const LOCAL_STORAGE = {
   PROJECT_DRAWER_OPEN: 'project-drawer-open',
+  MOBILE_SELECTED_PROJECT: 'mobile-selected-drawer-open',
 };
 
 export const TRANSACTIONS_DATE_KEY_FORMAT = 'MMYY';

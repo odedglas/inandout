@@ -16,6 +16,9 @@ import MobileHome from './MobileHome';
 import MobileHeader from './MobileHeader';
 import MobileDrawer from './MobileDrawer';
 import {selectProject, createProjectSyncListener} from "@action/project";
+import localStorageService from '@service/localstorage'
+import {LOCAL_STORAGE} from '@const/'
+
 class MobileDashboard extends Component {
 
   static propTypes = {
@@ -35,7 +38,10 @@ class MobileDashboard extends Component {
     //Dashboard init
     this.props.init(
       (projects) => {
-        const selectedProject = projects[0];
+
+        const preSelectedProject = localStorageService.get(LOCAL_STORAGE.MOBILE_SELECTED_PROJECT);
+        const selectedProject = preSelectedProject ? projects.find(p => p.id === preSelectedProject) : projects[0];
+
         selectProject(selectedProject);
       }
     );
@@ -52,6 +58,7 @@ class MobileDashboard extends Component {
     const {selectedProject, selectedDate, createProjectSyncListener} = this.props;
 
     if (selectedProject.id !== prevProps.selectedProject.id) {
+      localStorageService.set(LOCAL_STORAGE.MOBILE_SELECTED_PROJECT, selectedProject.id);
       createProjectSyncListener(selectedProject.id, selectedDate);
     }
   }

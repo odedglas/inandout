@@ -128,7 +128,7 @@ export default {
   },
   formatNumber(number, currency) {
 
-    return `${currency ? currency : ''} ${number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+    return `${currency ? currency : ''} ${number.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
   },
   formatPhone(phone) {
     return phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');

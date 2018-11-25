@@ -18,6 +18,7 @@ import {BudgetType} from "@model/budget";
 import {CategoryType} from "@model/category";
 import dateUtil from '@util/date';
 import {DIRECTIONS} from '@const/';
+import OverviewTab from './OverviewTab';
 import DynamicIcon from "../../common/DynamicIcon";
 
 class ProjectHome extends React.Component {
@@ -91,11 +92,10 @@ class ProjectHome extends React.Component {
                   className={'tabs'}
                   fullWidth
                 >
-                  <Tab icon={<DynamicIcon name={'projects'} />} />
-                  <Tab icon={<DynamicIcon name={'transactions'} />} />
-                  <Tab icon={<DynamicIcon name={'categories'} />} />
-                  <Tab icon={<DynamicIcon name={'budgets'} />} />
-                  <Tab icon={<DynamicIcon name={'calendar'} />} />
+                  <Tab icon={<DynamicIcon name={'projects'}/>}/>
+                  <Tab icon={<DynamicIcon name={'transactions'}/>}/>
+                  <Tab icon={<DynamicIcon name={'budgets'}/>}/>
+                  <Tab icon={<DynamicIcon name={'calendar'}/>}/>
 
                 </Tabs>
                 <div className={'tabs-content'}>
@@ -105,11 +105,14 @@ class ProjectHome extends React.Component {
                     onChangeIndex={this.handleChangeIndex}
                   >
 
-                    <div> Overview  <div> {project.id} / {dateUtil.formatShortMont(selectedDate)} </div> </div>
-                    <div> Transactions </div>
-                    <div> Categories </div>
-                    <div> Budgets </div>
-                    <div> Calendar </div>
+                    <OverviewTab project={project}
+                                 selectedDate={selectedDate}
+                                 currency={project.currency}
+                                 overall={indicators.totalBalance}
+                                 balance={indicators.monthlyBalance}/>
+                    <div> Transactions</div>
+                    <div> Budgets</div>
+                    <div> Calendar</div>
                   </SwipeableViews>
                 </div>
               </div>
