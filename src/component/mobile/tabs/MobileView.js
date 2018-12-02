@@ -16,9 +16,10 @@ import {ProjectType} from "@model/project";
 import {TransactionType} from "@model/transaction";
 import {BudgetType} from "@model/budget";
 import {CategoryType} from "@model/category";
-import dateUtil from '@util/date';
+import util from '@util/'
 import {DIRECTIONS} from '@const/';
 import OverviewTab from './OverviewTab';
+import TransactionsTab from './TransactionsTab';
 import DynamicIcon from "../../common/DynamicIcon";
 
 class ProjectHome extends React.Component {
@@ -82,6 +83,10 @@ class ProjectHome extends React.Component {
             selectedDate
           );
 
+          const lastTransactions = [...transactions].sort(util.sortJsonFN([
+            {name: 'date', reverse: true}
+          ])).slice(0,5);
+
           return (
             <div className={'mobile-view-wrapper row'}>
 
@@ -98,6 +103,7 @@ class ProjectHome extends React.Component {
                   <Tab icon={<DynamicIcon name={'calendar'}/>}/>
 
                 </Tabs>
+
                 <div className={'tabs-content'}>
                   <SwipeableViews
                     axis={direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -107,14 +113,18 @@ class ProjectHome extends React.Component {
 
                     <OverviewTab project={project}
                                  selectedDate={selectedDate}
+                                 transactions={lastTransactions}
                                  currency={project.currency}
                                  overall={indicators.totalBalance}
                                  balance={indicators.monthlyBalance}/>
-                    <div> Transactions</div>
+
+                    <TransactionsTab project={project} transactions={transactions}/>
+
                     <div> Budgets</div>
                     <div> Calendar</div>
                   </SwipeableViews>
                 </div>
+
               </div>
 
               <HomeCreateDial showNotification={(message, variant) => this.showSnackbar(message, variant)}/>
@@ -139,6 +149,7 @@ class ProjectHome extends React.Component {
 export default compose(
   withRouter,
   connect(state => ({
+    loading: state.dashboard.loading,
     selectedDate: state.project.selectedDate,
   }), {})
 )(ProjectHome);

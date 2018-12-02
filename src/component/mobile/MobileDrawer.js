@@ -20,11 +20,13 @@ import HelpIcon from '@material-ui/icons/Help';
 import SettingsIcon from '@material-ui/icons/Settings';
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import {toggleProjectDrawer, selectProject} from '@action/project';
+import {signOut} from '@action/authentication';
 
 class MobileDrawer extends Component {
 
   static propTypes = {
     selectedProject: PropTypes.object,
+    signOut: PropTypes.func.isRequired,
     toggleProjectDrawer: PropTypes.func.isRequired,
   };
 
@@ -54,10 +56,19 @@ class MobileDrawer extends Component {
     this.setState({projectsExpanded: newOpenState});
   };
 
+  signOut = () => {
+
+    this.handleDrawerToggle();
+    this.props.signOut();
+  };
+
   render() {
 
     const {open, user, selectedProject, projects} = this.props;
     const {projectsExpanded} = this.state;
+
+    const hasProjects = projects.length > 0;
+
     const drawer = ( <div>
         <div className={'user-header'}>
           <div className={'flex'}>
@@ -73,24 +84,28 @@ class MobileDrawer extends Component {
 
         <Divider/>
 
-        <ListItem button onClick={this.toggleProjects}>
-          <ListItemIcon>
-            <DynamicIcon name={'projects'}/>
-          </ListItemIcon>
-          <ListItemText inset primary="Projects"/>
-          {projectsExpanded ? <ExpandLess/> : <ExpandMore/>}
-        </ListItem>
-        <Collapse in={projectsExpanded} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            {projects.map(project => (
-              <ListItem className={`${selectedProject.id === project.id ? 'active' : ''}`} key={project.id}
-                        onClick={() => this.drawerProjectItemClick(project.id)}
-                        button>
-                <ListItemText inset primary={project.name}/>
-              </ListItem>
-            ))}
-          </List>
-        </Collapse>
+        {
+          hasProjects && <div>
+            <ListItem button onClick={this.toggleProjects}>
+              <ListItemIcon>
+                <DynamicIcon name={'projects'}/>
+              </ListItemIcon>
+              <ListItemText inset primary="Projects"/>
+              {projectsExpanded ? <ExpandLess/> : <ExpandMore/>}
+            </ListItem>
+            <Collapse in={projectsExpanded} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {projects.map(project => (
+                  <ListItem className={`${selectedProject.id === project.id ? 'active' : ''}`} key={project.id}
+                            onClick={() => this.drawerProjectItemClick(project.id)}
+                            button>
+                    <ListItemText inset primary={project.name}/>
+                  </ListItem>
+                ))}
+              </List>
+            </Collapse>
+          </div>
+        }
 
         <ListItem button onClick={this.handleDrawerToggle}>
           <ListItemIcon className={'menu-icon'}>
@@ -113,7 +128,7 @@ class MobileDrawer extends Component {
           <ListItemText className={'menu-text'} primary="Help"/>
         </ListItem>
 
-        <ListItem button onClick={this.handleDrawerToggle}>
+        <ListItem button onClick={this.signOut}>
           <ListItemIcon className={'menu-icon'}>
             <LogoutIcon/>
           </ListItemIcon>
@@ -150,5 +165,5 @@ export default compose(
     user: state.user,
     projects: state.projects,
     open: state.project.drawerOpen,
-  }), {toggleProjectDrawer, selectProject})
+  }), {toggleProjectDrawer, selectProject, signOut})
 )(MobileDrawer);

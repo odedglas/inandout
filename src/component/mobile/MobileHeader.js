@@ -24,8 +24,9 @@ class MobileHeader extends React.Component {
 
   render () {
 
-    const {notifications, selectedDate, toggleProjectDrawer} = this.props;
+    const {notifications, selectedDate, projects, toggleProjectDrawer} = this.props;
 
+    const hasProjects = projects.length > 0;
     const newNotifications = notifications.filter(n => n.unread);
     const hasNewNotifications = newNotifications.length > 0;
     const notificationsBadge = hasNewNotifications ? newNotifications.length : '';
@@ -37,16 +38,14 @@ class MobileHeader extends React.Component {
           <MenuIcon/>
         </span>
         <div className={'flex'}>
-          <ProjectToolbar selectedDate={selectedDate} showToday={false} showSelected={true}/>
+          {hasProjects && <ProjectToolbar selectedDate={selectedDate} showToday={false} showSelected={true}/>}
         </div>
         <div>
-          <Tooltip title={'Notifications'}>
-            <Badge badgeContent={notificationsBadge} className={`notification-badge ${!hasNewNotifications ? 'empty' : ''}`}>
-              <IconButton className={'notifications-button'} onClick={this.toggleNotificationsDrawer}>
-                <DynamicIcon name={'notification'}/>
-              </IconButton>
-            </Badge>
-          </Tooltip>
+          <Badge badgeContent={notificationsBadge} className={`notification-badge ${!hasNewNotifications ? 'empty' : ''}`}>
+            <IconButton className={'notifications-button'} onClick={this.toggleNotificationsDrawer}>
+              <DynamicIcon name={'notification'}/>
+            </IconButton>
+          </Badge>
         </div>
       </div>
     );
@@ -55,6 +54,7 @@ class MobileHeader extends React.Component {
 
 export default connect(state => ({
   user: state.user,
+  projects: state.projects,
   selectedDate: state.project.selectedDate,
   notifications: state.notifications
 }), {toggleProjectDrawer})(MobileHeader);

@@ -54,6 +54,13 @@ $small-font: 0.925rem;
 $smaller-font: 0.9rem;
 $smallest-font: 0.825rem;
 
+// -- Mobile -- //
+$mobile-header-height: 45px;
+$mobile-background: #e9ecef;
+$tabs-height: 42px;
+$mobile-header-color: rgba(255, 255, 255, 0.8);
+$mobile-panel-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -3px rgba(0, 0, 0, 0.12);
+
 $breakpoints: (
         "phone": 400px,
         "phone-wide": 480px,

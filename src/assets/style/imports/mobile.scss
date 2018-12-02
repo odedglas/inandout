@@ -1,18 +1,36 @@
 @import '../variables';
 
-$mobile-header-height: 45px;
-$mobile-background: #e9ecef;
-$tabs-height: 42px;
-$mobile-header-color: rgba(255, 255, 255, 0.8);
-
 .dashboard-container.mobile {
   background-color: $mobile-background;
+
+  .mobile-loader {
+    position: absolute;
+    width:100%;
+    padding-top:50%;
+  }
+
+  .mobile-welcome {
+    img {
+      box-shadow: $header-shadow;
+      width:100%;
+    }
+  }
+
+  .wrapper {
+
+    > div:first-child {
+      width:30px !important;
+    }
+  }
   .mobile-container {
     overflow-y: hidden;
+    width: 100%;
+
   }
 
   .app-header {
     height: $mobile-header-height;
+    z-index: 1200 !important;
 
     .logo {
       opacity: 0.8;
@@ -58,7 +76,6 @@ $mobile-header-color: rgba(255, 255, 255, 0.8);
     .tabs-content {
       height: calc(100vh - (#{$mobile-header-height} + #{$tabs-height}));
       overflow-y: hidden;
-      padding: 1rem 0;
 
       > div {
         height: 100%;
@@ -66,6 +83,13 @@ $mobile-header-color: rgba(255, 255, 255, 0.8);
 
       .react-swipeable-view-container {
         height: 100%;
+      }
+    }
+
+    .mobile-welcome {
+
+      img {
+        height: 400px;
       }
     }
   }

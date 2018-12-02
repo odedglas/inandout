@@ -278,6 +278,19 @@ export function updateTransaction(project, { id, type, owner, description, categ
   }
 }
 
+export function deleteTransaction (project, {id, date, payments, paymentIndex, sourceEventId}) {
+
+  return dispatch => {
+
+    dispatch({type: 'APP_LOADING', loading: true});
+
+    transactionService.deleteTransaction(project.id, id, date, payments, paymentIndex, sourceEventId).then(() => {
+
+      dispatch({type: 'APP_LOADING', loading: false});
+    })
+  }
+}
+
 export function createCustomer(project, { name, contactName, phone, email, address, logo, additionalPhoneNumber, additionalContactName }, onSuccess) {
 
   return dispatch => {

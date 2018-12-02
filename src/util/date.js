@@ -4,6 +4,7 @@ import {TRANSACTIONS_DATE_KEY_FORMAT} from '@const/'
 
 const baseFormat = 'DD/MM/YY';
 const shortFormat = 'MMM Do YY';
+const shortDateFormat = 'MMM Do';
 const monthShortFormat = 'MMM YY';
 const yearMonthFormat = "MMYY";
 const longMonthYearDisplayFormat = "MMM YYYY";
@@ -22,12 +23,16 @@ export default {
 
   formatShortMont: (date) => moment(date).format(monthShortFormat),
 
+  formatShortDate: (date) => moment(date).format(shortDateFormat),
+
   fromNow: (date) => moment(date).fromNow(),
 
   now: () => {
     const now = new Date();
     return now.getTime();
   },
+
+  sameDay: (d1, d2) => moment(d2).diff(moment(d1), 'days') === 0,
 
   sameMonth: (d1, d2) => moment(d1).format(yearMonthFormat) === moment(d2).format(yearMonthFormat),
 

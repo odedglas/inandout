@@ -10,7 +10,7 @@ export default {
       user: {
         id: res.id,
         ...res.user,
-        projects: Object.keys(res.projects)
+        projects: Object.keys(res.projects || {})
       },
     } : undefined
   }),
