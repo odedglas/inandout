@@ -116,6 +116,10 @@ $breakpoints: (
     $matchZIndex: 10
   }
 
+  @if $type == swipeDawer {
+    $matchZIndex: 97
+  }
+
   @if $type == menu {
     $matchZIndex: 98
   }

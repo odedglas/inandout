@@ -14,7 +14,7 @@ export function init(done) {
     dispatch({type: 'SET_DASHBOARD_LOADING', loading: true});
 
     const currentUser = getState().user;
-    const projectKeys = currentUser.projects;
+    const projectKeys = Array.isArray(currentUser.projects) ? currentUser.projects : [];
     const preSelectedIdentifier = getState().project.preSelectedProject;
     let resolved = {};
 

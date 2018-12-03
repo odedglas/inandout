@@ -1,7 +1,8 @@
 import firebaseService from '@service/firebase';
 import authService from '@service/auth';
 import userService from '@service/user';
-
+import localStorageService from '@service/localstorage'
+import {LOCAL_STORAGE} from '@const/'
 
 const fetchUserSuccess = (dispatch, { authUser, user}) => {
   dispatch({type: 'SET_USER', user});
@@ -71,7 +72,7 @@ export function signUp(email, password, displayName, onSuccess, onError) {
 
       //Auth success
       dispatch({type: 'SET_USER', user: res.user});
-      dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: res.authUser});
+      dispatch({type: 'AUTHENTICATION_SUCCESS', authUser: res.authUser.user});
 
       onSuccess();
       dispatch({type: 'APP_LOADING', loading: false})
@@ -129,6 +130,7 @@ export function loginWithProvider(providerName, onSuccess) {
 
 export function signOut() {
   return dispatch => {
+    localStorageService.remove(LOCAL_STORAGE.MOBILE_SELECTED_PROJECT);
     authService.signOut().then(() => dispatch({type: 'LOGOUT'}));
   }
 }

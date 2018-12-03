@@ -61,7 +61,7 @@ export default {
         })
     });
   },
-  fetchByKeys(path, keys, isArray) {
+  fetchByKeys(path, keys = [], isArray = false) {
 
     let promises = [];
     keys.forEach(key => {

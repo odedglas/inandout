@@ -1,5 +1,7 @@
 @import '../variables';
 
+$context-height: calc(100vh - (#{$mobile-header-height} + #{$tabs-height}));
+
 .dashboard-container.mobile {
   background-color: $mobile-background;
 
@@ -20,6 +22,8 @@
 
     > div:first-child {
       width:30px !important;
+      bottom:0 !important;
+      top:80px !important;
     }
   }
   .mobile-container {
@@ -30,7 +34,6 @@
 
   .app-header {
     height: $mobile-header-height;
-    z-index: 1200 !important;
 
     .logo {
       opacity: 0.8;
@@ -74,7 +77,7 @@
     }
 
     .tabs-content {
-      height: calc(100vh - (#{$mobile-header-height} + #{$tabs-height}));
+      height: $context-height;
       overflow-y: hidden;
 
       > div {

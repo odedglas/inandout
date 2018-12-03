@@ -1,0 +1,165 @@
+@import '../variables';
+
+$tab-bottom-space: 60px;
+
+.mobile-view-wrapper {
+
+  .tabs-content {
+
+    .tab {
+      padding-bottom: $tab-bottom-space;
+    }
+    .overview-tab {
+
+      .project-header {
+        box-shadow: $mobile-panel-shadow;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: white;
+        width: 100%;
+        border-radius: 4px;
+
+        .project-range {
+          display: flex;
+          align-items: center;
+          color: $light-text;
+          font-size: $smallest-font;
+        }
+
+        .title {
+          color: $light-text;
+          font-size: $smallest-font;
+          margin-bottom: .5rem;
+        }
+
+        .overall {
+          padding: 0.5rem;
+          border-left: 1px solid $divider-color;
+          > span {
+            text-align: center;
+            font-size: $big-font;
+            margin-bottom: 0.25rem;
+          }
+        }
+      }
+
+      .card-title {
+        color: $theme-primary;
+        font-size: $smallest-font;
+        margin-bottom: .25rem;
+        text-align: right;
+      }
+
+      .balance-container {
+        box-shadow: $mobile-panel-shadow;
+        background: white;
+        border-radius: 4px;
+        width: 100%;
+
+        .title {
+          color: $light-text;
+          font-size: $smallest-font;
+        }
+
+        .amount {
+          font-size: 1.1rem;
+        }
+
+        .balance {
+          border-right: 1px solid $divider-color;
+          padding: 1rem;
+
+          .amount {
+            margin-top: 1rem;
+            font-size: $biggest-font;
+          }
+        }
+
+        .outcome-container,
+        .income-container {
+          padding: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .income-container {
+          padding: 1rem .75rem;
+          border-bottom: 1px solid $divider-color;
+        }
+      }
+
+      .last-activity {
+        background: white;
+        box-shadow: $mobile-panel-shadow;
+        .title {
+          color: $theme-primary;
+        }
+      }
+    }
+
+    .transactions-tab {
+
+      .transactions-wrapper {
+        background: white;
+        box-shadow: $mobile-panel-shadow;
+      }
+    }
+  }
+
+  .transactions-list {
+    width: 100%;
+    .avatar-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .row {
+      border-bottom: 1px solid $divider-color;
+      padding: .75rem 0;
+      border-left: 4px solid transparent;
+
+      &:last-child {
+        border-bottom:none;
+      }
+
+      &.accepted {
+        border-left-color: $success-color
+      }
+
+      &.pending {
+        border-left-color: $warning-color;
+      }
+
+      &.denied {
+        border-left-color: $error-color;
+      }
+
+      .details {
+        font-size: $smallest-font;
+
+        .details-title {
+          font-size: $normal-font;
+          font-weight: 500;
+        }
+
+        .payment {
+          color: $light-text;
+        }
+      }
+
+      .details-amount {
+        font-size: $smallest-font;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: space-between;
+
+        .amount {
+          font-size: $medium-font;
+        }
+      }
+    }
+  }
+}
