@@ -15,6 +15,8 @@ const budgetPeriodMap = BUDGETS_PERIOD.reduce((map, bp) => {
 
 export default {
 
+  wrap: (date) => moment(date),
+
   monthYearKey: (date) => moment(date).format(TRANSACTIONS_DATE_KEY_FORMAT),
 
   format: (date, format) => moment(date).format(format || baseFormat),

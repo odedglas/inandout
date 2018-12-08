@@ -112,6 +112,7 @@ class InviteUser extends Component {
       <Dialog
         open={open}
         fullScreen={mobile}
+        disableBackdropClick={mobile}
         TransitionComponent={mobile ? SliderTransition : Grow}
         disableRestoreFocus={true}
         onClose={this.handleClose}
