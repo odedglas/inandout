@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
-import SpeedDialAction from './SpeedDialAction';
+import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import DynamicIcon from '@common/DynamicIcon';
 
 import CreateBudget from '@modal/CreateBudget'

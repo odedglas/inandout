@@ -9,6 +9,7 @@ import {compose} from 'recompose';
 import CreateProjectModal from '@modal/CreateProject'
 import ProjectCard from './ProjectCard';
 import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -96,13 +97,12 @@ class Landing extends React.Component {
         <CreateProjectModal open={showCreateProjectModal}
                             onClose={this.closeCreateProjectModal}/>
         <Tooltip title={'Add Project'} placement={'top'}>
-          <Button variant="fab"
-                  color="primary"
-                  aria-label="add"
-                  onClick={this.showCreateProjectModal}
-                  className={'fab'}>
+          <Fab color="primary"
+               aria-label="add"
+               onClick={this.showCreateProjectModal}
+               classes={{'root': 'fab'}}>
             <DynamicIcon name={'add'}/>
-          </Button>
+          </Fab>
         </Tooltip>
       </div>
     );

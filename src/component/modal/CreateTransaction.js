@@ -22,7 +22,7 @@ import navigationUtil from '@util/navigation';
 import {TRANSACTIONS_TYPE, TRANSACTIONS_PAYMENT_METHODS, TRANSACTIONS_STATUS} from '@const/';
 import CategoriesSelect from '@common/CategoriesSelect';
 import CustomersSelect from '@common/CustomersSelect';
-import DatePicker from 'material-ui-pickers/DatePicker';
+import {DatePicker} from 'material-ui-pickers';
 import variables from '@scss/_variables.scss';
 import DynamicIcon from "@common/DynamicIcon";
 

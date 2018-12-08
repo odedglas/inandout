@@ -4,8 +4,8 @@ import { Provider } from 'react-redux';
 import App from './component/App';
 import store from './store';
 import registerServiceWorker from './registerServiceWorker';
-import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
-import MomentUtils from 'material-ui-pickers/utils/moment-utils';
+import {MuiPickersUtilsProvider} from 'material-ui-pickers';
+import MomentUtils from '@date-io/moment';
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
 

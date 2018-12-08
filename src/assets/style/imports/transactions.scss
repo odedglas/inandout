@@ -43,7 +43,7 @@
 
       .icon-button {
         @include withSize(32);
-
+        padding: 0;
         svg {
           font-size: $big-font;
         }
@@ -121,7 +121,8 @@
           width:32px;
           color: $light-text;
           margin-left: 0.25rem;
-
+          padding: 0;
+          
           &.delete {
             &:hover {
               color: $error-color;

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import Breadcrumb from '../breadcrumbs/Breadcrumb';
-import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import DynamicIcon from "@common/DynamicIcon";
@@ -58,13 +58,12 @@ class Categories extends Component {
 
         <Tooltip title={'Create Category'} placement={'top'}>
           <Zoom in={true} timeout={400}>
-            <Button variant="fab"
-                    color="secondary"
-                    onClick={() => this.showHideCreateCategory(true)}
-                    aria-label="add"
-                    className={'fab'}>
+            <Fab color="secondary"
+                 onClick={() => this.showHideCreateCategory(true)}
+                 aria-label="add"
+                 classes={{'root': 'fab'}}>
               <DynamicIcon name={'add'}/>
-            </Button>
+            </Fab>
           </Zoom>
         </Tooltip>
       </div>

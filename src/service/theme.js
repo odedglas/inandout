@@ -281,6 +281,9 @@ export default {
             '"Segoe UI Symbol"',
           ].join(','),
         },*/
+    typography: {
+      useNextVariants: true,
+    },
     palette: {
       primary: {
         main: '#376a7f',

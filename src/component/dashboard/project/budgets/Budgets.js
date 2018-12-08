@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 
 import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 
@@ -162,13 +163,12 @@ class Budgets extends Component {
 
               <Tooltip title={'Create Budget'} placement={'top'}>
                 <Zoom in={true} timeout={400}>
-                  <Button variant="fab"
-                          color="secondary"
-                          onClick={() => this.showHideCreateBudge(true)}
-                          aria-label="add"
-                          className={'fab'}>
+                  <Fab color="secondary"
+                       onClick={() => this.showHideCreateBudge(true)}
+                       aria-label="add"
+                       classes={{'root': 'fab'}}>
                     <DynamicIcon name={'add'}/>
-                  </Button>
+                  </Fab>
                 </Zoom>
               </Tooltip>
 
