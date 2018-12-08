@@ -130,7 +130,7 @@ export function loginWithProvider(providerName, onSuccess) {
 
 export function signOut() {
   return dispatch => {
-    localStorageService.remove(LOCAL_STORAGE.MOBILE_SELECTED_PROJECT);
+    localStorageService.remove(LOCAL_STORAGE.SELECTED_PROJECT);
     authService.signOut().then(() => dispatch({type: 'LOGOUT'}));
   }
 }

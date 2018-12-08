@@ -6,9 +6,23 @@ $tab-bottom-space: 60px;
 
   .tabs-content {
 
+    .transactions-wrapper,
+    .budgets-wrapper {
+      background: white;
+      box-shadow: $mobile-panel-shadow;
+    }
+
     .tab {
       padding-bottom: $tab-bottom-space;
+      margin: 1rem 0.5rem;
     }
+
+    .header-title {
+      color: $light-text;
+      font-size: $smallest-font;
+      margin-bottom: .5rem;
+    }
+
     .overview-tab {
 
       .project-header {
@@ -25,12 +39,6 @@ $tab-bottom-space: 60px;
           align-items: center;
           color: $light-text;
           font-size: $smallest-font;
-        }
-
-        .title {
-          color: $light-text;
-          font-size: $smallest-font;
-          margin-bottom: .5rem;
         }
 
         .overall {
@@ -99,11 +107,103 @@ $tab-bottom-space: 60px;
       }
     }
 
-    .transactions-tab {
+    .budgets-tab {
 
-      .transactions-wrapper {
+      .header {
         background: white;
         box-shadow: $mobile-panel-shadow;
+        justify-content: space-between;
+
+        .indicator-wrapper {
+          padding: 0 0.5rem;
+        }
+
+        .usage-indicator {
+          position: relative;
+
+          .backdrop {
+            color: $theme-light-grey;
+          }
+          .progress {
+            position: absolute;
+            left: 0
+          }
+          .content {
+            flex: 1;
+            flex-direction: column;
+            border-radius: 50%;
+            box-shadow: $indicator-shadow;
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            top: 7px;
+            left: 7px;
+            z-index: 99;
+
+            .usage {
+              position: absolute;
+              left: 50%;
+              width: 100%;
+              top: 50%;
+              transform: translate(-50%, -50%);
+              font-size: $big-font;
+              text-align: center;
+            }
+          }
+        }
+
+        .safe-to-spent {
+          min-width: 200px;
+          justify-content: space-between;
+          display: flex;
+          flex-direction: column;
+
+          .progress-bar {
+            width: 100%;
+            height: 10px;
+            display: block;
+            position: relative;
+            background-color: rgb(238, 238, 238);
+            overflow: hidden;
+            border-radius: 3px;
+
+            span {
+              height: 10px;
+              display: block;
+              position: absolute;
+              top: 0;
+              left: 0;
+              overflow: hidden;
+              transition: width 0.2s ease;
+            }
+          }
+
+          .dates {
+            justify-content: space-between;
+            font-size: $smallest-font;
+            color: $light-text;
+          }
+        }
+      }
+
+      .budget-row {
+        width: 100%;
+        text-align: left;
+        border-bottom: 1px solid $divider-color;
+        padding: .75rem;
+        display: flex;
+        justify-content: space-between;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .budget-range {
+          display: flex;
+          align-items: center;
+          font-size: $smallest-font;
+          color: $light-text;
+        }
       }
     }
   }
@@ -116,12 +216,14 @@ $tab-bottom-space: 60px;
     }
 
     .row {
+      width: 100%;
+      text-align: left;
       border-bottom: 1px solid $divider-color;
       padding: .75rem 0;
       border-left: 4px solid transparent;
 
       &:last-child {
-        border-bottom:none;
+        border-bottom: none;
       }
 
       &.accepted {
@@ -155,6 +257,10 @@ $tab-bottom-space: 60px;
         flex-direction: column;
         align-items: flex-end;
         justify-content: space-between;
+
+        .date {
+          color: $light-text;
+        }
 
         .amount {
           font-size: $medium-font;

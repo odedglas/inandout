@@ -60,6 +60,7 @@ $mobile-background: #e9ecef;
 $tabs-height: 42px;
 $mobile-header-color: rgba(255, 255, 255, 0.8);
 $mobile-panel-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -3px rgba(0, 0, 0, 0.12);
+$indicator-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
 
 $breakpoints: (
         "phone": 400px,
@@ -173,8 +174,8 @@ $breakpoints: (
 }
 
 @mixin withSize($size) {
-  width: $size + px;
-  height: $size + px;
+  width: $size + px !important;
+  height: $size + px !important;;
 }
 
 :export {

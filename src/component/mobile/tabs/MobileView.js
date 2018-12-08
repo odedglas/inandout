@@ -20,6 +20,8 @@ import util from '@util/'
 import {DIRECTIONS} from '@const/';
 import OverviewTab from './OverviewTab';
 import TransactionsTab from './TransactionsTab';
+import BudgetsTab from './BudgetsTab';
+import CalendarTab from './CalendarTab';
 import DynamicIcon from "../../common/DynamicIcon";
 
 class ProjectHome extends React.Component {
@@ -104,7 +106,7 @@ class ProjectHome extends React.Component {
 
                 </Tabs>
 
-                <div className={'tabs-content'}>
+                <div className={'tabs-content '}>
                   <SwipeableViews
                     axis={direction === 'rtl' ? 'x-reverse' : 'x'}
                     index={this.state.activeTabIndex}
@@ -120,8 +122,14 @@ class ProjectHome extends React.Component {
 
                     <TransactionsTab project={project} transactions={transactions}/>
 
-                    <div> Budgets</div>
-                    <div> Calendar</div>
+                    <BudgetsTab project={project}
+                                selectedDate={selectedDate}
+                                budgets={budgets}
+                                indicator={indicators.budgetsUsage} />
+
+
+                    <CalendarTab />
+
                   </SwipeableViews>
                 </div>
 

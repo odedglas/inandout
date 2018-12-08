@@ -1,15 +1,15 @@
 @import '../variables';
 
 .success-indicator {
-  color: $success-color;
+  color: $success-color !important;
 }
 
 .warning-indicator {
-  color: $warning-color;
+  color: $warning-color !important;
 }
 
 .overage-indicator {
-  color: $error-color;
+  color: $error-color !important;
 }
 
 .success-background {

@@ -9,6 +9,7 @@ import UserAvatar from '@common/UserAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import DynamicIcon from '@common/DynamicIcon';
 import CreateTransaction from '@modal/CreateTransaction'
+import ButtonBase from "@material-ui/core/ButtonBase";
 import {
   deleteTransaction,
   updateTransaction
@@ -106,38 +107,39 @@ class TransactionsList extends React.Component{
             const paidToday = dateUtil.sameDay(t.date, dateUtil.now());
 
             return (
-              <div key={t.id} className={`row px-2 ${t.status.toLowerCase()}`} onClick={() => this.showTransactionModal(t)}>
 
-                <div className={'avatar-container mx-1'}>
-                  {
-                    templateRow.avatar({
-                      category: t.category,
-                      customer: t.customer
-                    })
-                  }
-                </div>
+                <ButtonBase  key={t.id} className={`row px-2 ${t.status.toLowerCase()}`} onClick={() => this.showTransactionModal(t)}>
+                  <div className={'avatar-container mx-1'}>
+                    {
+                      templateRow.avatar({
+                        category: t.category,
+                        customer: t.customer
+                      })
+                    }
+                  </div>
 
-                <div className={'flex'}>
-                  <div className={'details mx-2 col-flex'}>
-                    <div className={'details-title mb-1'}>
-                      {
-                        templateRow.title({
-                          category: t.category,
-                          customer: t.customer
-                        })
-                      }
+                  <div className={'flex'}>
+                    <div className={'details mx-2 col-flex'}>
+                      <div className={'details-title mb-1'}>
+                        {
+                          templateRow.title({
+                            category: t.category,
+                            customer: t.customer
+                          })
+                        }
+                      </div>
+                      <div className={'mb-1'}> {t.description} </div>
+                      <div className={'payment'}> {templateRow.paymentText} {paymentMethod.label} </div>
                     </div>
-                    <div> {t.description} </div>
-                    <div className={'payment'}> {templateRow.paymentText} {paymentMethod.label} </div>
-                  </div>
-                  <div className={'details-amount'}>
-                    <div>{paidToday ? 'Today' : dateUtil.formatShortDate(t.date)}</div>
-                    <div className={`amount ${templateRow.amountClass}`}>
-                      {templateRow.amountMark}{util.formatNumber(t.amount, currency)}
+                    <div className={'details-amount'}>
+                      <div className={'date mb-1'}>{paidToday ? 'Today' : dateUtil.formatShortDate(t.date)}</div>
+                      <div className={`amount ${templateRow.amountClass}`}>
+                        {templateRow.amountMark}{util.formatNumber(t.amount, currency)}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                </ButtonBase>
+
             );
           })
         }

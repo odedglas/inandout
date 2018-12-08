@@ -7,23 +7,23 @@ $context-height: calc(100vh - (#{$mobile-header-height} + #{$tabs-height}));
 
   .mobile-loader {
     position: absolute;
-    width:100%;
-    padding-top:50%;
+    width: 100%;
+    padding-top: 50%;
   }
 
   .mobile-welcome {
     img {
       box-shadow: $header-shadow;
-      width:100%;
+      width: 100%;
     }
   }
 
   .wrapper {
 
     > div:first-child {
-      width:30px !important;
-      bottom:0 !important;
-      top:80px !important;
+      width: 30px !important;
+      bottom: 0 !important;
+      top: 80px !important;
     }
   }
   .mobile-container {
@@ -98,6 +98,28 @@ $context-height: calc(100vh - (#{$mobile-header-height} + #{$tabs-height}));
   }
 }
 
+.mobile-usage-indicator {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  transform: rotate(-90deg);
+
+  .progress-bar {
+    transition: stroke-dasharray 0.3s ease;
+    stroke-width: 2;
+    fill: transparent;
+    stroke-dasharray: 0, 100;
+  }
+
+  .background {
+    opacity: 0.3;
+    stroke: black;
+    fill: transparent;
+    stroke-width: 2;
+    stroke-dasharray: 100, 100;
+  }
+}
+
 .project-drawer.mobile {
   width: 80%;
 
@@ -121,9 +143,9 @@ $context-height: calc(100vh - (#{$mobile-header-height} + #{$tabs-height}));
     }
   }
 
-    .active {
-        span {
-            color: $active-text-color;
-        }
+  .active {
+    span {
+      color: $active-text-color;
     }
+  }
 }

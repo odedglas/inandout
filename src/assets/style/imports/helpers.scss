@@ -1995,6 +1995,11 @@
   flex-direction:column;
 }
 
+.flex-between {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 .just-c {
   justify-content: center;
 }
@@ -2005,6 +2010,10 @@
 
 .block {
   display: block;
+}
+
+.font-normal {
+  font-size: 1rem !important;
 }
 
 .white {

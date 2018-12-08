@@ -130,7 +130,7 @@ class CreateBudgetModal extends React.Component {
     } = this.props;
 
     const editMode = !util.isEmptyObject(budget);
-    const model = editMode ? Object.create(budget) : {};
+    const model = (editMode&& budget) ? Object.create(budget) : {};
 
     if(model.categories) {
 

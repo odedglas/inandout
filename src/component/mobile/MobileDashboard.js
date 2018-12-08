@@ -41,7 +41,7 @@ class MobileDashboard extends Component {
       (projects) => {
 
         if(projects.length > 0) {
-          const preSelectedProject = localStorageService.get(LOCAL_STORAGE.MOBILE_SELECTED_PROJECT);
+          const preSelectedProject = localStorageService.get(LOCAL_STORAGE.SELECTED_PROJECT);
           const selectedProject = preSelectedProject ? projects.find(p => p.id === preSelectedProject) : projects[0];
 
           selectProject(selectedProject);
@@ -62,7 +62,7 @@ class MobileDashboard extends Component {
     const {selectedProject, selectedDate, createProjectSyncListener} = this.props;
 
     if (selectedProject.id !== prevProps.selectedProject.id) {
-      localStorageService.set(LOCAL_STORAGE.MOBILE_SELECTED_PROJECT, selectedProject.id);
+      localStorageService.set(LOCAL_STORAGE.SELECTED_PROJECT, selectedProject.id);
       createProjectSyncListener(selectedProject.id, selectedDate);
     }
   }

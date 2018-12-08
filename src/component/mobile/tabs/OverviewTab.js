@@ -14,7 +14,7 @@ const ProjectHeader = ({project, selectedDate, overall, currency}) => {
   return (
     <div className={'row project-header mb-2'}>
       <div className={'col-6'}>
-        <div className={'title'}>
+        <div className={'header-title'}>
           Project
         </div>
         {project.name}
@@ -45,7 +45,7 @@ const MonthlyHeader = ({currency, balance}) => {
       </div>
       <div className={'col-6 px-0'}>
         <div className={'income-container'}>
-          <div className={'title'}>
+          <div className={'header-title'}>
             Income
           </div>
           <div className={'amount income'}>
@@ -54,7 +54,7 @@ const MonthlyHeader = ({currency, balance}) => {
         </div>
 
         <div className={'outcome-container'}>
-          <div className={'title'}>
+          <div className={'header-title'}>
             Outcome
           </div>
           <div className={'amount outcome'}>
@@ -81,7 +81,7 @@ const OverviewTab = ({project, transactions, overall, balance, selectedDate, cur
 
   return (
     <div className={'tab overview-tab row'}>
-      <div className={'mx-2 mt-3 w-100'}>
+      <div className={'w-100'}>
 
         <div className={'card-title'}> Overall</div>
         <ProjectHeader project={project}

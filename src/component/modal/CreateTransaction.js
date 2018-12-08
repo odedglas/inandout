@@ -272,8 +272,7 @@ class CreateTransactionModal extends React.Component {
           </div>
           {
             paymentsEditMode ? <FormHelperText>
-              This transaction is {model.paymentIndex + 1} of {model.payments} Payments of {model.amount.toFixed(
-              2)}{selectedProject.currency}
+              This transaction is {model.paymentIndex + 1} of {model.payments} Payments of <b> {model.amount.toFixed(2)}{selectedProject.currency} </b>
             </FormHelperText> : null
           }
         </div>

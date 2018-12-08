@@ -83,6 +83,14 @@ export default {
     return moment(date).endOf(unit)
   },
 
+  periodRange(date, format, unit) {
+
+    return {
+      start: this.format(this.startOf(date, unit), format),
+      end: this.format(this.endOf(date, unit), format)
+    }
+  },
+
   getBudgetRange (period, selectedDate)  {
 
     let d = moment(selectedDate);
