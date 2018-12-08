@@ -130,6 +130,7 @@ class CreationModal extends React.Component {
           fullScreen={mobile}
           open={open}
           onClose={this.handleClose}
+          disableBackdropClick={mobile}
           disableRestoreFocus={true}
           TransitionComponent={mobile ? SliderTransition : Grow}
           transitionDuration={300}

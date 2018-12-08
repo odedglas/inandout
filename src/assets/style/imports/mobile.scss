@@ -52,6 +52,7 @@ $context-height: calc(100vh - (#{$mobile-header-height} + #{$tabs-height}));
         align-items: center;
       }
       button {
+        padding: 0;
         color: $mobile-header-color;
         @include withSize(36)
       }
