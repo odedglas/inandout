@@ -121,7 +121,7 @@ class CustomersList extends Component {
                       <DynamicIcon name={customer.star ? 'star' : 'star-empty'}/>
                     </IconButton>
 
-                    <div className={'logo mx-3'}>
+                    <div className={'logo mx-3 mt-2'}>
                       <UserAvatar user={customer}
                                   size={'small'}
                                   className={'white'}/>

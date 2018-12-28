@@ -499,6 +499,7 @@ export default compose(
       type: 'select',
       label: 'Customer',
       id: 'customer',
+      getFieldValue: (data) => data.customer && data.customer.id
     },
     {
       type: 'date',

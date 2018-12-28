@@ -198,11 +198,88 @@ $tab-bottom-space: 60px;
           border-bottom: none;
         }
 
+        .category:last-child .avatar {
+          margin-right: 0 !important;
+        }
+
         .budget-range {
           display: flex;
           align-items: center;
           font-size: $smallest-font;
           color: $light-text;
+        }
+      }
+    }
+
+    .calendar-tab {
+
+      .calendar-wrapper {
+
+        min-height: 286px;
+        div[role="presentation"] {
+          @include withSize(48);
+        }
+
+        .day-wrapper {
+          position: relative;
+          .events {
+            position: absolute;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+
+            .event {
+              @include withSize(7);
+              border-radius: 50%;
+              display: block;
+              margin-right: 0.25rem;
+
+              &.completed {
+                opacity: 0.5;
+              }
+            }
+          }
+        }
+
+      }
+
+      .events-details {
+        font-size: $smallest-font;
+
+        .title {
+          font-size: $normal-font;
+          color: $light-text;
+          padding: .5rem;
+        }
+        .event-row {
+          width: 100%;
+          text-align: left;
+          border-bottom: 1px solid $divider-color;
+          padding: .75rem;
+          display: flex;
+          border-left: 5px solid;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          .customer-details {
+            color: $light-text;
+          }
+
+          .sub-details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .icon {
+              font-size: $big-font;
+              color: $light-text;
+            }
+            .date {
+              color: $light-text;
+            }
+          }
+
         }
       }
     }

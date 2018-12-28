@@ -69,7 +69,6 @@ const withFilter = (filterDefinition) => (Component) => {
     };
 
     handleDoFilter = (data) => {
-
       return this.state.filterFN(data);
     };
 

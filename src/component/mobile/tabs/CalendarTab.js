@@ -1,34 +1,137 @@
 import React from 'react';
-
-import CircularProgress from '@material-ui/core/CircularProgress';
+import PropTypes from 'prop-types'
+import {Calendar} from 'material-ui-pickers';
 import Avatar from '@material-ui/core/Avatar';
-import ButtonBase from "@material-ui/core/ButtonBase";
-
+import UserAvatar from '@common/UserAvatar';
 import DynamicIcon from '@common/DynamicIcon';
-import CreateBudget from '@modal/CreateBudget'
 import Paper from '@material-ui/core/Paper';
-import util from '@util/'
+
 import dateUtil from '@util/date'
-import budgetService from '@service/budget';
-import ProjectCalendar from '../../dashboard/project/calendar/ProjectCalendar';
 import {TRANSACTIONS_PAYMENT_METHODS} from '@const/';
 
-import { Calendar } from 'material-ui-pickers';
+const EventStatus = ({ event, isEventType }) => {
+
+  let indicatorClass, statusText;
+
+  if(isEventType) {
+    const overdue = !event.completed && dateUtil.isBefore(event.date, dateUtil.now());
+    statusText = event.completed ? 'DONE' : (overdue ? 'OVERDUE' : 'UPCOMING');
+    indicatorClass = event.completed ? 'natural' : (overdue ? 'denied' : 'success');
+  }
+  else{
+    statusText = event.completed ? 'DONE' : 'OPEN';
+    indicatorClass = event.completed ? 'natural' : 'success'
+  }
+
+  return (
+    <div className={`status-indicator mb-1 ${indicatorClass}`}>
+      {statusText}
+    </div>
+  )
+};
 
 class CalendarTab extends React.Component {
 
-  render () {
+  static propTypes = {
+    projectSelectedDate: PropTypes.object,
+    events: PropTypes.array
+  };
+
+  state = {
+    selectedDate: dateUtil.wrap(new Date())
+  };
+
+  onSelectDate = (date) => {
+
+    this.setState({
+      selectedDate: date
+    });
+  };
+
+  render() {
+
+    const {selectedDate} = this.state;
+    const {events} = this.props;
+
+    const eventsMap = events.reduce((map, e) => {
+      const key = dateUtil.format(e.date);
+      map[key] = map[key] ? [
+        ...map[key],
+        e
+      ] : [e];
+      return map;
+    }, {});
+
+    const selectedEvents = eventsMap[dateUtil.format(selectedDate)] || [];
+    const hasSelected = selectedEvents.length > 0;
 
     return (
       <div className={'tab calendar-tab row'}>
-Yooo Cale!
-        <Paper style={{ overflow: 'hidden', width: '100%' }}>
-          <Calendar className={'test'} date={dateUtil.wrap(new Date())}  onChange={() => {}} />
+
+        <Paper style={{overflow: 'hidden', width: '100%'}}>
+          <Calendar date={selectedDate}
+                    classes={{
+                      transitionContainer: 'calendar-wrapper'
+                    }}
+                    allowKeyboardControl={true} m
+                    renderDay={(day, selectedDate, dayInCurrentMonth, dayComponent) => {
+
+                      const dayKey = dateUtil.format(day);
+                      const today = dayKey === dateUtil.format(selectedDate);
+                      const dailyEvents = eventsMap[dayKey] || [];
+
+                      return <div key={day.toString()} className={'day-wrapper'}>
+                        <div className={'events'}> {!today && dayInCurrentMonth && dailyEvents.map(e =>
+                          <span key={e.date.toString()} className={`event ${e.completed ? 'completed' : ''}`} style={{'backgroundColor': e.color}}/>)}
+                        </div>
+                        {dayComponent}
+                      </div>;
+                    }}
+                    onChange={this.onSelectDate}/>
+
+          <div className={'row events-details'}>
+            {hasSelected && <div className={'title'}> {dateUtil.format(selectedDate, 'Do MMM ')} </div>}
+            {
+              selectedEvents.map(event => {
+
+                const isEventType = event.type === 'EVENT';
+                const icon = isEventType ? 'calendar' : 'task';
+
+                return (
+                  <div className={'col-12 event-row flex'} key={event.date.toString()}
+                       style={{'borderLeftColor': event.color}}>
+
+                    {
+                      event.customer ? <UserAvatar user={event.customer}
+                                                   size={'medium'}
+                                                   className={'white mx-1'}/> : <Avatar className={'avatar medium mr-2'}>
+                        <DynamicIcon className={'icon white'} name={icon}/>
+                      </Avatar>
+                    }
+
+                    <div className={'flex-between flex-row'}>
+                      <div className={'event-title mx-2'} style={{flex: 2}}>
+                        <div> {event.title} </div>
+                        <div className={'customer-details'}> {event.customer && event.customer.name} </div>
+                      </div>
+
+                      <div className={'ml-1 sub-details'}>
+                        <EventStatus event={event} isEventType={isEventType}/>
+                        <div className={`date`}>
+                          {dateUtil.format(event.date, "HH:mm A")}
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                )
+              })
+            }
+          </div>
         </Paper>
       </div>
     );
   }
-
 
 }
 

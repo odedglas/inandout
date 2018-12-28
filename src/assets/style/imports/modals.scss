@@ -12,9 +12,13 @@
       padding: 0;
     }
 
-    h6 span {
-      color: whitesmoke;
+    h6 {
+      color: white;
       display: flex;
+
+      span {
+        color: white;
+      }
     }
   }
 

@@ -67,6 +67,8 @@ export function setSelectedDate(projectId, date) {
     const dateKey = transactionService.transactionsDateKey(date);
     transactionService.fetchTransactions(projectId, dateKey).then(transactions => {
 
+      dispatch(createProjectSyncListener(projectId, date));
+
       dispatch({
         type: 'SET_SELECTED_DATE',
         selectedDate: date,

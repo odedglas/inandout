@@ -359,7 +359,7 @@ class FilterRow extends Component {
           <div className={'col-sm-4'}>
             {this.getValueControl(selectedFilter, value, validation)}
           </div>
-          <div className={'col-sm-1 px-0'}>
+          <div className={'col-sm-1 px-0 flex'}>
             {isNewRow ?
               <IconButton className={'add-filter'} onClick={this.onFilterAdd}>
                 <DynamicIcon name={'add'}/>

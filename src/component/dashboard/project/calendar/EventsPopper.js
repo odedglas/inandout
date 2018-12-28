@@ -495,3 +495,4 @@ export default compose(
     updateTransaction
   })
 )(EventsPopper);
+

@@ -45,17 +45,23 @@ class Calendar extends Component {
     anchorEl: null,
     open: false,
     eventForEdit: {},
+    currentDate: undefined,
   };
 
   componentDidMount () {
 
     const {location, events} = this.props;
-    const selectedEventId = location.state && location.state.selectedEventId;
+    const {selectedEventId, date } = location.state ? location.state : {};
 
     if(selectedEventId) {
 
       const event = events.find(e => e.id === selectedEventId);
-      event && setTimeout(() => this.handleEventClick(event), 100);
+      event && setTimeout(() => {
+
+        this.setState({currentDate: new Date(date)});
+
+        this.handleEventClick(event)
+      }, 100);
     }
   }
 
@@ -124,7 +130,9 @@ class Calendar extends Component {
   render() {
 
     const {events, project, selectedDate} = this.props;
-    const {open, anchorEl, eventForEdit} = this.state;
+    const {open, anchorEl, eventForEdit, currentDate} = this.state;
+
+    const _date = currentDate ? currentDate : new Date(selectedDate);
 
     return (
       <div style={{position: 'relative'}}>
@@ -157,7 +165,8 @@ class Calendar extends Component {
           onSelectSlot={this.handleSlotClick}
           onSelectEvent={this.handleEventClick}
           defaultView={BigCalendar.Views.MONTH}
-          defaultDate={selectedDate}
+          date={_date}
+          onNavigate={(date) => { this.setState({ currentDate: date })}}
         />
 
         <EventsPopper open={open}

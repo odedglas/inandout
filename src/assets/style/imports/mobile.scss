@@ -18,14 +18,6 @@ $context-height: calc(100vh - (#{$mobile-header-height} + #{$tabs-height}));
     }
   }
 
-  .wrapper {
-
-    > div:first-child {
-      width: 30px !important;
-      bottom: 0 !important;
-      top: 80px !important;
-    }
-  }
   .mobile-container {
     overflow-y: hidden;
     width: 100%;

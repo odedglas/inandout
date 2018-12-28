@@ -2000,6 +2000,11 @@
   flex-direction: column;
   justify-content: space-between;
 }
+
+.flex-row {
+  flex: 1;
+  flex-direction: row;
+}
 .just-c {
   justify-content: center;
 }

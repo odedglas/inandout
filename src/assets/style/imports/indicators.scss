@@ -27,23 +27,34 @@
 .status-indicator {
   color: $success-color;
   font-weight: 500;
-  border: 1px solid  $success-color;
-  border-radius:4px;
+  border: 1px solid $success-color;
+  border-radius: 4px;
   padding: 0.25rem 0.5rem;
   text-align: center;
   font-size: 0.725rem;
 
+  @include mq('tablet-small', 'max') {
+    padding: 0.15rem 0.5rem;
+    width:100%;
+    font-size: 0.625rem;
+  }
+
   &.pending {
     color: $warning-color;
-    border: 1px solid  $warning-color;
+    border: 1px solid $warning-color;
   }
 
   &.denied {
     color: $error-color;
-    border: 1px solid  $error-color;
+    border: 1px solid $error-color;
+  }
+
+  &.natural {
+    color: $light-text;
+    border: 1px solid $light-text;
   }
 
   &.small {
-    max-width:70px;
+    max-width: 70px;
   }
 }

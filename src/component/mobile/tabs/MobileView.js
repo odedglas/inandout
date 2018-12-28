@@ -128,7 +128,7 @@ class ProjectHome extends React.Component {
                                 indicator={indicators.budgetsUsage} />
 
 
-                    <CalendarTab />
+                    <CalendarTab events={events} projectSelectedDate={selectedDate}/>
 
                   </SwipeableViews>
                 </div>
