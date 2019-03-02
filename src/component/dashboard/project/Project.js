@@ -62,7 +62,7 @@ class Project extends React.Component {
   render() {
 
     const {selectedProject, loading, location} = this.props;
-
+    console.log("Project Render")
     return (
       <ProjectProvider>
         <div className={'project-container'}>
@@ -89,7 +89,15 @@ class Project extends React.Component {
               </CSSTransition>
             </div>
             {
-              !loading ? getProjectRoutes(location) : null
+              !loading ?               <CSSTransition
+                in={!loading}
+                timeout={300}
+                classNames="fade"
+                unmountOnExit
+              >
+                  {getProjectRoutes(location)}
+              </CSSTransition>
+                 : null
             }
           </div>
 

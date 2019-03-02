@@ -33,7 +33,7 @@ class ProjectMembersMenu extends Component {
             transform: `translate(-${membersMenuWidth}px)`
           };
 
-          const _members = [...members].reverse();
+          const _members = [...members.filter(m => m)].reverse();
 
           return (
             moreThanOneMember ? <div className={'project-members'}

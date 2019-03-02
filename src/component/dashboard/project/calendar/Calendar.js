@@ -51,16 +51,16 @@ class Calendar extends Component {
   componentDidMount () {
 
     const {location, events} = this.props;
-    const {selectedEventId, date } = location.state ? location.state : {};
+    const {selectedEventId} = location.state ? location.state : {};
 
     if(selectedEventId) {
 
       const event = events.find(e => e.id === selectedEventId);
       event && setTimeout(() => {
 
-        this.setState({currentDate: new Date(date)});
+        this.setState({currentDate: new Date(event.date)});
 
-        this.handleEventClick(event)
+        this.handlePreSelectedEvent(event)
       }, 100);
     }
   }
@@ -95,7 +95,17 @@ class Calendar extends Component {
     this.handleClick(eventDom, event)
   };
 
+  handlePreSelectedEvent = event => {
+
+    const eventDom = document.querySelector(`.slot_${dateUtils.format(event.date, 'DDMMYY')}`);
+    this.handleClick(eventDom, event)
+  };
+
   handleClick = (target, event) => {
+    const parent = target && target.parentElement;
+    if(parent && parent.classList.contains('rbc-overlay')) {
+       target = document.querySelector(`.slot_${dateUtils.format(event.date, 'DDMMYY')}`);
+    }
 
     this.setState({
       anchorEl: target,

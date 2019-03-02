@@ -191,6 +191,7 @@ class EventsPopper extends Component {
         transactionCreateState: calendarService.transformEventToTransaction(
           data
         ),
+        transactionForEdit: {},
         popperPickerOpen: true,
       })
     }
@@ -400,7 +401,7 @@ class EventsPopper extends Component {
     const bodyHeight = Math.max(body.scrollHeight, body.offsetHeight,
       html.clientHeight, html.scrollHeight, html.offsetHeight
     );
-    const anchorTop = anchorEl ? anchorEl.getClientRects()[0].top : 0;
+    const anchorTop = anchorEl.getClientRects ? anchorEl.getClientRects()[0].top : 0;
 
     return anchorTop > (bodyHeight / 2) ? 'right-end' : defaultPlacement
   };

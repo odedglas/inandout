@@ -34,6 +34,27 @@ import dateUtil from '@util/date';
 import transactionService from '@service/transaction';
 import {TRANSACTIONS_PAYMENT_METHODS} from '@const/';
 
+const sum = (arr) => arr.reduce((total, i) => { total += i.amount; return total}, 0);
+const transactionIndicators = [
+  {
+    id: 'income',
+    label: 'Accepted',
+    valueClass: 'success-indicator',
+    value: (transactions) => sum(transactions.filter(t => t.income && t.status === 'ACCEPTED'))
+  },
+  {
+    id: 'pending',
+    valueClass: 'warning-indicator',
+    label: 'Pending',
+    value: (transactions) => sum(transactions.filter(t => t.income && t.status === 'PENDING'))
+  },
+  {
+    id: 'outcome',
+    label: 'Outcome',
+    valueClass: 'overage-indicator',
+    value: (transactions) => sum(transactions.filter(t => !t.income))
+  }
+];
 const getSorting = (order, orderBy) => {
 
   const sortProps = [{name: orderBy.prop, reverse: order === 'desc'}];
@@ -281,6 +302,15 @@ class TransactionsTableView extends Component {
 
     const filteredData = data.filter(doFilter);
 
+    const indicators = transactionIndicators.map(indicator => {
+      const { value, ...rest } = indicator;
+
+      return {
+        ...rest,
+        value: util.formatNumber(value(filteredData), selectedProject.currency)
+      };
+    });
+
     return (
       <Paper className={'mt-3 row'} style={{position: 'relative'}}>
 
@@ -296,6 +326,7 @@ class TransactionsTableView extends Component {
         </CSSTransition>
         <TransactionsTableViewToolbar date={selectedDate}
                                       filter={filter}
+                                      indicators={indicators}
                                       showFilter={this.showHideFilter}
                                       handleFilterChange={handleFilterChange}
                                       setSelectedForToday={this.setSelectedForToday}
@@ -413,7 +444,7 @@ class TransactionsTableView extends Component {
 
               {
                 isEmpty ? <TableRow key={'empty-row'} className={'empty-row'}>
-                  <TableCell colSpan="10">
+                  <TableCell colSpan="12">
                     <img src={require('@img/no-results.png')} alt={'no-results'}/>
                     <div>
                       No transactions was found for the selected period.

@@ -21,7 +21,7 @@ exports.sendInvite = (email, owner, projectName) => {
 
   console.log("Sending Mail to :" + email);
   const mailOptions = {
-    from: `${APP_NAME} <noreply@firebase.com>`,
+    from: `${APP_NAME} <noreply@inandout.com>`,
     to: email,
   };
 
@@ -38,4 +38,4 @@ const generateInviteText = (email, owner, projectName) => {
       <div> Hello ! </div> 
       <div> You have been invited to share a project "${projectName}" with ${owner}</div>
       <div> Please follow this link: <a href=${signUpURL}> In&Out</a> In order to sign up and start working on your projects!</div>`;
-}
+};

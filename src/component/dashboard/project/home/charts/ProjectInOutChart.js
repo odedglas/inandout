@@ -39,6 +39,20 @@ const ChartTooltip = ({value, name, props}) => {
     </span>
   );
 };
+const dataGuard = {
+    last() {
+
+      const keys = Object.keys(this).filter(key =>!(typeof this[key] === 'function'));
+      return {
+        key: keys.length !== 0 ? +keys[0] : 0,
+        data: this[keys[0]]
+      }
+    },
+    remove() {
+      const keys = Object.keys(this).filter(key =>!(typeof this[key] === 'function'));
+      keys.forEach(key => delete this[key]);
+    }
+};
 
 class ProjectInOutChart extends Component {
 
@@ -57,8 +71,15 @@ class ProjectInOutChart extends Component {
 
     const {transactions, selectedDate} = this.props;
 
+    const timeNow = (new Date()).getTime();
+    const lastItem = dataGuard.last();
+    if(timeNow < (lastItem.key + 700 )) {
+
+        return lastItem.data;
+    }
+
     const monthStart = dateUtil.startOf(selectedDate);
-    const thisMonth = dateUtil.sameMonth(selectedDate, dateUtil.now())
+    const thisMonth = dateUtil.sameMonth(selectedDate, dateUtil.now());
 
     let maxDate = thisMonth ? selectedDate : dateUtil.endOf(selectedDate);
     transactions.forEach(t => {
@@ -77,7 +98,8 @@ class ProjectInOutChart extends Component {
     let cumulativeIncomes = 0,
       cumulativeOutcomes = 0;
 
-    return datesMap.map(date => {
+    dataGuard.remove();
+    dataGuard[timeNow] = datesMap.map(date => {
       return {
         name: date,
         dailyIncomes: transactionsData[date].filter(t => t.income).reduce((total, t) => {
@@ -93,7 +115,9 @@ class ProjectInOutChart extends Component {
         [INCOME_KEY]: cumulativeIncomes,
         [OUTCOME_KEY]: cumulativeOutcomes
       }
-    })
+    });
+
+    return dataGuard[timeNow];
   }
 
   handleLegendClick = (key) => {
@@ -164,7 +188,6 @@ class ProjectInOutChart extends Component {
     const {disabledSets} = this.state;
 
     const data = this.getData();
-
     const showIncomes = !disabledSets.includes(INCOME_KEY);
     const showOutcomes = !disabledSets.includes(OUTCOME_KEY);
 

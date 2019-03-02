@@ -31,6 +31,8 @@
 
   .transaction-toolbar {
     justify-content: space-between;
+    box-shadow: $easy-shadow;
+
     .months-navigator {
       display:flex;
       align-items:center;
@@ -49,34 +51,39 @@
         }
       }
     }
-    .spacer {
+
+    .indicators {
       flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 0.25rem;
+      .title {
+        font-weight: 400;
+        opacity: .54;
+      }
 
-      .summary {
+      .indicator {
+        text-align: center;
+        border-left: 1px solid rgba(0, 0, 0, 0.12);
+        padding: 0 1rem;
+        max-width: 200px;
 
-        .title {
-          font-weight: 400;
-          opacity: .54;
-        }
-
-        .body {
-          text-align: center;
-          padding-top: 0.25rem;
-
-          span {
-            border-left: 1px solid rgba(0, 0, 0, 0.12);
-            padding:0 1rem;
-
-            &:first-child {
-              border-left: none;
-            }
-          }
+        &:first-child {
+          border: none;
         }
       }
+
+      .value {
+        font-size: $medium-font;
+      }
+
     }
 
     .filter-wrapper {
-
+      min-width: 150px;
+      display: flex;
+      justify-content: flex-end;
       .filter {
 
         &.active {

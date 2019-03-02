@@ -91,10 +91,7 @@ class CreateTransactionModal extends React.Component {
 
     history.push({
       pathname: navigationUtil.projectLink(selectedProject, 'calendar'),
-      state: {
-        selectedEventId: transaction.sourceEventId,
-        date: transaction.date
-      }
+      state: { selectedEventId: transaction.sourceEventId }
     });
     onClose();
   };

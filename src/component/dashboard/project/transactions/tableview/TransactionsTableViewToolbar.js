@@ -8,9 +8,10 @@ import DynamicIcon from '@common/DynamicIcon';
 import util from '@util/';
 import dateUtil from '@util/date';
 
-export default ({date, filter, onSelectedDateChange, handleFilterChange, setSelectedForToday, showFilter}) => {
+export default ({date, filter, indicators, onSelectedDateChange, handleFilterChange, setSelectedForToday, showFilter}) => {
 
   const hasFilter = filter.some(f => !util.isEmptyObject(f.value));
+
   return (
     <Toolbar className={'transaction-toolbar col-sm-12 row px-0'}>
       <div className={'col-sm-12 px-0 flex'}>
@@ -41,7 +42,16 @@ export default ({date, filter, onSelectedDateChange, handleFilterChange, setSele
           {dateUtil.format(date, 'MMM YYYY')}
         </span>
         </div>
-        <div className={'spacer row'}/>
+        <div className={'indicators row'}>
+          {
+            indicators.map(indicator => (
+              <div key={indicator.id} className={'col-flex indicator'}>
+                <span className="title"> {indicator.label} </span>
+                <span className={`value ${indicator.valueClass}`}>{indicator.value} </span>
+              </div>
+            ))
+          }
+        </div>
         <div className={'filter-wrapper mx-2'}>
           {
             hasFilter ? <Button size="small" className={'button--xs ml-2'}
