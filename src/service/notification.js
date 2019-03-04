@@ -94,6 +94,9 @@ const notificationService = {
   //Actions
   async acceptProjectInvite(acceptingUser, notification,projectId, callback) {
 
+    //Adding project to user
+    await firebaseService.addUserProject(acceptingUser.id, projectId);
+
     //Fetching project
     const project = await firebaseService.fetch(`/projects/${projectId}`);
 
@@ -101,9 +104,6 @@ const notificationService = {
     const members = [...project.members, acceptingUser.id];
     projectService.updateProject(project, {members});
     project.members = members;
-
-    //Adding project to user
-    await firebaseService.addUserProject(acceptingUser.id, projectId);
 
     //Sending owner response
     await this.createConfirmNotification(

@@ -13,6 +13,8 @@ const budgetPeriodMap = BUDGETS_PERIOD.reduce((map, bp) => {
   return map;
 },{});
 
+const today = new Date();
+
 export default {
 
   wrap: (date) => moment(date),
@@ -33,6 +35,8 @@ export default {
     const now = new Date();
     return now.getTime();
   },
+
+  today: () => today,
 
   sameDay: (d1, d2) => moment(d2).diff(moment(d1), 'days') === 0,
 

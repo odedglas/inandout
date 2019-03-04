@@ -5,6 +5,7 @@ import Avatar from '@material-ui/core/Avatar';
 import UserAvatar from '@common/UserAvatar';
 import DynamicIcon from '@common/DynamicIcon';
 import Paper from '@material-ui/core/Paper';
+import CreateEvent from '@modal/CreateEvent'
 
 import dateUtil from '@util/date'
 import {TRANSACTIONS_PAYMENT_METHODS} from '@const/';
@@ -38,7 +39,9 @@ class CalendarTab extends React.Component {
   };
 
   state = {
-    selectedDate: dateUtil.wrap(new Date())
+    selectedDate: dateUtil.wrap(new Date()),
+    showEventCreateModal: false,
+    eventForEdit: {}
   };
 
   onSelectDate = (date) => {
@@ -48,9 +51,19 @@ class CalendarTab extends React.Component {
     });
   };
 
+
+  showHideCreateEvent = (show, event) => {
+
+    this.setState({
+      showEventCreateModal: !!show,
+      eventForEdit: event || {}
+    });
+
+  };
+
   render() {
 
-    const {selectedDate} = this.state;
+    const {selectedDate, showEventCreateModal, eventForEdit} = this.state;
     const {events} = this.props;
 
     const eventsMap = events.reduce((map, e) => {
@@ -99,6 +112,7 @@ class CalendarTab extends React.Component {
 
                 return (
                   <div className={'col-12 event-row flex'} key={event.date.toString()}
+                       onClick={() => this.showHideCreateEvent(true, event)}
                        style={{'borderLeftColor': event.color}}>
 
                     {
@@ -129,6 +143,10 @@ class CalendarTab extends React.Component {
             }
           </div>
         </Paper>
+
+        <CreateEvent open={showEventCreateModal}
+                     event={eventForEdit}
+                     onClose={this.showHideCreateEvent}/>
       </div>
     );
   }

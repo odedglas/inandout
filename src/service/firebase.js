@@ -105,8 +105,8 @@ export default {
       });
   },
   addUserProject(userId, projectId) {
-
-    return database.ref(`users/${userId}/projects`).push(
+    //Adding to user projects
+    return database.ref(`users/${userId}/projects/${projectId}`).set(
       projectId
     );
   },
