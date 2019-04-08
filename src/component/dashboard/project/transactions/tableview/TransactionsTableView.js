@@ -19,7 +19,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import CreateTransaction from '@modal/CreateTransaction'
 import TransactionTableViewHeader from './TransactionTableViewHeader';
 import TransactionsTableViewToolbar from './TransactionsTableViewToolbar';
-import TransactionFilter from '../filter/TransactionFilter';
+import TransactionFilter from '@modal/TransactionFilter';
 import {ProjectType} from "@model/project";
 import {TransactionType} from "@model/transaction";
 import withFilter from '@hoc/withFilter';

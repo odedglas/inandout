@@ -7,8 +7,14 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import Grow from '@material-ui/core/Grow';
+import Slide from '@material-ui/core/Slide';
 import util from '@util/'
-import FilterRow from './FilterRow';
+import FilterRow from '../dashboard/project/transactions/filter/FilterRow';
+
+function SliderTransition(props) {
+  return <Slide direction="up" {...props} />;
+}
 
 class TransactionFilter extends Component {
 
@@ -152,10 +158,14 @@ class TransactionFilter extends Component {
     const {open, filter, categories, customers} = this.props;
     const {filterValues, projectMembers} = this.state;
 
+    const mobile = util.isMobile();
+
     return (
       <div>
         <Dialog
           open={open}
+          fullScreen={mobile}
+          TransitionComponent={mobile ? SliderTransition : Grow}
           disableRestoreFocus={true}
           onClose={this.handleClose}
           fullWidth
