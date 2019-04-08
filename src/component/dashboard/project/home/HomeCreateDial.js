@@ -11,16 +11,18 @@ import CreateBudget from '@modal/CreateBudget'
 import CreateTransaction from '@modal/CreateTransaction'
 import CreateCategory from '@modal/CreateCategory'
 import CreateCustomer from '@modal/CreateCustomer'
+import CreateEvent from '@modal/CreateEvent'
 import InviteUser from '@modal/InviteUser'
 
 import {createTransaction,} from "@action/project";
 
 const actions = [
-  {key: 'transactions',icon: <DynamicIcon name={'transactions'}/>, name: 'Create Transaction'},
-  {key: 'categories',icon: <DynamicIcon name={'categories'}/>, name: 'Create Category'},
-  {key: 'customers',icon: <DynamicIcon name={'customers'}/>, name: 'Create Customer'},
-  {key: 'budgets', icon: <DynamicIcon name={'budgets'}/>, name: 'Create Budget'},
-  {key: 'share',icon: <DynamicIcon name={'share'}/>, name: 'Invite'},
+  {key: 'showCreateTransactionModal',icon: <DynamicIcon name={'transactions'}/>, name: 'Create Transaction'},
+  {key: 'showCreateCategoryModal',icon: <DynamicIcon name={'categories'}/>, name: 'Create Category'},
+  {key: 'showCreateEventModal',icon: <DynamicIcon name={'calendar'}/>, name: 'Create Event'},
+  {key: 'showCreateCustomerModal',icon: <DynamicIcon name={'customers'}/>, name: 'Create Customer'},
+  {key: 'showCreateBudgetModal', icon: <DynamicIcon name={'budgets'}/>, name: 'Create Budget'},
+  {key: 'showInviteModal',icon: <DynamicIcon name={'share'}/>, name: 'Invite'},
 ];
 
 class HomeCreateDial extends React.Component {
@@ -35,6 +37,7 @@ class HomeCreateDial extends React.Component {
     open: false,
     showInviteModal: false,
     showCreateBudgetModal: false,
+    showCreateEventModal: false,
     showCreateTransactionModal: false,
     showCreateCategoryModal: false,
     showCreateCustomerModal: false,
@@ -78,19 +81,12 @@ class HomeCreateDial extends React.Component {
     const {
       open,
       showCreateBudgetModal,
+      showCreateEventModal,
       showCreateTransactionModal,
       showCreateCategoryModal,
       showCreateCustomerModal,
       showInviteModal,
     } = this.state;
-
-    const modalActionMap = {
-      budgets: () => this.toggleDialogModalState('showCreateBudgetModal'),
-      customers: () => this.toggleDialogModalState('showCreateCustomerModal'),
-      categories: () => this.toggleDialogModalState('showCreateCategoryModal'),
-      transactions: () => this.toggleDialogModalState('showCreateTransactionModal'),
-      share: () => this.toggleDialogModalState('showInviteModal'),
-    };
 
     return (
       <div className={'project-speed-dial fab'} style={{'pointerEvents': 'none'}}>
@@ -108,7 +104,7 @@ class HomeCreateDial extends React.Component {
                 icon={action.icon}
                 tooltipTitle={action.name}
                 onClick={() => {
-                  modalActionMap[action.key]();
+                  this.toggleDialogModalState(action.key);
                   this.toggleDialMenu();
                 }}
               />
@@ -138,6 +134,10 @@ class HomeCreateDial extends React.Component {
                         project={selectedProject}
                         customer={{}}
                         onClose={() => this.toggleDialogModalState('showCreateCustomerModal')}/>
+
+        <CreateEvent open={showCreateEventModal}
+                        event={{}}
+                        onClose={() => this.toggleDialogModalState('showCreateEventModal')}/>
       </div>
     );
   }

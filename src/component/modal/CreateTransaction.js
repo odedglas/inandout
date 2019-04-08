@@ -165,7 +165,7 @@ class CreateTransactionModal extends React.Component {
             <div className={'flex'}/>
           </Hidden>
 
-          <div className={'mr-4'}
+          <div className={'mr-0 mr-md-4'}
                aria-owns={statusTypeMenuAnchor ? 'transaction-status-menu' : null}
                onClick={this.handleTransactionStatusMenuShowHide}
                aria-haspopup="true">

@@ -32,6 +32,7 @@ class CreationModal extends React.Component {
     getInitialState: PropTypes.func.isRequired,
     model: PropTypes.object.isRequired,
     renderContent: PropTypes.func.isRequired,
+    renderFooterButtons: PropTypes.func,
     title: PropTypes.string.isRequired,
     context: PropTypes.string,
     editMode: PropTypes.bool,
@@ -41,6 +42,7 @@ class CreationModal extends React.Component {
 
   static defaultProps = {
     noPadding: false,
+    renderFooterButtons: () => {}
   };
 
   constructor(props) {
@@ -57,6 +59,7 @@ class CreationModal extends React.Component {
   static getDerivedStateFromProps(props, state) {
 
     if (props.open) {
+
       if (props.editMode && !state.editInitialized) {
 
         return {
@@ -73,6 +76,7 @@ class CreationModal extends React.Component {
           editInitialized: false,
         }
       }
+
     }
     else {
 
@@ -119,7 +123,7 @@ class CreationModal extends React.Component {
 
   render() {
 
-    const {open, title, editMode, context, validation, renderContent, noPadding, mainClass} = this.props;
+    const {open, title, editMode, context, validation, renderContent, renderFooterButtons, noPadding, mainClass} = this.props;
     const {model} = this.state;
 
     const mobile = util.isMobile();
@@ -166,6 +170,7 @@ class CreationModal extends React.Component {
                     variant="contained">
               {editMode ? 'Edit' : 'Create'}
             </Button>
+            {renderFooterButtons(model, validation, this.handleChange, editMode, this.handleClose)}
           </DialogActions>
         </Dialog>
       </div>

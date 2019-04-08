@@ -62,7 +62,7 @@ class Project extends React.Component {
   render() {
 
     const {selectedProject, loading, location} = this.props;
-    console.log("Project Render")
+
     return (
       <ProjectProvider>
         <div className={'project-container'}>

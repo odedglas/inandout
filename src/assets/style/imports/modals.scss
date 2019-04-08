@@ -45,6 +45,17 @@
         margin-top: 0 !important;
       }
     }
+
+    .picker {
+      flex: 1
+    }
+  }
+
+  div[role="document"] {
+
+    > div {
+      overflow-x: hidden;
+    }
   }
 }
 
@@ -133,6 +144,9 @@
       cursor: pointer;
       color: $success-color;
       font-weight: 500;
+      padding: 0.25rem 0.5rem;
+      text-align: center;
+      font-size: 0.725rem;
 
       .wrapper {
         border: 1px solid;

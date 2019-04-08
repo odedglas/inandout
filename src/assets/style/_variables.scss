@@ -129,7 +129,7 @@ $breakpoints: (
     $matchZIndex: 99
   }
   @if $type == loadingMask {
-    $matchZIndex: 101
+    $matchZIndex: 99999
   }
 
   z-index: $matchZIndex !important;

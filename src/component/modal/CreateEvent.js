@@ -2,16 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
+
 import {
   withRouter
 } from 'react-router-dom';
 
 import TextField from '@material-ui/core/TextField';
 import {DateTimePicker} from 'material-ui-pickers';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Chip from '@material-ui/core/Chip';
+import Button from '@material-ui/core/Button';
 import CustomersSelect from '@common/CustomersSelect';
+import CreateTransaction from '@modal/CreateTransaction'
 import withValidation from '../hoc/withValidation';
 import {
   createEvent,
@@ -19,7 +19,9 @@ import {
   deleteEvent,
   markEventComplete,
   attachEventTransaction,
-  fetchEventTransaction
+  fetchEventTransaction,
+  createTransaction,
+  updateTransaction
 } from "@action/project";
 import CreationModal from './CreationModal';
 
@@ -28,8 +30,15 @@ import dateUtil from '@util/date';
 import {EVENT_TYPE} from '@const/'
 import themeService from '@service/theme';
 import calendarService from '@service/calendar';
+import DynamicIcon from '../common/DynamicIcon';
 
 class CreateEventModal extends React.Component {
+
+  state = {
+    showTransactionModal: false,
+    transactionCreateState: {},
+    transactionForEdit: {},
+  };
 
   static propTypes = {
     open: PropTypes.bool.isRequired,
@@ -49,14 +58,14 @@ class CreateEventModal extends React.Component {
 
   handleEventCreate = (model, close) => {
 
-    const {selectedProject, event, editEvent, createEvent} = this.props;
+    const {project, event, editEvent, createEvent} = this.props;
 
     const editMode = !util.isEmptyObject(event);
     const method = editMode ? editEvent : createEvent;
 
     //Triggering Create / Edit
     method(
-      selectedProject,
+      project,
       model,
       () => close()
     );
@@ -65,12 +74,10 @@ class CreateEventModal extends React.Component {
 
   modalContent = (model, validation, handleChange, editMode, customers) => {
 
-    const isEventType = model.type === 'EVENT';
-
     const handleCustomerSelect = (customerId) => {
-      if(!model.location) {
+      if (!model.location) {
         const customer = customers.find(c => c.id === customerId);
-       handleChange(customer.address, 'location')
+        handleChange(customer.address, 'location')
       }
     };
 
@@ -83,7 +90,7 @@ class CreateEventModal extends React.Component {
             value={model.title}
             title={validation.title.message}
             error={validation.title.isInvalid}
-            onChange={(event) => this.handleChange(event.target.value, 'title')}
+            onChange={(event) => handleChange(event.target.value, 'title')}
             placeholder="Add Title"
             fullWidth
           />
@@ -97,7 +104,7 @@ class CreateEventModal extends React.Component {
               error={validation.date.isInvalid}
               onOpen={this.onPopperPickerOpen}
               onClose={this.onPopperPickerClose}
-              onChange={(date) => this.handleChange(date.toDate().getTime(), 'date')}
+              onChange={(date) => handleChange(date.toDate().getTime(), 'date')}
               placeholder="Date"
               fullWidth
             />
@@ -105,26 +112,104 @@ class CreateEventModal extends React.Component {
         </div>
 
         <CustomersSelect customer={model.customer}
-                         onClose={this.onPopperPickerClose}
-                         onOpen={this.onPopperPickerOpen}
                          onChange={(val) => {
-                           this.handleChange(val, 'customer');
+                           handleChange(val, 'customer');
                            handleCustomerSelect(val)
                          }}/>
 
-        {
-          isEventType ?
-            <TextField
-              value={model.location}
-              onChange={(event) => this.handleChange(event.target.value, 'location')}
-              placeholder="Location"
-              fullWidth
-            /> : null
-        }
+        <TextField
+          value={model.location}
+          onChange={(event) => handleChange(event.target.value, 'location')}
+          placeholder="Location"
+          fullWidth
+        />
+
+
+        {this.transactionContent(model, handleChange, editMode)}
 
       </div>
     )
   };
+
+  transactionContent = (model, handleChange, editMode) => {
+
+    const isCompleted = model.completed === true;
+    const isOverdue = editMode && dateUtil.isBefore(model.date, dateUtil.now());
+    const transactionReported = isCompleted && model.transaction !== undefined;
+
+    if (!isOverdue) {
+      return null;
+    }
+
+    return (
+
+      <div className={'row p-3 just-c'}>
+        <Button onClick={() => this.handleTransactionModalShow(transactionReported, model)}
+                color="secondary">
+          <DynamicIcon name={transactionReported ? 'transactions' : 'add'}/>
+          {transactionReported ? 'View Transaction' : 'Add Transaction'}
+        </Button>
+      </div>
+    )
+  };
+
+  handleTransactionModalShow = (fetchTransaction, event) => {
+
+    if (fetchTransaction) {
+      this.props.fetchEventTransaction(event, (transaction) => {
+
+        this.setState({
+          showTransactionModal: true,
+          transactionForEdit: transaction
+        })
+      });
+    }
+    else {
+      this.setState({
+        showTransactionModal: true,
+        transactionCreateState: calendarService.transformEventToTransaction(
+          event
+        ),
+      })
+    }
+
+  };
+
+  handleTransactionCrud = (transaction, action, cb) => {
+
+    const {event, updateTransaction, createTransaction} = this.props;
+
+    if (action === 'add') {
+
+      createTransaction(
+        this.props.project,
+        {
+          ...transaction,
+          sourceEventId: event.id
+        },
+        (transaction) => {
+
+          this.props.attachEventTransaction(
+            this.props.project,
+            event.id,
+            transaction,
+            cb
+          );
+        }
+      )
+    }
+    else {
+
+      updateTransaction(
+        this.props.project,
+        transaction,
+        cb
+      );
+    }
+
+  };
+
+  handleTransactionModalHide = () => this.setState({showTransactionModal: false, transactionCreateState: {}, transactionForEdit: {}});
 
   render() {
 
@@ -138,37 +223,45 @@ class CreateEventModal extends React.Component {
       event
     } = this.props;
 
+    const {showTransactionModal, transactionForEdit, transactionCreateState} = this.state;
+
     const editMode = !util.isEmptyObject(event);
-    const model = (editMode&& event) ? Object.create(event) : {};
+    const model = (editMode && event) ? Object.create(event) : {};
 
-    if(model.customer) {
-
-      model.customer = model.customer.id
-      console.log("After transform customers are : " , model.customer);
+    if (model.customer) {
+      model.customer = model.customer.id;
     }
 
     return (
-      <CreationModal open={open}
-                     onClose={onClose}
-                     title={ editMode ? 'Edit Event' : 'Create Event'}
-                     editMode={editMode}
-                     model={model}
-                     getInitialState={() => ({
-                       type: 'EVENT',
-                       date: dateUtil.today().setHours(12),
-                       title: '',
-                       description: '',
-                       color: themeService.getAvatarRandomColor('600'),
-                       customer: '',
-                       location: '',
-                       editMode: false,
-                     })}
-                     renderContent={(...args) => this.modalContent(...args,this.props.customers)}
-                     onCreate={this.handleEventCreate}
-                     validate={validate}
-                     validation={validation}
-                     onValidationChange={onValidationChange}
-                     clearValidation={clearValidation}/>
+      <React.Fragment>
+        <CreationModal open={open}
+                       onClose={onClose}
+                       title={editMode ? 'Edit Event' : 'Create Event'}
+                       editMode={editMode}
+                       model={model}
+                       getInitialState={() => ({
+                         type: 'EVENT',
+                         date: dateUtil.today().setHours(12),
+                         title: '',
+                         description: '',
+                         color: themeService.getAvatarRandomColor('600'),
+                         customer: '',
+                         location: '',
+                         editMode: false,
+                       })}
+                       renderContent={(...args) => this.modalContent(...args, this.props.customers)}
+                       onCreate={this.handleEventCreate}
+                       validate={validate}
+                       validation={validation}
+                       onValidationChange={onValidationChange}
+                       clearValidation={clearValidation}/>
+
+        <CreateTransaction open={showTransactionModal}
+                           createInitialState={transactionCreateState}
+                           transaction={transactionForEdit}
+                           transactionCrudHandler={this.handleTransactionCrud}
+                           onClose={this.handleTransactionModalHide}/>
+      </React.Fragment>
     );
   }
 }
@@ -192,7 +285,7 @@ export default compose(
     },
   ]),
   connect(state => ({
-    selectedProject: state.project.selectedProject,
+    project: state.project.selectedProject,
     customers: state.project.customers
   }), {
     createEvent,
@@ -200,6 +293,8 @@ export default compose(
     deleteEvent,
     markEventComplete,
     attachEventTransaction,
-    fetchEventTransaction
+    fetchEventTransaction,
+    createTransaction,
+    updateTransaction
   })
 )(CreateEventModal);

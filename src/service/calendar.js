@@ -119,6 +119,7 @@ export default {
 
     return {
       type: 'INCOME',
+      status: 'PENDING',
       date: event.date,
       customer: event.customer ? event.customer.id || event.customer : "",
       description
