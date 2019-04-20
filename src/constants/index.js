@@ -151,11 +151,13 @@ export const EVENT_TYPE = [
 ];
 
 export const FIREBASE_LOGIN_PROVIDERS = {
-
   GOOGLE: 'google',
   FACEBOOK: 'facebook',
-  TWITTER: 'twitter'
+  TWITTER: 'twitter',
+  TELEGRAM: 'telegram',
 };
+
+export const FIRBASE_CUSTOM_LOGIN_PROVIDERS = [FIREBASE_LOGIN_PROVIDERS.TELEGRAM];
 
 export const NOTIFICATION_TYPE = {
   INVITE: 'invite',

@@ -5,7 +5,7 @@ import {
   withRouter
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
+import TelegramLogin from './TelegramLogin'
 import {FIREBASE_LOGIN_PROVIDERS} from '@const/';
 import {loginWithProvider} from '@action/authentication';
 import {ROUTER} from "@const/";
@@ -45,6 +45,11 @@ class LoginWithMedia extends Component {
 
           <div className={'media-icon'} onClick={() => this.handleProviderLogin(FIREBASE_LOGIN_PROVIDERS.TWITTER)}>
             <DynamicIcon name={'twitter'}/>
+          </div>
+
+          <div className={'media-icon'}>
+            <DynamicIcon name={'telegram'}/>
+            <TelegramLogin />
           </div>
 
         </div>

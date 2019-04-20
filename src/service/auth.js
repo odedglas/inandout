@@ -1,6 +1,6 @@
 import firebaseService from './firebase';
 import userService from './user';
-import {FIREBASE_LOGIN_PROVIDERS} from '@const/';
+import {FIREBASE_LOGIN_PROVIDERS, FIRBASE_CUSTOM_LOGIN_PROVIDERS} from '@const/';
 
 const auth = firebaseService.auth;
 const authInstance = firebaseService.instance.auth;
@@ -24,9 +24,13 @@ export default {
     });
   }),
 
-  loginWithProvider: (providerName) => {
+  loginWithProvider: (providerName, token) => {
 
     let provider;
+
+    if(FIRBASE_CUSTOM_LOGIN_PROVIDERS.includes(providerName) && token) {
+      return auth.signInWithCustomToken(token)
+    }
 
     switch (providerName) {
 

@@ -78,7 +78,9 @@
       display: flex;
 
       .media-icon {
+        overflow: hidden;
         margin: 0 0.5rem;
+        background-color: white;
         border: 1px solid $theme-primary;
         color: $theme-primary;
         border-radius: 50%;

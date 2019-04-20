@@ -176,3 +176,14 @@ div[role="tooltip"] > div {
 .back-button {
   color: white !important;
 }
+
+.telegram-login {
+  position: relative;
+
+  iframe {
+    position: absolute;
+    opacity: 0.01;
+    top: -10px;
+    left: -23px;
+  }
+}

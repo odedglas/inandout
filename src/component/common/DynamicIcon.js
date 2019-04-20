@@ -93,6 +93,7 @@ import ChequeIcon from '../icon/ChequeIcon';
 import GoogleIcon from '../icon/GoogleIcon';
 import TwitterIcon from '../icon/TwitterIcon';
 import FacebookIcon from '../icon/FacebookIcon';
+import TelegramIcon from '../icon/TelegramIcon';
 import GithubIcon from '../icon/GithubIcon';
 
 const CashIcon = BudgetsIcon;
@@ -163,6 +164,7 @@ const iconMap = {
   'twitter': TwitterIcon,
   'facebook': FacebookIcon,
   'github': GithubIcon,
+  'telegram': TelegramIcon,
   'share': ShareIcon,
   'balance': AccountBalanceIcon,
   'toArrow': toArrowIcon,
