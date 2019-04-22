@@ -17,7 +17,6 @@ export default {
   database,
   initUser(user) {
     this.user = user;
-    debugger;
     user.getIdToken().then(token => this.token = token);
   },
   createUser(id, user) {
