@@ -1,6 +1,6 @@
 {
     "name": "inandout",
-    "version": "2.38.0",
+    "version": "2.40.0",
     "private": true,
     "scripts": {
         "dev": "node scripts/start.js",

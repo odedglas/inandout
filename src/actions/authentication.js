@@ -84,13 +84,12 @@ export function signUp(email, password, displayName, onSuccess, onError) {
   }
 }
 
-export function loginWithProvider(providerName, onSuccess, token) {
+export function loginWithProvider(providerName, onSuccess, {token, ...providerUser}) {
 
   return dispatch => {
 
     dispatch({type: 'APP_LOADING', loading: true});
-
-    debugger;
+debugger;
     authService.loginWithProvider(providerName, token).then(res => {
 
       const authUser = res.user;
@@ -102,9 +101,9 @@ export function loginWithProvider(providerName, onSuccess, token) {
           //First login via provider, Creating app user
           return userService.createUser(
             authUser.uid,
-            authUser.displayName,
-            authUser.email,
-            authUser.photoURL
+            authUser.displayName || providerUser.displayName,
+            authUser.email || providerUser.email,
+            authUser.photoURL || providerUser.photoURL
           ).then(createdUser => {
 
             fetchUserSuccess(
