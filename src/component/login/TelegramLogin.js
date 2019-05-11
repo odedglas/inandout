@@ -74,8 +74,6 @@ class TelegramLogin extends Component {
       <div className={'telegram-login'} ref={component => {
         this.instance = component;
       }}>
-
-
       </div>
     );
   }

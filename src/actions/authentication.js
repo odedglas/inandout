@@ -84,12 +84,12 @@ export function signUp(email, password, displayName, onSuccess, onError) {
   }
 }
 
-export function loginWithProvider(providerName, onSuccess, {token, ...providerUser}) {
+export function loginWithProvider(providerName, onSuccess, {token, ...providerUser} = {}) {
 
   return dispatch => {
 
     dispatch({type: 'APP_LOADING', loading: true});
-debugger;
+
     authService.loginWithProvider(providerName, token).then(res => {
 
       const authUser = res.user;

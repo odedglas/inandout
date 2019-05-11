@@ -45,7 +45,7 @@
       ".read": false,
       ".write": true,
       "$email": {
-        ".read": "$email.replace('_','.') === auth.email"
+        ".read": "!data.exists() || $email.replace('_','.') === auth.email"
       }
     }
   }
