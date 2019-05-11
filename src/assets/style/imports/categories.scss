@@ -57,10 +57,10 @@
       justify-content: flex-end;
 
       .category-menu-trigger {
-        height: 24px;
+        @include withSize(32);
         z-index:3;
-        width: 24px;
         margin: .5rem .5rem 0 0;
+        padding: 0;
       }
     }
   }

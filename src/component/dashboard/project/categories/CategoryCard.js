@@ -91,6 +91,7 @@ class CategoryCard extends Component {
         <div className={'menu-holder w-100'}>
           <IconButton className={'category-menu-trigger'}
                       aria-label="More"
+                      size
                       aria-owns={anchorEl ? 'category-menu' : null}
                       aria-haspopup="true"
                       onClick={this.handleMenuClick}
