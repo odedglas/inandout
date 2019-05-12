@@ -1,6 +1,5 @@
 import React from 'react';
 import util from '@util/'
-import {TRANSACTIONS_PAYMENT_METHODS} from '@const/';
 import dateUtil from '@util/date'
 import DynamicIcon from '@common/DynamicIcon';
 import TransactionsList from '../lists/TransactionsList';

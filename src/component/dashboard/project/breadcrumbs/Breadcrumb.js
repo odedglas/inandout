@@ -32,7 +32,6 @@ class Breadcrumb extends Component {
     let currentItem = this.props.item;
 
     if (newValue !== currentItem.value ) {
-      console.log("Bread crumbs update, FROM:" + currentItem.value + " , TO:" + newValue);
       this.props.update({
         ...currentItem,
         value: newValue

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import DynamicIcon from '@common/DynamicIcon';
-import Tooltip from '@material-ui/core/Tooltip';
 import ProjectToolbar from '../dashboard/project/home/ProjectToolbar';
 import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';

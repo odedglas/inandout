@@ -20,7 +20,6 @@ const notificationService = {
           ...value[key]
         }
       });
-      console.log("Notifications sync listener");
       callback(result);
     })
   },

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {FIREBASE_LOGIN_PROVIDERS} from '@const/';
 import {loginWithProvider} from '@action/authentication';
 import {setLoading} from '@action/loading';
-import {ROUTER} from "@const/";
 
 class TelegramLogin extends Component {
 

@@ -8,7 +8,6 @@ import Paper from '@material-ui/core/Paper';
 import CreateEvent from '@modal/CreateEvent'
 
 import dateUtil from '@util/date'
-import {TRANSACTIONS_PAYMENT_METHODS} from '@const/';
 
 const EventStatus = ({ event, isEventType }) => {
 

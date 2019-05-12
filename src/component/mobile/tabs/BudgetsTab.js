@@ -10,7 +10,6 @@ import CreateBudget from '@modal/CreateBudget'
 import util from '@util/'
 import dateUtil from '@util/date'
 import budgetService from '@service/budget';
-import {TRANSACTIONS_PAYMENT_METHODS} from '@const/';
 
 const formatBudgetSummaryRange = date => dateUtil.format(date, 'Do MMM');
 

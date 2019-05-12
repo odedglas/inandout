@@ -76,7 +76,7 @@ class ProjectHome extends React.Component {
       <ProjectContext.Consumer>
         {(projectContext) => {
 
-          const {project, transactions, budgets, categories, events} = projectContext;
+          const {project, transactions, budgets, events} = projectContext;
 
           const indicators = projectService.calculateProjectIndicators(
             project,

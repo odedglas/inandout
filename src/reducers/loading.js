@@ -5,7 +5,6 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case 'APP_LOADING':
-      console.log("setting app loading for : " + action.loading);
       return {
         ...state,
         isLoading: action.loading,

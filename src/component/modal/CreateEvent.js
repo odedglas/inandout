@@ -27,7 +27,6 @@ import CreationModal from './CreationModal';
 
 import util from '@util/';
 import dateUtil from '@util/date';
-import {EVENT_TYPE} from '@const/'
 import themeService from '@service/theme';
 import calendarService from '@service/calendar';
 import DynamicIcon from '../common/DynamicIcon';

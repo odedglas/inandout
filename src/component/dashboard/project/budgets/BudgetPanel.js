@@ -199,7 +199,7 @@ class BudgetPanel extends Component {
 
   render() {
 
-    const {expanded, budget, showBudgetStatistics} = this.props;
+    const {expanded, budget} = this.props;
     const containerCls = `budget-panel mx-3 ${expanded ? 'expanded' : ''}`;
     const budgetIndicator = budgetService.getBudgetStatusIndicator(budget);
     const hasTransactions = budget.transactions.length > 0;

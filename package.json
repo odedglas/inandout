@@ -1,11 +1,12 @@
 {
     "name": "inandout",
-    "version": "2.45.0",
+    "version": "3.13.0",
     "private": true,
     "scripts": {
         "dev": "node scripts/start.js",
         "build": "node scripts/build.js --env.minor",
         "deploy": "npm run build && cd firebase && firebase deploy",
+        "deploy-l": "npm run build && cd firebase && firebase deploy --only hosting",
         "deploy-m": "node scripts/build.js --env.major && cd firebase && firebase deploy",
         "test": "node scripts/test.js --env=jsdom"
     },

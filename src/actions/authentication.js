@@ -17,7 +17,6 @@ export function createAuthenticationListener(location) {
 
     firebaseService.auth.onAuthStateChanged(authUser => {
 
-      console.log("Auth state change listener : " +( authUser !== null ? 'true' : 'false'));
       if(authUser !== null) {
 
         //Auth went well, Fetching up user
@@ -56,7 +55,6 @@ export function loginWithPassword(email, password, onSuccess, onError) {
         dispatch({type: 'APP_LOADING', loading: false})
       })
     }).catch(e => {
-      console.log('Failed to login : ' + e);
       onError(e);
       dispatch({type: 'APP_LOADING', loading: false})
     })
@@ -77,7 +75,6 @@ export function signUp(email, password, displayName, onSuccess, onError) {
       onSuccess();
       dispatch({type: 'APP_LOADING', loading: false})
     }).catch(e => {
-      console.log('Failed to login : ' + e);
       onError(e);
       dispatch({type: 'APP_LOADING', loading: false})
     });
